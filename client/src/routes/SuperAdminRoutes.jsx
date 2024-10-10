@@ -56,7 +56,13 @@ function SuperAdminRoutes() {
         <Route path="/employee-management" element={<EmployeeManagement />} />
         <Route path="/AdminManagement" element={<AdminManagement />} />
         <Route path="/admincrmonerealty" element={<Registration />} />
-
+        <Route path="/quotation-section" element={<CreateCompanyProfile />} />
+        <Route path="/quotationlist" element={<QuotationList />} />
+        <Route
+          path="/admin-view-quotation/:id"
+          element={<AdminQuotationVIew />}
+        />
+        <Route path="/reporting" element={<Reporting />} />
         {/* <Route path="/" element={user? <Dashboard/> :<Landingpage/>} /> */}
         {/* <Route path="/admin-login" element={<AdminLogin/>} /> */}
 

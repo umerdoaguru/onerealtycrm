@@ -13,6 +13,10 @@ function Employee_Single_Lead_Profile() {
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
 
+  const [quotationCreated, setQuotationCreated] = useState(false);
+
+  // const leads = [{ /* lead data */ }];
+
   const fieldConfig = [
     {
       name: "lead_status",
@@ -95,22 +99,52 @@ function Employee_Single_Lead_Profile() {
   useEffect(() => {
     fetchLeads();
   }, [id]);
+  // const fetchLeads = async () => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+  //     setLeads(response.data);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.error("Error fetching quotations:", error);
+  //   }
+  // };
+
   const fetchLeads = async () => {
     try {
       const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
       setLeads(response.data);
-      console.log(response);
+
+      // Debugging: Log the exact value of the quotation field
+      response.data.forEach((lead) => {
+        console.log("Lead Quotation Status (raw):", lead.quotation);
+      });
+
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+      const hasCreatedQuotation = response.data.some(
+        (lead) =>
+          lead.quotation && lead.quotation.trim().toLowerCase() === "created"
+      );
+
+      console.log(
+        "Has created quotation (normalized check)?",
+        hasCreatedQuotation
+      ); // Debugging
+      setQuotationCreated(hasCreatedQuotation);
     } catch (error) {
       console.error("Error fetching quotations:", error);
     }
   };
-
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
-  const handleQuotation = (lead) => {
+  const handleQuotation = async (lead) => {
     const name = lead.name;
     navigate(`/quotation-by-lead/${lead.lead_id}`, { state: { name } });
+  };
+
+  const handleViewQuotation = (lead) => {
+    const name = lead.name;
+    navigate(`/final-quotation-by-lead/${lead.lead_id}`, { state: { name } });
   };
 
   const handleInputChange = (e) => {
@@ -229,13 +263,27 @@ function Employee_Single_Lead_Profile() {
           ))}
         </div>
 
-        <div className="">
+        <div className=" flex justify-between">
           <button
             onClick={() => handleQuotation(leads[0])}
             className="bg-blue-500 text-white px-4 py-2 rounded"
           >
             Quotation Creation
           </button>
+
+          {/* Conditionally render the View Quotation button */}
+          {quotationCreated ? (
+            <button
+              onClick={() => handleViewQuotation(leads[0])}
+              className="bg-green-500 text-white px-4 py-2 rounded"
+            >
+              View Quotation
+            </button>
+          ) : (
+            <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+              Quotation not yet created
+            </p>
+          )}
         </div>
 
         <div className="overflow-x-auto mt-5">

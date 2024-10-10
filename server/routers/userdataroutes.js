@@ -31,6 +31,7 @@ const {
   deleteProfile,
   getleadbyid,
   getAllQuotation,
+  updateQuotationStatus,
   socialmediaLead,
 } = require("../controllers/UserController");
 const upload = require("../controllers/fileUploadController");
@@ -103,6 +104,10 @@ router.delete("/services/:serviceId", deleteService);
 router.get("/quotation/:id", Quotationviaid);
 // router.get("/quotation",GetQuotation);
 router.get("/quotation-data", GetQuotation);
+
+// Route to update quotation status
+router.post("/update-quotation-status", updateQuotationStatus);
+
 router.put("/quotation-data/:quotationId", UpdateQuotationName);
 router.post("/copy-quotation/:quotationId", CopyQuotationData);
 router.get("/quotation-name/:quotationId", GetQuotationName);

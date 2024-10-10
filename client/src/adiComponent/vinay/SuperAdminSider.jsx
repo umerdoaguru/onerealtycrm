@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { BsHouse } from "react-icons/bs"; // Importing icons
+import { BsHouse, BsFileEarmarkPerson } from "react-icons/bs";
 import { FaHistory } from "react-icons/fa";
+import { RiSecurePaymentLine } from "react-icons/ri";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
@@ -84,7 +85,7 @@ const SuperAdminSider = () => {
             </li> */}
 
             <hr className="w-full border-gray-400" />
-            {/* 
+
             <li className={`w-full ${getSidebarClass("/reporting")}`}>
               <Link to="/reporting" className="flex flex-col items-center py-3">
                 <RiSecurePaymentLine className="text-white text-2xl md:text-3xl" />
@@ -94,7 +95,7 @@ const SuperAdminSider = () => {
               </Link>
             </li>
 
-            <hr className="w-full border-gray-400" /> */}
+            <hr className="w-full border-gray-400" />
             {/* 
             <li className={`w-full ${getSidebarClass("/data-export")}`}>
               <Link
@@ -110,19 +111,19 @@ const SuperAdminSider = () => {
 
             <hr className="w-full border-gray-400" /> */}
 
-            {/* <li className={`w-full ${getSidebarClass("/quotation-invoice")}`}>
+            <li className={`w-full ${getSidebarClass("/quotation-list")}`}>
               <Link
-                to="/quotation-section"
+                to="/quotationlist"
                 className="flex flex-col items-center py-1"
               >
                 <BsFileEarmarkPerson className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
-                  Quotation <br /> <span>&</span> <br /> Invoice
+                  All Quotations
                 </h3>
               </Link>
             </li>
 
-            <hr className="w-full border-gray-400" /> */}
+            <hr className="w-full border-gray-400" />
 
             <li className={`w-full ${getSidebarClass("/employee-management")}`}>
               <Link

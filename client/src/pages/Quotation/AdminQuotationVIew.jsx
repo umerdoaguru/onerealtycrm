@@ -13,6 +13,7 @@ import UserLogin from "../../components/UserLogin";
 import Logout from "../../components/Logout";
 import MainHeader from "../../components/MainHeader";
 import Sider from "../../components/Sider";
+import SuperAdminSider from "../../adiComponent/vinay/SuperAdminSider";
 
 function AdminQuotationVIew() {
   const { id } = useParams();
@@ -269,27 +270,31 @@ function AdminQuotationVIew() {
   return (
     <>
       <MainHeader />
-      <Sider />
-      <div className="container mt-5 px-2 mx-auto p-4">
-        <Wrapper>
-          <div className="container">
+      <SuperAdminSider />
+
+      <div className="flex flex-col lg:flex-row lg:space-x-4">
+        <Wrapper className="w-full lg:w-9/12 mx-auto px-4 lg:px-0">
+          <div className="container mx-auto">
             <Link
-              // to={`/admin-view-quotation/${id}`}
               to={`/quotationlist`}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded mx-1 w-25 btn-print"
+              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded w-full sm:w-auto block sm:inline-block mb-3"
             >
               <i className="bi bi-arrow-return-left mx-1"></i> Back
             </Link>
           </div>
 
-          <div className="w-full flex flex-wrap mt-3">
-            <div className="w-full lg:w-9/12 mb-2 lg:mb-0 mx-3"></div>
-            <div className="w-full lg:w-3/12 mx-3"></div>
+          <div className="w-full flex flex-wrap mt-3 space-y-4 lg:space-y-0 lg:space-x-4">
+            <div className="w-full lg:w-9/12">
+              {/* Placeholder for content */}
+            </div>
+            <div className="w-full lg:w-3/12">
+              {/* Placeholder for sidebar or additional content */}
+            </div>
           </div>
 
           {/* <Header companyName={selectedCompany} quotationName={quotationName} /> */}
 
-          <div className="container mt-5">
+          <div className="container mt-5 max-w-full">
             <h2 className="text-2xl font-bold">
               Plan & Quotation for {quotationName}
             </h2>
