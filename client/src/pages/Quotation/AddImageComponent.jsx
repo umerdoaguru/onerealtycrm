@@ -1,17 +1,13 @@
-
-
-
-
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const AddImageComponent = () => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [quotationId, setQuotationId] = useState('');
-  const [imageType, setImageType] = useState('');
-  const { quotationId: paramQuotationId, imageType: paramImageType } = useParams();
+  const [quotationId, setQuotationId] = useState("");
+  const [imageType, setImageType] = useState("");
+  const { quotationId: paramQuotationId, imageType: paramImageType } =
+    useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,19 +23,22 @@ const AddImageComponent = () => {
   const handleImageUpload = async () => {
     try {
       if (!quotationId || !imageType) {
-        console.error('Quotation ID and image type are required');
+        console.error("Quotation ID and image type are required");
         return;
       }
 
       const formData = new FormData();
-      formData.append('image', selectedFile);
+      formData.append("image", selectedFile);
 
-      await axios.post(`https://crmdemo.vimubds5.a2hosted.com/api/${quotationId}/${imageType}`, formData);
+      await axios.post(
+        `http://localhost:9000/api/${quotationId}/${imageType}`,
+        formData
+      );
 
-      console.log('Image uploaded successfully');
-    navigate(`/final-quotation/${quotationId}`);
+      console.log("Image uploaded successfully");
+      navigate(`/final-quotation/${quotationId}`);
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
     }
   };
 
@@ -66,18 +65,24 @@ const AddImageComponent = () => {
             disabled // Disable the input field
           />
         </div>
-        <input className="form-control" type="file" onChange={handleFileChange} />
+        <input
+          className="form-control"
+          type="file"
+          onChange={handleFileChange}
+        />
       </div>
 
       <button className="btn btn-success mt-3" onClick={handleImageUpload}>
         Upload Image
       </button>
-      <Link to={`/final-quotation/${quotationId}`} className="btn btn-primary mt-3 mx-2">
+      <Link
+        to={`/final-quotation/${quotationId}`}
+        className="btn btn-primary mt-3 mx-2"
+      >
         Back to Final Quotation
       </Link>
     </div>
   );
 };
 
-
-export default AddImageComponent
+export default AddImageComponent;

@@ -5,20 +5,20 @@ import styled from "styled-components";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import UserLogin from "../../UserLogin";
 import Logout from "../../Logout";
 import cogoToast from "cogo-toast";
-import MainHeader from './../../MainHeader';
+import MainHeader from "./../../MainHeader";
 import Sider from "../../Sider";
 import EmployeeeSider from "../EmployeeSider";
 
 const QuotationByLeads = () => {
-  const EmpId = useSelector(state => state.auth.user.id);
-  const EmpName = useSelector(state => state.auth.user.name);
+  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpName = useSelector((state) => state.auth.user.name);
   const navigate = useNavigate();
   const location = useLocation();
-  const {id} = useParams(); 
+  const { id } = useParams();
   const { name } = location.state || {}; // Retrieve name from state
   const [quotationName, setQuotationName] = useState("");
   const [serviceslist, setServiceslist] = useState([]);
@@ -45,9 +45,7 @@ const QuotationByLeads = () => {
     "Weekly",
     "15 Days",
     "10 Days",
-    "1-5 Days"
-   
-
+    "1-5 Days",
   ]);
 
   // const handleServiceChange = (index, field, value) => {
@@ -104,8 +102,6 @@ const QuotationByLeads = () => {
     setServices(newServices);
   };
 
- 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -123,7 +119,7 @@ const QuotationByLeads = () => {
           subscription_frequency: service.subscription_frequency,
         };
       });
-      const response = await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/quotation", {
+      const response = await axios.post("http://localhost:9000/api/quotation", {
         quotation_name: name,
         services: servicesToSave,
         // employeeId: userId,
@@ -135,21 +131,24 @@ const QuotationByLeads = () => {
 
       try {
         // Send updated data to the backend using Axios
-        const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyQuotationStatus/${id}`,  {quotation: 'created'});
-  
+        const response = await axios.put(
+          `http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,
+          { quotation: "created" }
+        );
+
         if (response.status === 200) {
-          console.log('Updated successfully:', response.data);
-          cogoToast.success('Quotation Created and status updated successfully');
-         
+          console.log("Updated successfully:", response.data);
+          cogoToast.success(
+            "Quotation Created and status updated successfully"
+          );
         } else {
-          console.error('Error updating:', response.data);
-          cogoToast.error('Failed to update the quotation status.');
+          console.error("Error updating:", response.data);
+          cogoToast.error("Failed to update the quotation status.");
         }
       } catch (error) {
-        console.error('Request failed:', error);
-        cogoToast.error('Failed to update the quotation status.');
+        console.error("Request failed:", error);
+        cogoToast.error("Failed to update the quotation status.");
       }
-  
 
       navigate(`/final-quotation-by-lead/${response.data.quotation.id}`);
     } catch (error) {
@@ -162,7 +161,7 @@ const QuotationByLeads = () => {
 
   const getServicelist = async () => {
     try {
-      const res = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/servicelist`);
+      const res = await axios.get(`http://localhost:9000/api/servicelist`);
       console.log(res.data);
       setServiceslist(res.data);
     } catch (error) {
@@ -186,51 +185,48 @@ const QuotationByLeads = () => {
     setOtherServices(newOtherServices);
   };
 
-  
   const handleCreateServices = () => {
     navigate(``);
   };
-
 
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
 
   return (
-  <>
-    <MainHeader/>
-    <EmployeeeSider/>
-  <div className="container">
-
-      <div className="p-4 mt-5">
-      <button
-      onClick={handleBackClick}
-      className="bg-blue-500 text-white px-4 py-2 rounded"
-    >
-      Go Back
-    </button>
-        {/* <Link
+    <>
+      <MainHeader />
+      <EmployeeeSider />
+      <div className="container">
+        <div className="p-4 mt-5">
+          <button
+            onClick={handleBackClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Go Back
+          </button>
+          {/* <Link
           to={`/quotation-section`}
           className="bg-green-500 text-white px-4 py-2 rounded mt-3 mx-2 inline-block"
         >
           <i className="bi bi-arrow-return-left"></i> Back
         </Link> */}
-        <div className="mt-5">
-          <div className=" gap-4">
-            <form
-              className="bg-white p-6 rounded shadow-md"
-              onSubmit={handleSubmit}
-            >
-              <div className="grid lg:grid-cols-12  gap-4 p-2">
-                <div className="lg:col-span-2 ">
-                  <UserLogin />
-                </div>
-    
-                <div className="lg:col-span-7 lg:text-center  ">
-                  <h5 className="mb-4">Quotation Generation System</h5>
-                </div>
-    
-                {/* <div className="lg:col-span-2">
+          <div className="mt-5">
+            <div className=" gap-4">
+              <form
+                className="bg-white p-6 rounded shadow-md"
+                onSubmit={handleSubmit}
+              >
+                <div className="grid lg:grid-cols-12  gap-4 p-2">
+                  <div className="lg:col-span-2 ">
+                    <UserLogin />
+                  </div>
+
+                  <div className="lg:col-span-7 lg:text-center  ">
+                    <h5 className="mb-4">Quotation Generation System</h5>
+                  </div>
+
+                  {/* <div className="lg:col-span-2">
                   <Link
                     to="/quotationlist"
                     className="bg-green-500 text-white px-4 py-2 rounded block text-center"
@@ -238,219 +234,222 @@ const QuotationByLeads = () => {
                     Quotation List
                   </Link>
                 </div> */}
-                {/* <div className="lg:col-span-1">
+                  {/* <div className="lg:col-span-1">
                   <Logout />
                 </div> */}
-              </div>
-    
-              <div className="mb-3">
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded text-center"
-                  id="quotationName"
-                  name="quotation_name"
-                  placeholder="Quotation Name"
-                  value={name}
-                  
-                  required
-                />
-              </div>
-    
-              {services.map((service, index) => (
-                <div key={index} className="mb-6">
-                  <div className="grid gap-4 lg:grid-cols-12">
-                    <h6 className="">Service {index + 1}</h6>
-    
-                    <div className="lg:col-span-12">
-                      <label className="block">
-                        Service Type:
-                        <br />
-                        <select
-                          className=" p-2 mt-1 border rounded"
-                          id={`serviceType${index}`}
-                          name="service_type"
-                          onChange={(e) =>
-                            handleServiceChange(index, "service_type", e.target.value)
-                          }
-                          value={service.service_type}
-                          required
-                        >
-                          <option value="" disabled>
-                            Select Service Type
-                          </option>
-                          <option value="Paid">Paid Service</option>
-                          <option value="Complimentary">
-                            Complimentary Service
-                          </option>
-                        </select>
-                      </label>
-                    </div>
-    
-                    <div className="lg:col-span-2">
-                      <label className="block">
-                        Subscription:
-                        <select
-                          className="w-full p-2 mt-1 border rounded"
-                          id={`subscriptionFrequency${index}`}
-                          name="subscription_frequency"
-                          onChange={(e) =>
-                            handleServiceChange(
-                              index,
-                              "subscription_frequency",
-                              e.target.value
-                            )
-                          }
-                          value={service.subscription_frequency}
-                          required
-                        >
-                          <option value="" disabled>
-                            Select Subscription Frequency
-                          </option>
-                          {subscriptionFrequencies.map((frequency, key) => (
-                            <option key={key} value={frequency}>
-                              {frequency}
-                            </option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-    
-                    <div className="lg:col-span-2">
-                      <label className="block">
-                        Service Name:
-                        {service.service_name === "Other Service" ? (
-                          <input
-                            type="text"
-                            className="w-full p-2 mt-1 border rounded"
-                            value={otherServices[index]}
-                            onChange={(e) =>
-                              handleOtherServiceChange(index, e.target.value)
-                            }
-                            required
-                          />
-                        ) : (
+                </div>
+
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    className="w-full p-2 border rounded text-center"
+                    id="quotationName"
+                    name="quotation_name"
+                    placeholder="Quotation Name"
+                    value={name}
+                    required
+                  />
+                </div>
+
+                {services.map((service, index) => (
+                  <div key={index} className="mb-6">
+                    <div className="grid gap-4 lg:grid-cols-12">
+                      <h6 className="">Service {index + 1}</h6>
+
+                      <div className="lg:col-span-12">
+                        <label className="block">
+                          Service Type:
+                          <br />
                           <select
-                            className="w-full p-2 mt-1 border rounded"
-                            id={`servicename${index}`}
-                            name="service_name"
-                            onChange={(e) => handleChange(e, index)}
-                            value={service.service_name}
+                            className=" p-2 mt-1 border rounded"
+                            id={`serviceType${index}`}
+                            name="service_type"
+                            onChange={(e) =>
+                              handleServiceChange(
+                                index,
+                                "service_type",
+                                e.target.value
+                              )
+                            }
+                            value={service.service_type}
                             required
                           >
                             <option value="" disabled>
-                              Select Service name
+                              Select Service Type
                             </option>
-                            {serviceslist.map((item, key) => (
-                              <option key={key} value={item.service_name}>
-                                {item.service_name}
+                            <option value="Paid">Paid Service</option>
+                            <option value="Complimentary">
+                              Complimentary Service
+                            </option>
+                          </select>
+                        </label>
+                      </div>
+
+                      <div className="lg:col-span-2">
+                        <label className="block">
+                          Subscription:
+                          <select
+                            className="w-full p-2 mt-1 border rounded"
+                            id={`subscriptionFrequency${index}`}
+                            name="subscription_frequency"
+                            onChange={(e) =>
+                              handleServiceChange(
+                                index,
+                                "subscription_frequency",
+                                e.target.value
+                              )
+                            }
+                            value={service.subscription_frequency}
+                            required
+                          >
+                            <option value="" disabled>
+                              Select Subscription Frequency
+                            </option>
+                            {subscriptionFrequencies.map((frequency, key) => (
+                              <option key={key} value={frequency}>
+                                {frequency}
                               </option>
                             ))}
-                            <option value="Other Service">Other Service</option>
                           </select>
-                        )}
-                      </label>
-                    </div>
-    
-                    <div className="lg:col-span-4">
-                      <label className="block">
-                        <div className="flex">
-                          <span>Service Description</span>
-                          <span className="ml-2 text-sm text-gray-500">
-                            (if you want to next line add .(dot) and nextline)
-                          </span>
-                        </div>
-                        <textarea
-                          required
-                          rows="3"
-                          className="w-full p-2 mt-1 border rounded"
-                          value={service.service_description}
-                          onChange={(e) =>
-                            handleServiceChange(
-                              index,
-                              "service_description",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </label>
-                    </div>
-    
-                    <div className="lg:col-span-2">
-                      <label className="block">
-                        Actual Price:
-                        <input
-                          type="number"
-                          className="w-full p-2 mt-1 border rounded"
-                          value={service.actual_price}
-                          onChange={(e) =>
-                            handleServiceChange(
-                              index,
-                              "actual_price",
-                              parseFloat(e.target.value)
-                            )
-                          }
-                          required
-                        />
-                      </label>
-                    </div>
-    
-                    <div className="lg:col-span-2">
-                      <label className="block">
-                        Offer Price:
-                        <input
-                          type="number"
-                          className="w-full p-2 mt-1 border rounded"
-                          value={service.offer_price}
-                          onChange={(e) =>
-                            handleServiceChange(
-                              index,
-                              "offer_price",
-                              parseFloat(e.target.value)
-                            )
-                          }
-                          required
-                        />
-                      </label>
-                    </div>
-    
-                    <div className="">
-                      <button
-                        type="button"
-                        className="bg-red-500 text-white px-4 py-2 rounded"
-                        onClick={() => removeService(index)}
-                      >
-                        Remove
-                      </button>
+                        </label>
+                      </div>
+
+                      <div className="lg:col-span-2">
+                        <label className="block">
+                          Service Name:
+                          {service.service_name === "Other Service" ? (
+                            <input
+                              type="text"
+                              className="w-full p-2 mt-1 border rounded"
+                              value={otherServices[index]}
+                              onChange={(e) =>
+                                handleOtherServiceChange(index, e.target.value)
+                              }
+                              required
+                            />
+                          ) : (
+                            <select
+                              className="w-full p-2 mt-1 border rounded"
+                              id={`servicename${index}`}
+                              name="service_name"
+                              onChange={(e) => handleChange(e, index)}
+                              value={service.service_name}
+                              required
+                            >
+                              <option value="" disabled>
+                                Select Service name
+                              </option>
+                              {serviceslist.map((item, key) => (
+                                <option key={key} value={item.service_name}>
+                                  {item.service_name}
+                                </option>
+                              ))}
+                              <option value="Other Service">
+                                Other Service
+                              </option>
+                            </select>
+                          )}
+                        </label>
+                      </div>
+
+                      <div className="lg:col-span-4">
+                        <label className="block">
+                          <div className="flex">
+                            <span>Service Description</span>
+                            <span className="ml-2 text-sm text-gray-500">
+                              (if you want to next line add .(dot) and nextline)
+                            </span>
+                          </div>
+                          <textarea
+                            required
+                            rows="3"
+                            className="w-full p-2 mt-1 border rounded"
+                            value={service.service_description}
+                            onChange={(e) =>
+                              handleServiceChange(
+                                index,
+                                "service_description",
+                                e.target.value
+                              )
+                            }
+                          />
+                        </label>
+                      </div>
+
+                      <div className="lg:col-span-2">
+                        <label className="block">
+                          Actual Price:
+                          <input
+                            type="number"
+                            className="w-full p-2 mt-1 border rounded"
+                            value={service.actual_price}
+                            onChange={(e) =>
+                              handleServiceChange(
+                                index,
+                                "actual_price",
+                                parseFloat(e.target.value)
+                              )
+                            }
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      <div className="lg:col-span-2">
+                        <label className="block">
+                          Offer Price:
+                          <input
+                            type="number"
+                            className="w-full p-2 mt-1 border rounded"
+                            value={service.offer_price}
+                            onChange={(e) =>
+                              handleServiceChange(
+                                index,
+                                "offer_price",
+                                parseFloat(e.target.value)
+                              )
+                            }
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      <div className="">
+                        <button
+                          type="button"
+                          className="bg-red-500 text-white px-4 py-2 rounded"
+                          onClick={() => removeService(index)}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              <div className="flex space-x-3">
-                <button
-                  type="button"
-                  className="bg-green-500 text-white px-4 py-2 rounded"
-                  onClick={addService}
-                >
-                  Add Service
-                </button>
-    
-                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">
-                  Submit
-                </button>
-              </div>
-            </form>
+                <div className="flex space-x-3">
+                  <button
+                    type="button"
+                    className="bg-green-500 text-white px-4 py-2 rounded"
+                    onClick={addService}
+                  >
+                    Add Service
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-  </div>
-  
-  
-  </>
-    
-    );
-    
-  
+    </>
+  );
 };
 
 const Wrapper = styled.div`

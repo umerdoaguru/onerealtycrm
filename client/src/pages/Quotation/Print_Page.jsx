@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 import UserLogin from "../../components/UserLogin";
 import Logout from "../../components/Logout";
 
-
 function Print_Page() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -39,7 +38,7 @@ function Print_Page() {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `https://crmdemo.vimubds5.a2hosted.com/api/quotation/${id}`
+        `http://localhost:9000/api/quotation/${id}`
       );
 
       if (response.status === 200) {
@@ -54,7 +53,7 @@ function Print_Page() {
   };
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/notes/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
 
       if (response.status === 200) {
         setNotes(response.data);
@@ -64,13 +63,12 @@ function Print_Page() {
     }
   };
 
-
   useEffect(() => {
     // Fetch company names from the backend
     const fetchCompanyNames = async () => {
       try {
         const response = await axios.get(
-          `https://crmdemo.vimubds5.a2hosted.com/api/header-footer-images/company-names`
+          `http://localhost:9000/api/header-footer-images/company-names`
         );
         if (response.status === 200) {
           setCompanyNames(response.data); // Assuming response.data is an array of company names
@@ -129,88 +127,93 @@ function Print_Page() {
     const toggleRowVisibility = () => {
       setRowVisible(!rowVisible);
     };
-  
-   return (
-  actualPriceTotal > 0 && (
-    <div className="mt-4">
-      <h5 className="font-bold text-lg">{`${serviceTypeTitle} Services - ${subscriptionFrequency}`}</h5>
-      <div className="overflow-auto">
-        <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Sr.No
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Service Name
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Service Description
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actual Price (INR)
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Offer Price (INR)
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {services.map((q, index) => (
-              <tr key={q.id}>
-                <td className="px-6 py-4 border border-gray-300 text-center text-sm font-bold">
-                  {index + 1}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm font-bold">
-                  {q.service_name}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm">
-                  {q.service_description.split(".").map((part, index) => (
-                    <p key={index}>
-                      {part.trim()}
-                      {index !== q.service_description.split(".").length - 1 && "."}
-                    </p>
-                  ))}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm">
-                  {q.actual_price}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm">
-                  {q.offer_price}
-                </td>
-              </tr>
-            ))}
-            {rowVisible && (
-              <tr>
-                <td colSpan="3" className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  Total {`${serviceTypeTitle} Amount`}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  {actualPriceTotal}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  {offerPriceTotal}
-                </td>
-              </tr>
-            )}
-            <tr className="bg-gray-50 btn-print">
-              <td colSpan="5" className="px-6 py-4 text-center border border-gray-300">
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                  onClick={toggleRowVisibility}
-                >
-                  {rowVisible ? "Hide" : "Show"}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )
-);
 
-    
+    return (
+      actualPriceTotal > 0 && (
+        <div className="mt-4">
+          <h5 className="font-bold text-lg">{`${serviceTypeTitle} Services - ${subscriptionFrequency}`}</h5>
+          <div className="overflow-auto">
+            <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Sr.No
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Name
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Description
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actual Price (INR)
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Offer Price (INR)
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {services.map((q, index) => (
+                  <tr key={q.id}>
+                    <td className="px-6 py-4 border border-gray-300 text-center text-sm font-bold">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm font-bold">
+                      {q.service_name}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.service_description.split(".").map((part, index) => (
+                        <p key={index}>
+                          {part.trim()}
+                          {index !==
+                            q.service_description.split(".").length - 1 && "."}
+                        </p>
+                      ))}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.actual_price}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.offer_price}
+                    </td>
+                  </tr>
+                ))}
+                {rowVisible && (
+                  <tr>
+                    <td
+                      colSpan="3"
+                      className="px-6 py-4 border border-gray-300 font-bold text-sm"
+                    >
+                      Total {`${serviceTypeTitle} Amount`}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
+                      {actualPriceTotal}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
+                      {offerPriceTotal}
+                    </td>
+                  </tr>
+                )}
+                <tr className="bg-gray-50 btn-print">
+                  <td
+                    colSpan="5"
+                    className="px-6 py-4 text-center border border-gray-300"
+                  >
+                    <button
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                      onClick={toggleRowVisibility}
+                    >
+                      {rowVisible ? "Hide" : "Show"}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )
+    );
   };
 
   const renderPaidServices = () => {
@@ -283,7 +286,7 @@ function Print_Page() {
             Payment Conditions for Website/Moblie/Software Development /Graphic
             & Logo Designing/Video Editing
           </h4>
-        
+
           <EditablePaymentTable />
         </div>
       );
@@ -341,7 +344,7 @@ function Print_Page() {
             Optimization/GMB/Google Reviews/Google PPC Ads/Website Modification
             & Maintenance
           </h4>
-       
+
           <EditableSeoPayment />
         </div>
       );
@@ -354,7 +357,7 @@ function Print_Page() {
     const fetchImages = async () => {
       try {
         const response = await axios.post(
-          "https://crmdemo.vimubds5.a2hosted.com/api/company-header-footer",
+          "http://localhost:9000/api/company-header-footer",
           {
             company_name: selectedCompany,
           }
@@ -394,8 +397,6 @@ function Print_Page() {
     fetchNotes();
   }, []);
 
- 
-
   const handleDelete = () => {
     navigate(`/deletecompanydata/${id}`);
   };
@@ -406,36 +407,36 @@ function Print_Page() {
 
   return (
     <>
-   <Wrapper>
-  <div className="flex justify-between px-4">
-    <div className="mx-3 btn-print mt-2">
-      <UserLogin />
-    </div>
-    <div className="mx-3 btn-print mt-2">
-      <Logout />
-    </div>
-  </div>
+      <Wrapper>
+        <div className="flex justify-between px-4">
+          <div className="mx-3 btn-print mt-2">
+            <UserLogin />
+          </div>
+          <div className="mx-3 btn-print mt-2">
+            <Logout />
+          </div>
+        </div>
 
-  <div className="flex justify-between items-center px-4 mt-3 mb-2">
-    <div className="">
-      <Link
-        to={`/final-quotation/${id}`}
-        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mx-1 w-25 btn-print"
-      >
-        <i className="bi bi-arrow-return-left mx-1"></i> Back
-      </Link>
-    </div>
-    <div className="">
-      <Link
-        to="/quotationlist"
-        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mx-5 w-75 btn-print"
-      >
-        Quotation List
-      </Link>
-    </div>
-  </div>
+        <div className="flex justify-between items-center px-4 mt-3 mb-2">
+          <div className="">
+            <Link
+              to={`/final-quotation/${id}`}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mx-1 w-25 btn-print"
+            >
+              <i className="bi bi-arrow-return-left mx-1"></i> Back
+            </Link>
+          </div>
+          <div className="">
+            <Link
+              to="/quotationlist"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mx-5 w-75 btn-print"
+            >
+              Quotation List
+            </Link>
+          </div>
+        </div>
 
-  {/* <div className="container px-4">
+        {/* <div className="container px-4">
     <button
       className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-3 mt-2 w-full btn-print"
       onClick={handlePrintPage}
@@ -444,78 +445,84 @@ function Print_Page() {
     </button>
   </div> */}
 
-  <div className="w-full px-4 mt-2">
-    <h1 className="text-xl font-bold btn-print">Select Company Data</h1>
-    <select
-      className="form-select w-64 mt-2 mb-3 px-2 py-2 border rounded btn-print"
-      value={selectedCompany}
-      onChange={handleCompanyNameChange}
-      required
-    >
-      <option value="">Select Company</option>
-      {companyNames.map((company, index) => (
-        <option className="px-4" key={index} value={company}>
-          {company}
-        </option>
-      ))}
-    </select>
-  </div>
+        <div className="w-full px-4 mt-2">
+          <h1 className="text-xl font-bold btn-print">Select Company Data</h1>
+          <select
+            className="form-select w-64 mt-2 mb-3 px-2 py-2 border rounded btn-print"
+            value={selectedCompany}
+            onChange={handleCompanyNameChange}
+            required
+          >
+            <option value="">Select Company</option>
+            {companyNames.map((company, index) => (
+              <option className="px-4" key={index} value={company}>
+                {company}
+              </option>
+            ))}
+          </select>
+        </div>
 
-  <Header companyName={selectedCompany} quotationName={quotationName} />
+        <Header companyName={selectedCompany} quotationName={quotationName} />
 
-  <div className="mt-5 px-4">
-    <h2 className="text-2xl font-bold">Plan & Quotation for {quotationName}</h2>
-    {renderPaidServices()}
-    {renderComplimentaryServices()}
+        <div className="mt-5 px-4">
+          <h2 className="text-2xl font-bold">
+            Plan & Quotation for {quotationName}
+          </h2>
+          {renderPaidServices()}
+          {renderComplimentaryServices()}
 
-    <div className="mt-3">
-      <h5 className="font-bold">Notes:</h5>
-      <ul>
-        {notes.map((note) => (
-          <li key={note.id}>
-            {note.note_text}
-            <p>{note.additional_info}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div className="mt-2">{renderWebsiteDevelopmentPaymentConditions()}</div>
-    <div className="mt-2 mb-3">{renderSEOPaymentConditions()}</div>
+          <div className="mt-3">
+            <h5 className="font-bold">Notes:</h5>
+            <ul>
+              {notes.map((note) => (
+                <li key={note.id}>
+                  {note.note_text}
+                  <p>{note.additional_info}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-2">
+            {renderWebsiteDevelopmentPaymentConditions()}
+          </div>
+          <div className="mt-2 mb-3">{renderSEOPaymentConditions()}</div>
 
-    <div>
-      <table className="min-w-full divide-y divide-gray-300 mt-3 border border-gray-300">
-        <thead className="bg-gray-100">
-          <tr>
-            <th colSpan="3" className="text-center py-2 font-semibold">Payment Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="px-4 py-2">{accountname}</td>
-            <td className="px-4 py-2">{accountIFSC}</td>
-            <td className="px-4 py-2">{accountNumber}</td>
-          </tr>
-          {/* Other payment details */}
-        </tbody>
-      </table>
-    </div>
-  </div>
+          <div>
+            <table className="min-w-full divide-y divide-gray-300 mt-3 border border-gray-300">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th colSpan="3" className="text-center py-2 font-semibold">
+                    Payment Details
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="px-4 py-2">{accountname}</td>
+                  <td className="px-4 py-2">{accountIFSC}</td>
+                  <td className="px-4 py-2">{accountNumber}</td>
+                </tr>
+                {/* Other payment details */}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-  <div className="mt-3 mb-2 px-4">
-    <h6 className="text-lg">Address: {companyAddress}</h6>
-  </div>
+        <div className="mt-3 mb-2 px-4">
+          <h6 className="text-lg">Address: {companyAddress}</h6>
+        </div>
 
-  <div className="container flex justify-center">
-    <button
-      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-3 mt-2 w-auto btn-print print:hidden"
-      onClick={handlePrintPage}
-    >
-      Print Page
-    </button>
-  </div>
-  
-  <Footer companyName={selectedCompany} />
-</Wrapper>
+        <div className="container flex justify-center">
+          <button
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mb-3 mt-2 w-auto btn-print print:hidden"
+            onClick={handlePrintPage}
+          >
+            Print Page
+          </button>
+        </div>
+
+        <Footer companyName={selectedCompany} />
+      </Wrapper>
 
       {/* <Lastpage/> */}
     </>
@@ -559,4 +566,3 @@ const Wrapper = styled.div`
     }
   }
 `;
-

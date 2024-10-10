@@ -1,31 +1,33 @@
-import axios from 'axios';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import img from '../../images/lead_profile.png'; // Assuming this will be the employee's image as well
-import MainHeader from '../MainHeader';
-import EmployeeSider from './EmployeeSider';
-import { useSelector } from 'react-redux';
+import axios from "axios";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import img from "../../images/lead_profile.png"; // Assuming this will be the employee's image as well
+import MainHeader from "../MainHeader";
+import EmployeeSider from "./EmployeeSider";
+import { useSelector } from "react-redux";
 
 const mockEmployeeData = {
-    employeeId: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "9876543210",
-    salary: "50000.00",
-    position: "Software Engineer",
-    designation: "Developer",
-    createdTime: "2024-09-01 12:00:00",
-    signature: "john-sign.png",
-    photo: "john-profile.png"
-  };
+  employeeId: 1,
+  name: "John Doe",
+  email: "john.doe@example.com",
+  phone: "9876543210",
+  salary: "50000.00",
+  position: "Software Engineer",
+  designation: "Developer",
+  createdTime: "2024-09-01 12:00:00",
+  signature: "john-sign.png",
+  photo: "john-profile.png",
+};
 
 function EmployeeProfile() {
   const [user, setUser] = useState([]); // Initialize state for employee data
-  const EmpId = useSelector(state => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user.id);
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api//employeeProfile/${EmpId}`); // Fetch employee data
+        const response = await axios.get(
+          `http://localhost:9000/api//employeeProfile/${EmpId}`
+        ); // Fetch employee data
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data
       } catch (error) {
@@ -38,12 +40,10 @@ function EmployeeProfile() {
 
   // Mock data for testing (remove once API is working)
 
-
-
   return (
     <>
-         <MainHeader/>
-         <EmployeeSider/>
+      <MainHeader />
+      <EmployeeSider />
       <div className="container mt-[5rem]">
         <h1 className="text-2xl text-center mt-[2rem]">Employee Profile</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
@@ -57,7 +57,6 @@ function EmployeeProfile() {
           </div>
           <div className="w-full lg:w-2/3">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-
               <div>
                 <label className="text-info">Employee ID</label>
                 <div className="p-2 bg-gray-100 rounded">
@@ -100,14 +99,14 @@ function EmployeeProfile() {
                 </div>
               </div>
 
-
               <div>
                 <label className="text-info">Created Date</label>
                 <div className="p-2 bg-gray-100 rounded">
-                  <p className="m-0">{moment(user.createdTime).format('DD/MM/YYYY')}</p>
+                  <p className="m-0">
+                    {moment(user.createdTime).format("DD/MM/YYYY")}
+                  </p>
                 </div>
               </div>
-
             </div>
           </div>
         </div>

@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 
 const EmployeeLeadsReport = () => {
   const [leads, setLeads] = useState([]);
-  const EmpId = useSelector(state => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user.id);
   useEffect(() => {
     const fetchLeads = async () => {
       try {
         const response = await axios.get(
-          `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
+          `http://localhost:9000/api/employe-leads/${EmpId}`
         );
         const data = response.data;
         const today = new Date();
@@ -95,9 +95,7 @@ const EmployeeLeadsReport = () => {
             ) : (
               <tr className="px-2 ">
                 <td colSpan={7} className="px-4 py-2">
-                  <p className="text-center p-4">
-                    No leads created today.
-                  </p>
+                  <p className="text-center p-4">No leads created today.</p>
                 </td>
               </tr>
             )}

@@ -1,11 +1,10 @@
-
-import React, { useState } from 'react';
-import axios from 'axios';
-import cogoToast from 'cogo-toast';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../store/UserSlice';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import React, { useState } from "react";
+import axios from "axios";
+import cogoToast from "cogo-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../store/UserSlice";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 function Login() {
   const [formData, setFormData] = useState({});
@@ -20,7 +19,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/login", formData);
+      const res = await axios.post("http://localhost:9000/api/login", formData);
       if (res.data.success) {
         dispatch(loginUser(res.data.user));
         cogoToast.success(res.data.message);
@@ -29,7 +28,7 @@ function Login() {
         cogoToast.error(res.data.message);
       }
     } catch (error) {
-      cogoToast.error(error?.response?.data?.message || 'An error occurred');
+      cogoToast.error(error?.response?.data?.message || "An error occurred");
     }
   };
 
@@ -43,7 +42,12 @@ function Login() {
         <h1 className="mb-6 text-2xl font-bold text-center">Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -55,7 +59,12 @@ function Login() {
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPassword ? "text" : "password"}
@@ -71,7 +80,11 @@ function Login() {
                 className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                 onClick={togglePasswordVisibility}
               >
-                {showPassword ? <AiFillEye className="text-gray-500" /> : <AiFillEyeInvisible className="text-gray-500" />}
+                {showPassword ? (
+                  <AiFillEye className="text-gray-500" />
+                ) : (
+                  <AiFillEyeInvisible className="text-gray-500" />
+                )}
               </button>
             </div>
           </div>

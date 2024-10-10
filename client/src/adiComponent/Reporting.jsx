@@ -16,13 +16,32 @@ const Reporting = () => {
   const [rowPerPage, setRowPerPage] = useState(5);
   const [dataFields, setDataFields] = useState({
     quotation: {
-      heading: ["Id", "Quotation Name", "Employee Name", "Date"],  
-      columns: ["quotation_id", "quotation_name", "employee_name", "created_date"],
+      heading: ["Id", "Quotation Name", "Employee Name", "Date"],
+      columns: [
+        "quotation_id",
+        "quotation_name",
+        "employee_name",
+        "created_date",
+      ],
       quotation: [],
     },
     invoice: {
-      heading: ["id ", "Invoice Name", "Employee Name", "Amount", "Payment Mode", "Date"],
-      columns: ["invoice_id", "invoice_name", "employee_name", "offer_price", "payment_mode", "created_date"],
+      heading: [
+        "id ",
+        "Invoice Name",
+        "Employee Name",
+        "Amount",
+        "Payment Mode",
+        "Date",
+      ],
+      columns: [
+        "invoice_id",
+        "invoice_name",
+        "employee_name",
+        "offer_price",
+        "payment_mode",
+        "created_date",
+      ],
       invoice: [],
     },
     employee: {
@@ -31,12 +50,33 @@ const Reporting = () => {
       employee: [],
     },
     leads: {
-      heading: ["Lead No.", "Assigned To", "Lead Name", "Phone Number", "Date", "Lead Source", "Quotation Status", "Invoice Status", "Deal Status",  "FollowUp Status"],
-      columns: ["lead_no", "assignedTo", "name",  "phone", "createdTime", "leadSource", "quotation_status", "invoice_status", "deal_status",  "follow_up_status"],
+      heading: [
+        "Lead No.",
+        "Assigned To",
+        "Lead Name",
+        "Phone Number",
+        "Date",
+        "Lead Source",
+        "Quotation Status",
+        "Invoice Status",
+        "Deal Status",
+        "FollowUp Status",
+      ],
+      columns: [
+        "lead_no",
+        "assignedTo",
+        "name",
+        "phone",
+        "createdTime",
+        "leadSource",
+        "quotation_status",
+        "invoice_status",
+        "deal_status",
+        "follow_up_status",
+      ],
       leads: [],
     },
   });
-
 
   useEffect(() => {
     filterData();
@@ -143,29 +183,29 @@ const Reporting = () => {
   };
 
   const quotationAxios = axios.create({
-    baseURL: "https://crmdemo.vimubds5.a2hosted.com/api",
+    baseURL: "http://localhost:9000/api",
   });
-  
+
   const invoiceAxios = axios.create({
-    baseURL: "https://crmdemo.vimubds5.a2hosted.com/api",
+    baseURL: "http://localhost:9000/api",
   });
-  
+
   const employeeAxios = axios.create({
-    baseURL: "https://crmdemo.vimubds5.a2hosted.com/api",
+    baseURL: "http://localhost:9000/api",
   });
-  
+
   const leadsAxios = axios.create({
-    baseURL: "https://crmdemo.vimubds5.a2hosted.com/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format('DD/MM/YYYY'),
-      createdTime: moment(item.createdTime).format('DD/MM/YYYY'),
+      created_date: moment(item.created_date).format("DD/MM/YYYY"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
     }));
   };
-  
+
   const getQuotationData = async () => {
     try {
       const results = await Promise.allSettled([
@@ -174,16 +214,16 @@ const Reporting = () => {
         employeeAxios.get("/employee"),
         leadsAxios.get("/leads"),
       ]);
-  
+
       // Initialize empty response objects
       let quotationData = [];
       let invoiceData = [];
       let employeeData = [];
       let leadsData = [];
-  
+
       // Handle each result
       results.forEach((result, index) => {
-        if (result.status === 'fulfilled') {
+        if (result.status === "fulfilled") {
           switch (index) {
             case 0:
               quotationData = formatData(result.value.data.data);
@@ -201,17 +241,20 @@ const Reporting = () => {
               break;
           }
         } else {
-          console.error(`Error fetching data for index ${index}:`, result.reason);
+          console.error(
+            `Error fetching data for index ${index}:`,
+            result.reason
+          );
         }
       });
-  
+
       const combinedData = {
         quotation: quotationData,
         invoice: invoiceData,
         employee: employeeData,
         leads: leadsData,
       };
-  
+
       const updatedDataFields = {
         ...dataFields,
         quotation: {
@@ -231,7 +274,7 @@ const Reporting = () => {
           leads: combinedData.leads,
         },
       };
-  
+
       setDataFields(updatedDataFields);
       console.log(combinedData);
       setData(combinedData);
@@ -239,7 +282,6 @@ const Reporting = () => {
       console.log("Unexpected error:", error);
     }
   };
-  
 
   useEffect(() => {
     getQuotationData();
@@ -250,8 +292,8 @@ const Reporting = () => {
       <MainHeader />
       <Sider />
       <div className=" container px-3 pt-5">
-      <h1 className="text-2xl text-center mt-[2rem] font-medium">Reports</h1>
-      <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+        <h1 className="text-2xl text-center mt-[2rem] font-medium">Reports</h1>
+        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
       <div className=" container mt-16 flex flex-col min-h-screen p-4 lg:p-8">
         <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between mb-8">

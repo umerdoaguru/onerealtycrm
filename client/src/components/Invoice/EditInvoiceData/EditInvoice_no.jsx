@@ -1,13 +1,10 @@
-
-
-
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditInvoice_no = () => {
   const { id } = useParams();
-  const [newInvoiceNo, setNewInvoiceNo] = useState('');
+  const [newInvoiceNo, setNewInvoiceNo] = useState("");
   const [showModal, setShowModal] = useState(true);
   const navigate = useNavigate();
 
@@ -15,12 +12,15 @@ const EditInvoice_no = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-no/${id}`, { newInvoice_no: newInvoiceNo });
+      const response = await axios.put(
+        `http://localhost:9000/api/invoice-no/${id}`,
+        { newInvoice_no: newInvoiceNo }
+      );
       if (response.status === 200) {
         navigate(`/print-invoice/${id}`);
       }
     } catch (error) {
-      console.error('Error updating Invoice number:', error);
+      console.error("Error updating Invoice number:", error);
     }
 
     setShowModal(false);
@@ -37,13 +37,18 @@ const EditInvoice_no = () => {
         <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Update Invoice Number</h2>
-            <button onClick={handleClose} className="text-gray-500 hover:text-gray-700">
+            <button
+              onClick={handleClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
               &times;
             </button>
           </div>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">New Invoice Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                New Invoice Number
+              </label>
               <input
                 type="text"
                 className="w-full border border-gray-300 rounded-md p-2"
@@ -54,10 +59,16 @@ const EditInvoice_no = () => {
               />
             </div>
             <div className="flex justify-end">
-              <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-2"
+              >
                 Save Changes
               </button>
-              <button onClick={handleClose} className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400">
+              <button
+                onClick={handleClose}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+              >
                 Close
               </button>
             </div>
@@ -69,4 +80,3 @@ const EditInvoice_no = () => {
 };
 
 export default EditInvoice_no;
-

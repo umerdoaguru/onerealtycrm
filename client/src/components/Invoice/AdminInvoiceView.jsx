@@ -50,7 +50,7 @@ function AdminInvoiceView() {
     const fetchInvoiceAddress = async () => {
       try {
         const response = await axios.get(
-          `https://crmdemo.vimubds5.a2hosted.com/api/invoice-address/${id}`
+          `http://localhost:9000/api/invoice-address/${id}`
         );
         console.log(response.data);
         if (response.status === 200) {
@@ -80,7 +80,7 @@ function AdminInvoiceView() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `https://crmdemo.vimubds5.a2hosted.com/api/invoice/${id}`
+        `http://localhost:9000/api/invoice/${id}`
       );
       if (response.status === 200) {
         setInvoiceName(response.data[0].invoice_name);
@@ -188,81 +188,91 @@ function AdminInvoiceView() {
                       {offerPriceTotal}
                     </td>
                   </tr>
-        
+
                   {/* Render GST rows if the selected company is Doaguru Infosystems */}
-        
-                  {serviceTypeTitle === "Paid" && SelectGstType === "Excluding" && (
-                    <>
-                      <tr>
-                        <td colSpan="2" className="px-4 py-2 text-center border">
-                          CGST {invoiceClientGst_per / 2}%
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {cgstTotalActualPrice}
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {cgstTotalOfferPrice}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colSpan="2" className="px-4 py-2 text-center border">
-                          SGST {invoiceClientGst_per / 2}%
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {sgstTotalActualPrice}
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {sgstTotalOfferPrice}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colSpan="2" className="px-4 py-2 border">
-                          Total Payable Amount
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {totalPayableAmountActual}
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {totalPayableAmountOffer}
-                        </td>
-                      </tr>
-                    </>
-                  )}
-        
+
+                  {serviceTypeTitle === "Paid" &&
+                    SelectGstType === "Excluding" && (
+                      <>
+                        <tr>
+                          <td
+                            colSpan="2"
+                            className="px-4 py-2 text-center border"
+                          >
+                            CGST {invoiceClientGst_per / 2}%
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {cgstTotalActualPrice}
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {cgstTotalOfferPrice}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            colSpan="2"
+                            className="px-4 py-2 text-center border"
+                          >
+                            SGST {invoiceClientGst_per / 2}%
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {sgstTotalActualPrice}
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {sgstTotalOfferPrice}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan="2" className="px-4 py-2 border">
+                            Total Payable Amount
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {totalPayableAmountActual}
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {totalPayableAmountOffer}
+                          </td>
+                        </tr>
+                      </>
+                    )}
+
                   {/* Including */}
-        
-                  {serviceTypeTitle === "Paid" && SelectGstType === "Including" && (
-                    <>
-                      <tr>
-                        <td colSpan="2" className="px-4 py-2 text-center border">
-                          GST {gstpercentagefull}%
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {totalGstPayableAmountActual}
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {totalGstPayableAmountOffer}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colSpan="2" className="px-4 py-2 border">
-                          Total Payable Amount
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {totalGstPayableAmountActual}
-                        </td>
-                        <td className="px-4 py-2 font-semibold border">
-                          {totalGstPayableAmountOffer}
-                        </td>
-                      </tr>
-                    </>
-                  )}
+
+                  {serviceTypeTitle === "Paid" &&
+                    SelectGstType === "Including" && (
+                      <>
+                        <tr>
+                          <td
+                            colSpan="2"
+                            className="px-4 py-2 text-center border"
+                          >
+                            GST {gstpercentagefull}%
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {totalGstPayableAmountActual}
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {totalGstPayableAmountOffer}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colSpan="2" className="px-4 py-2 border">
+                            Total Payable Amount
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {totalGstPayableAmountActual}
+                          </td>
+                          <td className="px-4 py-2 font-semibold border">
+                            {totalGstPayableAmountOffer}
+                          </td>
+                        </tr>
+                      </>
+                    )}
                 </tbody>
               </table>
             </div>
           </div>
         );
-        
       } else {
         return null;
       }
@@ -307,7 +317,7 @@ function AdminInvoiceView() {
     try {
       // Make a POST request to fetch data for the selected company
       const response = await axios.post(
-        "https://crmdemo.vimubds5.a2hosted.com/api/company-name-data",
+        "http://localhost:9000/api/company-name-data",
         {
           company_name: companyType,
         }
@@ -374,7 +384,7 @@ function AdminInvoiceView() {
   const fetchNotes = async () => {
     try {
       const response = await axios.get(
-        `https://crmdemo.vimubds5.a2hosted.com/api/invoice-get-notes/${id}`
+        `http://localhost:9000/api/invoice-get-notes/${id}`
       );
 
       if (response.status === 200) {
@@ -427,22 +437,22 @@ function AdminInvoiceView() {
 
   return (
     <Wrapper>
-     <div className="px-4">
-  <Link
-    to={`/invoicelist`}
-    className="bg-green-500 text-white mx-1 mt-3 mb-2 w-1/4 text-center py-2 rounded print:hidden"
-  >
-    <i className="bi bi-arrow-return-left mx-1"></i> Back
-  </Link>
+      <div className="px-4">
+        <Link
+          to={`/invoicelist`}
+          className="bg-green-500 text-white mx-1 mt-3 mb-2 w-1/4 text-center py-2 rounded print:hidden"
+        >
+          <i className="bi bi-arrow-return-left mx-1"></i> Back
+        </Link>
 
-  <Link
-    to="/invoicelist"
-    className="bg-green-500 text-white mt-2 float-right w-1/4 text-center py-2 rounded print:hidden"
-  >
-    Invoice List
-  </Link>
+        <Link
+          to="/invoicelist"
+          className="bg-green-500 text-white mt-2 float-right w-1/4 text-center py-2 rounded print:hidden"
+        >
+          Invoice List
+        </Link>
 
-  {/* <div>
+        {/* <div>
     <button
       className="bg-green-500 text-white mb-3 mt-2 w-full p-3 rounded"
       onClick={handlePrintPage}
@@ -451,212 +461,214 @@ function AdminInvoiceView() {
     </button>
   </div> */}
 
-  <div>
-    <div className="flex">
-      <div>
-        <img
-          src={companyLogo}
-          height={200}
-          width={200}
-          alt=""
-          className="mt-[-3rem]"
-        />
-      </div>
-      <div className="ml-4">
-        <h6 className="leading-6 text-sm">
-          {companyName} Address :- {companyAddress}
-          <br /> Mobile Number:-{companyMoblie_no}
-          <br />
-          {companyGST_no && <>GST Number : - {companyGST_no}</>}
-          {companyPan_no && <>Pan Card No. : - {companyPan_no}</>}
-          <br /> Email Id :- {companyEmail_id}
-        </h6>
-      </div>
-    </div>
+        <div>
+          <div className="flex">
+            <div>
+              <img
+                src={companyLogo}
+                height={200}
+                width={200}
+                alt=""
+                className="mt-[-3rem]"
+              />
+            </div>
+            <div className="ml-4">
+              <h6 className="leading-6 text-sm">
+                {companyName} Address :- {companyAddress}
+                <br /> Mobile Number:-{companyMoblie_no}
+                <br />
+                {companyGST_no && <>GST Number : - {companyGST_no}</>}
+                {companyPan_no && <>Pan Card No. : - {companyPan_no}</>}
+                <br /> Email Id :- {companyEmail_id}
+              </h6>
+            </div>
+          </div>
 
-    <div className="flex justify-between mt-4">
-      <div>
-        Invoice No :- {invoice_no}{" "}
-        <Link to={`/update-invoice-number/${id}`} className="text-blue-500">
-          Edit
-        </Link>
-      </div>
-      <div>
-        Invoice Date :- {formattedAdjustedInvoiceDate}{" "}
-        <Link to={`/update-invoice-date/${id}`} className="text-blue-500">
-          Edit
-        </Link>
-      </div>
-    </div>
+          <div className="flex justify-between mt-4">
+            <div>
+              Invoice No :- {invoice_no}{" "}
+              <Link
+                to={`/update-invoice-number/${id}`}
+                className="text-blue-500"
+              >
+                Edit
+              </Link>
+            </div>
+            <div>
+              Invoice Date :- {formattedAdjustedInvoiceDate}{" "}
+              <Link to={`/update-invoice-date/${id}`} className="text-blue-500">
+                Edit
+              </Link>
+            </div>
+          </div>
 
-    <div className="flex justify-between mt-2">
-      <div>
-        Service Duration :- {formattedAdjustedInvoiceDateStart}{" "}
-        <Link
-          to={`/update-invoice-start-date/${id}`}
-          className="text-blue-500"
-        >
-          Edit
-        </Link>
-        &nbsp; to {formattedAdjustedInvoiceDateEnd}{" "}
-        <Link to={`/update-invoice-end-date/${id}`} className="text-blue-500">
-          Edit
-        </Link>
-      </div>
-      <div>Payment Mode :- {paymentMode}</div>
-    </div>
+          <div className="flex justify-between mt-2">
+            <div>
+              Service Duration :- {formattedAdjustedInvoiceDateStart}{" "}
+              <Link
+                to={`/update-invoice-start-date/${id}`}
+                className="text-blue-500"
+              >
+                Edit
+              </Link>
+              &nbsp; to {formattedAdjustedInvoiceDateEnd}{" "}
+              <Link
+                to={`/update-invoice-end-date/${id}`}
+                className="text-blue-500"
+              >
+                Edit
+              </Link>
+            </div>
+            <div>Payment Mode :- {paymentMode}</div>
+          </div>
 
-    <div className="flex mt-3">
-      <table className="w-full border border-black">
-        <thead>
-          <tr>
-            <th className="p-2 border">BILL TO</th>
-            <th className="p-2 border">SHIP TO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="p-2 border">
-              <strong>{invoiceName}</strong>
-            </td>
-            <td className="p-2 border">
-              <strong>{invoiceName}</strong>
-            </td>
-          </tr>
-          <tr>
-            <td className="p-2 border">
-              <h6>{invoiceAddress}</h6>
-            </td>
-            <td className="p-2 border">
-              <h6>{invoiceAddress}</h6>
-            </td>
-          </tr>
-          {invoiceClientGst_no && (
-            <tr>
-              <td className="p-2 border">
-                <h6>GST:-{invoiceClientGst_no}</h6>
-              </td>
-              <td className="p-2 border">
-                <h6>GST:-{invoiceClientGst_no}</h6>
-              </td>
-            </tr>
+          <div className="flex mt-3">
+            <table className="w-full border border-black">
+              <thead>
+                <tr>
+                  <th className="p-2 border">BILL TO</th>
+                  <th className="p-2 border">SHIP TO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="p-2 border">
+                    <strong>{invoiceName}</strong>
+                  </td>
+                  <td className="p-2 border">
+                    <strong>{invoiceName}</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="p-2 border">
+                    <h6>{invoiceAddress}</h6>
+                  </td>
+                  <td className="p-2 border">
+                    <h6>{invoiceAddress}</h6>
+                  </td>
+                </tr>
+                {invoiceClientGst_no && (
+                  <tr>
+                    <td className="p-2 border">
+                      <h6>GST:-{invoiceClientGst_no}</h6>
+                    </td>
+                    <td className="p-2 border">
+                      <h6>GST:-{invoiceClientGst_no}</h6>
+                    </td>
+                  </tr>
+                )}
+                {invoiceClientPan_no && (
+                  <tr>
+                    <td className="p-2 border">
+                      <h6>Pan Card :-{invoiceClientPan_no}</h6>
+                    </td>
+                    <td className="p-2 border">
+                      <h6>Pan Card :-{invoiceClientPan_no}</h6>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {companyGST_no && (
+            <div className="flex mt-3">
+              <div className="w-full">
+                <h4 className="text-center text-lg">Select GST Type</h4>
+                <select
+                  className="w-full border border-gray-300 p-2 rounded"
+                  id={`invoicegstType`}
+                  name="invoicegsttype"
+                  onChange={handleInvoiceGstTypeChange}
+                  value={invoiceGstType}
+                  required
+                >
+                  <option value="">Select Invoice GST Type</option>
+                  <option value="Excluding">Excluding</option>
+                  <option value="Including">Including</option>
+                </select>
+              </div>
+            </div>
           )}
-          {invoiceClientPan_no && (
-            <tr>
-              <td className="p-2 border">
-                <h6>Pan Card :-{invoiceClientPan_no}</h6>
-              </td>
-              <td className="p-2 border">
-                <h6>Pan Card :-{invoiceClientPan_no}</h6>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
 
-    {companyGST_no && (
-      <div className="flex mt-3">
-        <div className="w-full">
-          <h4 className="text-center text-lg">Select GST Type</h4>
-          <select
-            className="w-full border border-gray-300 p-2 rounded"
-            id={`invoicegstType`}
-            name="invoicegsttype"
-            onChange={handleInvoiceGstTypeChange}
-            value={invoiceGstType}
-            required
-          >
-            <option value="">Select Invoice GST Type</option>
-            <option value="Excluding">Excluding</option>
-            <option value="Including">Including</option>
-          </select>
+          {renderPaidServices(invoiceGstType)}
+          {renderComplimentaryServices(invoiceGstType)}
+
+          <div className="mt-3">
+            <h5 className="font-bold mb-3">Notes:-</h5>
+
+            <ul>
+              {notes.map((note) => (
+                <li key={note.id} className="font-bold text-sm leading-5 mb-1">
+                  {note.note_text}
+                  <p>{note.additional_info}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-3">
+            <button
+              className="bg-blue-500 text-white py-2 px-4 rounded mr-2 print:hidden"
+              onClick={handleAddNotes}
+            >
+              Add Notes
+            </button>
+            <button
+              className="bg-red-500 text-white py-2 px-4 rounded mr-2 print:hidden"
+              onClick={handleDeleteNotes}
+            >
+              Delete Notes
+            </button>
+            <button
+              className="bg-teal-500 text-white py-2 px-4 rounded print:hidden"
+              onClick={handleUpdateNotes}
+            >
+              Edit Notes
+            </button>
+          </div>
+
+          <div className="flex justify-between mt-6">
+            <div>
+              <h6 className="font-bold">Bank Details</h6>
+              <ul className="list-none leading-6">
+                <li>Name : {accountname}</li>
+                <li>IFSC Code : {accountIFSC}</li>
+                <li>Account No : {accountNumber}</li>
+                <li>Bank : {companyBank}</li>
+              </ul>
+            </div>
+            <div>
+              <img
+                src={companydigitalsign}
+                height={200}
+                width={200}
+                alt=""
+                className="mt-4"
+              />
+            </div>
+          </div>
+
+          <div
+            className="mx-auto"
+            style={{
+              height: 1,
+              width: "100%",
+              backgroundColor: "#34495E",
+              marginTop: 0,
+              marginBottom: 0,
+            }}
+          ></div>
+
+          <div className="mt-6 print:hiddenn flex justify-center">
+            <button
+              className="bg-green-500 text-white mb-3 mt-2 w-auto p-3 rounded print:hidden"
+              onClick={handlePrintPage}
+            >
+              Print Page
+            </button>
+          </div>
         </div>
       </div>
-    )}
-
-    {renderPaidServices(invoiceGstType)}
-    {renderComplimentaryServices(invoiceGstType)}
-
-    <div className="mt-3">
-      <h5 className="font-bold mb-3">Notes:-</h5>
-
-      <ul>
-        {notes.map((note) => (
-          <li
-            key={note.id}
-            className="font-bold text-sm leading-5 mb-1"
-          >
-            {note.note_text}
-            <p>{note.additional_info}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div className="mt-3">
-      <button
-        className="bg-blue-500 text-white py-2 px-4 rounded mr-2 print:hidden"
-        onClick={handleAddNotes}
-      >
-        Add Notes
-      </button>
-      <button
-        className="bg-red-500 text-white py-2 px-4 rounded mr-2 print:hidden"
-        onClick={handleDeleteNotes}
-      >
-        Delete Notes
-      </button>
-      <button
-        className="bg-teal-500 text-white py-2 px-4 rounded print:hidden"
-        onClick={handleUpdateNotes}
-      >
-        Edit Notes
-      </button>
-    </div>
-
-    <div className="flex justify-between mt-6">
-      <div>
-        <h6 className="font-bold">Bank Details</h6>
-        <ul className="list-none leading-6">
-          <li>Name : {accountname}</li>
-          <li>IFSC Code : {accountIFSC}</li>
-          <li>Account No : {accountNumber}</li>
-          <li>Bank : {companyBank}</li>
-        </ul>
-      </div>
-      <div>
-        <img
-          src={companydigitalsign}
-          height={200}
-          width={200}
-          alt=""
-          className="mt-4"
-        />
-      </div>
-    </div>
-
-    <div
-      className="mx-auto"
-      style={{
-        height: 1,
-        width: "100%",
-        backgroundColor: "#34495E",
-        marginTop: 0,
-        marginBottom: 0,
-      }}
-    ></div>
-
-    <div className="mt-6 print:hiddenn flex justify-center">
-      <button
-        className="bg-green-500 text-white mb-3 mt-2 w-auto p-3 rounded print:hidden"
-        onClick={handlePrintPage}
-      >
-        Print Page
-      </button>
-    </div>
-  </div>
-</div>
-
     </Wrapper>
   );
 }

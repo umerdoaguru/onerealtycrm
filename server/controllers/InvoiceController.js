@@ -97,9 +97,7 @@ const createInvoice = async (req, res) => {
 
 const getInvoice = async (req, res) => {
   try {
-  
-    const sql =
-      "SELECT * FROM invoice_data ORDER BY invoice_id DESC";
+    const sql = "SELECT * FROM invoice_data ORDER BY invoice_id DESC";
 
     const invoices = await new Promise((resolve, reject) => {
       db.query(sql, (err, results) => {
@@ -118,16 +116,14 @@ const getInvoice = async (req, res) => {
   }
 };
 
-
 const getAllInvoice = async (req, res) => {
   try {
-    const sql =  `SELECT * FROM  
+    const sql = `SELECT * FROM  
     invoice_data 
     JOIN  invoice_services_data ON invoice_data.invoice_id = invoice_services_data.invoice_id `;
 
-
     const allQuotations = await new Promise((resolve, reject) => {
-      db.query(sql,(err, results) => {
+      db.query(sql, (err, results) => {
         if (err) {
           reject(err);
         } else {
@@ -136,12 +132,14 @@ const getAllInvoice = async (req, res) => {
       });
     });
 
-    res.status(200).json({message: "Successfull", data: allQuotations});
+    res.status(200).json({ message: "Successfull", data: allQuotations });
   } catch (error) {
     console.error("Error processing request:", error);
-    res.status(500).json({ message: "Internal Server Error", success: false, error });
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", success: false, error });
   }
-}
+};
 
 const getInvoiceAddress = async (req, res) => {
   try {
@@ -237,10 +235,10 @@ const deleteInvoice = async (req, res) => {
       });
     });
 
-
     res.status(200).json({
       success: true,
-      message: "Invoice ,  Invoice services , Invoice Notes  deleted successfully",
+      message:
+        "Invoice ,  Invoice services , Invoice Notes  deleted successfully",
     });
   } catch (error) {
     console.error("Error processing request:", error);
@@ -259,7 +257,6 @@ const UpdateInvoiceName = async (req, res) => {
       newClient_GST_per,
       newClient_Pan_no,
       newcompany_type,
-      
     } = req.body; // Extracting new invoice name from req.body
 
     // Construct SQL query to update the invoice name
@@ -313,33 +310,21 @@ const UpdateInvoiceName = async (req, res) => {
 const UpdateInvoice_No = async (req, res) => {
   try {
     const { invoiceId } = req.params; // Extracting invoiceId from req.params
-    const {
-      newInvoice_no
-      
-    } = req.body; // Extracting new invoice name from req.body
+    const { newInvoice_no } = req.body; // Extracting new invoice name from req.body
 
     // Construct SQL query to update the invoice name
-    const sql =
-      "UPDATE invoice_data SET invoice_no = ?  WHERE invoice_id = ?";
+    const sql = "UPDATE invoice_data SET invoice_no = ?  WHERE invoice_id = ?";
 
     // Execute the update query asynchronously
     await new Promise((resolve, reject) => {
-      db.query(
-        sql,
-        [
-         newInvoice_no,
-          invoiceId
-        ],
-        (err, results) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(results);
-          }
+      db.query(sql, [newInvoice_no, invoiceId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
         }
-      );
+      });
     });
-   
 
     res.status(200).json({ message: "Invoice number updated successfully" });
   } catch (error) {
@@ -351,11 +336,7 @@ const UpdateInvoice_No = async (req, res) => {
 const UpdateInvoice_date = async (req, res) => {
   try {
     const { invoiceId } = req.params; // Extracting invoiceId from req.params
-    const {
-      newInvoice_date
-      
-    } = req.body; // Extracting new invoice name from req.body
-
+    const { newInvoice_date } = req.body; // Extracting new invoice name from req.body
 
     // Construct SQL query to update the invoice name
     const sql =
@@ -363,22 +344,14 @@ const UpdateInvoice_date = async (req, res) => {
 
     // Execute the update query asynchronously
     await new Promise((resolve, reject) => {
-      db.query(
-        sql,
-        [
-         newInvoice_date,
-          invoiceId
-        ],
-        (err, results) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(results);
-          }
+      db.query(sql, [newInvoice_date, invoiceId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
         }
-      );
+      });
     });
-   
 
     res.status(200).json({ message: "Invoice date updated successfully" });
   } catch (error) {
@@ -421,40 +394,33 @@ const UpdateInvoice_date = async (req, res) => {
 //   }
 // };
 
-
 const getInvoiceDate = async (req, res) => {
-
   try {
     const { id } = req.params;
-    const query = 'SELECT invoice_date FROM invoice_data WHERE invoice_id = ?';
+    const query = "SELECT invoice_date FROM invoice_data WHERE invoice_id = ?";
     db.query(query, [id], (err, results) => {
       if (err) {
-        console.error('Error fetching invoice date:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error fetching invoice date:", err);
+        res.status(500).json({ error: "Internal Server Error" });
       } else {
         if (results.length > 0) {
           const invoiceDate = results[0].invoice_date;
           res.status(200).json({ invoiceDate });
         } else {
-          res.status(404).json({ error: 'Invoice not found' });
+          res.status(404).json({ error: "Invoice not found" });
         }
       }
     });
   } catch (error) {
-    console.error('Error fetching invoice date:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching invoice date:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
-
-
+};
 
 const UpdateInvoice_start_date = async (req, res) => {
   try {
     const { invoiceId } = req.params; // Extracting invoiceId from req.params
-    const {
-      newInvoice_start_date,
-      
-    } = req.body; // Extracting new invoice name from req.body
+    const { newInvoice_start_date } = req.body; // Extracting new invoice name from req.body
 
     // Construct SQL query to update the invoice name
     const sql =
@@ -462,24 +428,18 @@ const UpdateInvoice_start_date = async (req, res) => {
 
     // Execute the update query asynchronously
     await new Promise((resolve, reject) => {
-      db.query(
-        sql,
-        [
-         newInvoice_start_date,
-          invoiceId
-        ],
-        (err, results) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(results);
-          }
+      db.query(sql, [newInvoice_start_date, invoiceId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
         }
-      );
+      });
     });
-   
 
-    res.status(200).json({ message: "Invoice Start Date updated successfully" });
+    res
+      .status(200)
+      .json({ message: "Invoice Start Date updated successfully" });
   } catch (error) {
     console.error("Error updating Invoice Start Date :", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -488,10 +448,7 @@ const UpdateInvoice_start_date = async (req, res) => {
 const UpdateInvoice_end_date = async (req, res) => {
   try {
     const { invoiceId } = req.params; // Extracting invoiceId from req.params
-    const {
-      newInvoice_end_date
-      
-    } = req.body; // Extracting new invoice name from req.body
+    const { newInvoice_end_date } = req.body; // Extracting new invoice name from req.body
 
     // Construct SQL query to update the invoice name
     const sql =
@@ -499,32 +456,23 @@ const UpdateInvoice_end_date = async (req, res) => {
 
     // Execute the update query asynchronously
     await new Promise((resolve, reject) => {
-      db.query(
-        sql,
-        [
-         newInvoice_end_date,
-          invoiceId
-        ],
-        (err, results) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(results);
-          }
+      db.query(sql, [newInvoice_end_date, invoiceId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
         }
-      );
+      });
     });
-   
 
-    res.status(200).json({ message: "Invoice Start Date  updated successfully" });
+    res
+      .status(200)
+      .json({ message: "Invoice Start Date  updated successfully" });
   } catch (error) {
     console.error("Error updating Invoice Start Date :", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
-
 
 const GetInvoiceName = async (req, res) => {
   try {
@@ -589,12 +537,10 @@ const deleteServiceInvoice = async (req, res) => {
 
     // Check if a row was affected to determine if the service was found and deleted
     if (result.affectedRows > 0) {
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "Invoice Service deleted successfully",
-        });
+      res.status(200).json({
+        success: true,
+        message: "Invoice Service deleted successfully",
+      });
     } else {
       res.status(404).json({ error: "Service not found" });
     }
@@ -680,12 +626,10 @@ const updateServicesInvoice = async (req, res) => {
 
     await Promise.all(updateServicePromises);
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Invoice Services updated successfully",
-      });
+    res.status(200).json({
+      success: true,
+      message: "Invoice Services updated successfully",
+    });
   } catch (error) {
     console.error("Error updating invoice services:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -705,7 +649,7 @@ const CompanyIncoiceData = async (req, res) => {
       charges,
     } = req.body;
 
-    const logoImagePath = "https://crmdemo.vimubds5.a2hosted.com/uploads/" + logo[0].filename;
+    const logoImagePath = "http://localhost:9000/uploads/" + logo[0].filename;
 
     // Insert header and footer images with the associated company_id
     const insertHeaderFooterImages = await new Promise((resolve, reject) => {
@@ -731,12 +675,10 @@ const CompanyIncoiceData = async (req, res) => {
       });
     });
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Invoice Company profile uploaded successfully",
-      });
+    res.status(201).json({
+      success: true,
+      message: "Invoice Company profile uploaded successfully",
+    });
   } catch (error) {
     console.error("Error uploading invoice company data:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -835,7 +777,7 @@ const CopyInvoiceData = async (req, res) => {
         invoice.company_type,
         invoice.invoice_date,
         invoice.duration_start_date,
-        invoice.duration_end_date
+        invoice.duration_end_date,
       ]
     );
 
@@ -890,51 +832,55 @@ const CopyInvoiceData = async (req, res) => {
       });
     });
 
-     // SQL query to retrieve notes data associated with the invoice ID
-const sqlNotes = 'SELECT * FROM invoice_notes WHERE invoice_id = ?';
+    // SQL query to retrieve notes data associated with the invoice ID
+    const sqlNotes = "SELECT * FROM invoice_notes WHERE invoice_id = ?";
 
-// Execute the query asynchronously and retrieve the notes data
-const getNotes = await new Promise((resolve, reject) => {
-  db.query(sqlNotes, [invoiceId], (err, results) => {
-    if (err) {
-      reject(err);
-    } else {
-      resolve(results);
-    }
-  });
-});
+    // Execute the query asynchronously and retrieve the notes data
+    const getNotes = await new Promise((resolve, reject) => {
+      db.query(sqlNotes, [invoiceId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
 
-// Check if notes data is retrieved successfully
-if (!Array.isArray(getNotes)) {
-  console.error('Error fetching notes data:', getNotes);
-  // Handle the error appropriately, such as returning an error response
-} else {
-  // Prepare notes data for insertion
-  const notesValues = getNotes.map(note => [note.note_text, newInvoiceId]);
-
-  // SQL query to insert notes data into the database
-  const insertNotesQuery = 'INSERT INTO invoice_notes (note_text, invoice_id) VALUES ?';
-
-  // Execute the insertion query
-  db.query(insertNotesQuery, [notesValues], (err, result) => {
-    if (err) {
-      console.error('Error inserting notes data:', err);
+    // Check if notes data is retrieved successfully
+    if (!Array.isArray(getNotes)) {
+      console.error("Error fetching notes data:", getNotes);
       // Handle the error appropriately, such as returning an error response
     } else {
-      console.log('Notes data inserted successfully:', result);
-      // Handle the successful insertion, such as returning a success response
+      // Prepare notes data for insertion
+      const notesValues = getNotes.map((note) => [
+        note.note_text,
+        newInvoiceId,
+      ]);
+
+      // SQL query to insert notes data into the database
+      const insertNotesQuery =
+        "INSERT INTO invoice_notes (note_text, invoice_id) VALUES ?";
+
+      // Execute the insertion query
+      db.query(insertNotesQuery, [notesValues], (err, result) => {
+        if (err) {
+          console.error("Error inserting notes data:", err);
+          // Handle the error appropriately, such as returning an error response
+        } else {
+          console.log("Notes data inserted successfully:", result);
+          // Handle the successful insertion, such as returning a success response
+        }
+      });
     }
-  });
-}
 
-
-    res.status(200).json({ message: "Invoice and services data copied successfully" });
+    res
+      .status(200)
+      .json({ message: "Invoice and services data copied successfully" });
   } catch (error) {
     console.error("Error copying Invoice and services data:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 const InvoiceNotes = (req, res) => {
   const { noteTexts, invoiceId } = req.body;
@@ -985,7 +931,6 @@ const InvoicedeleteNote = (req, res) => {
   });
 };
 // const InvoiceupdateNote = async (req, res) => {
-  
 
 //   try {
 //     // Use map to update each note in the database
@@ -1017,14 +962,19 @@ const InvoiceupdateNote = async (req, res) => {
 
     // Check if notes is provided
     if (!notes || !Array.isArray(notes)) {
-      return res.status(400).json({ success: false, message: "Invalid input: notes must be an array" });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Invalid input: notes must be an array",
+        });
     }
 
     // Use map to update each note in the database
     await Promise.all(
       notes.map(async (note) => {
         const { id, invoice_id, note_text } = note;
-        
+
         // Ensure id, invoice_id, and note_text are provided
         if (!id || !invoice_id || !note_text) {
           throw new Error("Missing fields in note");
@@ -1046,9 +996,8 @@ const InvoiceupdateNote = async (req, res) => {
     console.error("Error updating notes:", error);
     // Send an error response
     res.status(500).json({ success: false, error: "Internal Server Error" });
-  }    
+  }
 };
-
 
 module.exports = {
   createInvoice,
@@ -1073,5 +1022,7 @@ module.exports = {
   UpdateInvoice_No,
   UpdateInvoice_date,
   UpdateInvoice_start_date,
-  UpdateInvoice_end_date, getInvoiceDate,getAllInvoice
+  UpdateInvoice_end_date,
+  getInvoiceDate,
+  getAllInvoice,
 };

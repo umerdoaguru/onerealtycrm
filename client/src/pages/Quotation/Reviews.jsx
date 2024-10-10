@@ -3,38 +3,29 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 
-
-
 function Reviews({ handleClose }) {
-
   const { id } = useParams();
   const [quotations, setQuotations] = useState([]);
   const [quotationDate, setQuotationDate] = useState(""); // New state to store quotation name
-  const [quotationName, setQuotationName] = useState(""); 
+  const [quotationName, setQuotationName] = useState("");
 
- 
- 
-  const [notes, setNotes] = useState([]); 
+  const [notes, setNotes] = useState([]);
   const [footerImagePath, setFooterImagePath] = useState("");
 
-  
   const [headerImagePath, setHeaderImagePath] = useState("");
 
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
         `
-        https://crmdemo.vimubds5.a2hosted.com/api/quotation/${id}`
+        http://localhost:9000/api/quotation/${id}`
       );
 
       if (response.status === 200) {
         setQuotationDate(response.data[0].created_date); // Set the quotation name
         setQuotationName(response.data[0].quotation_name);
         setQuotations(response.data);
-         console.log(response);
-
-     
-       
+        console.log(response);
       }
     } catch (error) {
       console.error("Error fetching quotations:", error);
@@ -44,7 +35,7 @@ function Reviews({ handleClose }) {
     try {
       const response = await axios.get(
         `
-        https://crmdemo.vimubds5.a2hosted.com/api/notes/${id}`
+        http://localhost:9000/api/notes/${id}`
       );
 
       if (response.status === 200) {
@@ -58,7 +49,7 @@ function Reviews({ handleClose }) {
     try {
       const response = await axios.get(
         `
-        https://crmdemo.vimubds5.a2hosted.com/api/${id}/header`
+        http://localhost:9000/api/${id}/header`
       );
 
       if (response.status === 200) {
@@ -71,15 +62,9 @@ function Reviews({ handleClose }) {
     }
   };
 
-
-
   const handlePrintPage = () => {
-    
-  
     window.print();
-  
   };
-
 
   const renderServiceTables = (subscriptionFrequency, serviceTypeTitle) => {
     const actualPriceTotal = quotations.reduce(
@@ -113,29 +98,56 @@ function Reviews({ handleClose }) {
             <table className="min-w-full divide-y divide-gray-200 bg-white border border-gray-300 mt-3">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sr.No</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service Description</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actual Price (INR)</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Offer Price (INR)</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Sr.No
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Description
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actual Price (INR)
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Offer Price (INR)
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {services.map((q, index) => (
                   <tr key={q.id}>
-                    <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">{index + 1}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{q.service_name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{q.service_description}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{q.actual_price}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{q.offer_price}</td>
+                    <td className="px-6 py-4 text-center text-sm font-medium text-gray-900">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      {q.service_name}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {q.service_description}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {q.actual_price}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {q.offer_price}
+                    </td>
                   </tr>
                 ))}
                 <tr>
-                  <td colSpan="3" className="px-6 py-4 text-sm font-medium text-gray-900">
+                  <td
+                    colSpan="3"
+                    className="px-6 py-4 text-sm font-medium text-gray-900"
+                  >
                     Total {`${serviceTypeTitle} Amount`}
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">{actualPriceTotal}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">{offerPriceTotal}</td>
+                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    {actualPriceTotal}
+                  </td>
+                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    {offerPriceTotal}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -143,13 +155,11 @@ function Reviews({ handleClose }) {
         </div>
       )
     );
-    
   };
 
   const renderPaidServices = () => {
     return (
       <>
-       
         {renderServiceTables("Monthly", "Paid")}
         {renderServiceTables("Yearly", "Paid")}
         {renderServiceTables("One Time", "Paid")}
@@ -183,69 +193,57 @@ function Reviews({ handleClose }) {
     );
   };
 
-
-
-  
   useEffect(() => {
     fetchQuotations();
     fetchNotes();
-    
-   
-  }, []); 
+  }, []);
 
   return (
     <>
+      <Wrapper>
+        <div className="container mx-auto p-4">
+          <Link
+            to={`/final-quotation/${id}`}
+            className="btn btn-success mx-1 mt-3 mb-2 bg-green-600 text-white hover:bg-green-700 rounded py-2 px-4 inline-flex items-center"
+          >
+            <i className="bi bi-arrow-return-left mx-1"></i> Back
+          </Link>
 
-  
+          <div className="mt-4">
+            {/* Example: Display date if needed */}
+            {/* <p className="text-sm font-medium">Date: {moment(quotationDate).format('DD/MM/YYYY')}</p> */}
 
-<Wrapper>
-      <div className="container mx-auto p-4">
-        <Link
-          to={`/final-quotation/${id}`}
-          className="btn btn-success mx-1 mt-3 mb-2 bg-green-600 text-white hover:bg-green-700 rounded py-2 px-4 inline-flex items-center"
-        >
-          <i className="bi bi-arrow-return-left mx-1"></i> Back
-        </Link>
+            {renderPaidServices()}
+            {renderComplimentaryServices()}
 
-        <div className="mt-4">
-          {/* Example: Display date if needed */}
-          {/* <p className="text-sm font-medium">Date: {moment(quotationDate).format('DD/MM/YYYY')}</p> */}
-
-          {renderPaidServices()}
-          {renderComplimentaryServices()}
-
-          <div className="mt-6">
-            <h5 className="text-lg font-semibold mb-3">Notes:</h5>
-            <ul className="list-disc pl-5">
-              {notes.map((note) => (
-                <li key={note.id} className="mb-2">
-                  <p>{note.note_text}</p>
-                  {note.additional_info && <p className="text-gray-600">{note.additional_info}</p>}
-                </li>
-              ))}
-            </ul>
+            <div className="mt-6">
+              <h5 className="text-lg font-semibold mb-3">Notes:</h5>
+              <ul className="list-disc pl-5">
+                {notes.map((note) => (
+                  <li key={note.id} className="mb-2">
+                    <p>{note.note_text}</p>
+                    {note.additional_info && (
+                      <p className="text-gray-600">{note.additional_info}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
 
-        {/* Example: Add footer or any additional content if needed */}
-        {/* <div className="mt-6">
+          {/* Example: Add footer or any additional content if needed */}
+          {/* <div className="mt-6">
           <Footer />
         </div> */}
 
-        <Link
-          to={`/final-quotation/${id}`}
-          className="btn btn-success mx-1 mt-3 mb-2 bg-green-600 text-white hover:bg-green-700 rounded py-2 px-4 inline-flex items-center"
-        >
-          <i className="bi bi-arrow-return-left mx-1"></i> Back
-        </Link>
-      </div>
-    </Wrapper>
-
-
-
-      
-     
-             
+          <Link
+            to={`/final-quotation/${id}`}
+            className="btn btn-success mx-1 mt-3 mb-2 bg-green-600 text-white hover:bg-green-700 rounded py-2 px-4 inline-flex items-center"
+          >
+            <i className="bi bi-arrow-return-left mx-1"></i> Back
+          </Link>
+        </div>
+      </Wrapper>
     </>
   );
 }
@@ -263,17 +261,16 @@ const Wrapper = styled.div`
     font-weight: bold;
     font-size: 1.2rem;
   }
-  li{
-    font-weight:bold;
+  li {
+    font-weight: bold;
     font-size: 1rem;
-
   }
 
-  .btn-print{
-    @media print{
+  .btn-print {
+    @media print {
       display: none;
     }
-  } 
+  }
   .no-print {
     display: none;
 
@@ -283,19 +280,11 @@ const Wrapper = styled.div`
   }
 
   .footimage {
-
-    @media print{
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    
+    @media print {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
     }
   }
-
- 
-
 `;
-
-
-

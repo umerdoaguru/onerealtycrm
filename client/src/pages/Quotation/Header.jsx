@@ -7,18 +7,17 @@
 //   const [headerImage, setHeaderImage] = useState('');
 //   const userName = useSelector(state => state.auth.user.id);
 
-
 //   useEffect(() => {
 //     const fetchImages = async () => {
 //       try {
-//         const response = await axios.post(`https://crmdemo.vimubds5.a2hosted.com/api/company-header-footer`);
+//         const response = await axios.post(`http://localhost:9000/api/company-header-footer`);
 
 //         if (response.status === 200) {
 //           const { header_img} = response.data;
 
 //           // Update state with image URLs
 //           setHeaderImage(header_img);
-          
+
 //         } else {
 //           console.error('Error fetching header and footer images:', response.statusText);
 //         }
@@ -34,14 +33,12 @@
 //     <Wrapper>
 //     <div className="">
 //     <div >
-       
+
 //         <img src={headerImage} alt="Header" style={{ maxWidth: '100%' }} />
 //       </div>
-     
+
 //     </div>
-   
-    
-    
+
 //     </Wrapper>
 //   )
 // }
@@ -52,11 +49,8 @@
 // img{
 //   width: -webkit-fill-available;
 
-
 // }
 // `
-
-
 
 // import React, { useEffect, useState } from 'react';
 // import axios from 'axios';
@@ -69,7 +63,7 @@
 //   useEffect(() => {
 //     const fetchImages = async () => {
 //       try {
-//         const response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/company-header-footer', {
+//         const response = await axios.post('http://localhost:9000/api/company-header-footer', {
 //           company_name_branch: companyName // Send the company name in the request body
 //         });
 
@@ -108,33 +102,39 @@
 //   }
 // `;
 
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
 
-
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-
-function Header({ companyName , quotationName  }) {
-  const [headerImage, setHeaderImage] = useState('');
+function Header({ companyName, quotationName }) {
+  const [headerImage, setHeaderImage] = useState("");
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/company-header-footer', {
-          company_name: companyName
-        });
-        
+        const response = await axios.post(
+          "http://localhost:9000/api/company-header-footer",
+          {
+            company_name: companyName,
+          }
+        );
 
         if (response.status === 200) {
           const { header_img } = response.data;
 
           setHeaderImage(header_img);
         } else {
-          console.error('Error fetching header and footer images:', response.statusText);
+          console.error(
+            "Error fetching header and footer images:",
+            response.statusText
+          );
         }
       } catch (error) {
-        console.error('Error fetching header and footer images:', error.message);
+        console.error(
+          "Error fetching header and footer images:",
+          error.message
+        );
       }
     };
 
@@ -146,20 +146,20 @@ function Header({ companyName , quotationName  }) {
       {/* <div>
         <img src={headerImage} alt="Header" style={{ maxWidth: '100%' }} />
       </div> */}
-       {headerImage && (
-          <div>
-             <img  src={headerImage}
-  className="h-40 w-40 object-cover print:w-[100%] print:h-auto px-3"
-  alt="Header"
-    />
-             {/* <div className="bottomleft text-white">
+      {headerImage && (
+        <div>
+          <img
+            src={headerImage}
+            className="h-40 w-40 object-cover print:w-[100%] print:h-auto px-3"
+            alt="Header"
+          />
+          {/* <div className="bottomleft text-white">
                 <h1>Plans & Quotation for</h1>
                 <h1 className="hdd">{quotationName}</h1>
               </div> */}
-              {/* style={{width:"-webkit-fill-available"}} */}
-          </div>
-        )}
-       
+          {/* style={{width:"-webkit-fill-available"}} */}
+        </div>
+      )}
     </Wrapper>
   );
 }

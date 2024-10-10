@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [profilePicture, setProfilePicture] = useState(null);
-  const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const handleProfileUpdate = async (e) => {
@@ -17,30 +17,37 @@ const EditProfile = () => {
     try {
       // Create a FormData object
       const formData = new FormData();
-      formData.append('user_name', userName);
-      formData.append('email', email);
-      formData.append('password', password);
-      
+      formData.append("user_name", userName);
+      formData.append("email", email);
+      formData.append("password", password);
+
       // Append the profile picture file if it exists
       if (profilePicture) {
-        formData.append('profile_picture', profilePicture);
+        formData.append("profile_picture", profilePicture);
       }
 
       // Make the PUT request with FormData
-      const response = await axios.put('https://crmdemo.vimubds5.a2hosted.com/api/editProfile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await axios.put(
+        "http://localhost:9000/api/editProfile",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.data.success) {
         setSuccessMessage(response.data.message);
-        setError('');
-        navigate('/profile');
+        setError("");
+        navigate("/profile");
       }
     } catch (error) {
-      setError(error.response?.data?.error || 'An error occurred while updating the profile');
-      setSuccessMessage('');
+      setError(
+        error.response?.data?.error ||
+          "An error occurred while updating the profile"
+      );
+      setSuccessMessage("");
     }
   };
 
@@ -51,14 +58,25 @@ const EditProfile = () => {
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center text-gray-800">Edit Profile</h1>
-        {error && <div className="p-3 text-red-600 bg-red-100 border border-red-400 rounded">{error}</div>}
+        <h1 className="text-3xl font-bold text-center text-gray-800">
+          Edit Profile
+        </h1>
+        {error && (
+          <div className="p-3 text-red-600 bg-red-100 border border-red-400 rounded">
+            {error}
+          </div>
+        )}
         {successMessage && (
-          <div className="p-3 text-green-600 bg-green-100 border border-green-400 rounded">{successMessage}</div>
+          <div className="p-3 text-green-600 bg-green-100 border border-green-400 rounded">
+            {successMessage}
+          </div>
         )}
         <form onSubmit={handleProfileUpdate} className="space-y-4">
           <div>
-            <label htmlFor="user_name" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="user_name"
+              className="block text-sm font-medium text-gray-700"
+            >
               Name
             </label>
             <input
@@ -71,7 +89,10 @@ const EditProfile = () => {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
             <input
@@ -84,7 +105,10 @@ const EditProfile = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -97,7 +121,10 @@ const EditProfile = () => {
             />
           </div>
           <div>
-            <label htmlFor="profile_picture" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="profile_picture"
+              className="block text-sm font-medium text-gray-700"
+            >
               Profile Picture
             </label>
             <input
@@ -120,4 +147,3 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
- 
