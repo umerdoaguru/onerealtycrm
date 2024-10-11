@@ -156,9 +156,9 @@ const EmployeeReport = () => {
   //       invoiceResponse,
   //       leadsResponse,
   //     ] = await Promise.all([
-  //       axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byEmploye/${EmpId}`),
-  //       axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-employee-invoice/${EmpId}`),
-  //       axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`),
+  //       axios.get(`http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`),
+  //       axios.get(`http://localhost:9000/api/get-employee-invoice/${EmpId}`),
+  //       axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`),
   //     ]);
   
   //     // Use formatData to format the response data
@@ -186,17 +186,17 @@ const EmployeeReport = () => {
   
   
   const quotationAxios = axios.create({
-    baseURL: "https://crmdemo.vimubds5.a2hosted.com/api",
+    baseURL: "http://localhost:9000/api",
   });
   
   const invoiceAxios = axios.create({
-    baseURL: "https://crmdemo.vimubds5.a2hosted.com/api",
+    baseURL: "http://localhost:9000/api",
   });
   
 
   
   const leadsAxios = axios.create({
-    baseURL: "https://crmdemo.vimubds5.a2hosted.com/api",
+    baseURL: "http://localhost:9000/api",
   });
   
   const formatData = (data) => {

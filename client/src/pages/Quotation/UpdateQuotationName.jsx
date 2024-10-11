@@ -14,7 +14,7 @@
 
 //     const fetchServices = async () => {
 //         try {
-//           const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/quotation-name/${id}`);
+//           const response = await axios.get(`http://localhost:9000/api/quotation-name/${id}`);
        
      
 //           setQuotationName(response.data[0].quotation_name);
@@ -33,7 +33,7 @@
 //         event.preventDefault();
 
 //         try {
-//             const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/quotation-data/${id}`, { newName });
+//             const response = await axios.put(`http://localhost:9000/api/quotation-data/${id}`, { newName });
 
 //             if (response.status === 200) {
 //                 setMessage(response.data.message);
@@ -100,7 +100,7 @@ const UpdateQuotationName = () => {
     useEffect(() => {
         const fetchQuotationName = async () => {
             try {
-                const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/quotation-name/${id}`);
+                const response = await axios.get(`http://localhost:9000/api/quotation-name/${id}`);
                 if (response.data && response.data.length > 0) {
                     setNewName(response.data[0].quotation_name); // Set default value for input
                 }
@@ -115,7 +115,7 @@ const UpdateQuotationName = () => {
         event.preventDefault();
 
         try {
-            const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/quotation-data/${id}`, { newName });
+            const response = await axios.put(`http://localhost:9000/api/quotation-data/${id}`, { newName });
             if (response.status === 200) {
                 setMessage(response.data.message);
                 navigate('/quotationlist');

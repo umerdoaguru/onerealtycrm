@@ -31,7 +31,7 @@ const UpdateFooterImageForm = ({ quotationId }) => {
 
       
       const response = await axios.put(
-        `https://crmdemo.vimubds5.a2hosted.com/api/footer/${quotationId}`,
+        `http://localhost:9000/api/footer/${quotationId}`,
         formData,
       );
 

@@ -60,7 +60,7 @@ function MainQuotation() {
   useEffect(() => {
     const fetchinvoice = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/company-data`);
+        const response = await axios.get(`http://localhost:9000/api/company-data`);
         setcompanydata(response.data);
         console.log(response);
       } catch (error) {
@@ -74,7 +74,7 @@ function MainQuotation() {
   const handleDeleteCompanyData = async (CompanyName) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this Company data?");
    if(isConfirmed){ try {
-       const response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/companydata', {
+       const response = await axios.post('http://localhost:9000/api/companydata', {
         company_name: CompanyName
       });
        
@@ -131,7 +131,7 @@ function MainQuotation() {
       formData.append("digital_sign", companydigitalsign);
 
       const response = await axios.post(
-        "https://crmdemo.vimubds5.a2hosted.com/api/upload-company-profile",
+        "http://localhost:9000/api/upload-company-profile",
         formData,
         {
           headers: {

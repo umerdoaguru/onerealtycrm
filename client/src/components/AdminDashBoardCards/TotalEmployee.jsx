@@ -13,7 +13,7 @@ function TotalEmployee() {
     
       const fetchEmployees = async () => {
         try {
-          const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/getAllEmployees');
+          const response = await axios.get('http://localhost:9000/api/getAllEmployees');
           const { employees } = response.data;
           setEmployees(employees || []); // Ensure employees is always an array
         } catch (error) {

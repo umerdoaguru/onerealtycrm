@@ -34,7 +34,7 @@ const AddImageComponent = () => {
       const formData = new FormData();
       formData.append('image', selectedFile);
 
-      await axios.post(`https://crmdemo.vimubds5.a2hosted.com/api/${quotationId}/${imageType}`, formData);
+      await axios.post(`http://localhost:9000/api/${quotationId}/${imageType}`, formData);
 
       console.log('Image uploaded successfully');
     navigate(`/final-quotation/${quotationId}`);

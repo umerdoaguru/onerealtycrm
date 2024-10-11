@@ -24,7 +24,7 @@ const EmployeeInvoiceGraph = () => {
     const getAppointList = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-employee-invoice/${EmpId}`);
+        const response = await axios.get(`http://localhost:9000/api/get-employee-invoice/${EmpId}`);
         const invoiceList = response.data;
     
         // Get the current date and the date 28 days ago

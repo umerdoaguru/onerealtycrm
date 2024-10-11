@@ -23,7 +23,7 @@ const Invoice = () => {
     const getAppointList = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-data-dash`);
+        const response = await axios.get(`http://localhost:9000/api/invoice-data-dash`);
         const invoiceList = response.data.data;
     
         // Get the current date and the date 28 days ago

@@ -20,7 +20,7 @@ const EmployeeQuotationData = () => {
   useEffect(() => {
     const fetchQuotations = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byEmploye/${EmpId}`);
+        const response = await axios.get(`http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`);
         setQuotations(response.data);
       } catch (error) {
         console.error("Error fetching quotations:", error);

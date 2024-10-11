@@ -12,7 +12,7 @@ function DeleteCompanydata() {
   const handleDeleteCompanyData = async (CompanyName) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this Company data?");
    if(isConfirmed){ try {
-       const response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/companydata', {
+       const response = await axios.post('http://localhost:9000/api/companydata', {
         company_name: CompanyName
       });
        
@@ -33,7 +33,7 @@ function DeleteCompanydata() {
         // Fetch company names from the backend
         const fetchCompanyNames = async () => {
           try {
-            const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/header-footer-images/company-names/${UserId}`);
+            const response = await axios.get(`http://localhost:9000/api/header-footer-images/company-names/${UserId}`);
             if (response.status === 200) {
               setCompanyNames(response.data); // Assuming response.data is an array of company names
        

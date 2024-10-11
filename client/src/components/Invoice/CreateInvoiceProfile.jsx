@@ -56,7 +56,7 @@ function CreateInvoiceProfile() {
       formData.append('charges',companyCharge);
       formData.append('bank',companyBank);
   
-      const response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/upload-invoice-profile', formData, {
+      const response = await axios.post('http://localhost:9000/api/upload-invoice-profile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

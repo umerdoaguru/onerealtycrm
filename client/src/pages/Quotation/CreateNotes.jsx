@@ -15,7 +15,7 @@ const CreateNotes = () => {
     // Fetch notes from the backend API
     const fetchNotes = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/notes_data`);
+        const response = await axios.get(`http://localhost:9000/api/notes_data`);
         setNoteTexts(response.data);
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -48,7 +48,7 @@ const CreateNotes = () => {
     try {
       
       for (const note of selectedNotes) {
-        const response = await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/notes", {
+        const response = await axios.post("http://localhost:9000/api/notes", {
           noteTexts: [note],
           quotationId: id,
         });

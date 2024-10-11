@@ -13,7 +13,7 @@ const DeleteNoteBylead = () => {
   const handleDeleteNote = async (noteId) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this Notes?");
    if(isConfirmed){ try {
-      const response = await axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/notes/${noteId}`);
+      const response = await axios.delete(`http://localhost:9000/api/notes/${noteId}`);
 
       if (response.status === 200) {
         console.log('Note deleted successfully');
@@ -28,7 +28,7 @@ const DeleteNoteBylead = () => {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/notes/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
 
       if (response.status === 200) {
         setNotes(response.data);

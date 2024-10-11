@@ -14,7 +14,7 @@ const UpdateInvoiceNotes = () => {
     // Fetch notes from the backend API
     const fetchNotes = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-get-notes/${id}`);
+        const response = await axios.get(`http://localhost:9000/api/invoice-get-notes/${id}`);
         setNotes(response.data);
       } catch (error) {
         console.error('Error fetching notes:', error);
@@ -28,7 +28,7 @@ const UpdateInvoiceNotes = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-update-notes`, { notes });
+      const response = await axios.put(`http://localhost:9000/api/invoice-update-notes`, { notes });
 
       if (response.data.success) {
         console.log('Notes updated successfully');

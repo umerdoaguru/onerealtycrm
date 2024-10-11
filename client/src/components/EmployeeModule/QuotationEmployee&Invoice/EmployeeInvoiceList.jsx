@@ -16,7 +16,7 @@ const EmployeeInvoiceList = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-employee-invoice/${EmpId}`);
+        const response = await axios.get(`http://localhost:9000/api/get-employee-invoice/${EmpId}`);
         setInvoices(response.data);
         console.log(response);
       } catch (error) {
@@ -31,7 +31,7 @@ const EmployeeInvoiceList = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete this invoice?");
     if (isConfirmed) {
       try {
-        const response = await axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/invoice/${id}`);
+        const response = await axios.delete(`http://localhost:9000/api/invoice/${id}`);
         if (response.status === 200) {
           console.log("Invoice deleted successfully");
           window.location.reload();
@@ -44,7 +44,7 @@ const EmployeeInvoiceList = () => {
 
   const handleCopyInvoice = async (invoiceId) => {
     try {
-      const response = await axios.post(`https://crmdemo.vimubds5.a2hosted.com/api/copy-invoice/${invoiceId}`);
+      const response = await axios.post(`http://localhost:9000/api/copy-invoice/${invoiceId}`);
       console.log(response.data.message);
       window.location.reload();
     } catch (error) {

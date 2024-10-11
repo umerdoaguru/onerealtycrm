@@ -10,7 +10,7 @@ const EmployeeLeadsGraph = () => {
   // useEffect(() => {
   //   const fetchLeadsData = async () => {
   //     try {
-  //       const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`);
+  //       const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
   //       const allLeads = response.data;
 
   //       // Get today's date and the date 28 days ago (to include today and 27 previous days)
@@ -73,7 +73,7 @@ const EmployeeLeadsGraph = () => {
   useEffect(() => {
     const fetchLeadsData = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`);
+        const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
         const allLeads = response.data;
 
         const today = moment();

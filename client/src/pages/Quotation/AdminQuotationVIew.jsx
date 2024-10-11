@@ -41,7 +41,7 @@ function AdminQuotationVIew() {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `https://crmdemo.vimubds5.a2hosted.com/api/quotation/${id}`
+        `http://localhost:9000/api/quotation/${id}`
       );
 
       if (response.status === 200) {
@@ -56,7 +56,7 @@ function AdminQuotationVIew() {
   };
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/notes/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
 
       if (response.status === 200) {
         setNotes(response.data);
@@ -72,7 +72,7 @@ function AdminQuotationVIew() {
     const fetchCompanyNames = async () => {
       try {
         const response = await axios.get(
-          `https://crmdemo.vimubds5.a2hosted.com/api/header-footer-images/company-names/${UserId}`
+          `http://localhost:9000/api/header-footer-images/company-names/${UserId}`
         );
         if (response.status === 200) {
           setCompanyNames(response.data); // Assuming response.data is an array of company names
@@ -235,7 +235,7 @@ function AdminQuotationVIew() {
     const fetchImages = async () => {
       try {
         const response = await axios.post(
-          "https://crmdemo.vimubds5.a2hosted.com/api/company-header-footer",
+          "http://localhost:9000/api/company-header-footer",
           {
             company_name: selectedCompany,
           }

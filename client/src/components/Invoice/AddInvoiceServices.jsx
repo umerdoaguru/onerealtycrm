@@ -101,7 +101,7 @@ const AddInvoiceServices = () => {
       });
 
       const response = await axios.post(
-        `https://crmdemo.vimubds5.a2hosted.com/api/add-invoice-services/${id}`,
+        `http://localhost:9000/api/add-invoice-services/${id}`,
         {
           invoice_name: invoiceName,
           services: servicesToSave,
@@ -121,7 +121,7 @@ const AddInvoiceServices = () => {
 
   const getQuotationName = async () => {
     try {
-      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-name/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/invoice-name/${id}`);
       setInvoiceName(response.data[0].invoice_name);
     } catch (error) {
       console.log('Error fetching quotation name:', error);
@@ -130,7 +130,7 @@ const AddInvoiceServices = () => {
 
   const getServicelist = async () => {
     try {
-      const res = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/services`);
+      const res = await axios.get(`http://localhost:9000/api/services`);
       setServiceslist(res.data.services);
     } catch (error) {
       console.log('Error fetching services list:', error);

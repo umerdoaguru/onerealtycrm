@@ -7,14 +7,14 @@ const NotesTable = ({ quotationId }) => {
 
   useEffect(() => {
     // Fetch notes for the given quotationId
-    axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/notes?quotationId=${quotationId}`)
+    axios.get(`http://localhost:9000/api/notes?quotationId=${quotationId}`)
       .then((response) => setNotes(response.data))
       .catch((error) => console.error('Error fetching notes:', error));
   }, [quotationId]);
 
   const handleAddNote = () => {
     // Add a new note
-    axios.post('https://crmdemo.vimubds5.a2hosted.com/api/notes', { noteText: newNote, quotationId })
+    axios.post('http://localhost:9000/api/notes', { noteText: newNote, quotationId })
       .then((response) => {
         setNotes([...notes, { id: response.data.id, note_text: newNote }]);
         setNewNote('');
@@ -24,7 +24,7 @@ const NotesTable = ({ quotationId }) => {
 
   const handleDeleteNote = (id) => {
     // Delete a note
-    axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/notes/${id}`)
+    axios.delete(`http://localhost:9000/api/notes/${id}`)
       .then(() => setNotes(notes.filter((note) => note.id !== id)))
       .catch((error) => console.error('Error deleting note:', error));
   };

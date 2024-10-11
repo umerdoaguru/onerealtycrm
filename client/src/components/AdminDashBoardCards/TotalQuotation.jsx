@@ -10,7 +10,7 @@ function TotalQuotation() {
     useEffect(() => {
         const fetchQuotations = async () => {
           try {
-            const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/quotation-data`);
+            const response = await axios.get(`http://localhost:9000/api/quotation-data`);
             setQuotations(response.data);
             console.log(response);
           } catch (error) {

@@ -31,7 +31,7 @@ const EmployeeSingle = () => {
   // Fetch employee data
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/getEmployeeById/${employeeId}`);
+      const response = await axios.get(`http://localhost:9000/api/getEmployeeById/${employeeId}`);
       if (response.data.success) {
         setEmployee(response.data.employee);
         setNewEmployee({
@@ -91,7 +91,7 @@ const EmployeeSingle = () => {
 
   const isEmailTaken = async (email) => {
     try {
-      const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/checkEmail', {
+      const response = await axios.get('http://localhost:9000/api/checkEmail', {
         params: { email },
       });
       return response.data.exists;
@@ -103,7 +103,7 @@ const EmployeeSingle = () => {
 
   const isPhoneNumberTaken = async (phone) => {
     try {
-      const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/checkPhoneNumber', {
+      const response = await axios.get('http://localhost:9000/api/checkPhoneNumber', {
         params: { phone },
       });
       return response.data.exists;
@@ -156,11 +156,11 @@ const EmployeeSingle = () => {
 
       let response;
       if (editingIndex !== null) {
-        response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateSingleEmployee/${employee.employeeId}`, formData, {
+        response = await axios.put(`http://localhost:9000/api/updateSingleEmployee/${employee.employeeId}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/addEmployee', formData, {
+        response = await axios.post('http://localhost:9000/api/addEmployee', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -208,7 +208,7 @@ const EmployeeSingle = () => {
       const isConfirmed = window.confirm("Are you sure you want to delete this employee?");
       if (isConfirmed) {
         try {
-          await axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/deleteEmployee/${employee.employeeId}`);
+          await axios.delete(`http://localhost:9000/api/deleteEmployee/${employee.employeeId}`);
           navigate('/employee-management');
         } catch (error) {
           setError('Error deleting employee');
@@ -226,7 +226,7 @@ const EmployeeSingle = () => {
 const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${employeeId}`);
+        `http://localhost:9000/api/employe-leads/${employeeId}`);
       const data = response.data;
       setLeads(data);
     } catch (error) {
@@ -270,7 +270,7 @@ const fetchLeads = async () => {
             <div className="flex items-center mb-6">
               {employee.photo ? (
                 <img
-                  src={`https://crmdemo.vimubds5.a2hosted.com${employee.photo}`}
+                  src={`http://localhost:9000${employee.photo}`}
                   alt="Profile"
                   className="w-24 h-24 border-2 border-gray-300 rounded-full"
                 />
@@ -290,7 +290,7 @@ const fetchLeads = async () => {
               <div className="mb-6">
                 <h4 className="text-lg font-semibold text-gray-800">Signature</h4>
                 <img
-                  src={`https://crmdemo.vimubds5.a2hosted.com${employee.signature}`}
+                  src={`http://localhost:9000${employee.signature}`}
                   alt="Signature"
                   className="w-32 h-16 border-t border-gray-300"
                 />

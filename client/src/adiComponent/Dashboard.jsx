@@ -22,7 +22,7 @@ const Dashboard = () => {
     };
     const getInvoiceData = () => {
         try {
-            const response = axios.get("https://crmdemo.vimubds5.a2hosted.com/api/invoiceData")
+            const response = axios.get("http://localhost:9000/api/invoiceData")
         }catch (err) {
 
         }

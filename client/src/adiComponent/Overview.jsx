@@ -34,7 +34,7 @@ const Overview = () => {
 
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/getOrganization');
+      const response = await axios.get('http://localhost:9000/api/getOrganization');
       const { organizations } = response.data;
       setCompanies(organizations);
     } catch (error) {
@@ -108,7 +108,7 @@ const Overview = () => {
 
       if (editingIndex !== null) {
         const companyId = companies[editingIndex].companyId;
-        await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateOrganization/${companyId}`, formData, {
+        await axios.put(`http://localhost:9000/api/updateOrganization/${companyId}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         const updatedCompanies = [...companies];
@@ -116,7 +116,7 @@ const Overview = () => {
         setCompanies(updatedCompanies);
         setEditingIndex(null);
       } else {
-        await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/addOrganization', formData, {
+        await axios.post('http://localhost:9000/api/addOrganization', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         setCompanies((prev) => [...prev, { ...newCompany, companyId: Date.now() }]);
@@ -191,7 +191,7 @@ const Overview = () => {
     const isConfirmed = window.confirm('Are you sure you want to delete this organization?');
     if (isConfirmed) {
       try {
-        await axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/deleteOrganization/${companyId}`);
+        await axios.delete(`http://localhost:9000/api/deleteOrganization/${companyId}`);
         setCompanies(companies.filter((company) => company.companyId !== companyId));
       } catch (error) {
         console.error('Error deleting company:', error);

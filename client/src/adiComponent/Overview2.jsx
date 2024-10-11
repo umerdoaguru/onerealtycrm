@@ -36,7 +36,7 @@ const Overview2 = () => {
 
     const fetchLeads = async () => {
         try {
-          const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/leads');
+          const response = await axios.get('http://localhost:9000/api/leads');
           setLeads(response.data);
         } catch (error) {
           console.error('Error fetching leads:', error);
@@ -45,7 +45,7 @@ const Overview2 = () => {
     
       const fetchEmployee = async () => {
         try {
-          const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employee`);
+          const response = await axios.get(`http://localhost:9000/api/employee`);
           setEmployee(response.data);
         } catch (error) {
           console.error("Error fetching employee data:", error);
@@ -54,7 +54,7 @@ const Overview2 = () => {
     
       const fetchQuotation = async () => {
         try {
-          const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-data`);
+          const response = await axios.get(`http://localhost:9000/api/get-quotation-data`);
           console.log(response.data);
           setQuotation(response.data.data);
         } catch (error) {
@@ -64,7 +64,7 @@ const Overview2 = () => {
     
       const fetchInvoice = async () => {
         try {
-          const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-data`);
+          const response = await axios.get(`http://localhost:9000/api/invoice-data`);
           setInvoice(response.data);
         } catch (error) {
           console.error("Error fetching invoices:", error);
@@ -82,8 +82,7 @@ const Overview2 = () => {
         
        <>
        
-     
-      {/* <div className="w-full  h-screen"> */}
+ 
      
 
         <div className="flex flex-wrap justify-around mt-5">
@@ -112,6 +111,24 @@ const Overview2 = () => {
           </div>
 
           <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+          <Link to='/total-visit'>
+            <div
+              className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600"  
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div className=" text-3xl text-gray-700">
+                  <MdOutlineNextWeek />
+                </div>
+                <div className="mt-2">
+                  <h5 className="text-gray-800 text-xl font-semibold ">Total Visit</h5>
+                  <p className="text-gray-800 text-xl font-semibold ">{quotationCount}</p>
+                </div>
+              </div>
+            </div>
+</Link>
+          </div>
+
+          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
           <Link to='/total-employees'>
             <div
               className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600"   // Change background color if active
@@ -130,53 +147,13 @@ const Overview2 = () => {
 </Link>
           </div>
 
-          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-          <Link to='/total-quotations'>
-            <div
-              className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600"  
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div className=" text-3xl text-gray-700">
-                  <MdOutlineNextWeek />
-                </div>
-                <div className="mt-2">
-                  <h5 className="text-gray-800 text-xl font-semibold ">Total Quotation</h5>
-                  <p className="text-gray-800 text-xl font-semibold ">{quotationCount}</p>
-                </div>
-              </div>
-            </div>
-</Link>
-          </div>
+       
 
-          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-          <Link to='/total-invoices'>
-            <div
-               className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600"   // Change background color if active
-            //   onClick={() => setSelectedComponent('InvoiceData')}  // Set selected component
-            >
-                   <div className="p-4 flex flex-col items-center text-center">
-                   <div className=" text-3xl text-gray-700">
-                  <GiMoneyStack />
-                </div>
-                <div className="mt-2">
-                  <h5 className="text-gray-800 text-xl font-semibold "> Total Invoices</h5>
-                  <p className="text-gray-800 text-xl font-semibold ">{invoiceCount}</p>
-                </div>
-              </div>
-            </div>
-</Link>
-          </div>
+          
         </div>
 
 
-        {/* Conditionally render the selected component */}
-        {/* <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
-          {selectedComponent === 'LeadData' && <LeadData />}
-          {selectedComponent === 'EmployeeData' && <Employees />}
-          {selectedComponent === 'QuotationData' && <QuotationData />}
-          {selectedComponent === 'InvoiceData' && <InvoiceData />}
-        </div> */}
-      {/* </div> */}
+    
        </>
     );
 };

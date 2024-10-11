@@ -861,6 +861,25 @@ const getleadbyid = (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const getvisit = (req, res) => {
+  try {
+    const {id} = req.params;
+
+    const getQuery = `SELECT * FROM leads WHERE lead_id = ?`;
+
+    db.query(getQuery, [id], (error, result) => {
+      if (error) {
+        
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  } catch (error) {
+    
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 
 const getLeads = (req, res) => {

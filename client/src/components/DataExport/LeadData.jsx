@@ -16,7 +16,7 @@
 
 //     const fetchLeads = async () => {
 //         try {
-//             const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/leads');
+//             const response = await axios.get('http://localhost:9000/api/leads');
 //             setLeads(response.data);
 //         } catch (error) {
 //             console.error('Error fetching leads:', error);
@@ -102,7 +102,7 @@ function LeadData() {
 
     const fetchLeads = async () => {
         try {
-            const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/leads');
+            const response = await axios.get('http://localhost:9000/api/leads');
             setLeads(response.data);
             setFilteredLeads(response.data); // Initial data set for filtering
         } catch (error) {

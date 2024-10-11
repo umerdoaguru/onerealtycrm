@@ -122,7 +122,7 @@ const CreateInvoice = () => {
       });
 
       const response = await axios.post(
-        "https://crmdemo.vimubds5.a2hosted.com/api/create-invoice",
+        "http://localhost:9000/api/create-invoice",
         {
           invoice_name: invoiceName,
           invoice_no: invoice_no,
@@ -157,7 +157,7 @@ const CreateInvoice = () => {
   const getServicelist = async () => {
     try {
       const res = await axios.get(
-        `https://crmdemo.vimubds5.a2hosted.com/api/servicelist`
+        `http://localhost:9000/api/servicelist`
       );
       
       setServiceslist(res.data);
@@ -169,7 +169,7 @@ const CreateInvoice = () => {
   useEffect(() => {
     const fetchinvoice = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/company-data`);
+        const response = await axios.get(`http://localhost:9000/api/company-data`);
         setCompany_data(response.data);
         
         console.log(response);
@@ -185,7 +185,7 @@ const CreateInvoice = () => {
     // Fetch existing data from the API
     const fetchCompanyData = async () => {
       try {
-        const response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/company-header-footer', {
+        const response = await axios.post('http://localhost:9000/api/company-header-footer', {
           company_name: selectedCompany
         });
         

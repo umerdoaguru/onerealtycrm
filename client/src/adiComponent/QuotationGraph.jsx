@@ -45,7 +45,7 @@ const QuotationGraph = () => {
     // Fetch data from the API
     const fetchData = async () => {
         try {
-            const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-data`); // Adjust the API route as necessary
+            const response = await axios.get(`http://localhost:9000/api/get-quotation-data`); // Adjust the API route as necessary
             const data = response.data.data;
 
             const formattedData = generateStaticData(data);

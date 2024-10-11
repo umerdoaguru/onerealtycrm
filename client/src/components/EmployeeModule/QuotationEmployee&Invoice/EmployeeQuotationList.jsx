@@ -20,7 +20,7 @@ const EmployeeQuotationList = () => {
   useEffect(() => {
     const fetchQuotations = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byEmploye/${EmpId}`);
+        const response = await axios.get(`http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`);
         setQuotations(response.data);
         console.log(response);
       } catch (error) {
@@ -35,7 +35,7 @@ const EmployeeQuotationList = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete this quotation?");
     if (isConfirmed) {
       try {
-        const response = await axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/quotation/${id}`);
+        const response = await axios.delete(`http://localhost:9000/api/quotation/${id}`);
         if (response.status === 200) {
           console.log("Quotation deleted successfully");
           // window.location.reload();
@@ -49,7 +49,7 @@ const EmployeeQuotationList = () => {
 
   const handleCopyQuotation = async (quotationId) => {
     try {
-      const response = await axios.post(`https://crmdemo.vimubds5.a2hosted.com/api/copy-quotation/${quotationId}`);
+      const response = await axios.post(`http://localhost:9000/api/copy-quotation/${quotationId}`);
       console.log(response.data.message);
       // window.location.reload();
       setRender(!render)

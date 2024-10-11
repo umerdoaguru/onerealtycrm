@@ -36,7 +36,7 @@
 //     const fetchLeads = async () => {
 //         try {
 //           const response = await axios.get(
-//             `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`);
+//             `http://localhost:9000/api/employe-leads/${EmpId}`);
 //           const data = response.data;
 //           setLeads(data);
 //         } catch (error) {
@@ -60,7 +60,7 @@
         
 //         try {
 //           // Send updated data to the backend using Axios
-//           const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
+//           const response = await axios.put(`http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
       
 //           if (response.status === 200) {
 //             console.log('Updated successfully:', response.data);
@@ -184,7 +184,7 @@ const [currentPage, setCurrentPage] = useState(0);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`);
+      const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
       const data = response.data;
       setLeads(data);
     } catch (error) {
@@ -197,7 +197,7 @@ const [currentPage, setCurrentPage] = useState(0);
 
     try {
       // Send updated data to the backend using Axios
-      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyLeadStatus/${lead.lead_id}`,  {lead_status: 'in progress'});
+      const response = await axios.put(`http://localhost:9000/api/updateOnlyLeadStatus/${lead.lead_id}`,  {lead_status: 'in progress'});
 
       if (response.status === 200) {
         console.log('Updated successfully:', response.data);

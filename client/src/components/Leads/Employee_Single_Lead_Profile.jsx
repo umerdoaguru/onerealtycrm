@@ -99,7 +99,7 @@ function Employee_Single_Lead_Profile() {
       }, [id]);
       const fetchLeads = async () => {
         try {
-          const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/leads/${id}`);
+          const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
           setLeads(response.data);
           console.log(response);
         } catch (error) {
@@ -136,7 +136,7 @@ function Employee_Single_Lead_Profile() {
         
         try {
           // Send updated data to the backend using Axios
-          const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
+          const response = await axios.put(`http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
       
           if (response.status === 200) {
             console.log('Updated successfully:', response.data);

@@ -11,7 +11,7 @@
 //   useEffect(() => {
 //     const fetchinvoice = async () => {
 //       try {
-//         const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-data/${UserId}`);
+//         const response = await axios.get(`http://localhost:9000/api/invoice-data/${UserId}`);
 //         setInvoice(response.data);
 //         console.log(response);
 //       } catch (error) {
@@ -32,7 +32,7 @@
 //     if (isConfirmed) {
 //       try {
 //         const response = await axios.delete(
-//           `https://crmdemo.vimubds5.a2hosted.com/api/invoice/${id}`
+//           `http://localhost:9000/api/invoice/${id}`
 //         );
 
 //         if (response.status === 200) {
@@ -47,7 +47,7 @@
 
 //   const handleCopyInvoice = async (invoiceId) => {
 //     try {
-//       const response = await axios.post(`https://crmdemo.vimubds5.a2hosted.com/api/copy-invoice/${invoiceId}`);
+//       const response = await axios.post(`http://localhost:9000/api/copy-invoice/${invoiceId}`);
 //       console.log(response.data.message);
 //       window.location.reload();
 //     } catch (error) {
@@ -122,7 +122,7 @@ const Invoicelist = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-data`);
+        const response = await axios.get(`http://localhost:9000/api/invoice-data`);
         setInvoices(response.data);
         console.log(response);
       } catch (error) {
@@ -137,7 +137,7 @@ const Invoicelist = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete this invoice?");
     if (isConfirmed) {
       try {
-        const response = await axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/invoice/${id}`);
+        const response = await axios.delete(`http://localhost:9000/api/invoice/${id}`);
         if (response.status === 200) {
           console.log("Invoice deleted successfully");
           window.location.reload();
@@ -150,7 +150,7 @@ const Invoicelist = () => {
 
   const handleCopyInvoice = async (invoiceId) => {
     try {
-      const response = await axios.post(`https://crmdemo.vimubds5.a2hosted.com/api/copy-invoice/${invoiceId}`);
+      const response = await axios.post(`http://localhost:9000/api/copy-invoice/${invoiceId}`);
       console.log(response.data.message);
       window.location.reload();
     } catch (error) {

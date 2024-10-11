@@ -14,7 +14,7 @@ const EditInvoiceName = () => {
   useEffect(() => {
     const fetchInvoiceData = async () => {
       try {
-        const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-name/${id}`);
+        const response = await axios.get(`http://localhost:9000/api/invoice-name/${id}`);
         if (response.data) {
           setNewName(response.data[0].invoice_name);
           
@@ -30,7 +30,7 @@ const EditInvoiceName = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/invoice-data/${id}`, {
+      const response = await axios.put(`http://localhost:9000/api/invoice-data/${id}`, {
         newName,
       
       });

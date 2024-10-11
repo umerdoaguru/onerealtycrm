@@ -14,7 +14,7 @@ const SingleOrganization = () => {
 
   const fetchOrganization = async () => {
     try {
-      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/getOrganization/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/getOrganization/${id}`);
       setOrganization(response.data.organization);
     } catch (error) {
       console.error('Error fetching organization:', error);

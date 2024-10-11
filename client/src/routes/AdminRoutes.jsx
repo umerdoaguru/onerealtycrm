@@ -42,6 +42,7 @@ import TotalEmployee from '../components/AdminDashBoardCards/TotalEmployee';
 import TotalQuotation from '../components/AdminDashBoardCards/TotalQuotation';
 import TotalInvoice from '../components/AdminDashBoardCards/TotalInvoice';
 import MainSocialLeads from '../components/SocialMediaLeads/MainSocialLeads';
+import TotalVisit from '../components/AdminDashBoardCards/ToatalVisit';
 
 function AdminRoutes() {
     const user = useSelector(state => state.auth.user);
@@ -65,6 +66,7 @@ function AdminRoutes() {
 <Route path="/total-employees" element={<TotalEmployee/>} />
 <Route path="/total-quotations" element={<TotalQuotation/>} />
 <Route path="/total-invoices" element={<TotalInvoice/>} />
+<Route path="/total-visit" element={<TotalVisit/>} />
 
 
 
