@@ -63,10 +63,12 @@ import EmployeeProfile from './components/EmployeeModule/EmployeeProfile';
 import MainQuotation from './components/EmployeeModule/QuotationEmployee&Invoice/MainQuotationPage';
 import AdminRoutes from './routes/AdminRoutes';
 import EmployeeRoutes from './routes/EmployeeRoutes';
+import SuperAdminLogin from './components/SuperAdminLogin';
+import SuperAdminRoutes from './routes/SuperAdminRoutes';
 
 
 function App() {
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
   console.log(user);
   
   
@@ -85,14 +87,24 @@ function App() {
  
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/employee-login" element={<EmployeeLogin/>} />
-
-        {/* Conditionally render Admin or Employee routes based on user's role */}
+        <Route path="/SuperAdmin-login" element={<SuperAdminLogin />} />
+        {/* Conditionally render Admin or Employee routes based on user's role
         {user?.roles === 'Admin' ? (<Route path="/*" element={<AdminRoutes />} />) : user?.roles === 'Employee' ? (<Route path="/*" element={<EmployeeRoutes />} />) :
-         ( <Route path="/" element={<Navigate to="/main_page_crm" />} /> )}
+         ( <Route path="/" element={<Navigate to="/main_page_crm" />} /> )} */}
 
+ {user?.roles === "Super-Admin" ? (
+            <Route path="/*" element={<SuperAdminRoutes />} />
+          ) : user?.roles === "Admin" ? (
+            <Route path="/*" element={<AdminRoutes />} />
+          ) : user?.roles === "Employee" ? (
+            <Route path="/*" element={<EmployeeRoutes />} />
+          ) : (
+            <Route path="/" element={<Navigate to="/main_page_crm" />} />
+          )}
         {/* Catch-all route to redirect unauthorized users */}
         <Route path="*" element={<Navigate to="/" />} />
 
+       
 
 
 

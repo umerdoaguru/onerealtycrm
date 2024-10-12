@@ -563,8 +563,189 @@ const deleteOrganization = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   };
+
+  
+const getAllAdmins = async (req, res) => {
+  try {
+    // Query to get all admins
+    const getAllAdminsQuery = "SELECT * FROM admins";
+
+    db.query(getAllAdminsQuery, (err, results) => {
+      if (err) {
+        console.error("Error fetching admins from MySQL:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      // Return the results
+      return res.status(200).json({
+        success: true,
+        admins: results,
+      });
+    });
+  } catch (error) {
+    console.error("Error in getting admins:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in getting admins",
+      error: error.message,
+    });
+  }
+};
+
+const getAdminById = async (req, res) => {
+  const { admin_id } = req.params;
+
+  try {
+    const getAdminByIdQuery = "SELECT * FROM admins WHERE admin_id = ?";
+
+    db.query(getAdminByIdQuery, [admin_id], (err, result) => {
+      if (err) {
+        console.error("Error fetching admin by ID from MySQL:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Admin not found" });
+      }
+
+      return res.status(200).json({
+        success: true,
+        admin: result[0], // Return a single admin
+      });
+    });
+  } catch (error) {
+    console.error("Error in getting admin by ID:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in getting admin by ID",
+      error: error.message,
+    });
+  }
+};
+
+const addAdmin = async (req, res) => {
+  const { name, email, password, position, phone, salary } = req.body;
+
+  try {
+    const addAdminQuery = `
+      INSERT INTO admins (name, email, password, position, phone, salary)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+      addAdminQuery,
+      [name, email, password, position, phone, salary],
+      (err, results) => {
+        if (err) {
+          console.error("Error adding admin:", err);
+          return res.status(500).json({ error: "Internal server error" });
+        }
+
+        res.status(201).json({
+          success: true,
+          message: "Admin added successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.error("Error in adding admin:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in adding admin",
+      error: error.message,
+    });
+  }
+};
+
+const updateAdmin = async (req, res) => {
+  const { admin_id } = req.params;
+  const { name, email, position, phone, salary, password } = req.body; // Added password
+
+  if (!admin_id) {
+    return res.status(400).json({ error: "Admin ID is required" });
+  }
+
+  // Optional: Validate the password if necessary, e.g., check length or strength
+
+  try {
+    // Update the query to include the password
+    const updateAdminQuery = `
+      UPDATE admins
+      SET name = ?, email = ?, position = ?, phone = ?, salary = ?, password = ?
+      WHERE admin_id = ?
+    `;
+
+    console.log(name, email, position, phone, salary, password, admin_id); // Log the new password
+
+    db.query(
+      updateAdminQuery,
+      [name, email, position, phone, salary, password, admin_id], // Include password in the values array
+      (err, results) => {
+        if (err) {
+          console.error("Error updating admin:", err);
+          return res.status(500).json({ error: "Internal server error" });
+        }
+
+        if (results.affectedRows === 0) {
+          return res.status(404).json({ error: "Admin not found" });
+        }
+
+        res.status(200).json({
+          success: true,
+          message: "Admin updated successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.error("Error in updating admin:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in updating admin",
+      error: error.message,
+    });
+  }
+};
+
+const deleteAdmin = async (req, res) => {
+  const { admin_id } = req.params; // Change admin_id to admin_id
+  console.log("Admin ID received:", admin_id); // Log admin_id
+
+  if (!admin_id) {
+    return res.status(400).json({ error: "Admin ID is required" });
+  }
+
+  try {
+    const deleteAdminQuery = "DELETE FROM admins WHERE admin_id = ?"; // Use admin_id in SQL query
+    db.query(deleteAdminQuery, [admin_id], (err, results) => {
+      if (err) {
+        console.error("Error deleting admin from DB:", err);
+        return res.status(500).json({ error: "Database error", details: err });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Admin deleted successfully",
+      });
+    });
+  } catch (error) {
+    console.error("Server error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while deleting admin",
+      error: error.message,
+    });
+  }
+};
   
 
   
 
-module.exports = {getAllOrganizations, addOrganization,deleteOrganization,updateOrganization ,addEmployee,getAllEmployees,updateEmployee,deleteEmployee,getEmployeeById,updateSingleEmployee,getOrganizationById};
+module.exports = {getAllOrganizations, addOrganization,deleteOrganization,updateOrganization ,addEmployee,getAllEmployees,updateEmployee,deleteEmployee,getEmployeeById,updateSingleEmployee,getOrganizationById, getAllAdmins,
+  getAdminById,
+  addAdmin,
+  updateAdmin,
+  deleteAdmin,};

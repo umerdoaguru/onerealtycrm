@@ -207,5 +207,71 @@ const register = async (req, res) => {
       });
     }
   };
+  const adminLogin = async (req, res) => {
+    try {
+      const { email, password } = req.body;
   
-  module.exports = {register,login,employeelogin}
+      // Validation
+      if (!email || !password) {
+        return res.status(404).send({
+          success: false,
+          message: "Invalid email or password",
+        });
+      }
+  
+      // Check admin in MySQL
+      const checkAdminsQuery = "SELECT * FROM admins WHERE email = ?";
+      db.query(checkAdminsQuery, [email], (err, results) => {
+        if (err) {
+          console.log("Error checking admins in MySQL", err);
+          return res.status(500).send({
+            success: false,
+            message: "Server error",
+          });
+        }
+  
+        if (results.length === 0) {
+          return res.status(404).send({
+            success: false,
+            message: "Email is not registered",
+          });
+        }
+  
+        const admin = results[0];
+  
+        // Compare passwords (direct comparison since bcrypt is not used)
+        if (password !== admin.password) {
+          return res.status(404).send({
+            success: false,
+            message: "Invalid password",
+          });
+        }
+  
+        // Generate token
+        const token = JWT.sign({ id: admin.admin_id }, process.env.JWT_SECRET, {
+          expiresIn: "7d",
+        });
+  
+        // Send response
+        res.status(200).send({
+          success: true,
+          message: "Login successfully",
+          admin: {
+            id: admin.admin_id,
+            name: admin.name,
+            email: admin.email,
+            roles: admin.roles,
+          },
+          token,
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        success: false,
+        message: "Error in login",
+        error,
+      });
+    }
+  };
+  module.exports = {register,login,employeelogin,adminLogin}

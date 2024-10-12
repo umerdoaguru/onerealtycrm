@@ -14,7 +14,12 @@ const {
   getEmployeeById,
   updateSingleEmployee,
   getOrganizationById, 
-  employeelogin
+  employeelogin,
+  addAdmin,
+  getAllAdmins,
+  getAdminById,
+  updateAdmin,
+  deleteAdmin
 } = require('../controllers/OrgsnizationActions');
 
 // Route to add an organization (with file upload)
@@ -51,5 +56,19 @@ router.put("/updateSingleEmployee/:id", upload.fields([{ name: 'signature' }, { 
 
 // Route to delete an employee by ID
 router.delete("/deleteEmployee/:id", deleteEmployee);
+// Route to add an admin
+router.post("/addAdmin", addAdmin);
+
+// Route to get all admins
+router.get("/getAllAdmins", getAllAdmins);
+
+// Route to get an admin by ID
+router.get("/getAdminById/:adminId", getAdminById);
+
+// Route to update an admin by ID
+router.put("/updateAdmin/:admin_id", updateAdmin);
+
+// Route to delete an admin by ID
+router.delete("/deleteAdmin/:admin_id", deleteAdmin);
 
 module.exports = router;

@@ -11,7 +11,7 @@ const Router2 = require("./routers/organizationRoutes");
 const Router3 = require("./routers/dashboardRoutes");
 const Router = require("./routers/userdataroutes")
 
-const app =  express();
+const app = express();
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

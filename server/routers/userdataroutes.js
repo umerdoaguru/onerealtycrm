@@ -9,7 +9,7 @@ const upload1 = require('../config/multerConfig'); // Import multer configuratio
 
 const {  fetchcompanyname, company_name_header_footer, deleteCompanydata, CompanyDataUpload, updateCompanyData, getCompanydata, getcompany_name_data } = require("../controllers/Company_Data_Controller");
 
-const { register, login, employeelogin } = require("../controllers/UserRegitrationlLogin");
+const { register, login, employeelogin, adminLogin } = require("../controllers/UserRegitrationlLogin");
 
 const { createServiceList, getServicelist, deleteServicename, updateServiceList } = require("../controllers/ServicesList");
 
@@ -131,6 +131,7 @@ router.use((err, req, res, next) => {
 
 
 router.post("/employee-login",employeelogin );
+router.post("/admin-login", adminLogin);
 
 
 
