@@ -237,10 +237,10 @@ const register = async (req, res) => {
           });
         }
   
-        const admin = results[0];
+        const user = results[0];
   
         // Compare passwords (direct comparison since bcrypt is not used)
-        if (password !== admin.password) {
+        if (password !== user.password) {
           return res.status(404).send({
             success: false,
             message: "Invalid password",
@@ -248,7 +248,7 @@ const register = async (req, res) => {
         }
   
         // Generate token
-        const token = JWT.sign({ id: admin.admin_id }, process.env.JWT_SECRET, {
+        const token = JWT.sign({ id: user.admin_id }, process.env.JWT_SECRET, {
           expiresIn: "7d",
         });
   
@@ -256,11 +256,11 @@ const register = async (req, res) => {
         res.status(200).send({
           success: true,
           message: "Login successfully",
-          admin: {
-            id: admin.admin_id,
-            name: admin.name,
-            email: admin.email,
-            roles: admin.roles,
+          user: {
+            id: user.admin_id,
+            name: user.name,
+            email: user.email,
+            roles: user.roles,
           },
           token,
         });
