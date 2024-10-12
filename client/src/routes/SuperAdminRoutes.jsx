@@ -26,6 +26,7 @@ import SuperQuotationList from "../adiComponent/Super-Admin/SuperQuotationList";
 import SuperQuotationVIew from "../adiComponent/Super-Admin/SuperQuotationView";
 import SuperReports from './../adiComponent/Super-Admin/SuperReports';
 import Super_Admin_Adminmanagement from "../adiComponent/Super-Admin/Super_Admin_AdminManagement";
+import Employee_Single_Lead_Profile from "../components/Leads/Employee_Single_Lead_Profile";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -46,6 +47,8 @@ function SuperAdminRoutes() {
           element={<SuperQuotationVIew />} 
         />
         <Route path="/super-admin-reporting" element={<SuperReports />} />
+<Route path="/employee-lead-single-data/:id" element={  <Employee_Single_Lead_Profile/>} />
+
         {/* <Route path="/" element={user? <Dashboard/> :<Landingpage/>} /> */}
         {/* <Route path="/admin-login" element={<AdminLogin/>} /> */}
 

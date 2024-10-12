@@ -41,6 +41,8 @@ function SuperAdminLead() {
   const [leadsPerPage] = useState(10);
   const [leadSourceFilter, setLeadSourceFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [visitFilter, setVisitFilter] = useState("");
+  const [dealFilter, setDealFilter] = useState("");
 
   // Fetch leads and employees from the API
   useEffect(() => {
@@ -127,26 +129,8 @@ function SuperAdminLead() {
     });
   };
 
-  const handleCreateClick = () => {
-    setIsEditing(false);
-    setCurrentLead({
-      lead_no: "",
-      assignedTo: "",
-      employeeId: "",
-      createdTime: "", // Added here
-      name: "",
-      phone: "",
-      leadSource: "",
-      subject: "",
-      status: "",
-      visit: "",
-      visit_date: "",
-    });
-    setShowPopup(true);
-  };
 
   const handleEditClick = (lead) => {
-    setIsEditing(true);
     setCurrentLead({
       ...lead,
       createdTime: moment(lead.createdTime).format("YYYY-MM-DD"), // Format the createdTime
@@ -156,7 +140,6 @@ function SuperAdminLead() {
 
   const saveChanges = async () => {
     if (validateForm()) {
-      if (isEditing) {
         try {
           await axios.put(
             `http://localhost:9000/api/leads/${currentLead.lead_id}`,
@@ -166,16 +149,7 @@ function SuperAdminLead() {
           closePopup();
         } catch (error) {
           console.error("Error updating lead:", error);
-        }
-      } else {
-        try {
-          await axios.post("http://localhost:9000/api/leads", currentLead);
-          fetchLeads(); // Refresh the list
-          closePopup();
-        } catch (error) {
-          console.error("Error adding lead:", error);
-        }
-      }
+        } 
     }
   };
 
@@ -224,8 +198,18 @@ function SuperAdminLead() {
       filtered = filtered.filter((lead) => lead.status === statusFilter);
     }
 
+    // Filter by visit
+    if (visitFilter) {
+      filtered = filtered.filter((visit) => visit.visit === visitFilter);
+    }
+
+    // Filter by Deak
+    if (dealFilter) {
+      filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
+    }
+
     setFilteredLeads(filtered);
-  }, [searchTerm, startDate, endDate, leads, leadSourceFilter, statusFilter]);
+  }, [searchTerm, startDate, endDate, leads, leadSourceFilter, statusFilter, visitFilter, dealFilter]);
 
   const closePopup = () => {
     setShowPopup(false);
@@ -254,15 +238,6 @@ function SuperAdminLead() {
             </h1>
             <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
-            {/* Button to create a new lead */}
-            <div className="mb-4">
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 font-medium"
-                onClick={handleCreateClick}
-              >
-                Add Lead
-              </button>
-            </div>
             <div className="grid grid-cols-5 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
@@ -327,10 +302,40 @@ function SuperAdminLead() {
                   className="border rounded-2xl p-2 w-full"
                 >
                   <option value="">All Status</option>
-                  <option value="Facebook Campaign">visited</option>
+                  {/* <option value="Facebook Campaign">visited</option>
                   <option value="One Realty Website">pending</option>
                   <option value="Trade Shows">confirm</option>
-                  <option value="Cold Calling">Cold Calling</option>
+                  <option value="Cold Calling">Cold Calling</option> */}
+                  <option default value="pending">Pending</option>
+                  <option value="interested">Interested</option>
+                  <option value="non interested">Non-Interested</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="">Visit Filter</label>
+                <select
+                  value={visitFilter}
+                  onChange={(e) => setVisitFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All visit</option>
+                  <option value="pending">Pending</option>
+                  <option value="fresh visit">Fresh Visit</option>
+                  <option value="repeated visit">Repeated Visit</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="">Deal Filter</label>
+                <select
+                  value={dealFilter}
+                  onChange={(e) => setDealFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Deal</option>
+                  <option value="pending">Pending</option>
+                  <option value="in progress">In Progress</option>
+                  <option value="closed">Closed</option>
+                  <option value="done">Done</option>
                 </select>
               </div>
             </div>
@@ -465,7 +470,8 @@ function SuperAdminLead() {
             <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
                 <h2 className="text-xl mb-4">
-                  {isEditing ? "Edit Lead" : "Add Lead"}
+                  {/* {isEditing ? "Edit Lead" : "Add Lead"} */}
+                  Edit Lead
                 </h2>
                 <div className="mb-4">
                   <label className="block text-gray-700">Lead Number</label>
