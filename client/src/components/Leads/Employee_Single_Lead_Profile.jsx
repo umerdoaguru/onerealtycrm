@@ -272,6 +272,7 @@ function Employee_Single_Lead_Profile() {
                                 <th className="px-6 py-3 border-b-2 border-gray-300">Lead  Status</th>
                                 <th className="px-6 py-3 border-b-2 border-gray-300"> Action</th>
                                 
+                                
                             </tr>
                         </thead>
                         <tbody>

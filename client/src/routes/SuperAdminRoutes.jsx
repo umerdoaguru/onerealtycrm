@@ -27,6 +27,10 @@ import SuperQuotationVIew from "../adiComponent/Super-Admin/SuperQuotationView";
 import SuperReports from './../adiComponent/Super-Admin/SuperReports';
 import Super_Admin_Adminmanagement from "../adiComponent/Super-Admin/Super_Admin_AdminManagement";
 import Employee_Single_Lead_Profile from "../components/Leads/Employee_Single_Lead_Profile";
+import Single_Lead_Profile from "../components/Leads/Single_Lead_Profile";
+import Super_Single_Lead_Profile from "../adiComponent/Super-Admin/Super_Single_Lead_Profile";
+import SuperEmployeeList from "../adiComponent/Super-Admin/SuperEmployeeList";
+import SuperEmployeeLeads from "../adiComponent/Super-Admin/SuperEmployeeLeads";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -39,6 +43,8 @@ function SuperAdminRoutes() {
         <Route path="/super-admin-leads" element={<SuperAdminLead />} />
         <Route path="/super-admin-employee-management" element={<SuperAdEmployeemanagement />} />
         <Route path="/super-admin-AdminManagement" element={<Super_Admin_Adminmanagement />} />
+        <Route path="/super-admin-employee-list" element={<SuperEmployeeList />} />
+        <Route path="/super-admin-employee-leads/:id" element={<SuperEmployeeLeads />} />
 {/*         
         <Route path="/super-admin-quotation-section" element={<CreateCompanyProfile />} /> */}
         <Route path="/super-admin-quotationlist" element={<SuperQuotationList />} />
@@ -47,7 +53,7 @@ function SuperAdminRoutes() {
           element={<SuperQuotationVIew />} 
         />
         <Route path="/super-admin-reporting" element={<SuperReports />} />
-<Route path="/employee-lead-single-data/:id" element={  <Employee_Single_Lead_Profile/>} />
+        <Route path="/super-admin-lead-single-data/:id" element={  <Super_Single_Lead_Profile/>} />
 
         {/* <Route path="/" element={user? <Dashboard/> :<Landingpage/>} /> */}
         {/* <Route path="/admin-login" element={<AdminLogin/>} /> */}

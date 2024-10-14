@@ -189,6 +189,41 @@ const employeeProfile = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error: err });
     } 
 };
+const getAllEmployeeTotalLeads = async (req, res) => {
+  try {
+    const query = `
+      SELECT 
+          e.employeeId,
+          e.name,
+          e.email,
+          COUNT(l.lead_id) AS total_leads
+      FROM employee e
+      LEFT JOIN leads l ON e.employeeId = l.employeeId
+      
+      GROUP BY e.employeeId;
+    `;
+
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching employees with lead count:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+      return res.status(200).json({
+        success: true,
+        employees: results,
+      });
+    });
+  } catch (error) {
+    console.error('Error in fetching employees:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error in fetching employees',
+      error: error.message,
+    });
+  }
+};
+
+
 
  
 module.exports = {
@@ -197,6 +232,6 @@ module.exports = {
     updateLeadStatus,
     getEmployeeQuotation,
     employeeProfile,
-    updateOnlyLeadStatus,updateOnlyQuotationStatus
+    updateOnlyLeadStatus,updateOnlyQuotationStatus,getAllEmployeeTotalLeads
 };
   

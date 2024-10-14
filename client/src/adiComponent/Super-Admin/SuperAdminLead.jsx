@@ -335,7 +335,7 @@ function SuperAdminLead() {
                   <option value="pending">Pending</option>
                   <option value="in progress">In Progress</option>
                   <option value="closed">Closed</option>
-                  <option value="done">Done</option>
+                  <option value="not closed">Not Closed</option>
                 </select>
               </div>
             </div>
@@ -395,7 +395,7 @@ function SuperAdminLead() {
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {index + 1}
                     </td>
-                    <Link to={`/lead-single-data/${lead.lead_id}`}>
+                    <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
                       <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
                         {lead.lead_no}
                       </td>
