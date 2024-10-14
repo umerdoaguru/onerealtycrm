@@ -11,8 +11,8 @@ import Invoice from "./Invoice";
 import axios from "axios";
 import LeadsGraph from "./LeadsGraph";
 import QuotationGraph from "./QuotationGraph";
-import SuperAdminSider from "./vinay/SuperAdminSider";
-import SuperHeader from "./vinay/SuperHeader";
+import SuperAdminSider from "./Super-Admin/SuperAdminSider";
+import SuperHeader from "./Super-Admin/SuperHeader";
 
 const SuperDash = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

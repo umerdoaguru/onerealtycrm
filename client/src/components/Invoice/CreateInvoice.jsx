@@ -150,8 +150,15 @@ const CreateInvoice = () => {
 
   const getServicelist = async () => {
     try {
+<<<<<<< HEAD
       const res = await axios.get(`http://localhost:9000/api/servicelist`);
 
+=======
+      const res = await axios.get(
+        `http://localhost:9000/api/servicelist`
+      );
+      
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setServiceslist(res.data);
     } catch (error) {}
   };
@@ -159,9 +166,13 @@ const CreateInvoice = () => {
   useEffect(() => {
     const fetchinvoice = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/company-data`
         );
+=======
+        const response = await axios.get(`http://localhost:9000/api/company-data`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setCompany_data(response.data);
 
         console.log(response);
@@ -177,6 +188,7 @@ const CreateInvoice = () => {
     // Fetch existing data from the API
     const fetchCompanyData = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.post(
           "http://localhost:9000/api/company-header-footer",
           {
@@ -184,6 +196,12 @@ const CreateInvoice = () => {
           }
         );
 
+=======
+        const response = await axios.post('http://localhost:9000/api/company-header-footer', {
+          company_name: selectedCompany
+        });
+        
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         if (response.status === 200) {
           const companyData = response.data;
 

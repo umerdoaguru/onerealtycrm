@@ -17,6 +17,7 @@ function Employees() {
     fetchEmployees();
   }, []);
 
+<<<<<<< HEAD
   const fetchEmployees = async () => {
     try {
       const response = await axios.get("http://localhost:9000/api/employee");
@@ -26,6 +27,17 @@ function Employees() {
       console.error("Error fetching employee:", error);
     }
   };
+=======
+    const fetchEmployees = async () => {
+        try {
+            const response = await axios.get('http://localhost:9000/api/employee');
+            setEmployee(response.data);
+            setFilteredEmployee(response.data); // Initial data set for filtering
+        } catch (error) {
+            console.error('Error fetching employee:', error);
+        }
+    };
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
   // Automatically apply date filter when start or end date changes
   useEffect(() => {

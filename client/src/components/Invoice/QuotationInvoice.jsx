@@ -29,9 +29,13 @@ const QuotationInvoice = () => {
 
   const fetchServices = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/quotation/${id}`
       );
+=======
+      const response = await axios.get(`http://localhost:9000/api/quotation/${id}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setServices(response.data);
       setQuotationName(response.data[0].quotation_name);
     } catch (error) {
@@ -42,6 +46,7 @@ const QuotationInvoice = () => {
     // Fetch existing data from the API
     const fetchCompanyData = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.post(
           "http://localhost:9000/api/company-header-footer",
           {
@@ -49,6 +54,12 @@ const QuotationInvoice = () => {
           }
         );
 
+=======
+        const response = await axios.post('http://localhost:9000/api/company-header-footer', {
+          company_name: selectedCompany
+        });
+        
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         if (response.status === 200) {
           const companyData = response.data;
 
@@ -102,9 +113,13 @@ const QuotationInvoice = () => {
   useEffect(() => {
     const fetchinvoice = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/company-data/${userId}`
         );
+=======
+        const response = await axios.get(`http://localhost:9000/api/company-data/${userId}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setCompany_data(response.data);
 
         console.log(response);
@@ -120,6 +135,7 @@ const QuotationInvoice = () => {
     e.preventDefault();
 
     try {
+<<<<<<< HEAD
       const response = await axios.post(
         "http://localhost:9000/api/create-invoice",
         {
@@ -129,6 +145,17 @@ const QuotationInvoice = () => {
           payment_mode: paymentmode,
           // advance_payment: invoiceAdvancePayment,
           client_gst_no: invoiceClient_GST_no,
+=======
+     
+
+      const response = await axios.post("http://localhost:9000/api/create-invoice", {
+        invoice_name: quotationName,
+        invoice_no: invoice_no,
+        invoice_address: invoiceAddress,
+        payment_mode: paymentmode,
+        // advance_payment: invoiceAdvancePayment,
+        client_gst_no: invoiceClient_GST_no,
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
           client_pan_no: invoiceClient_Pan_no,
           services: services,
           user_id: userId,

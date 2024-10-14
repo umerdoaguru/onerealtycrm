@@ -8,6 +8,7 @@ const DeleteInvoiceNotes = () => {
   const [notes, setNotes] = useState([]);
 
   const handleDeleteNote = async (noteId) => {
+<<<<<<< HEAD
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this Notes?"
     );
@@ -16,6 +17,11 @@ const DeleteInvoiceNotes = () => {
         const response = await axios.delete(
           `http://localhost:9000/api/delete-notes/${noteId}`
         );
+=======
+    const isConfirmed = window.confirm("Are you sure you want to delete this Notes?");
+   if(isConfirmed){ try {
+      const response = await axios.delete(`http://localhost:9000/api/delete-notes/${noteId}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
         if (response.status === 200) {
           console.log("Note deleted successfully");
@@ -30,9 +36,13 @@ const DeleteInvoiceNotes = () => {
 
   const fetchNotes = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/invoice-get-notes/${id}`
       );
+=======
+      const response = await axios.get(`http://localhost:9000/api/invoice-get-notes/${id}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
       if (response.status === 200) {
         setNotes(response.data);

@@ -16,6 +16,7 @@ function TotalEmpLead() {
     fetchLeads();
   }, []);
 
+<<<<<<< HEAD
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
@@ -29,6 +30,20 @@ function TotalEmpLead() {
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
+=======
+    const fetchLeads = async () => {
+        try {
+            const response = await axios.get( `http://localhost:9000/api/employe-leads/${EmpId}`);
+            setLeads(response.data);
+        } catch (error) {
+            console.error('Error fetching leads:', error);
+        }
+    };
+    const handleBackClick = () => {
+        navigate(-1); // -1 navigates to the previous page in history
+      };
+    
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
   return (
     <>

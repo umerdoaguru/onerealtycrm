@@ -12,12 +12,9 @@ const EditInvoice_start_date = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.put(
-        `http://localhost:9000/api/invoice-start-date/${id}`,
-        {
-          newInvoice_start_date: newInvoiceStartDate,
-        }
-      );
+      const response = await axios.put(`http://localhost:9000/api/invoice-start-date/${id}`, {
+        newInvoice_start_date: newInvoiceStartDate,
+      });
       if (response.status === 200) {
         navigate(`/print-invoice/${id}`);
       }

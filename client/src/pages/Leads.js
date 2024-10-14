@@ -8,7 +8,10 @@ import { BsPencilSquare, BsTrash } from "react-icons/bs";
 import ToDoList from "./../adiComponent/Todo";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
+<<<<<<< HEAD
 import SuperAdminSider from "../adiComponent/vinay/SuperAdminSider";
+=======
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
 function Leads() {
   const navigate = useNavigate();
@@ -23,9 +26,12 @@ function Leads() {
     phone: "",
     leadSource: "",
     subject: "",
+<<<<<<< HEAD
     status: "",
     visit: "",
     visit_date: "",
+=======
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
   });
   const [showPopup, setShowPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -37,8 +43,11 @@ function Leads() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
+<<<<<<< HEAD
   const [leadSourceFilter, setLeadSourceFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+=======
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
   // Fetch leads and employees from the API
   useEffect(() => {
@@ -50,6 +59,10 @@ function Leads() {
     try {
       const response = await axios.get("http://localhost:9000/api/leads");
       setLeads(response.data);
+<<<<<<< HEAD
+=======
+      console.log(leads);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
@@ -131,6 +144,7 @@ function Leads() {
       lead_no: "",
       assignedTo: "",
       employeeId: "",
+<<<<<<< HEAD
       createdTime: "", // Added here
       name: "",
       phone: "",
@@ -139,6 +153,13 @@ function Leads() {
       status: "",
       visit: "",
       visit_date: "",
+=======
+      name: "",
+      phone: "",
+      leadSource: "",
+      createdTime: "", // Clear out createdTime for new lead
+      subject: "",
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
     });
     setShowPopup(true);
   };
@@ -211,6 +232,7 @@ function Leads() {
       });
     }
 
+<<<<<<< HEAD
     // Filter by lead source
     if (leadSourceFilter) {
       filtered = filtered.filter(
@@ -224,6 +246,10 @@ function Leads() {
 
     setFilteredLeads(filtered);
   }, [searchTerm, startDate, endDate, leads, leadSourceFilter, statusFilter]);
+=======
+    setFilteredLeads(filtered);
+  }, [searchTerm, startDate, endDate, leads]);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
   const closePopup = () => {
     setShowPopup(false);
@@ -242,8 +268,12 @@ function Leads() {
   return (
     <>
       <Header />
+<<<<<<< HEAD
       {/* <Sider /> */}
       <SuperAdminSider />
+=======
+      <Sider />
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       <Wrapper>
         <div className="container">
           <div className="main">
@@ -261,7 +291,11 @@ function Leads() {
                 Add Lead
               </button>
             </div>
+<<<<<<< HEAD
             <div className="grid grid-cols-5 gap-4 mb-4">
+=======
+            <div className="grid grid-cols-3 gap-4 mb-4">
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
               <div>
                 <label htmlFor="">Search</label>
                 <input
@@ -291,6 +325,7 @@ function Leads() {
                   className="border   rounded-2xl p-2 w-full"
                 />
               </div>
+<<<<<<< HEAD
               <div>
                 <label htmlFor="">Lead Source Filter</label>
                 <select
@@ -331,6 +366,8 @@ function Leads() {
                   <option value="Cold Calling">Cold Calling</option>
                 </select>
               </div>
+=======
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
             </div>
           </div>
 
@@ -363,16 +400,27 @@ function Leads() {
                     Lead Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+<<<<<<< HEAD
                     Created Time
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Status
+=======
+                     Status
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Visit
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+<<<<<<< HEAD
                     Visit date
+=======
+                    Visit Date
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                 Date
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Action
@@ -424,6 +472,7 @@ function Leads() {
                         {lead.lead_status}
                       </td>
                     )}
+<<<<<<< HEAD
 
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {moment(lead.createdTime).format("YYYY-MM-DD")}
@@ -438,6 +487,59 @@ function Leads() {
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.visit_date}
+=======
+                    {lead.status === "pending" && (
+                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
+                        {lead.status}
+                      </td>
+                    )}
+                    {lead.status === "in progress" && (
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
+                        {lead.status}
+                      </td>
+                    )}
+
+                    {lead.status === "completed" && (
+                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
+                        {lead.status}
+                      </td>
+                    )}
+
+
+                    {lead.visit === "pending" && (
+                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
+                        {lead.visit}
+                      </td>
+                    )}
+                    {lead.visit === "in progress" && (
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
+                        {lead.visit}
+                      </td>
+                    )}
+
+                    {lead.visit === "completed" && (
+                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
+                        {lead.visit}
+                      </td>
+                    )}
+
+                   
+
+{lead.visit_date === "pending" ? (
+  <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
+    {lead.visit_date}
+  </td>
+) : (
+  <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
+    {moment(lead.visit_date).format("DD-MM-YYYY")}
+  </td>
+)}
+
+
+
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      {moment(lead.createdTime).format("DD-MM-YYYY")}
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       <button
@@ -539,7 +641,11 @@ function Leads() {
                 <div className="mb-4">
                   <label className="block text-gray-700">Phone</label>
                   <input
+<<<<<<< HEAD
                     type="number"
+=======
+                    type="text"
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
                     name="phone"
                     value={currentLead.phone}
                     onChange={handleInputChange}
@@ -571,7 +677,13 @@ function Leads() {
                     <option value="Content Marketing">Content Marketing</option>
                     <option value="SEO">Search Engine Optimization</option>
                     <option value="Trade Shows">Trade Shows</option>
+<<<<<<< HEAD
                     <option value="Affiliate Marketing">
+=======
+                    <option value="Facebook Campaign">Facebook Campaign</option>
+                    <option value="One Realty Website">One Realty Website</option>
+                    <option value="Affiliate Marketing">    
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
                       Affiliate Marketing
                     </option>
                     <option value="Direct Mail">Direct Mail</option>
@@ -594,9 +706,12 @@ function Leads() {
                       errors.phone ? "border-red-500" : "border-gray-300"
                     } rounded`}
                   />
+<<<<<<< HEAD
                   {errors.phone && (
                     <span className="text-red-500">{errors.phone}</span>
                   )}
+=======
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
                 </div>
 
                 <div className="flex justify-end">

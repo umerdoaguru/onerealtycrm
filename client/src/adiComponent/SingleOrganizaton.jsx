@@ -14,9 +14,13 @@ const SingleOrganization = () => {
 
   const fetchOrganization = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/getOrganization/${id}`
       );
+=======
+      const response = await axios.get(`http://localhost:9000/api/getOrganization/${id}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setOrganization(response.data.organization);
     } catch (error) {
       console.error("Error fetching organization:", error);

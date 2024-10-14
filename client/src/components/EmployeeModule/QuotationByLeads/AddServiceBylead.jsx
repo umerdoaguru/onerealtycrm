@@ -131,9 +131,13 @@ const AddServiceByLead = () => {
 
   const getQuotationName = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/quotation/${id}`
       );
+=======
+      const response = await axios.get(`http://localhost:9000/api/quotation/${id}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setQuotationName(response.data[0].quotation_name);
     } catch (error) {
       console.log("Error fetching quotation name:", error);
@@ -142,9 +146,13 @@ const AddServiceByLead = () => {
 
   const getServicelist = async () => {
     try {
+<<<<<<< HEAD
       const res = await axios.get(
         `http://localhost:9000/api/servicelist/${userId}`
       );
+=======
+      const res = await axios.get(`http://localhost:9000/api/servicelist/${userId}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       console.log(res.data);
       setServiceslist(res.data);
     } catch (error) {

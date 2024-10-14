@@ -12,10 +12,14 @@ const EditInvoice_no = () => {
     event.preventDefault();
 
     try {
+<<<<<<< HEAD
       const response = await axios.put(
         `http://localhost:9000/api/invoice-no/${id}`,
         { newInvoice_no: newInvoiceNo }
       );
+=======
+      const response = await axios.put(`http://localhost:9000/api/invoice-no/${id}`, { newInvoice_no: newInvoiceNo });
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       if (response.status === 200) {
         navigate(`/print-invoice/${id}`);
       }

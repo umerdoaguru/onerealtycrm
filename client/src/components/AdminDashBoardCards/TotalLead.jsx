@@ -13,6 +13,7 @@ function TotalLead() {
     fetchLeads();
   }, []);
 
+<<<<<<< HEAD
   const fetchLeads = async () => {
     try {
       const response = await axios.get("http://localhost:9000/api/leads");
@@ -24,6 +25,25 @@ function TotalLead() {
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
+=======
+    useEffect(() => {
+        fetchLeads();
+        
+    }, []);
+
+    const fetchLeads = async () => {
+        try {
+            const response = await axios.get('http://localhost:9000/api/leads');
+            setLeads(response.data);
+        } catch (error) {
+            console.error('Error fetching leads:', error);
+        }
+    };
+    const handleBackClick = () => {
+        navigate(-1); // -1 navigates to the previous page in history
+      };
+    
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
   return (
     <>

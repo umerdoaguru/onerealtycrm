@@ -25,9 +25,13 @@ function EmployeeProfile() {
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api//employeeProfile/${EmpId}`
         ); // Fetch employee data
+=======
+        const response = await axios.get(`http://localhost:9000/api//employeeProfile/${EmpId}`); // Fetch employee data
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data
       } catch (error) {

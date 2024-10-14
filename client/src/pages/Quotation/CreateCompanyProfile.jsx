@@ -43,9 +43,7 @@ function CreateCompanyProfile() {
   useEffect(() => {
     const fetchinvoice = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:9000/api/company-data`
-        );
+        const response = await axios.get(`http://localhost:9000/api/company-data`);
         setcompanydata(response.data);
         console.log(response);
       } catch (error) {
@@ -57,27 +55,22 @@ function CreateCompanyProfile() {
   }, [UserId, render]);
 
   const handleDeleteCompanyData = async (CompanyName) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this Company data?"
-    );
-    if (isConfirmed) {
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/api/companydata",
-          {
-            company_name: CompanyName,
-          }
-        );
-
-        if (response.status === 200) {
-          console.log("Company Data deleted successfully");
-          // Refresh CompanyDatas after deletion
-          // window.location.reload();
-          setRender(!render);
-        }
-      } catch (error) {
-        console.error("Error deleting Company Data:", error);
+    const isConfirmed = window.confirm("Are you sure you want to delete this Company data?");
+   if(isConfirmed){ try {
+       const response = await axios.post('http://localhost:9000/api/companydata', {
+        company_name: CompanyName
+      });
+       
+       
+       
+      if (response.status === 200) {
+        console.log('Company Data deleted successfully');
+        // Refresh CompanyDatas after deletion
+        // window.location.reload();
+        setRender(!render);
       }
+    } catch {
+      console.log('Error deleting Company Data');
     }
   };
 
@@ -515,7 +508,7 @@ function CreateCompanyProfile() {
     </>
   );
 }
-
+}
 export default CreateCompanyProfile;
 
-const Wrapper = styled.div``;
+

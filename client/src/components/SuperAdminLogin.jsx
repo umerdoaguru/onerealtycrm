@@ -25,7 +25,7 @@ function SuperAdminLogin() {
         cogoToast.success(res.data.message);
         console.log("asdfghjksadfghjklsdfghjkl");
 
-        navigate("/Super-Admin-Dashboard");
+        navigate("/super-admin-dashboard");
       } else {
         cogoToast.error(res.data.message);
       }

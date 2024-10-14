@@ -252,52 +252,7 @@ const GetQuotation = async (req, res) => {
   }
 };
 
-const updateQuotationStatus = async (req, res) => {
-  try {
-    const { quotation_id, status } = req.body; // Get the quotation_id and new status from the request body
 
-    // Validate that both fields are provided
-    if (!quotation_id || !status) {
-      return res.status(400).json({
-        message: "quotation_id and status are required",
-        success: false,
-      });
-    }
-
-    const sql = "UPDATE quotations_data SET status = ? WHERE quotation_id = ?";
-
-    // Use a promise to execute the SQL update query
-    const updateStatus = await new Promise((resolve, reject) => {
-      db.query(sql, [status, quotation_id], (err, result) => {
-        if (err) {
-          return reject(err); // Reject the promise if there's an error
-        }
-        resolve(result); // Resolve the promise with the query result
-      });
-    });
-
-    // Check if any rows were affected (i.e., if the update was successful)
-    if (updateStatus.affectedRows === 0) {
-      return res.status(404).json({
-        message: "Quotation not found",
-        success: false,
-      });
-    }
-
-    // Send a success response
-    res.status(200).json({
-      message: "Quotation status updated successfully",
-      success: true,
-    });
-  } catch (error) {
-    // Handle any errors and send a failure response
-    res.status(500).json({
-      message: "Internal Server Error",
-      success: false,
-      error: error.message, // Send a specific error message for debugging
-    });
-  }
-};
 
 const getAllQuotation = async (req, res) => {
   try {
@@ -887,6 +842,23 @@ const getleadbyid = (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const getvisit = (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const getQuery = `SELECT * FROM leads WHERE lead_id = ?`;
+
+    db.query(getQuery, [id], (error, result) => {
+      if (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+      } else {
+        res.status(200).json(result);
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 const getLeads = (req, res) => {
   const sql = "SELECT * FROM leads";
@@ -1131,6 +1103,53 @@ const getAllUsers = async (req, res) => {
       success: false,
       message: "Error in retrieving users",
       error: error.message,
+    });
+  }
+};
+
+const updateQuotationStatus = async (req, res) => {
+  try {
+    const { quotation_id, status } = req.body; // Get the quotation_id and new status from the request body
+
+    // Validate that both fields are provided
+    if (!quotation_id || !status) {
+      return res.status(400).json({
+        message: "quotation_id and status are required",
+        success: false,
+      });
+    }
+
+    const sql = "UPDATE quotations_data SET status = ? WHERE quotation_id = ?";
+
+    // Use a promise to execute the SQL update query
+    const updateStatus = await new Promise((resolve, reject) => {
+      db.query(sql, [status, quotation_id], (err, result) => {
+        if (err) {
+          return reject(err); // Reject the promise if there's an error
+        }
+        resolve(result); // Resolve the promise with the query result
+      });
+    });
+
+    // Check if any rows were affected (i.e., if the update was successful)
+    if (updateStatus.affectedRows === 0) {
+      return res.status(404).json({
+        message: "Quotation not found",
+        success: false,
+      });
+    }
+
+    // Send a success response
+    res.status(200).json({
+      message: "Quotation status updated successfully",
+      success: true,
+    });
+  } catch (error) {
+    // Handle any errors and send a failure response
+    res.status(500).json({
+      message: "Internal Server Error",
+      success: false,
+      error: error.message, // Send a specific error message for debugging
     });
   }
 };

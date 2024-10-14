@@ -18,9 +18,13 @@ const EmployeeInvoiceData = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/get-employee-invoice/${EmpId}`
         );
+=======
+        const response = await axios.get(`http://localhost:9000/api/get-employee-invoice/${EmpId}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setInvoices(response.data);
       } catch (error) {
         console.error("Error fetching invoices:", error);

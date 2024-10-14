@@ -26,8 +26,8 @@ function DeleteCompanydata() {
           // Refresh CompanyDatas after deletion
           window.location.reload();
         }
-      } catch (error) {
-        console.error("Error deleting Company Data:", error);
+      } catch {
+        console.log("Error deleting Company Data");
       }
     }
   };

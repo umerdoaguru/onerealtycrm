@@ -35,8 +35,8 @@ function DeleteServiceName() {
           console.log("Service Name Deleted successfully");
           fetchServicelist();
         }
-      } catch (error) {
-        console.log("Error Delete service name", error);
+      } catch {
+        console.log("Error deleting Service Name");
       }
     }
   };

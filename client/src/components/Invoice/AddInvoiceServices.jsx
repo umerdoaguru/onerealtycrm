@@ -122,9 +122,13 @@ const AddInvoiceServices = () => {
 
   const getQuotationName = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/invoice-name/${id}`
       );
+=======
+      const response = await axios.get(`http://localhost:9000/api/invoice-name/${id}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setInvoiceName(response.data[0].invoice_name);
     } catch (error) {
       console.log("Error fetching quotation name:", error);

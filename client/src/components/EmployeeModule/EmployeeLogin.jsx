@@ -19,10 +19,14 @@ function EmployeeLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+<<<<<<< HEAD
       const res = await axios.post(
         "http://localhost:9000/api/employee-login",
         formData
       );
+=======
+      const res = await axios.post("http://localhost:9000/api/employee-login", formData);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       if (res.data.success) {
         dispatch(loginUser(res.data.user));
         cogoToast.success(res.data.message);

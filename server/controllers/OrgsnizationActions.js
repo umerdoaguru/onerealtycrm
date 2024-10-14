@@ -464,7 +464,136 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
-//admin by vinay
+const deleteOrganization = async (req, res) => {
+  try {
+    // Extract companyId from URL parameters
+    const { id } = req.params;
+
+    // Validate companyId
+    if (!id) {
+      return res.status(400).json({ error: "Company ID is required" });
+    }
+
+    // Check if the organization exists
+    const checkOrgQuery = "SELECT * FROM organization WHERE companyId = ?";
+
+    db.query(checkOrgQuery, [id], (err, result) => {
+      if (err) {
+        console.error("Error checking if organization exists in MySQL:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({ error: "Organization not found" });
+      } else {
+        // Organization found, proceed with deletion
+        const deleteOrgQuery = "DELETE FROM organization WHERE companyId = ?";
+
+        db.query(deleteOrgQuery, [id], (deleteErr, deleteResult) => {
+          if (deleteErr) {
+            console.error("Error deleting organization:", deleteErr);
+            return res.status(500).json({ error: "Internal server error" });
+          } else {
+            console.log("Organization deleted successfully");
+            return res.status(200).json({
+              success: true,
+              message: "Organization deleted successfully",
+            });
+          }
+        });
+      }
+    });
+  } catch (error) {
+    console.error("Error in deleting organization:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error in deleting organization",
+      error: error.message,
+    });
+  }
+};
+
+const updateOrganization = async (req, res) => {
+  try {
+    const { companyId } = req.params; // Changed to companyId
+    const {
+      name,
+      contact,
+      bankDetails,
+      email_id,
+      bankname,
+      ifsc_code,
+      acc_no,
+      type,
+      zip_code,
+      location,
+      district,
+    } = req.body;
+
+    // Retrieve file paths for signature and logo, if available
+    const signaturePath = req.files.signature
+      ? `/Assets/${req.files.signature[0].filename}`
+      : null;
+    const logoPath = req.files.logo
+      ? `/Assets/${req.files.logo[0].filename}`
+      : null;
+
+    // Construct the SQL query with placeholders for all fields
+    const query = `
+        UPDATE organization 
+        SET 
+          name = COALESCE(?, name),
+          contact = COALESCE(?, contact),
+          bankDetails = COALESCE(?, bankDetails),
+          email_id = COALESCE(?, email_id),
+          bankname = COALESCE(?, bankname),
+          ifsc_code = COALESCE(?, ifsc_code),
+          acc_no = COALESCE(?, acc_no),
+          type = COALESCE(?, type),
+          zip_code = COALESCE(?, zip_code),
+          location = COALESCE(?, location),
+          district = COALESCE(?, district),
+          signature = COALESCE(?, signature),
+          logo = COALESCE(?, logo)
+        WHERE companyId = ?
+      `;
+
+    const values = [
+      name,
+      contact,
+      bankDetails,
+      email_id,
+      bankname,
+      ifsc_code,
+      acc_no,
+      type,
+      zip_code,
+      location,
+      district,
+      signaturePath,
+      logoPath,
+      companyId,
+    ];
+
+    // Execute the database query
+    db.query(query, values, (err, results) => {
+      if (err) {
+        console.error("Error executing query:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ error: "Organization not found" });
+      }
+
+      // Return success message
+      res.status(200).json({ message: "Organization updated successfully" });
+    });
+  } catch (error) {
+    console.error("Error updating organization:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 const getAllAdmins = async (req, res) => {
   try {
@@ -642,136 +771,22 @@ const deleteAdmin = async (req, res) => {
   }
 };
 
-const deleteOrganization = async (req, res) => {
-  try {
-    // Extract companyId from URL parameters
-    const { id } = req.params;
-
-    // Validate companyId
-    if (!id) {
-      return res.status(400).json({ error: "Company ID is required" });
-    }
-
-    // Check if the organization exists
-    const checkOrgQuery = "SELECT * FROM organization WHERE companyId = ?";
-
-    db.query(checkOrgQuery, [id], (err, result) => {
-      if (err) {
-        console.error("Error checking if organization exists in MySQL:", err);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-
-      if (result.length === 0) {
-        return res.status(404).json({ error: "Organization not found" });
-      } else {
-        // Organization found, proceed with deletion
-        const deleteOrgQuery = "DELETE FROM organization WHERE companyId = ?";
-
-        db.query(deleteOrgQuery, [id], (deleteErr, deleteResult) => {
-          if (deleteErr) {
-            console.error("Error deleting organization:", deleteErr);
-            return res.status(500).json({ error: "Internal server error" });
-          } else {
-            console.log("Organization deleted successfully");
-            return res.status(200).json({
-              success: true,
-              message: "Organization deleted successfully",
-            });
-          }
-        });
-      }
-    });
-  } catch (error) {
-    console.error("Error in deleting organization:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error in deleting organization",
-      error: error.message,
-    });
-  }
-};
-
-const updateOrganization = async (req, res) => {
-  try {
-    const { companyId } = req.params; // Changed to companyId
-    const {
-      name,
-      contact,
-      bankDetails,
-      email_id,
-      bankname,
-      ifsc_code,
-      acc_no,
-      type,
-      zip_code,
-      location,
-      district,
-    } = req.body;
-
-    // Retrieve file paths for signature and logo, if available
-    const signaturePath = req.files.signature
-      ? `/Assets/${req.files.signature[0].filename}`
-      : null;
-    const logoPath = req.files.logo
-      ? `/Assets/${req.files.logo[0].filename}`
-      : null;
-
-    // Construct the SQL query with placeholders for all fields
-    const query = `
-        UPDATE organization 
-        SET 
-          name = COALESCE(?, name),
-          contact = COALESCE(?, contact),
-          bankDetails = COALESCE(?, bankDetails),
-          email_id = COALESCE(?, email_id),
-          bankname = COALESCE(?, bankname),
-          ifsc_code = COALESCE(?, ifsc_code),
-          acc_no = COALESCE(?, acc_no),
-          type = COALESCE(?, type),
-          zip_code = COALESCE(?, zip_code),
-          location = COALESCE(?, location),
-          district = COALESCE(?, district),
-          signature = COALESCE(?, signature),
-          logo = COALESCE(?, logo)
-        WHERE companyId = ?
-      `;
-
-    const values = [
-      name,
-      contact,
-      bankDetails,
-      email_id,
-      bankname,
-      ifsc_code,
-      acc_no,
-      type,
-      zip_code,
-      location,
-      district,
-      signaturePath,
-      logoPath,
-      companyId,
-    ];
-
-    // Execute the database query
-    db.query(query, values, (err, results) => {
-      if (err) {
-        console.error("Error executing query:", err);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-
-      if (results.affectedRows === 0) {
-        return res.status(404).json({ error: "Organization not found" });
-      }
-
-      // Return success message
-      res.status(200).json({ message: "Organization updated successfully" });
-    });
-  } catch (error) {
-    console.error("Error updating organization:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+const values = [
+  name,
+  contact,
+  bankDetails,
+  email_id,
+  bankname,
+  ifsc_code,
+  acc_no,
+  type,
+  zip_code,
+  location,
+  district,
+  signaturePath,
+  logoPath,
+  companyId,
+];
 
 module.exports = {
   getAllOrganizations,
@@ -784,10 +799,10 @@ module.exports = {
   deleteEmployee,
   getEmployeeById,
   updateSingleEmployee,
+  getOrganizationById,
   getAllAdmins,
   getAdminById,
   addAdmin,
   updateAdmin,
   deleteAdmin,
-  getOrganizationById,
 };

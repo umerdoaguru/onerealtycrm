@@ -1,48 +1,32 @@
 import React from "react";
 
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import Registration from "../components/Registration";
-
 import Leads from "../pages/Leads";
-import QuotationForm1 from "../pages/Quotation/QuotationForm1";
+
 import CreateCompanyProfile from "../pages/Quotation/CreateCompanyProfile";
 
-import UpdateCompanyData from "../pages/Quotation/UpdateCompanyData";
-import DeleteCompanydata from "../pages/Quotation/DeleteCompanydata";
-
-import Invoicelist from "../components/Invoice/Invoicelist";
-
-import DataExport from "../pages/DataExport";
-import LeadData from "../components/DataExport/LeadData";
-import QuotationData from "../components/DataExport/QuotationData";
-import InvoiceData from "../components/DataExport/InvoiceData";
-import Dashboard from "../adiComponent/Dashboard";
-import Overview from "../adiComponent/Overview";
-import UserProfile from "../adiComponent/userProfile";
 import EmployeeManagement from "../adiComponent/EmployManagement";
-import EmployeeSingle from "../adiComponent/EmployeSingle";
-import SingleOrganization from "../adiComponent/SingleOrganizaton";
+
 import Reporting from "../adiComponent/Reporting";
-import Single_Lead_Profile from "../components/Leads/Single_Lead_Profile";
-import Landingpage from "../pages/Landingpage";
-// import AdminLogin from "../components/AdminLogin";
-import ServicenameList from "../pages/Quotation/ServicenameList";
-import CreateServicelist from "../pages/Quotation/CreateServicelist";
-import DeleteServiceName from "../pages/Quotation/DeleteServiceName";
-import UpdateServiceList from "../pages/Quotation/UpdateServiceList";
 
 import QuotationList from "../pages/Quotation/QuotationList";
 import AdminQuotationVIew from "../pages/Quotation/AdminQuotationVIew";
-import AdminInvoiceView from "../components/Invoice/AdminInvoiceView";
-import TotalLead from "../components/AdminDashBoardCards/TotalLead";
-import TotalEmployee from "../components/AdminDashBoardCards/TotalEmployee";
-import TotalQuotation from "../components/AdminDashBoardCards/TotalQuotation";
-import TotalInvoice from "../components/AdminDashBoardCards/TotalInvoice";
-import MainSocialLeads from "../components/SocialMediaLeads/MainSocialLeads";
+
 import SuperDash from "../adiComponent/SuperDash";
 import AdminManagement from "../adiComponent/AdminManagement";
+import SuperAdminLead from "../adiComponent/Super-Admin/SuperAdminLead";
+import SuperAdEmployeemanagement from "../adiComponent/Super-Admin/SuperAdEmployeemanagement";
+import SuperQuotationList from "../adiComponent/Super-Admin/SuperQuotationList";
+import SuperQuotationVIew from "../adiComponent/Super-Admin/SuperQuotationView";
+import SuperReports from "./../adiComponent/Super-Admin/SuperReports";
+import Super_Admin_Adminmanagement from "../adiComponent/Super-Admin/Super_Admin_AdminManagement";
+import Employee_Single_Lead_Profile from "../components/Leads/Employee_Single_Lead_Profile";
+import Single_Lead_Profile from "../components/Leads/Single_Lead_Profile";
+import Super_Single_Lead_Profile from "../adiComponent/Super-Admin/Super_Single_Lead_Profile";
+import SuperEmployeeList from "../adiComponent/Super-Admin/SuperEmployeeList";
+import SuperEmployeeLeads from "../adiComponent/Super-Admin/SuperEmployeeLeads";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -51,18 +35,40 @@ function SuperAdminRoutes() {
       <Routes>
         {/*super Admin routes by vinay */}
         <Route path="/" element={<SuperDash />} />
-        <Route path="/Super-Admin-Dashboard" element={<SuperDash />} />
-        <Route path="/leads" element={<Leads />} />
-        <Route path="/employee-management" element={<EmployeeManagement />} />
-        <Route path="/AdminManagement" element={<AdminManagement />} />
-        <Route path="/admincrmonerealty" element={<Registration />} />
-        <Route path="/quotation-section" element={<CreateCompanyProfile />} />
-        <Route path="/quotationlist" element={<QuotationList />} />
+        <Route path="/super-admin-dashboard" element={<SuperDash />} />
+        <Route path="/super-admin-leads" element={<SuperAdminLead />} />
+        <Route
+          path="/super-admin-employee-management"
+          element={<SuperAdEmployeemanagement />}
+        />
+        <Route
+          path="/super-admin-AdminManagement"
+          element={<Super_Admin_Adminmanagement />}
+        />
+        <Route
+          path="/super-admin-employee-list"
+          element={<SuperEmployeeList />}
+        />
+        <Route
+          path="/super-admin-employee-leads/:id"
+          element={<SuperEmployeeLeads />}
+        />
+        {/*         
+        <Route path="/super-admin-quotation-section" element={<CreateCompanyProfile />} /> */}
+        <Route
+          path="/super-admin-quotationlist"
+          element={<SuperQuotationList />}
+        />
         <Route
           path="/admin-view-quotation/:id"
-          element={<AdminQuotationVIew />}
+          element={<SuperQuotationVIew />}
         />
-        <Route path="/reporting" element={<Reporting />} />
+        <Route path="/super-admin-reporting" element={<SuperReports />} />
+        <Route
+          path="/super-admin-lead-single-data/:id"
+          element={<Super_Single_Lead_Profile />}
+        />
+
         {/* <Route path="/" element={user? <Dashboard/> :<Landingpage/>} /> */}
         {/* <Route path="/admin-login" element={<AdminLogin/>} /> */}
 

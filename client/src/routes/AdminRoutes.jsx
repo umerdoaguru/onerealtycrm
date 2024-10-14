@@ -33,6 +33,25 @@ import CreateServicelist from "../pages/Quotation/CreateServicelist";
 import DeleteServiceName from "../pages/Quotation/DeleteServiceName";
 import UpdateServiceList from "../pages/Quotation/UpdateServiceList";
 
+import DataExport from "../pages/DataExport";
+import LeadData from "../components/DataExport/LeadData";
+import QuotationData from "../components/DataExport/QuotationData";
+import InvoiceData from "../components/DataExport/InvoiceData";
+import Dashboard from "../adiComponent/Dashboard";
+import Overview from "../adiComponent/Overview";
+import UserProfile from "../adiComponent/userProfile";
+import EmployeeManagement from "../adiComponent/EmployManagement";
+import EmployeeSingle from "../adiComponent/EmployeSingle";
+import SingleOrganization from "../adiComponent/SingleOrganizaton";
+import Reporting from "../adiComponent/Reporting";
+import Single_Lead_Profile from "../components/Leads/Single_Lead_Profile";
+import Landingpage from "../pages/Landingpage";
+import AdminLogin from "../components/AdminLogin";
+import ServicenameList from "../pages/Quotation/ServicenameList";
+import CreateServicelist from "../pages/Quotation/CreateServicelist";
+import DeleteServiceName from "../pages/Quotation/DeleteServiceName";
+import UpdateServiceList from "../pages/Quotation/UpdateServiceList";
+
 import QuotationList from "../pages/Quotation/QuotationList";
 import AdminQuotationVIew from "../pages/Quotation/AdminQuotationVIew";
 import AdminInvoiceView from "../components/Invoice/AdminInvoiceView";
@@ -41,6 +60,7 @@ import TotalEmployee from "../components/AdminDashBoardCards/TotalEmployee";
 import TotalQuotation from "../components/AdminDashBoardCards/TotalQuotation";
 import TotalInvoice from "../components/AdminDashBoardCards/TotalInvoice";
 import MainSocialLeads from "../components/SocialMediaLeads/MainSocialLeads";
+import TotalVisit from "../components/AdminDashBoardCards/ToatalVisit";
 
 function AdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -59,6 +79,7 @@ function AdminRoutes() {
         <Route path="/total-employees" element={<TotalEmployee />} />
         <Route path="/total-quotations" element={<TotalQuotation />} />
         <Route path="/total-invoices" element={<TotalInvoice />} />
+        <Route path="/total-visit" element={<TotalVisit />} />
 
         <Route path="/leads" element={<Leads />} />
         <Route path="/social-media-leads" element={<MainSocialLeads />} />

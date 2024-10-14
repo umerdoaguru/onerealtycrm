@@ -49,7 +49,11 @@
 //         try {
 //           // Send updated data to the backend using Axios
 //           const response = await axios.put(`http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 //           if (response.status === 200) {
 //             console.log('Updated successfully:', response.data);
 //             cogoToast.success("Lead status updated successfully");
@@ -168,9 +172,13 @@ function EmployeeLead() {
 
   const fetchLeads = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/employe-leads/${EmpId}`
       );
+=======
+      const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       const data = response.data;
       setLeads(data);
     } catch (error) {
@@ -181,10 +189,14 @@ function EmployeeLead() {
   const handleUpdate = async (lead) => {
     try {
       // Send updated data to the backend using Axios
+<<<<<<< HEAD
       const response = await axios.put(
         `http://localhost:9000/api/updateOnlyLeadStatus/${lead.lead_id}`,
         { lead_status: "in progress" }
       );
+=======
+      const response = await axios.put(`http://localhost:9000/api/updateOnlyLeadStatus/${lead.lead_id}`,  {lead_status: 'in progress'});
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
       if (response.status === 200) {
         console.log("Updated successfully:", response.data);

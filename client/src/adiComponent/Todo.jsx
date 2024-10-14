@@ -10,6 +10,7 @@ const statusStyles = {
 const ToDoList = () => {
   const [todos, setTodos] = useState([]);
 
+<<<<<<< HEAD
   useEffect(() => {
     const fetchTodos = async () => {
       try {
@@ -21,6 +22,19 @@ const ToDoList = () => {
         console.error("Error fetching to-dos:", error);
       }
     };
+=======
+    useEffect(() => {
+        const fetchTodos = async () => {
+            try {
+                const response = await fetch('http://localhost:9000/api/todo-list');
+                const data = await response.json();
+                // Process and set the to-do data
+                setTodos(data);
+            } catch (error) {
+                console.error('Error fetching to-dos:', error);
+            }
+        };
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
     fetchTodos();
   }, []);

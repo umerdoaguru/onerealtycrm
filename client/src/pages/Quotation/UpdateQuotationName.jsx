@@ -125,9 +125,6 @@ const UpdateQuotationName = () => {
       console.error("Error updating quotation name:", error);
       setMessage("Internal Server Error");
     }
-
-    // Close the modal after saving
-    setShowModal(false);
   };
 
   const handleClose = () => {

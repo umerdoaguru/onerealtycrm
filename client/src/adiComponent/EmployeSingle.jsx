@@ -31,9 +31,7 @@ const EmployeeSingle = () => {
   // Fetch employee data
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/api/getEmployeeById/${employeeId}`
-      );
+      const response = await axios.get(`http://localhost:9000/api/getEmployeeById/${employeeId}`);
       if (response.data.success) {
         setEmployee(response.data.employee);
         setNewEmployee({
@@ -106,7 +104,7 @@ const EmployeeSingle = () => {
 
   const isEmailTaken = async (email) => {
     try {
-      const response = await axios.get("http://localhost:9000/api/checkEmail", {
+      const response = await axios.get('http://localhost:9000/api/checkEmail', {
         params: { email },
       });
       return response.data.exists;
@@ -118,12 +116,9 @@ const EmployeeSingle = () => {
 
   const isPhoneNumberTaken = async (phone) => {
     try {
-      const response = await axios.get(
-        "http://localhost:9000/api/checkPhoneNumber",
-        {
-          params: { phone },
-        }
-      );
+      const response = await axios.get('http://localhost:9000/api/checkPhoneNumber', {
+        params: { phone },
+      });
       return response.data.exists;
     } catch (error) {
       console.error("Error checking phone number:", error);
@@ -177,21 +172,13 @@ const EmployeeSingle = () => {
 
       let response;
       if (editingIndex !== null) {
-        response = await axios.put(
-          `http://localhost:9000/api/updateSingleEmployee/${employee.employeeId}`,
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        response = await axios.put(`http://localhost:9000/api/updateSingleEmployee/${employee.employeeId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
       } else {
-        response = await axios.post(
-          "http://localhost:9000/api/addEmployee",
-          formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+        response = await axios.post('http://localhost:9000/api/addEmployee', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
       }
 
       if (response.data.success) {
@@ -239,10 +226,8 @@ const EmployeeSingle = () => {
       );
       if (isConfirmed) {
         try {
-          await axios.delete(
-            `http://localhost:9000/api/deleteEmployee/${employee.employeeId}`
-          );
-          navigate("/employee-management");
+          await axios.delete(`http://localhost:9000/api/deleteEmployee/${employee.employeeId}`);
+          navigate('/employee-management');
         } catch (error) {
           setError("Error deleting employee");
           console.error("Error deleting employee:", error);
@@ -258,8 +243,7 @@ const EmployeeSingle = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${employeeId}`
-      );
+        `http://localhost:9000/api/employe-leads/${employeeId}`);
       const data = response.data;
       setLeads(data);
     } catch (error) {

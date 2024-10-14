@@ -25,12 +25,21 @@ function Login() {
   const handleSumbit = async (e) => {
     console.log(formData);
     e.preventDefault();
+<<<<<<< HEAD
     try {
       const res = await axios.post("http://localhost:9000/api/login", formData);
       console.log(res);
       if (res.data.success === true) {
         dispatch(loginUser(res.data.user));
         cogoToast.success(`${res.data.message}`);
+=======
+    try{
+      const res  = await axios.post("http://localhost:9000/api/login", formData)
+      console.log(res)
+      if(res.data.success === true){
+        dispatch(loginUser(res.data.user)); 
+        cogoToast.success(`${res.data.message}`)
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         navigate("/create-company-profile");
       } else {
         cogoToast.error(`${res.data.message}`);

@@ -14,11 +14,6 @@ const PaymentsGraph = () => {
         const response = await fetch("http://localhost:9000/api/payments");
         const data = await response.json();
 
-        // Process the data to format it for the chart
-        const receivedAmounts = [];
-        const dueAmounts = [];
-        const labels = [];
-
         data.forEach((item) => {
           const month = new Date(item.created_at).toLocaleString("default", {
             month: "short",

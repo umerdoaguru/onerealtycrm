@@ -13,9 +13,13 @@ const EditInvoiceName = () => {
   useEffect(() => {
     const fetchInvoiceData = async () => {
       try {
+<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/invoice-name/${id}`
         );
+=======
+        const response = await axios.get(`http://localhost:9000/api/invoice-name/${id}`);
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         if (response.data) {
           setNewName(response.data[0].invoice_name);
         }
@@ -30,12 +34,19 @@ const EditInvoiceName = () => {
     event.preventDefault();
 
     try {
+<<<<<<< HEAD
       const response = await axios.put(
         `http://localhost:9000/api/invoice-data/${id}`,
         {
           newName,
         }
       );
+=======
+      const response = await axios.put(`http://localhost:9000/api/invoice-data/${id}`, {
+        newName,
+      
+      });
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
       if (response.status === 200) {
         setMessage(response.data.message);

@@ -16,7 +16,7 @@ function MainHeader() {
                 className="mr-3 h-6 sm:h-9"
                 alt="Flowbite Logo"
               />
-              CRM GURU 
+              CRM  GURU
             </a>
             <div className="flex items-center lg:order-2 mx-3">
              <div className=" mx-4">

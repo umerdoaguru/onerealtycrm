@@ -194,7 +194,6 @@ function AdminLogin() {
         "http://localhost:9000/api/admin-login",
         formData
       );
-      console.log("Response:", res.data); // Log API response
       if (res.data.success) {
         dispatch(loginUser(res.data.admin));
         // cogoToast.success(res.data.message);

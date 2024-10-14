@@ -212,4 +212,7 @@ router.use((err, req, res, next) => {
 router.post("/employee-login", employeelogin);
 router.post("/admin-login", adminLogin);
 
+router.post("/employee-login", employeelogin);
+router.post("/admin-login", adminLogin);
+
 module.exports = router;

@@ -131,11 +131,16 @@ const QuotationByLeads = () => {
 
       try {
         // Send updated data to the backend using Axios
+<<<<<<< HEAD
         const response = await axios.put(
           `http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,
           { quotation: "created" }
         );
 
+=======
+        const response = await axios.put(`http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,  {quotation: 'created'});
+  
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         if (response.status === 200) {
           console.log("Updated successfully:", response.data);
           cogoToast.success(

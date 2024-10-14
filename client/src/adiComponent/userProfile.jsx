@@ -63,8 +63,13 @@ const UserProfile = () => {
     }
 
     try {
+<<<<<<< HEAD
       const response = await fetch("http://localhost:9000/api/editProfile", {
         method: "POST",
+=======
+      const response = await fetch('http://localhost:9000/api/editProfile', {
+        method: 'POST',
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         body: formData, // Send the formData instead of JSON
       });
 
@@ -86,8 +91,13 @@ const UserProfile = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete your profile?")) {
       try {
+<<<<<<< HEAD
         const response = await fetch("http://localhost:9000/api/deleteUser", {
           method: "DELETE",
+=======
+        const response = await fetch('http://localhost:9000/api/deleteUser', {
+          method: 'DELETE',
+>>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
           headers: {
             "Content-Type": "application/json",
           },
