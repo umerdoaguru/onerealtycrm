@@ -11,13 +11,9 @@ function TotalInvoice() {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/invoice-data`
         );
-=======
-        const response = await axios.get(`http://localhost:9000/api/invoice-data`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setInvoices(response.data);
         console.log(response);
       } catch (error) {

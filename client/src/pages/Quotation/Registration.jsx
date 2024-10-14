@@ -22,7 +22,6 @@ const Registration = () => {
     e.preventDefault();
     try {
       setLoading(true);
-<<<<<<< HEAD
       const res = await axios.post(
         "http://localhost:9000/api/register",
         formData
@@ -31,13 +30,6 @@ const Registration = () => {
       console.log(res);
       if (res.data.success === true) {
         cogoToast.success(`${res.data.message}`);
-=======
-      const res = await axios.post("http://localhost:9000/api/register" , formData)
-      setLoading(false)
-      console.log(res)
-      if(res.data.success === true){
-        cogoToast.success(`${res.data.message}`)
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         navigate("/");
       }
       setError(false);

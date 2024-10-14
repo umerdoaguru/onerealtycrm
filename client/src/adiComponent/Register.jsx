@@ -28,14 +28,10 @@ const Registration = () => {
     }
     try {
       setLoading(true);
-<<<<<<< HEAD
       const res = await axios.post(
         "http://localhost:9000/api/register",
         formData
       );
-=======
-      const res = await axios.post("http://localhost:9000/api/register", formData);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setLoading(false);
       if (res.data.success) {
         cogoToast.success(res.data.message);

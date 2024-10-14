@@ -8,7 +8,6 @@ import MainHeader from "../../../MainHeader";
 import EmployeeSider from "./../../EmployeeSider";
 
 function TotalEmpQuotation() {
-<<<<<<< HEAD
   const EmpId = useSelector((state) => state.auth.user.id);
   const [quotations, setQuotations] = useState([]);
   useEffect(() => {
@@ -27,24 +26,6 @@ function TotalEmpQuotation() {
     fetchQuotations();
   }, []);
 
-=======
-  const EmpId = useSelector(state => state.auth.user.id);
-    const [quotations, setQuotations] = useState([]);
-    useEffect(() => {
-        const fetchQuotations = async () => {
-          try {
-            const response = await axios.get(`http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`);
-            setQuotations(response.data);
-            console.log(response);
-          } catch (error) {
-            console.error("Error fetching quotations:", error);
-          }
-        };
-    
-        fetchQuotations();
-      }, []);
-    
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
   return (
     <>
       <MainHeader />

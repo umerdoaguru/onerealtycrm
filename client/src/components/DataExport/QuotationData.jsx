@@ -17,13 +17,9 @@ const QuotationData = () => {
   useEffect(() => {
     const fetchQuotations = async () => {
       try {
-<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/quotation-data`
         );
-=======
-        const response = await axios.get(`http://localhost:9000/api/quotation-data`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setQuotations(response.data);
       } catch (error) {
         console.error("Error fetching quotations:", error);

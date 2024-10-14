@@ -29,15 +29,10 @@ function ReviewInvoice() {
 
   const fetchNotes = async () => {
     try {
-<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/invoice-get-notes/${id}`
       );
 
-=======
-      const response = await axios.get(`http://localhost:9000/api/invoice-get-notes/${id}`);
-  
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       if (response.status === 200) {
         setNotes(response.data);
       }

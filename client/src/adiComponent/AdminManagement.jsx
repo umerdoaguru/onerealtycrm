@@ -7,11 +7,7 @@ import { BsPencilSquare, BsTrash, BsPlusCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import cogoToast from "cogo-toast"; // Import CogoToast
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-<<<<<<< HEAD
-import SuperAdminSider from "./vinay/SuperAdminSider";
-=======
 import SuperAdminSider from "./Super-Admin/SuperAdminSider";
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
 function AdminManagement() {
   const [admins, setAdmins] = useState([]);

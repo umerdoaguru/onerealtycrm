@@ -25,7 +25,6 @@ const CreateInvoiceNotes = () => {
   const handleCreateNotes = async () => {
     try {
       for (const note of selectedNotes) {
-<<<<<<< HEAD
         const response = await axios.post(
           "http://localhost:9000/api/invoice-notes",
           {
@@ -33,12 +32,6 @@ const CreateInvoiceNotes = () => {
             invoiceId: id,
           }
         );
-=======
-        const response = await axios.post("http://localhost:9000/api/invoice-notes", {
-          noteTexts: [note],
-          invoiceId: id,
-        });
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
         console.log("Note stored successfully:", response.data);
       }

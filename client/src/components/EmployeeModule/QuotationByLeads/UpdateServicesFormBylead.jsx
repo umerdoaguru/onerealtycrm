@@ -10,13 +10,9 @@ const UpdateServicesFormBylead = ({
 
   const fetchServices = async () => {
     try {
-<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/quotation/${quotationId}`
       );
-=======
-      const response = await axios.get(`http://localhost:9000/api/quotation/${quotationId}`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setServices(response.data);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -26,20 +22,12 @@ const UpdateServicesFormBylead = ({
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-<<<<<<< HEAD
       const response = await axios.put(
         `http://localhost:9000/api/quotation/${quotationId}`,
         {
           services,
         }
       );
-=======
-      const response = await axios.put(`http://localhost:9000/api/quotation/${quotationId}`, {
-        services,
-
-      });
-      
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
       if (response.data.success) {
         console.log("Services updated successfully");

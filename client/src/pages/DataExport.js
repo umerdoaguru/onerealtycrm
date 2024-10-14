@@ -31,11 +31,7 @@ function DataExport() {
 
   const fetchLeads = async () => {
     try {
-<<<<<<< HEAD
       const response = await axios.get("http://localhost:9000/api/leads");
-=======
-      const response = await axios.get('http://localhost:9000/api/leads');
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -53,13 +49,9 @@ function DataExport() {
 
   const fetchQuotation = async () => {
     try {
-<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/quotation-data`
       );
-=======
-      const response = await axios.get(`http://localhost:9000/api/quotation-data`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setQuotation(response.data);
     } catch (error) {
       console.error("Error fetching quotations:", error);
@@ -68,13 +60,9 @@ function DataExport() {
 
   const fetchInvoice = async () => {
     try {
-<<<<<<< HEAD
       const response = await axios.get(
         `http://localhost:9000/api/invoice-data`
       );
-=======
-      const response = await axios.get(`http://localhost:9000/api/invoice-data`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       setInvoice(response.data);
     } catch (error) {
       console.error("Error fetching invoices:", error);

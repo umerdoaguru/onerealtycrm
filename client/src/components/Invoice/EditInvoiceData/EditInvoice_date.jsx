@@ -12,14 +12,10 @@ const EditInvoice_date = () => {
     event.preventDefault();
 
     try {
-<<<<<<< HEAD
       const response = await axios.put(
         `http://localhost:9000/api/invoice-date/${id}`,
         { newInvoice_date: newInvoiceDate }
       );
-=======
-      const response = await axios.put(`http://localhost:9000/api/invoice-date/${id}`, { newInvoice_date: newInvoiceDate });
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       if (response.status === 200) {
         // Navigate after successful update
         navigate(`/print-invoice/${id}`);

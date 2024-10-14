@@ -86,7 +86,6 @@ function LeadData() {
     fetchLeads();
   }, []);
 
-<<<<<<< HEAD
   const fetchLeads = async () => {
     try {
       const response = await axios.get("http://localhost:9000/api/leads");
@@ -96,17 +95,6 @@ function LeadData() {
       console.error("Error fetching leads:", error);
     }
   };
-=======
-    const fetchLeads = async () => {
-        try {
-            const response = await axios.get('http://localhost:9000/api/leads');
-            setLeads(response.data);
-            setFilteredLeads(response.data); // Initial data set for filtering
-        } catch (error) {
-            console.error('Error fetching leads:', error);
-        }
-    };
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
   // Automatically apply date filter when start or end date changes
   useEffect(() => {

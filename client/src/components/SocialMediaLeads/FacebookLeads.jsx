@@ -95,7 +95,6 @@ const FacebookLeads = () => {
   const saveChanges = async () => {
     try {
       await axios.post("http://localhost:9000/api/leads", {
-<<<<<<< HEAD
         lead_no: selectedLead.leadId,
         assignedTo: currentLead.assignedTo,
         employeeId: currentLead.employeeId,
@@ -104,16 +103,6 @@ const FacebookLeads = () => {
         phone: selectedLead.phoneNumber,
         leadSource: "Facebook Campaign",
         subject: "Query",
-=======
-        lead_no:  selectedLead.leadId,    
-        assignedTo:currentLead.assignedTo,
-        employeeId:currentLead.employeeId,
-        createdTime:  selectedLead.date,
-        name: selectedLead.fullName,         
-        phone:  selectedLead.phoneNumber,   
-        leadSource: "Facebook Campaign", 
-        subject:  'Query', 
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       });
       fetchLeads(); // Refresh the list
       fetchLeadassigned();

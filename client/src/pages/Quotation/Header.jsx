@@ -113,19 +113,12 @@ function Header({ companyName, quotationName }) {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-<<<<<<< HEAD
         const response = await axios.post(
           "http://localhost:9000/api/company-header-footer",
           {
             company_name: companyName,
           }
         );
-=======
-        const response = await axios.post('http://localhost:9000/api/company-header-footer', {
-          company_name: companyName
-        });
-        
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
         if (response.status === 200) {
           const { header_img } = response.data;

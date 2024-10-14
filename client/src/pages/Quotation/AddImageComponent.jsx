@@ -30,14 +30,10 @@ const AddImageComponent = () => {
       const formData = new FormData();
       formData.append("image", selectedFile);
 
-<<<<<<< HEAD
       await axios.post(
         `http://localhost:9000/api/${quotationId}/${imageType}`,
         formData
       );
-=======
-      await axios.post(`http://localhost:9000/api/${quotationId}/${imageType}`, formData);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
 
       console.log("Image uploaded successfully");
       navigate(`/final-quotation/${quotationId}`);

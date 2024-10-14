@@ -13,13 +13,9 @@ const CreateNotes = () => {
     // Fetch notes from the backend API
     const fetchNotes = async () => {
       try {
-<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/notes_data`
         );
-=======
-        const response = await axios.get(`http://localhost:9000/api/notes_data`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setNoteTexts(response.data);
       } catch (error) {
         console.error("Error fetching notes:", error);

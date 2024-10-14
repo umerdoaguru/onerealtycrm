@@ -6,7 +6,6 @@ import MainHeader from "../MainHeader";
 import Sider from "../Sider";
 
 function TotalQuotation() {
-<<<<<<< HEAD
   const [quotations, setQuotations] = useState([]);
   useEffect(() => {
     const fetchQuotations = async () => {
@@ -24,23 +23,6 @@ function TotalQuotation() {
     fetchQuotations();
   }, []);
 
-=======
-    const [quotations, setQuotations] = useState([]);
-    useEffect(() => {
-        const fetchQuotations = async () => {
-          try {
-            const response = await axios.get(`http://localhost:9000/api/quotation-data`);
-            setQuotations(response.data);
-            console.log(response);
-          } catch (error) {
-            console.error("Error fetching quotations:", error);
-          }
-        };
-    
-        fetchQuotations();
-      }, []);
-    
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
   return (
     <>
       <MainHeader />

@@ -121,13 +121,9 @@ const Invoicelist = () => {
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-<<<<<<< HEAD
         const response = await axios.get(
           `http://localhost:9000/api/invoice-data`
         );
-=======
-        const response = await axios.get(`http://localhost:9000/api/invoice-data`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         setInvoices(response.data);
         console.log(response);
       } catch (error) {
@@ -144,13 +140,9 @@ const Invoicelist = () => {
     );
     if (isConfirmed) {
       try {
-<<<<<<< HEAD
         const response = await axios.delete(
           `http://localhost:9000/api/invoice/${id}`
         );
-=======
-        const response = await axios.delete(`http://localhost:9000/api/invoice/${id}`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         if (response.status === 200) {
           console.log("Invoice deleted successfully");
           window.location.reload();
@@ -163,13 +155,9 @@ const Invoicelist = () => {
 
   const handleCopyInvoice = async (invoiceId) => {
     try {
-<<<<<<< HEAD
       const response = await axios.post(
         `http://localhost:9000/api/copy-invoice/${invoiceId}`
       );
-=======
-      const response = await axios.post(`http://localhost:9000/api/copy-invoice/${invoiceId}`);
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       console.log(response.data.message);
       window.location.reload();
     } catch (error) {

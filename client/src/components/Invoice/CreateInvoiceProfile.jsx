@@ -32,9 +32,6 @@ function CreateInvoiceProfile() {
     try {
       const formData = new FormData();
 
-<<<<<<< HEAD
-      formData.append("logo", headerImage);
-
       formData.append("employeeId", UserId);
       formData.append("company_name", companyNameBranch);
       formData.append("company_name_account_name", accountName);
@@ -55,25 +52,6 @@ function CreateInvoiceProfile() {
       );
 
       if (response.data.success === true) {
-=======
-     
-      formData.append('employeeId', UserId);
-      formData.append('company_name', companyNameBranch);
-      formData.append('company_name_account_name',accountName);
-      formData.append('company_name_account_ifsc',accountIFSC);
-      formData.append('company_name_account_number',accountNumber);
-      formData.append('company_address',companyAddress);
-      formData.append('charges',companyCharge);
-      formData.append('bank',companyBank);
-  
-      const response = await axios.post('http://localhost:9000/api/upload-invoice-profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
-      if(response.data.success === true){
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
         // Trigger CogoToast success message
         cogoToast.success(`${response.data.message}`);
 

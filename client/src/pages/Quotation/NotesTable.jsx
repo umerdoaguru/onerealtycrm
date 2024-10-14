@@ -7,27 +7,19 @@ const NotesTable = ({ quotationId }) => {
 
   useEffect(() => {
     // Fetch notes for the given quotationId
-<<<<<<< HEAD
     axios
       .get(`http://localhost:9000/api/notes?quotationId=${quotationId}`)
-=======
-    axios.get(`http://localhost:9000/api/notes?quotationId=${quotationId}`)
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       .then((response) => setNotes(response.data))
       .catch((error) => console.error("Error fetching notes:", error));
   }, [quotationId]);
 
   const handleAddNote = () => {
     // Add a new note
-<<<<<<< HEAD
     axios
       .post("http://localhost:9000/api/notes", {
         noteText: newNote,
         quotationId,
       })
-=======
-    axios.post('http://localhost:9000/api/notes', { noteText: newNote, quotationId })
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       .then((response) => {
         setNotes([...notes, { id: response.data.id, note_text: newNote }]);
         setNewNote("");
@@ -37,12 +29,8 @@ const NotesTable = ({ quotationId }) => {
 
   const handleDeleteNote = (id) => {
     // Delete a note
-<<<<<<< HEAD
     axios
       .delete(`http://localhost:9000/api/notes/${id}`)
-=======
-    axios.delete(`http://localhost:9000/api/notes/${id}`)
->>>>>>> 60b59349eb3700a5fdac63d4db21e49fcf757eb2
       .then(() => setNotes(notes.filter((note) => note.id !== id)))
       .catch((error) => console.error("Error deleting note:", error));
   };
