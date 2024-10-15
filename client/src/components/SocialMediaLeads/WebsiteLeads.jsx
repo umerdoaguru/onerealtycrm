@@ -149,8 +149,10 @@ function WebsiteLeads() {
                   </td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
-                      <BsPencilSquare size={20} />
+                      {/* <BsPencilSquare size={20} /> */}
+                      Assign
                     </button>
+                    
                   </td>
                 </tr>
               ))}
@@ -183,22 +185,120 @@ function WebsiteLeads() {
 
         {/* Popup */}
         {showPopup && selectedLead && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
-              <h2 className="text-xl mb-4">{"Add Lead"}</h2>
-              {/* Popup content */}
-              {/* ... */}
-              <div className="flex justify-end">
-                <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2" onClick={saveChanges}>
-                  Save
-                </button>
-                <button className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700" onClick={closePopup}>
-                  Cancel
-                </button>
-              </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+            <h2 className="text-xl mb-4">{"Add Lead"}</h2>
+            <div className="mb-4">
+              <label className="block text-gray-700">Lead Number</label>
+              <input
+                type="number"
+                name="lead_no"
+                value={selectedLead.leadId}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border  rounded`}
+                disabled
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Assigned To</label>
+              <select
+                name="assignedTo"
+                value={currentLead.assignedTo}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border rounded`}
+              >
+                <option value="">Select Employee</option>
+                {employees.map((employee) => (
+                  <option key={employee.employee_id} value={employee.name}>
+                    {employee.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Hidden employeeId field */}
+            <input
+              type="hidden"
+              id="employeeId"
+              name="employeeId"
+              value={currentLead.employeeId}
+            />
+
+            <div className="mb-4">
+              <label className="block text-gray-700">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={selectedLead.fullName}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border  rounded`}
+                disabled
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Phone</label>
+              <input
+                type="text"
+                name="phone"
+                value={selectedLead.phoneNumber}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border rounded`}
+                disabled
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Lead Source</label>
+              <select
+                name="leadSource"
+                id="leadSource"
+                value={currentLead.leadSource}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded"
+                disabled
+              >
+                <option value="Website Inquiries">One Realty Website</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Subject</label>
+              <input
+                type="text"
+                name="subject"
+                value={selectedLead.subject}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border  rounded`}
+                disabled
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Date</label>
+              <input
+                type=""
+                name="createdTime"
+                value={selectedLead.date}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border  rounded`}
+                disabled
+              />
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+                onClick={saveChanges}
+              >
+                Save
+              </button>
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                onClick={closePopup}
+              >
+                Cancel
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
       </div>
     </>
   );

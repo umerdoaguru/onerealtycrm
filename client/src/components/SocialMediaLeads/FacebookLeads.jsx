@@ -16,6 +16,8 @@ const FacebookLeads = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
+  const [formName, setFormName] = useState([]);
+
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
     employeeId: "",
@@ -36,13 +38,16 @@ const FacebookLeads = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(
-        `https://graph.facebook.com/v20.0/${formId}/leads?access_token=${ACCESS_TOKEN}`
-      );
-      const leadsData = response.data.data;
-      setLeads(leadsData); // Update local state with leads
-      console.log(leads);
-      
+      // const response = await axios.get(
+      //   `https://graph.facebook.com/v20.0/${formId}/leads?access_token=${ACCESS_TOKEN}`
+      // );
+      const response = await axios.get(`https://graph.facebook.com/v20.0/${formId}?fields=name%2Cleads&access_token=${ACCESS_TOKEN}`);
+
+      // const leadsData = response.data.data;
+      // setLeads(leadsData); // Update local state with leads
+      // console.log(leads);
+      setLeads(response.data.leads?.data);
+      setFormName(response.data.name);
       setLoading(false);
     } catch (err) {
       setError("Failed to fetch leads data");
@@ -176,12 +181,14 @@ const FacebookLeads = () => {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
+          <th colSpan="6" className='py-2 px-4 border-b"'>Ad Name : {formName}</th>
             <tr className="bg-gray-100">
               <th className="py-2 px-4 border-b">Lead S.no</th> 
               <th className="py-2 px-4 border-b">Lead ID</th>
               <th className="py-2 px-4 border-b">Full Name</th>
               <th className="py-2 px-4 border-b">Phone Number</th>
               <th className="py-2 px-4 border-b">Address</th>
+              <th className="py-2 px-4 border-b">Subject</th>
               <th className="py-2 px-4 border-b">Date</th>
               <th className="py-2 px-4 border-b">Assign Lead</th>
             </tr>
@@ -205,6 +212,8 @@ const FacebookLeads = () => {
                   <td className="py-2 px-4 border-b">
                     {extractFieldValue(lead.field_data, "street_address")}
                   </td>
+                  <td className="py-2 px-4 border-b">{formName}</td>
+
                   <td className="py-2 px-4 border-b">
                     {new Date(lead.created_time).toLocaleString()}
                   </td>
