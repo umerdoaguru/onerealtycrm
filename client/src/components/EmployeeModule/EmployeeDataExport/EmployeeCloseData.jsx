@@ -1,81 +1,15 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-
-// import moment from 'moment';
-// import Sider from '../Sider';
-// import Header from '../../pages/Quotation/Header';
-
-// function LeadData() {
-//     const [leads, setLeads] = useState([]);
-
-//     // Fetch leads from the API
-//     useEffect(() => {
-//         fetchLeads();
-//     }, []);
-
-//     const fetchLeads = async () => {
-//         try {
-//             const response = await axios.get('http://localhost:9000/api/leads');
-//             setLeads(response.data);
-//         } catch (error) {
-//             console.error('Error fetching leads:', error);
-//         }
-//     };
-
-//     return (
-//         <>
-//             <Header />
-//             <Sider />
-//             <div className="container">
-//                 <h1 className="text-2xl text-center mt-[2rem]">Leads Management</h1>
-//                 <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-
-//                 <div className="overflow-x-auto mt-4">
-//                     <table className="min-w-full bg-white border">
-//                         <thead>
-//                             <tr>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">S.no</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Lead Number</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Assigned To</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Created Time</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Name</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Phone</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Lead Source</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             {leads.map((lead, index) => (
-//                                 <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{index + 1}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_no}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.assignedTo}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{moment(lead.createdTime).format('DD/MM/YYYY')}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.phone}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.leadSource}</td>
-
-//                                 </tr>
-//                             ))}
-//                         </tbody>
-//                     </table>
-//                 </div>
-
-//             </div>
-//         </>
-//     );
-// }
-
-// export default LeadData;
-
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import * as XLSX from "xlsx";
-
-import styled from "styled-components";
 import { useSelector } from "react-redux";
+import ReactPaginate from "react-paginate";
+import * as XLSX from "xlsx";
+import styled from "styled-components";
+import MainHeader from "../../MainHeader";
+import EmployeeSider from "../EmployeeSider";
 
-function EmployeeLeadData() {
+const EmployeeCloseData = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
@@ -91,8 +25,13 @@ function EmployeeLeadData() {
       const response = await axios.get(
         `http://localhost:9000/api/employe-leads/${EmpId}`
       );
-      setLeads(response.data);
-      setFilteredLeads(response.data); // Initial data set for filtering
+      // Filter out leads where visit is "Pending"
+      const nonPendingLeads = response.data.filter(
+        (lead) => lead.deal_status !== "pending"
+      );
+
+      setLeads(nonPendingLeads);
+      setFilteredLeads(nonPendingLeads); // Initial data set for filtering
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
@@ -153,7 +92,7 @@ function EmployeeLeadData() {
 
         {/* Download Button */}
 
-        <div className="overflow-x-auto mt-4">
+        <div className="overflow-x-auto mt-4 ">
           <table className="min-w-full bg-white border">
             <thead>
               <tr>
@@ -165,15 +104,26 @@ function EmployeeLeadData() {
                   Assigned To
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Created Time
+                  Lead Name
                 </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  Subject
+                </th>
+
                 <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Lead Source
                 </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">Visit </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Subject
+                  Visit Date
+                </th>
+
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  FollowUp Status
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  Deal Status
                 </th>
               </tr>
             </thead>
@@ -192,11 +142,12 @@ function EmployeeLeadData() {
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     {lead.assignedTo}
                   </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {moment(lead.createdTime).format("DD/MM/YYYY")}
-                  </td>
+
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     {lead.name}
+                  </td>
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                    {lead.subject}
                   </td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     {lead.phone}
@@ -204,9 +155,25 @@ function EmployeeLeadData() {
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     {lead.leadSource}
                   </td>
+
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.subject}
+                    {lead.visit}
                   </td>
+
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                    {lead.visit_date}
+                  </td>
+
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                    {lead.follow_up_status}
+                  </td>
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                    {lead.deal_status}
+                  </td>
+
+                  {/* <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                    {moment(lead.createdTime).format("DD/MM/YYYY")}
+                  </td> */}
                 </tr>
               ))}
             </tbody>
@@ -215,10 +182,8 @@ function EmployeeLeadData() {
       </div>
     </Wrapper>
   );
-}
-
-export default EmployeeLeadData;
-
+};
+export default EmployeeCloseData;
 const Wrapper = styled.div`
   .respo {
     @media screen and (max-width: 768px) {

@@ -389,3 +389,4 @@ function MainQuotation() {
 }
 
 export default MainQuotation;
+const Wrapper = styled.div``;

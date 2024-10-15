@@ -771,23 +771,6 @@ const deleteAdmin = async (req, res) => {
   }
 };
 
-const values = [
-  name,
-  contact,
-  bankDetails,
-  email_id,
-  bankname,
-  ifsc_code,
-  acc_no,
-  type,
-  zip_code,
-  location,
-  district,
-  signaturePath,
-  logoPath,
-  companyId,
-];
-
 module.exports = {
   getAllOrganizations,
   addOrganization,

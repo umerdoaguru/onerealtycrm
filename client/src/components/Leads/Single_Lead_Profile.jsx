@@ -221,12 +221,17 @@ function Single_Lead_Profile() {
                     </td>
                   )}
 
-                  {lead.deal_status === "crack" && (
+                  {lead.deal_status === "close" && (
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
                       {lead.deal_status}
                     </td>
                   )}
-                  {lead.deal_status === "not crack" && (
+                  {lead.deal_status === "not close" && (
+                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[blue]">
+                      {lead.deal_status}
+                    </td>
+                  )}
+                  {lead.deal_status === "in-progress" && (
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[blue]">
                       {lead.deal_status}
                     </td>
