@@ -40,7 +40,6 @@ const getEmployeeLeads = async (req, res) => {
                 }
             });
         });
-        
         // Send the result as a response
         res.status(200).json(result);
     } catch (err) {

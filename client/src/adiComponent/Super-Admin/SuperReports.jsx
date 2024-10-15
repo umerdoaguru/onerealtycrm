@@ -2,58 +2,52 @@ import React, { useState, useEffect } from "react";
 import { BsDownload, BsFilter } from "react-icons/bs";
 import * as XLSX from "xlsx";
 
-
 import axios from "axios";
 
 import moment from "moment";
 import SuperAdminSider from "./SuperAdminSider";
-import MainHeader from './../../components/MainHeader';
+import MainHeader from "./../../components/MainHeader";
 import Pagination from "../comp/pagination";
-
 
 const SuperReports = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState("All");
   const [filteredLeads, setFilteredLeads] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("quotation");
+  const [selectedCategory, setSelectedCategory] = useState("Visited lead");
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredData, setFilteredData] = useState(data);
   const [rowPerPage, setRowPerPage] = useState(5);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [dataFields, setDataFields] = useState({
-    quotation: {
-      heading: ["Id", "Quotation Name", "Employee Name", "Date"],
-      columns: [
-        "quotation_id",
-        "quotation_name",
-        "employee_name",
-        "created_date",
-      ],
-      quotation: [],
-    },
-    invoice: {
+    "Visited lead": {
       heading: [
-        "id ",
-        "Invoice Name",
-        "Employee Name",
-        "Amount",
-        "Payment Mode",
+        "Lead No.",
+        "Assigned To",
+        "Lead Name",
+        "Phone Number",
         "Date",
+        "Lead Source",
+        "Quotation Status",
+        "Invoice Status",
+        "Deal Status",
+        "FollowUp Status",
       ],
       columns: [
-        "invoice_id",
-        "invoice_name",
-        "employee_name",
-        "offer_price",
-        "payment_mode",
-        "created_date",
+        "lead_no",
+        "assignedTo",
+        "name",
+        "phone",
+        "createdTime",
+        "leadSource",
+        "quotation_status",
+        "invoice_status",
+        "deal_status",
+        "follow_up_status",
       ],
-      invoice: [],
+      "Visited lead": [],
     },
     employee: {
-      heading: ["Id", "Name", "Email", "Position", "date"],
-      columns: ["employeeId", "name", "email", "position", "createdTime"],
       employee: [],
     },
     leads: {
@@ -195,14 +189,6 @@ const SuperReports = () => {
     );
   };
 
-  const quotationAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
-  });
-
-  const invoiceAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
-  });
-
   const employeeAxios = axios.create({
     baseURL: "http://localhost:9000/api",
   });
@@ -222,32 +208,23 @@ const SuperReports = () => {
   const getQuotationData = async () => {
     try {
       const results = await Promise.allSettled([
-        quotationAxios.get("/get-quotation-data"),
-        invoiceAxios.get("/get-invoice-data"),
         employeeAxios.get("/employee"),
         leadsAxios.get("/leads"),
       ]);
 
       // Initialize empty response objects
-      let quotationData = [];
-      let invoiceData = [];
       let employeeData = [];
       let leadsData = [];
+      console.log(results);
 
       // Handle each result
       results.forEach((result, index) => {
         if (result.status === "fulfilled") {
           switch (index) {
             case 0:
-              quotationData = formatData(result.value.data.data);
-              break;
-            case 1:
-              invoiceData = formatData(result.value.data.data);
-              break;
-            case 2:
               employeeData = formatData(result.value.data);
               break;
-            case 3:
+            case 1:
               leadsData = formatData(result.value.data);
               break;
             default:
@@ -260,23 +237,23 @@ const SuperReports = () => {
           );
         }
       });
+      console.log(leadsData, employeeData);
+
+      let defaultEmployeLead = leadsData.filter(
+        (lead) => lead.employeeId == employeeData[2].employeeId
+      );
 
       const combinedData = {
-        quotation: quotationData,
-        invoice: invoiceData,
+        "Visited lead": defaultEmployeLead,
         employee: employeeData,
         leads: leadsData,
       };
 
       const updatedDataFields = {
         ...dataFields,
-        quotation: {
-          ...dataFields.quotation,
-          quotation: combinedData.quotation,
-        },
-        invoice: {
-          ...dataFields.invoice,
-          invoice: combinedData.invoice,
+        "Visited lead": {
+          ...dataFields["Visited lead"],
+          "Visited lead": combinedData["Visited lead"],
         },
         employee: {
           ...dataFields.employee,
@@ -287,7 +264,7 @@ const SuperReports = () => {
           leads: combinedData.leads,
         },
       };
-
+      console.log(updatedDataFields, combinedData);
       setDataFields(updatedDataFields);
       console.log(combinedData);
       setData(combinedData);
@@ -296,9 +273,25 @@ const SuperReports = () => {
     }
   };
 
-  useEffect(() => {
-    getQuotationData();
-  }, []);
+  const changeVisitedLeadData = (e) => {
+    const value = e.target.value;
+    console.log(value);
+  
+    // Optional chaining to safely access `leads` array
+    const getEmployeeLead = dataFields?.leads?.leads?.filter((data) => {
+      console.log(data);
+      return data.employeeId == value;  // Use strict equality for type safety
+    });
+  
+    console.log(getEmployeeLead);
+    setDataFields({...dataFields, "Visited lead": {
+          ...dataFields["Visited lead"],
+          "Visited lead": getEmployeeLead,
+        },});
+  
+    // Update the state or perform necessary actions here
+    // setDataFields(updatedDataFields);
+  };
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
@@ -306,6 +299,10 @@ const SuperReports = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
+
+  useEffect(() => {
+    getQuotationData();
+  }, []);
 
   return (
     <>
@@ -317,31 +314,28 @@ const SuperReports = () => {
             Reports
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-
           <div className="gap-4 mb-3">
             <div className="flex flex-col space-y-4 lg:space-y-0 md:flex-row justify-between  mb-8">
               <div className="flex flex-wrap justify-center max-sm:justify-center">
-                <div className="flex flex-wrap justify-center items-center p-2   rounded-lg mt-0">
-                  {["quotation", "invoice", "employee", "leads"].map(
-                    (category) => (
-                      <button
-                        key={category}
-                        onClick={() => handleCategoryClick(category)}
-                        className={`mb-2 mr-2 px-3 py-1 rounded-lg  font-medium ${
-                          selectedCategory === category
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-200"
-                        }`}
-                      >
-                        {category.charAt(0).toUpperCase() + category.slice(1)}
-                      </button>
-                    )
-                  )}
+                <div className="flex flex-wrap justify-center items-center p-2 rounded-lg mt-0">
+                  {["Visited lead", "leads"].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => handleCategoryClick(category)}
+                      className={`mb-2 mr-2 px-3 py-1 rounded-lg  font-medium ${
+                        selectedCategory === category
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-200"
+                      }`}
+                    >
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </button>
+                  ))}
                 </div>
 
                 <div className="md:flex sm:w-auto sm:flex-1 md:w-full items-center justify-center ">
                   {/* Date Filter */}
-                  <div className="flex   md:items-center sm:items-center md:mr-2 mb-2 rounded-lg mt-0">
+                  <div className="flex  md:items-center sm:items-center md:mr-2 mb-2 rounded-lg mt-0">
                     <input
                       type="date"
                       value={startDate}
@@ -369,19 +363,32 @@ const SuperReports = () => {
                   {/* </div> */}
 
                   <div className="flex justify-start items-center px-1 py-1 bg-gray-100 border mr-2 mb-2 rounded-lg mt-0">
-                    <BsFilter className="lg:mr-2 mr-0" />
-                    <select
-                      value={filter}
-                      onChange={handleFilterChange}
-                      className="bg-transparent  border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none "
-                    >
-                      <option value="All">All</option>
-                      <option value="week">Week</option>
-                      <option value="month">Month</option>
-                      <option value="half-year">Half Year</option>
-                      <option value="year">Year</option>
-                    </select>
-                  </div>
+  <BsFilter className="lg:mr-2 mr-0" />
+  {selectedCategory === "Visited lead" ? (
+    <select
+      onChange={changeVisitedLeadData}
+      className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
+    >
+      {dataFields?.employee?.employee?.map((emp_name) => (
+        <option key={emp_name.employeeId} value={emp_name.employeeId}>
+          {emp_name.name}
+        </option>
+      ))}
+    </select>
+  ) : (
+    <select
+      value={filter}
+      onChange={handleFilterChange}
+      className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
+    >
+      <option value="All">All</option>
+      <option value="week">Week</option>
+      <option value="month">Month</option>
+      <option value="half-year">Half Year</option>
+      <option value="year">Year</option>
+    </select>
+  )}
+</div>
 
                   <div className="respo flex-1 md:mx-2 mb-2 ">
                     <button

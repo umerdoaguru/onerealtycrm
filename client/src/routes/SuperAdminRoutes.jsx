@@ -31,6 +31,9 @@ import Single_Lead_Profile from "../components/Leads/Single_Lead_Profile";
 import Super_Single_Lead_Profile from "../adiComponent/Super-Admin/Super_Single_Lead_Profile";
 import SuperEmployeeList from "../adiComponent/Super-Admin/SuperEmployeeList";
 import SuperEmployeeLeads from "../adiComponent/Super-Admin/SuperEmployeeLeads";
+import SuperAdminVisit from "../adiComponent/Super-Admin/SuperAdminVisit";
+import SuperAdminTotalLead from "../adiComponent/Super-Admin/SuperAdminTotalLead";
+import SuperAdminTotalEmployee from "../adiComponent/Super-Admin/SuperAdminTotalEmployee";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -41,6 +44,9 @@ function SuperAdminRoutes() {
         <Route path="/" element={<SuperDash />} />
         <Route path="/super-admin-dashboard" element={<SuperDash />} />
         <Route path="/super-admin-leads" element={<SuperAdminLead />} />
+        <Route path="/super-admin-total-visit" element={<SuperAdminVisit />} />
+        <Route path="/super-admin-total-lead" element={<SuperAdminTotalLead/>} />
+        <Route path="/super-admin-total-employee" element={<SuperAdminTotalEmployee/>} />
         <Route path="/super-admin-employee-management" element={<SuperAdEmployeemanagement />} />
         <Route path="/super-admin-AdminManagement" element={<Super_Admin_Adminmanagement />} />
         <Route path="/super-admin-employee-list" element={<SuperEmployeeList />} />

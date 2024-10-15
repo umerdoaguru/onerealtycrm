@@ -8,7 +8,6 @@ import { BsPencilSquare, BsTrash } from "react-icons/bs";
 
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
-
 import SuperAdminSider from './SuperAdminSider';
 import MainHeader from '../../components/MainHeader';
 
@@ -20,7 +19,7 @@ function SuperAdminLead() {
     lead_no: "",
     assignedTo: "",
     employeeId: "",
-    createdTime: "", // Added here
+    createdTime: "", 
     name: "",
     phone: "",
     leadSource: "",
@@ -53,6 +52,7 @@ function SuperAdminLead() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get("http://localhost:9000/api/leads");
+      console.log(response.data);
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
