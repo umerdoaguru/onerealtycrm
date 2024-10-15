@@ -65,7 +65,7 @@ const LeadsGraph = () => {
       ) : (
         <>
           <p className="text-sm text-gray-500 mb-4">Leads for the past 28 days</p>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart data={leadsData} margin={{ top: 5, right: 30, left: 0, bottom: 25 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="createdDate" tick={{ fill: 'gray' }} angle={0} textAnchor="middle" />

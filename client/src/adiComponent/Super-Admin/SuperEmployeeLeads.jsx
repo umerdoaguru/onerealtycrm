@@ -1,38 +1,31 @@
+import React, { useState, useEffect } from "react";
+import moment from "moment";
 
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-
-
-import { Link, useNavigate, useParams } from 'react-router-dom';
-
-
-
-
-import axios from 'axios';
-import ReactPaginate from 'react-paginate';
-import styled from 'styled-components';
-import MainHeader from './../../components/MainHeader';
-import SuperAdminSider from './SuperAdminSider';
+import axios from "axios";
+import ReactPaginate from "react-paginate";
+import styled from "styled-components";
+import MainHeader from "./../../components/MainHeader";
+import SuperAdminSider from "./SuperAdminSider";
 
 function SuperEmployeeLeads() {
   const [leads, setLeads] = useState([]);
-  const [filteredLeads, setFilteredLeads] = useState([]); 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [startDate, setStartDate] = useState(''); 
-  const [endDate, setEndDate] = useState('');
-// Pagination state
-const [currentPage, setCurrentPage] = useState(0);
- const [leadsPerPage] = useState(10);
- const [leadSourceFilter, setLeadSourceFilter] = useState("");
- const [statusFilter, setStatusFilter] = useState("");
- const [visitFilter, setVisitFilter] = useState("");
- const [dealFilter, setDealFilter] = useState("");
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [leadsPerPage] = useState(10);
+  const [leadSourceFilter, setLeadSourceFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [visitFilter, setVisitFilter] = useState("");
+  const [dealFilter, setDealFilter] = useState("");
 
   const navigate = useNavigate();
 
-
-  const {id} = useParams();
+  const { id } = useParams();
 
   // Fetch leads from the API
   useEffect(() => {
@@ -41,18 +34,20 @@ const [currentPage, setCurrentPage] = useState(0);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employe-leads/${id}`);
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-leads/${id}`
+      );
       const data = response.data;
+      console.log(data);
       setLeads(data);
     } catch (error) {
-      console.error('Error fetching leads:', error);
+      console.error("Error fetching leads:", error);
     }
   };
 
-
   useEffect(() => {
     let filtered = leads;
-
+    console.log(filtered);
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(
@@ -93,35 +88,40 @@ const [currentPage, setCurrentPage] = useState(0);
     }
 
     setFilteredLeads(filtered);
-  }, [searchTerm, startDate, endDate, leads, leadSourceFilter, statusFilter, visitFilter, dealFilter]);
+  }, [
+    searchTerm,
+    startDate,
+    endDate,
+    leads,
+    leadSourceFilter,
+    statusFilter,
+    visitFilter,
+    dealFilter,
+  ]);
 
+  // Use filteredLeads for pagination
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
 
-
-
-
-// Use filteredLeads for pagination
-const indexOfLastLead = (currentPage + 1) * leadsPerPage;
-const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
-
-const handlePageClick = (data) => {
-setCurrentPage(data.selected);
-};
-
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
 
   return (
     <>
       <MainHeader />
       <SuperAdminSider />
-<Wrapper>
-      <div className="container mt-16">
+      <Wrapper>
+        <div className="container mt-16">
+          <div className="main">
+            <h1 className="text-2xl text-center mt-[5rem]">
+              Leads Management{" "}
+            </h1>
+            <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
-        <div className="main">
-        <h1 className="text-2xl text-center mt-[5rem]">Leads Management </h1>
-                <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-
-                {/* Button to create a new lead */}
-                <div className="grid grid-cols-5 gap-4 mb-4">
+            {/* Button to create a new lead */}
+            <div className="grid grid-cols-5 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
                 <input
@@ -189,7 +189,9 @@ setCurrentPage(data.selected);
                   <option value="One Realty Website">pending</option>
                   <option value="Trade Shows">confirm</option>
                   <option value="Cold Calling">Cold Calling</option> */}
-                  <option default value="pending">Pending</option>
+                  <option default value="pending">
+                    Pending
+                  </option>
                   <option value="interested">Interested</option>
                   <option value="non interested">Non-Interested</option>
                 </select>
@@ -222,53 +224,70 @@ setCurrentPage(data.selected);
                 </select>
               </div>
             </div>
-</div>
-      
+          </div>
 
-        <div className="overflow-x-auto mt-4">
-          <table className="tt min-w-full bg-white border">
-          <thead>
+          <div className="overflow-x-auto mt-4">
+            <div className="flex gap-10 text-xl font-semibold my-3">
+              <div>
+                Total Lead visit:{" "}
+                {currentLeads.reduce(
+                  (acc, lead) =>
+                    acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
+                  0
+                )}
+              </div>
+              <div>Total Lead: {currentLeads.length}</div>
+              <div>
+                Total Closed Lead:{" "}
+                {
+                  currentLeads.filter((lead) => lead.deal_status === "closed")
+                    .length
+                }
+              </div>
+            </div>
+
+            <table className="tt min-w-full bg-white border">
+              <thead>
                 <tr>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     S.no
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Lead Number
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Name
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Phone
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Lead Source
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Subject
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Lead Status
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Created Time
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Deal Status
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                    Deal Status
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Visit
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Visit date
                   </th>
-               
                 </tr>
               </thead>
               <tbody>
@@ -335,35 +354,34 @@ setCurrentPage(data.selected);
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.visit_date}
                     </td>
-                   
                   </tr>
                 ))}
               </tbody>
-          </table>
+            </table>
+          </div>
+          <div className="mt-4 flex justify-center">
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              pageCount={Math.ceil(leads.length / leadsPerPage)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination"}
+              activeClassName={"active"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              nextClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+            />
+          </div>
         </div>
-        <div className="mt-4 flex justify-center">
-  <ReactPaginate
-    previousLabel={"Previous"}
-    nextLabel={"Next"}
-    breakLabel={"..."}
-    pageCount={Math.ceil(leads.length / leadsPerPage)}
-    marginPagesDisplayed={2}
-    pageRangeDisplayed={3}
-    onPageChange={handlePageClick}
-    containerClassName={"pagination"}
-    activeClassName={"active"}
-    pageClassName={"page-item"}
-    pageLinkClassName={"page-link"}
-    previousClassName={"page-item"}
-    nextClassName={"page-item"}
-    previousLinkClassName={"page-link"}
-    nextLinkClassName={"page-link"}
-    breakClassName={"page-item"}
-    breakLinkClassName={"page-link"}
-  />
-</div>
-      </div>
-</Wrapper>
+      </Wrapper>
     </>
   );
 }
@@ -371,23 +389,17 @@ setCurrentPage(data.selected);
 export default SuperEmployeeLeads;
 
 const Wrapper = styled.div`
-.tt{
+  .tt {
     white-space: nowrap;
-    @media screen and (min-width: 1500px) and (max-width:1700px) {
-        width: 89%;
-        margin-left: 10rem;
-        white-space: nowrap;
+    @media screen and (min-width: 1500px) and (max-width: 1700px) {
+      width: 89%;
+      margin-left: 10rem;
+      white-space: nowrap;
     }
-}
-.main{
-   
-    @media screen and (min-width: 1500px) and (max-width:1700px) {
-    
-     margin-left: 10rem;
-       
+  }
+  .main {
+    @media screen and (min-width: 1500px) and (max-width: 1700px) {
+      margin-left: 10rem;
     }
-}
-
-
-
-`
+  }
+`;
