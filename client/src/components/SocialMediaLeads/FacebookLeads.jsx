@@ -115,7 +115,7 @@ const FacebookLeads = () => {
         name: selectedLead.fullName,         
         phone:  selectedLead.phoneNumber,   
         leadSource: "Facebook Campaign", 
-        subject:  'Query', 
+        subject:  selectedLead.subject, 
       });
       fetchLeads(); // Refresh the list
     fetchLeadassigned();

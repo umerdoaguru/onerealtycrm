@@ -70,8 +70,13 @@ function WebsiteLeads() {
       return updatedLead;
     });
   };
-
   const saveChanges = async () => {
+    // Check if assignedTo field is empty
+    if (!currentLead.assignedTo) {
+      alert("Please assign the lead to an employee."); // Show an alert message
+      return; // Stop further execution if the field is empty
+    }
+  
     try {
       await axios.post("http://localhost:9000/api/leads", {
         lead_no: selectedLead.leadId,
@@ -81,7 +86,7 @@ function WebsiteLeads() {
         name: selectedLead.fullName,
         phone: selectedLead.phoneNumber,
         leadSource: "One Realty Website",
-        subject: 'Query',
+        subject: selectedLead.subject,
       });
       fetchLeads();
       fetchLeadassigned();
@@ -90,7 +95,7 @@ function WebsiteLeads() {
       console.error("Error adding lead:", error);
     }
   };
-
+  
   const handleEditClick = (lead) => {
     setSelectedLead({
       leadId: lead.id,
@@ -115,6 +120,10 @@ function WebsiteLeads() {
  const handlePageClick = (data) => {
   setCurrentPage(data.selected);
 };
+
+console.log("Leads:", currentLeads);
+console.log("Assigned Leads:", websiteleadsAssigned);
+
   return (
     <>
       <div className="container">
@@ -136,27 +145,30 @@ function WebsiteLeads() {
               </tr>
             </thead>
             <tbody>
-              {currentLeads.map((lead, index) => (
-                <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{ index + 1}</td>
-                  <td className="px-6 py-4 border-b border-gray-200">{lead.id}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.email}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.mobile_no}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {moment(lead.created_date).format('DD-MM-YYYY')}
-                  </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
-                      {/* <BsPencilSquare size={20} /> */}
-                      Assign
-                    </button>
-                    
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            {currentLeads.filter(
+  (lead) =>
+    !websiteleadsAssigned.some((assigned) => assigned.lead_no === lead.id.toString())
+).map((lead, index) => (
+  <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{index + 1}</td>
+    <td className="px-6 py-4 border-b border-gray-200">{lead.id}</td>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.email}</td>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.mobile_no}</td>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+      {moment(lead.created_date).format('DD-MM-YYYY')}
+    </td>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+      <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
+        Assign
+      </button>
+    </td>
+  </tr>
+))}
+
+</tbody>
+
           </table>
 
           {/* Pagination Component */}
