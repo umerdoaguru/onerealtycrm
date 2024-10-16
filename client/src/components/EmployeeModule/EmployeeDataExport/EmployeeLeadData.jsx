@@ -66,21 +66,27 @@
 // }
 
 // export default LeadData;
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
 import * as XLSX from "xlsx";
-
+import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+
+const Wrapper = styled.div`
+  /* Add your styled-components CSS here */
+`;
 
 function EmployeeLeadData() {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const leadsPerPage = 10; // Adjust as needed
   const EmpId = useSelector((state) => state.auth.user.id);
+
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
@@ -102,8 +108,13 @@ function EmployeeLeadData() {
   useEffect(() => {
     if (startDate && endDate) {
       const filtered = leads.filter((lead) => {
-        const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
+        const createdTime = moment(lead.createdTime);
+        return createdTime.isBetween(
+          moment(startDate),
+          moment(endDate),
+          null,
+          "[]"
+        );
       });
       setFilteredLeads(filtered);
     } else {
@@ -118,11 +129,24 @@ function EmployeeLeadData() {
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
 
+  // Pagination logic
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+  const currentLeads = filteredLeads.slice(
+    currentPage * leadsPerPage,
+    (currentPage + 1) * leadsPerPage
+  );
+
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
+
   return (
-    <Wrapper>
-      <div className="container">
-        <h1 className="text-2xl text-center mt-[2rem]">Leads Management</h1>
-        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+    <>
+      <div className="flex-grow md:p-4 mt-14 lg:mt-0 sm:ml-0">
+        <center className="text-2xl text-center mt-8 font-medium">
+          Leads Management
+        </center>
+        <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
         {/* Date Filter */}
         <div className="flex space-x-1 mb-4 sm:flex-row flex-col">
@@ -141,17 +165,15 @@ function EmployeeLeadData() {
             onChange={(e) => setEndDate(e.target.value)}
             className="border p-2"
           />
-          <div className="respo mx-2 ">
+          <div className=" max-sm:mt-2 md:mt-0 mx-2">
             <button
               onClick={downloadExcel}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded "
+              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2  rounded "
             >
               Download Excel
             </button>
           </div>
         </div>
-
-        {/* Download Button */}
 
         <div className="overflow-x-auto mt-4">
           <table className="min-w-full bg-white border">
@@ -178,13 +200,13 @@ function EmployeeLeadData() {
               </tr>
             </thead>
             <tbody>
-              {filteredLeads.map((lead, index) => (
+              {currentLeads.map((lead, index) => (
                 <tr
                   key={lead.id}
                   className={index % 2 === 0 ? "bg-gray-100" : ""}
                 >
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {index + 1}
+                    {index + 1 + currentPage * leadsPerPage}
                   </td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     {lead.lead_no}
@@ -212,17 +234,39 @@ function EmployeeLeadData() {
             </tbody>
           </table>
         </div>
+
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"flex justify-center items-center space-x-3 mt-6"} // Parent container style
+          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"} // Page button style
+          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"} // Page link style
+          previousClassName={
+            "bg-white border border-gray-300 rounded-md shadow-md"
+          } // Previous button style
+          previousLinkClassName={
+            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+          } // Previous link style
+          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"} // Next button style
+          nextLinkClassName={
+            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+          } // Next link style
+          breakClassName={
+            "bg-white border border-gray-300 rounded-md shadow-md"
+          } // Break (... dot) button style
+          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"} // Break link style
+          activeClassName={
+            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
+          } // Active page style
+        />
       </div>
-    </Wrapper>
+    </>
   );
 }
 
 export default EmployeeLeadData;
-
-const Wrapper = styled.div`
-  .respo {
-    @media screen and (max-width: 768px) {
-      margin-top: 1rem;
-    }
-  }
-`;

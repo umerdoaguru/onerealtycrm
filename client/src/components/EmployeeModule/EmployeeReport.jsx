@@ -117,6 +117,7 @@ const d_fileds = {
       // "Quotation Status",
       // "Invoice Status",
       "Deal Status",
+      "Deal Close Date",
       "FollowUp Status",
     ],
     columns: [
@@ -132,6 +133,7 @@ const d_fileds = {
       // "quotation_status",
       // "invoice_status",
       "deal_status",
+      "d_closeDate",
       "follow_up_status",
     ],
     closed: [],
@@ -372,126 +374,133 @@ const EmployeeReport = () => {
     <>
       <MainHeader />
       <EmployeeSider />
-      <h1 className="text-2xl text-center mt-[5rem] ">Employee Report</h1>
-      <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
-      <div className="container flex flex-col min-h-screen p-4 lg:p-8">
-        <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between mb-8">
-          <div className="flex flex-wrap justify-center max-sm:justify-start">
-            {["leads", "visit", "closed"].map((category) => (
-              <button
-                key={category}
-                onClick={() => handleCategoryClick(category)}
-                className={`mb-2 mr-2 px-4 py-2 rounded-lg ${
-                  selectedCategory === category
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
-          </div>
+      <div className="flex-auto flex-col lg:flex-row min-w-screen md:mx-2">
+        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0 w-2xl">
+          <center className="text-2xl text-center mt-8 font-medium">
+            Employee Report
+          </center>
+          <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
-          <div className="flex flex-wrap items-center lg:flex-row justify-center max-sm:justify-start">
-            <div className="flex items-center p-2 bg-gray-100 mr-2 mb-2 border rounded-lg">
-              <label htmlFor="rowsPerPage" className="mr-2">
-                Rows per page:
-              </label>
-              <select
-                id="rowsPerPage"
-                value={rowPerPage}
-                onChange={(e) => setRowPerPage(Number(e.target.value))}
-                className="bg-transparent border-none outline-none"
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-              </select>
-            </div>
-
-            <div className="flex items-center p-2 bg-gray-100 border mr-2 mb-2 rounded-lg mt-0">
-              <BsFilter className="mr-2" />
-              <select
-                value={filter}
-                onChange={handleFilterChange}
-                className="bg-transparent border-none outline-none"
-              >
-                <option value="All">All</option>
-                <option value="week">Week</option>
-                <option value="month">Month</option>
-                <option value="year">Year</option>
-              </select>
-            </div>
-
-            <button
-              onClick={handleDownload}
-              className="flex items-center px-4 py-2 text-white mr-2 mb-2 bg-blue-500 hover:bg-blue-700 rounded-lg    mt-0"
-            >
-              <BsDownload className="mr-2" /> Download
-            </button>
-          </div>
-        </div>
-
-        <div className="overflow-x-auto rounded-lg shadow-md">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
-                {dataFields?.[selectedCategory].heading.map((head) => (
-                  <th className="px-4 py-3">{head}</th>
+          <div className="md:flex  justify-between mb-4 ">
+            <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:justify-between  w-fit">
+              <div className="flex flex-wrap justify-center max-sm:justify-start">
+                {["leads", "visit", "closed"].map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => handleCategoryClick(category)}
+                    className={`mb-2 mr-2 px-4 py-2 rounded-lg ${
+                      selectedCategory === category
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                  >
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </button>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
-              0 ? (
-                dataFields?.[selectedCategory]?.[selectedCategory]
+              </div>
+            </div>
 
-                  .filter((item, index, array) => {
-                    // For the visit category, filter out rows where the visit status is 'Pending'
-                    if (
-                      selectedCategory === "visit" &&
-                      item.visit === "pending"
-                    ) {
-                      return false;
-                    }
-                    // For the closed category, filter out rows where the deal_status is 'Pending'
-                    if (
-                      selectedCategory === "closed" &&
-                      item.deal_status === "pending" // Ensure correct case for 'pending'
-                    ) {
-                      return false;
-                    }
+            <div className="flex flex-wrap items-center lg:flex-row justify-between lg:justify-end max-sm:justify-start ">
+              <div className="flex items-center p-2 bg-gray-100 mr-2 mb-2 border rounded-lg">
+                <label htmlFor="rowsPerPage" className="mr-2">
+                  Rows per page:
+                </label>
+                <select
+                  id="rowsPerPage"
+                  value={rowPerPage}
+                  onChange={(e) => setRowPerPage(Number(e.target.value))}
+                  className="bg-transparent border-none outline-none"
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                </select>
+              </div>
 
-                    return true; // Include all other rows
-                  })
-                  .slice(
-                    (currentPage - 1) * rowPerPage,
-                    currentPage * rowPerPage
-                  )
-                  .map((item, index) => (
-                    <tr key={index} className="border-b border-gray-200">
-                      {dataFields[selectedCategory]?.columns.map((column) => (
-                        <td className="px-4 py-3">{item[column]}</td>
-                      ))}
-                    </tr>
-                  ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="py-4 text-center">
-                    No data found
-                  </td>
+              <div className="flex items-center p-2 bg-gray-100 border mr-2 mb-2 rounded-lg">
+                <BsFilter className="mr-2" />
+                <select
+                  value={filter}
+                  onChange={handleFilterChange}
+                  className="bg-transparent border-none outline-none"
+                >
+                  <option value="All">All</option>
+                  <option value="week">Week</option>
+                  <option value="month">Month</option>
+                  <option value="year">Year</option>
+                </select>
+              </div>
+
+              <button
+                onClick={handleDownload}
+                className="flex items-center px-4 py-2 text-white mr-2 mb-2 bg-blue-500 hover:bg-blue-700 rounded-lg"
+              >
+                <BsDownload className="mr-2" /> Download
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto rounded-lg shadow-md ">
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
+                  {dataFields?.[selectedCategory].heading.map((head) => (
+                    <th className="px-4 py-3">{head}</th>
+                  ))}
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
+                0 ? (
+                  dataFields?.[selectedCategory]?.[selectedCategory]
+
+                    .filter((item, index, array) => {
+                      // For the visit category, filter out rows where the visit status is 'Pending'
+                      if (
+                        selectedCategory === "visit" &&
+                        item.visit === "pending"
+                      ) {
+                        return false;
+                      }
+                      // For the closed category, filter out rows where the deal_status is 'Pending'
+                      if (
+                        selectedCategory === "closed" &&
+                        item.deal_status === "pending" // Ensure correct case for 'pending'
+                      ) {
+                        return false;
+                      }
+
+                      return true; // Include all other rows
+                    })
+                    .slice(
+                      (currentPage - 1) * rowPerPage,
+                      currentPage * rowPerPage
+                    )
+                    .map((item, index) => (
+                      <tr key={index} className="border-b border-gray-200">
+                        {dataFields[selectedCategory]?.columns.map((column) => (
+                          <td className="px-4 py-3">{item[column]}</td>
+                        ))}
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="py-4 text-center">
+                      No data found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalItems={data?.[selectedCategory]?.length}
+            itemsPerPage={rowPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
-        <Pagination
-          currentPage={currentPage}
-          totalItems={data?.[selectedCategory]?.length}
-          itemsPerPage={rowPerPage}
-          onPageChange={setCurrentPage}
-        />
       </div>
     </>
   );

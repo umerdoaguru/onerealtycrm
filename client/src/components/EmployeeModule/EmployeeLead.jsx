@@ -236,27 +236,28 @@ function EmployeeLead() {
     <>
       <MainHeader />
       <EmployeeSider />
-      <Wrapper>
-        <div className="container mt-16">
-          <div className="main">
-            <h1 className="text-2xl text-center mt-[5rem]">
-              Assigned Employee Leads
-            </h1>
-            <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+      {/* <div className=" container"> */}
+      <div className="flex flex-col  2xl:ml-44 ">
+        <div className="flex-grow p-4 mt-14 lg:mt-5  sm:ml-0">
+          <center className="text-2xl text-center mt-8 font-medium">
+            Assigned Employee Leads
+          </center>
+          <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
-            {/* Button to create a new lead */}
+          {/* Button to create a new lead */}
 
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              <div>
-                <label htmlFor="">Search</label>
-                <input
-                  type="text"
-                  placeholder="Search by Name, Lead No, Lead Source"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
-                />
-              </div>
+          <div className="md:flex justify-between mb-4 min-w-fit gap-4">
+            <div>
+              <label htmlFor="">Search</label>
+              <input
+                type="text"
+                placeholder="Search by Name, Lead No, Lead Source"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border rounded-2xl p-2 w-full"
+              />
+            </div>
+            <div className="flex gap-4 w-full justify-start">
               <div>
                 <label htmlFor="">Start Date</label>
                 <input
@@ -279,8 +280,8 @@ function EmployeeLead() {
             </div>
           </div>
 
-          <div className="overflow-x-auto mt-4">
-            <table className="tt min-w-full bg-white border">
+          <div className="overflow-x-auto rounded-lg shadow-md">
+            <table className="min-w-full bg-white">
               <thead>
                 <tr>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
@@ -386,7 +387,8 @@ function EmployeeLead() {
             />
           </div>
         </div>
-      </Wrapper>
+      </div>
+      {/* </div> */}
     </>
   );
 }
@@ -394,17 +396,17 @@ function EmployeeLead() {
 export default EmployeeLead;
 
 const Wrapper = styled.div`
-  .tt {
-    white-space: nowrap;
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      width: 89%;
-      margin-left: 10rem;
-      white-space: nowrap;
-    }
-  }
-  .main {
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      margin-left: 10rem;
-    }
-  }
+  // .tt {
+  //   white-space: nowrap;
+  //   @media screen and (min-width: 1500px) and (max-width: 1700px) {
+  //     width: 89%;
+  //     margin-left: 10rem;
+  //     white-space: nowrap;
+  //   }
+  // }
+  // .main {
+  //   @media screen and (min-width: 1500px) and (max-width: 1700px) {
+  //     margin-left: 10rem;
+  //   }
+  // }
 `;
