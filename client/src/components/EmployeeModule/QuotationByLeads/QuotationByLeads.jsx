@@ -199,12 +199,12 @@ const QuotationByLeads = () => {
       <EmployeeeSider />
       <div className="container">
         <div className="p-4 mt-5">
-          <button
+          {/* <button
             onClick={handleBackClick}
             className="bg-blue-500 text-white px-4 py-2 rounded"
           >
             Go Back
-          </button>
+          </button> */}
           {/* <Link
           to={`/quotation-section`}
           className="bg-green-500 text-white px-4 py-2 rounded mt-3 mx-2 inline-block"

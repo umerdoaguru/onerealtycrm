@@ -4,6 +4,7 @@ import axios from "axios";
 import { MdOutlineNextWeek } from "react-icons/md";
 import { GiFiles, GiMoneyStack } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { FaClipboardList, FaCheckCircle } from "react-icons/fa"; // Import icons for Visit and Closed Data
 
 const EmployeeOverview = () => {
   // const [metrics, setMetrics] = useState([
@@ -74,6 +75,15 @@ const EmployeeOverview = () => {
 
   const leadCount = leads.length;
   //   const employeeCount = employee.length;
+
+  const visitCount = leads.filter(
+    (lead) => lead.visit === "Fresh Visit" || lead.visit === "Repeated Visit"
+  ).length;
+
+  const closedCount = leads.filter(
+    (lead) => lead.deal_status === "close"
+  ).length; // Get count for Closed Data
+
   const quotationCount = quotation.length;
   const invoiceCount = invoice.length;
 
@@ -122,7 +132,7 @@ const EmployeeOverview = () => {
             </div>
           </div> */}
 
-        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+        {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
           <Link to="/employees-total-quotations">
             <div className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600">
               <div className="p-4 flex flex-col items-center text-center">
@@ -140,9 +150,101 @@ const EmployeeOverview = () => {
               </div>
             </div>
           </Link>
+        </div> */}
+
+        {/* Card for Visit Data */}
+        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+          <Link to="/visit-data">
+            <div
+              className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "VisitData"
+                  ? "bg-blue-500 text-white"
+                  : ""
+              }`}
+              onClick={() => setSelectedComponent("VisitData")}
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div
+                  className={`text-3xl ${
+                    selectedComponent === "VisitData"
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
+                >
+                  <FaClipboardList />
+                </div>
+                <div className="mt-2">
+                  <h5
+                    className={`text-xl font-semibold ${
+                      selectedComponent === "VisitData"
+                        ? "text-white"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    Visit Data
+                  </h5>
+                  <p
+                    className={`${
+                      selectedComponent === "VisitData"
+                        ? "text-white"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {visitCount}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
 
-        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
+        {/* Card for Closed Data */}
+        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+          <Link to="/close-data">
+            <div
+              className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "ClosedData"
+                  ? "bg-blue-500 text-white"
+                  : ""
+              }`}
+              onClick={() => setSelectedComponent("ClosedData")}
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div
+                  className={`text-3xl ${
+                    selectedComponent === "ClosedData"
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
+                >
+                  <FaCheckCircle />
+                </div>
+                <div className="mt-2">
+                  <h5
+                    className={`text-xl font-semibold ${
+                      selectedComponent === "ClosedData"
+                        ? "text-white"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    Closed Data
+                  </h5>
+                  <p
+                    className={`${
+                      selectedComponent === "ClosedData"
+                        ? "text-white"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {closedCount}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
           <Link to="/employees-total-invoices">
             <div
               className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600" // Change background color if active
@@ -164,7 +266,7 @@ const EmployeeOverview = () => {
               </div>
             </div>
           </Link>
-        </div>
+        </div> */}
       </div>
 
       {/* Conditionally render the selected component */}

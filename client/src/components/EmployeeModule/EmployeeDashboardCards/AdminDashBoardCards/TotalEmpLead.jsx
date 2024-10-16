@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import EmployeeSider from "./../../EmployeeSider";
 import MainHeader from "../../../MainHeader";
+import EmployeeeSider from "./../../EmployeeSider";
 
 function TotalEmpLead() {
   const EmpId = useSelector((state) => state.auth.user.id);
@@ -33,7 +34,7 @@ function TotalEmpLead() {
   return (
     <>
       <MainHeader />
-      <EmployeeSider />
+      <EmployeeeSider />
       <div className="container">
         <h1 className="text-2xl text-center mt-[5rem]">Total Leads </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>

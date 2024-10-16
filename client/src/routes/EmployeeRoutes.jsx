@@ -62,6 +62,9 @@ import CreateNotesBylead from "./../components/EmployeeModule/QuotationByLeads/C
 import DeleteNoteBylead from "./../components/EmployeeModule/QuotationByLeads/DeleteNoteBylead";
 import UpdateNoteBylead from "./../components/EmployeeModule/QuotationByLeads/UpdateNoteBylead";
 import FinalQuotationByLeads from "./../components/EmployeeModule/QuotationByLeads/FinalQuotationByLead";
+import EmployeeVisitData from "../components/EmployeeModule/EmployeeDataExport/EmployeeVisitData";
+import VisitTable from "../components/EmployeeModule/VisitTable";
+import CloseTable from "../components/EmployeeModule/CloseTable";
 
 function EmployeeRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -78,6 +81,10 @@ function EmployeeRoutes() {
           <Route path="/employees-dashboard" element={<EmployeeDashboard />} />
 
           <Route path="/employees-total-leads" element={<TotalEmpLead />} />
+          <Route path="/employees-visit-data" element={<EmployeeVisitData />} />
+          {/* <Route path="/employees-visit-data" element={<EmployeeVisitData />} /> */}
+          <Route path="/visit-data" element={<VisitTable />} />
+          <Route path="/close-data" element={<CloseTable />} />
           <Route
             path="/employees-total-quotations"
             element={<TotalEmpQuotation />}

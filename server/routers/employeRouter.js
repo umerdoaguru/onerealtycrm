@@ -9,7 +9,6 @@ const {
   updateOnlyLeadStatus,
   updateOnlyQuotationStatus,
   getAllEmployeeTotalLeads,
-  getEmployeeVisitData,
 } = require("../controllers/employeController");
 const router = express.Router();
 
@@ -21,9 +20,5 @@ router.put("/updateOnlyLeadStatus/:id", updateOnlyLeadStatus);
 router.put("/updateOnlyQuotationStatus/:id", updateOnlyQuotationStatus);
 router.get("/get-quotation-byEmploye/:id", getEmployeeQuotation);
 router.get("/getAllEmployee-Toal-lead", getAllEmployeeTotalLeads);
-
-//vinay
-
-router.get("/get-employee-visit-data/:id", getEmployeeVisitData);
 
 module.exports = router;

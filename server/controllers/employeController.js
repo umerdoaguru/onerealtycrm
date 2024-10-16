@@ -288,43 +288,6 @@ const getAllEmployeeTotalLeads = async (req, res) => {
   }
 };
 
-const getEmployeeVisitData = async (req, res) => {
-  try {
-    const query = `
-      SELECT 
-          e.employeeId,
-          e.name,
-          e.email,
-          v.status,
-          COUNT(v.visit_status) AS total_visits
-      FROM employee e
-      LEFT JOIN visits v ON e.employeeId = v.employeeId
-      GROUP BY e.employeeId, v.status;
-    `;
-
-    db.query(query, (err, results) => {
-      if (err) {
-        console.error(
-          "Error fetching employees with visit count by status:",
-          err
-        );
-        return res.status(500).json({ error: "Internal server error" });
-      }
-      return res.status(200).json({
-        success: true,
-        employees: results,
-      });
-    });
-  } catch (error) {
-    console.error("Error in fetching employees' visit data by status:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error in fetching employees' visit data by status",
-      error: error.message,
-    });
-  }
-};
-
 module.exports = {
   getEmployeeInvoice,
   getEmployeeLeads,
@@ -334,5 +297,4 @@ module.exports = {
   updateOnlyLeadStatus,
   updateOnlyQuotationStatus,
   getAllEmployeeTotalLeads,
-  getEmployeeVisitData,
 };

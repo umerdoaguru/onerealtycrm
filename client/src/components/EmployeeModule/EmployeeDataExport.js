@@ -250,7 +250,7 @@ function DataExport() {
   const [leads, setLeads] = useState([]);
   const [quotation, setQuotation] = useState([]);
   const [invoice, setInvoice] = useState([]);
-  const [visitData, setVisitData] = useState([]); // State for Visit Data
+
   const [closedData, setClosedData] = useState([]); // State for Closed Data
   const [selectedComponent, setSelectedComponent] = useState("LeadData"); // Set 'LeadData' as default
 
@@ -260,8 +260,6 @@ function DataExport() {
     fetchLeads();
     fetchQuotation();
     fetchInvoice();
-    fetchVisitData(); // Fetch Visit Data
-    fetchClosedData(); // Fetch Closed Data
   }, []);
 
   const fetchLeads = async () => {
@@ -269,6 +267,7 @@ function DataExport() {
       const response = await axios.get(
         `http://localhost:9000/api/employe-leads/${EmpId}`
       );
+      console.log("setLeads", response.data);
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -297,33 +296,17 @@ function DataExport() {
     }
   };
 
-  const fetchVisitData = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/api/get-visit-data/${EmpId}`
-      ); // Adjust API endpoint as necessary
-      setVisitData(response.data);
-    } catch (error) {
-      console.error("Error fetching visit data:", error);
-    }
-  };
-
-  const fetchClosedData = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/api/get-closed-data/${EmpId}`
-      ); // Adjust API endpoint as necessary
-      setClosedData(response.data);
-    } catch (error) {
-      console.error("Error fetching closed data:", error);
-    }
-  };
-
   const leadCount = leads.length;
-  const quotationCount = quotation.length;
-  const invoiceCount = invoice.length;
-  const visitCount = visitData.length; // Get count for Visit Data
-  const closedCount = closedData.length; // Get count for Closed Data
+  // const quotationCount = quotation.length;
+  // const invoiceCount = invoice.length;
+
+  const visitCount = leads.filter(
+    (lead) => lead.visit === "Fresh Visit" || lead.visit === "Repeated Visit"
+  ).length;
+
+  const closedCount = leads.filter(
+    (lead) => lead.deal_status === "close"
+  ).length; // Get count for Closed Data
 
   return (
     <>
@@ -375,7 +358,7 @@ function DataExport() {
             </div>
           </div>
 
-          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+          {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
             <div
               className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
                 selectedComponent === "QuotationData"
@@ -459,7 +442,7 @@ function DataExport() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Card for Visit Data */}
           <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
