@@ -8,17 +8,18 @@ import moment from "moment";
 import SuperAdminSider from "./SuperAdminSider";
 import MainHeader from "./../../components/MainHeader";
 import Pagination from "../comp/pagination";
+import cogoToast from "cogo-toast";
 
 const SuperReports = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState("All");
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Visited lead");
+  const [selectEmploye, setSelectEmploye] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredData, setFilteredData] = useState(data);
   const [rowPerPage, setRowPerPage] = useState(5);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [date, setDate] = useState({startDate: "", endDate: ""});
   const [dataFields, setDataFields] = useState({
     "Visited lead": {
       heading: [
@@ -200,8 +201,8 @@ const SuperReports = () => {
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format("DD/MM/YYYY"),
-      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
+      created_date: moment(item.created_date).format("YYYY/MM/DD"),
+      createdTime: moment(item.createdTime).format("YYYY/MM/DD"),
     }));
   };
 
@@ -240,7 +241,7 @@ const SuperReports = () => {
       console.log(leadsData, employeeData);
 
       let defaultEmployeLead = leadsData.filter(
-        (lead) => lead.employeeId == employeeData[2].employeeId
+        (lead) => lead.employeeId == employeeData[0].employeeId
       );
 
       const combinedData = {
@@ -276,29 +277,96 @@ const SuperReports = () => {
   const changeVisitedLeadData = (e) => {
     const value = e.target.value;
     console.log(value);
-  
+    setSelectEmploye(value);
+
     // Optional chaining to safely access `leads` array
     const getEmployeeLead = dataFields?.leads?.leads?.filter((data) => {
       console.log(data);
-      return data.employeeId == value;  // Use strict equality for type safety
+      return data.employeeId == value; // Use strict equality for type safety
     });
-  
+
     console.log(getEmployeeLead);
-    setDataFields({...dataFields, "Visited lead": {
-          ...dataFields["Visited lead"],
-          "Visited lead": getEmployeeLead,
-        },});
-  
+    setDataFields({
+      ...dataFields,
+      "Visited lead": {
+        ...dataFields["Visited lead"],
+        "Visited lead": getEmployeeLead,
+      },
+    });
+
     // Update the state or perform necessary actions here
     // setDataFields(updatedDataFields);
   };
 
-  const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-    XLSX.writeFile(workbook, "LeadsData.xlsx");
+  const searchByDate = () => {
+    // console.log(dataFields?.[selectedCategory]);
+    if(date.startDate === "" || date.endDate === "") {
+      cogoToast.info("Date is set");
+      return
+    }
+    const filteredData = dataFields?.[selectedCategory]?.[selectedCategory].filter((item) => {
+      const currentDate = new Date(item.createdTime);
+      return currentDate.getTime() >= new Date(date.startDate).getTime() && currentDate.getTime() <= new Date(date.endDate).getTime();
+    });
+
+    setDataFields({
+      ...dataFields,
+      [selectedCategory]: {
+        ...dataFields[selectedCategory],
+        [selectedCategory]: filteredData
+      }
+    })
+  }
+
+  const clearDate = () => {
+    // Clear the date states
+    console.log(dataFields);
+    setDate({startDate: "", endDate: ""});
+    
+    let defaultEmployeLead = data?.leads.filter(
+      (lead) => lead.employeeId == selectEmploye
+    );
+
+    console.log(defaultEmployeLead, selectEmploye);
+
+    const combinedData = {
+      "Visited lead": defaultEmployeLead,
+      employee: data?.employee,
+      leads: data?.leads,
+    };
+
+    // console.log(combinedData);
+  
+    const updatedDataFields = {
+      ...dataFields,
+      "Visited lead": {
+        ...dataFields["Visited lead"],
+        "Visited lead": combinedData["Visited lead"],
+      },
+      employee: {
+        ...dataFields.employee,
+        employee: combinedData.employee,
+      },
+      leads: {
+        ...dataFields.leads,
+        leads: combinedData.leads,
+      },
+    };
+    console.log(updatedDataFields);
+    // Update the state with the unfiltered data
+    setDataFields(updatedDataFields);
+    setData(combinedData);
+  
+    console.log("Date filter cleared, showing all data");
   };
+  
+
+  // const downloadExcel = () => {
+  //   const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
+  //   XLSX.writeFile(workbook, "LeadsData.xlsx");
+  // };
 
   useEffect(() => {
     getQuotationData();
@@ -322,7 +390,7 @@ const SuperReports = () => {
                     <button
                       key={category}
                       onClick={() => handleCategoryClick(category)}
-                      className={`mb-2 mr-2 px-3 py-1 rounded-lg  font-medium ${
+                      className={`px-3 py-1 mr-3 rounded-lg hover:bg-blue-600 transition-colors rounded-lg  font-medium ${
                         selectedCategory === category
                           ? "bg-blue-500 text-white"
                           : "bg-gray-200"
@@ -335,65 +403,81 @@ const SuperReports = () => {
 
                 <div className="md:flex sm:w-auto sm:flex-1 md:w-full items-center justify-center ">
                   {/* Date Filter */}
-                  <div className="flex  md:items-center sm:items-center md:mr-2 mb-2 rounded-lg mt-0">
+                  <div className="flex md:items-center sm:items-center md:mr-2 rounded-lg mt-0  p-1 ">
                     <input
                       type="date"
-                      value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      className="border lg:px-2 py-1 rounded"
+                      value={date.startDate}
+                      onChange={(e) => setDate({...date, startDate: e.target.value})}
+                      className="border border-gray-300 px-2 py-1 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
                     />
-                    <div className="p-2">
+                    <div className="px-4 text-gray-600">
                       <p>to</p>
                     </div>
                     <input
                       type="date"
-                      value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      className="border px-2 py-1 rounded"
+                      value={date.endDate}
+                      onChange={(e) => setDate({...date, endDate: e.target.value})}
+                      className="border border-gray-300 px-2 py-1 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
                     />
                   </div>
-                  <div className="respo md:mx-2 mb-2 ">
+
+                  {/* Buttons */}
+                  <div>
+                    <button onClick={searchByDate}  className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors">
+                      Search by Date
+                    </button>
+                  </div>
+                  <div className="ml-2">
+                    <button onClick={clearDate}  className="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-400 transition-colors">
+                      Clear Date
+                    </button>
+                  </div>
+                  {/* <div className="respo md:mx-2 mb-2 ">
                     <button
                       onClick={downloadExcel}
                       className="bg-blue-500 text-white lg:font-medium font-base  lg:px-3 px-1 py-1 rounded hover:bg-blue-700 sm:auto w-full"
                     >
                       Download
                     </button>
-                  </div>
+                  </div> */}
                   {/* </div> */}
 
-                  <div className="flex justify-start items-center px-1 py-1 bg-gray-100 border mr-2 mb-2 rounded-lg mt-0">
-  <BsFilter className="lg:mr-2 mr-0" />
-  {selectedCategory === "Visited lead" ? (
-    <select
-      onChange={changeVisitedLeadData}
-      className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
-    >
-      {dataFields?.employee?.employee?.map((emp_name) => (
-        <option key={emp_name.employeeId} value={emp_name.employeeId}>
-          {emp_name.name}
-        </option>
-      ))}
-    </select>
-  ) : (
-    <select
-      value={filter}
-      onChange={handleFilterChange}
-      className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
-    >
-      <option value="All">All</option>
-      <option value="week">Week</option>
-      <option value="month">Month</option>
-      <option value="half-year">Half Year</option>
-      <option value="year">Year</option>
-    </select>
-  )}
-</div>
+                  <div className="flex justify-center items-center px-1 py-1 bg-gray-100 border mx-2 rounded-lg mt-0">
+                    <BsFilter className="lg:mr-2 mr-0" />
+                    {selectedCategory === "Visited lead" ? (
+                      <select
+                      value={selectEmploye}
+                        onChange={changeVisitedLeadData}
+                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
+                      >
+                        {dataFields?.employee?.employee?.map((emp_name) => (
+                          <option
+                            key={emp_name.employeeId}
+                            value={emp_name.employeeId}
+                          >
+                            Leads of Emp : {emp_name.name.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <select
+                        value={filter}
+                        onChange={handleFilterChange}
+                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
+                      >
+                        <option value="All">All</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="half-year">Half Year</option>
+                        <option value="year">Year</option>
+                      </select>
+                    )}
+                  </div>
 
-                  <div className="respo flex-1 md:mx-2 mb-2 ">
+                  <div className="respo flex-1 md:mx-2 ">
                     <button
                       onClick={handleDownload}
-                      className="bg-blue-500 flex justify-center items-center text-white lg:font-medium font-base  lg:px-3 px-1 py-1 rounded hover:bg-blue-700 sm:auto w-full"
+                      className="bg-blue-500 flex justify-center items-center text-white lg:font-medium font-base  lg:px-3 px-3 py-1 rounded hover:bg-blue-700 sm:auto w-full"
                     >
                       <BsDownload className="mr-2" /> Download
                     </button>
