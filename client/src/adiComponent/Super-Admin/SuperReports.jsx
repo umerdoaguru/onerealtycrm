@@ -376,8 +376,9 @@ const SuperReports = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
+<div className="container">
       <div className="flex flex-col lg:flex-row">
-        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
+        <div className="flex-grow p-4 mt-14 lg:mt-0 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
             Reports
           </center>
@@ -400,7 +401,37 @@ const SuperReports = () => {
                     </button>
                   ))}
                 </div>
-
+                <div className="flex justify-center items-center px-1 py-1 bg-gray-100 border mx-2 rounded-lg mt-0">
+                    <BsFilter className="lg:mr-2 mr-0" />
+                    {selectedCategory === "Visited lead" ? (
+                      <select
+                      value={selectEmploye}
+                        onChange={changeVisitedLeadData}
+                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
+                      >
+                        {dataFields?.employee?.employee?.map((emp_name) => (
+                          <option
+                            key={emp_name.employeeId}
+                            value={emp_name.employeeId}
+                          >
+                            Leads of Emp : {emp_name.name.toUpperCase()}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <select
+                        value={filter}
+                        onChange={handleFilterChange}
+                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
+                      >
+                        <option value="All">All</option>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="half-year">Half Year</option>
+                        <option value="year">Year</option>
+                      </select>
+                    )}
+                  </div>
                 <div className="md:flex sm:w-auto sm:flex-1 md:w-full items-center justify-center ">
                   {/* Date Filter */}
                   <div className="flex md:items-center sm:items-center md:mr-2 rounded-lg mt-0  p-1 ">
@@ -432,47 +463,6 @@ const SuperReports = () => {
                       Clear Date
                     </button>
                   </div>
-                  {/* <div className="respo md:mx-2 mb-2 ">
-                    <button
-                      onClick={downloadExcel}
-                      className="bg-blue-500 text-white lg:font-medium font-base  lg:px-3 px-1 py-1 rounded hover:bg-blue-700 sm:auto w-full"
-                    >
-                      Download
-                    </button>
-                  </div> */}
-                  {/* </div> */}
-
-                  <div className="flex justify-center items-center px-1 py-1 bg-gray-100 border mx-2 rounded-lg mt-0">
-                    <BsFilter className="lg:mr-2 mr-0" />
-                    {selectedCategory === "Visited lead" ? (
-                      <select
-                      value={selectEmploye}
-                        onChange={changeVisitedLeadData}
-                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
-                      >
-                        {dataFields?.employee?.employee?.map((emp_name) => (
-                          <option
-                            key={emp_name.employeeId}
-                            value={emp_name.employeeId}
-                          >
-                            Leads of Emp : {emp_name.name.toUpperCase()}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <select
-                        value={filter}
-                        onChange={handleFilterChange}
-                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
-                      >
-                        <option value="All">All</option>
-                        <option value="week">Week</option>
-                        <option value="month">Month</option>
-                        <option value="half-year">Half Year</option>
-                        <option value="year">Year</option>
-                      </select>
-                    )}
-                  </div>
 
                   <div className="respo flex-1 md:mx-2 ">
                     <button
@@ -486,40 +476,41 @@ const SuperReports = () => {
               </div>
             </div>
           </div>
-          <div className="overflow-x-auto rounded-lg shadow-md">
-            <table className="min-w-full bg-white">
-              <thead>
-                <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
-                  {dataFields?.[selectedCategory].heading.map((heading) => (
-                    <th className="px-4 py-3">{heading}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
-                0 ? (
-                  dataFields?.[selectedCategory]?.[selectedCategory]
-                    .slice(
-                      (currentPage - 1) * rowPerPage,
-                      currentPage * rowPerPage
-                    )
-                    .map((item, index) => (
-                      <tr key={index} className="border-b border-gray-200">
-                        {dataFields[selectedCategory]?.columns.map((column) => (
-                          <td className="px-4 py-3">{item[column]}</td>
-                        ))}
-                      </tr>
-                    ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="py-4 text-center">
-                      No data found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <div className="overflow-x-auto w-full rounded-lg shadow-md">
+            
+  <table className="min-w-full bg-white">
+    <thead>
+      <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
+        {dataFields?.[selectedCategory].heading.map((heading, index) => (
+          <th key={index} className="px-4 py-3">{heading}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {dataFields?.[selectedCategory]?.[selectedCategory]?.length > 0 ? (
+        dataFields?.[selectedCategory]?.[selectedCategory]
+          .slice(
+            (currentPage - 1) * rowPerPage,
+            currentPage * rowPerPage
+          )
+          .map((item, index) => (
+            <tr key={index} className="border-b border-gray-200">
+              {dataFields[selectedCategory]?.columns.map((column, colIndex) => (
+                <td key={colIndex} className="px-4 py-3">{item[column]}</td>
+              ))}
+            </tr>
+          ))
+      ) : (
+        <tr>
+          <td colSpan={dataFields?.[selectedCategory]?.heading.length || 1} className="py-4 text-center">
+            No data found
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
+
 
           <Pagination
             currentPage={currentPage}
@@ -529,6 +520,7 @@ const SuperReports = () => {
           />
         </div>
       </div>
+</div>
     </>
   );
 };

@@ -32,13 +32,16 @@ const SuperDash = () => {
       <SuperAdminSider />
       {/* <SuperHeader /> */}
 
+<div className="container">
+  
       <h1 className="text-2xl text-center mt-[5rem] font-medium">
         Super Admin Dashboard
       </h1>
       <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       <div className="flex min-h-screen overflow-hidden ">
         {/* Main Content */}
-        <div className="flex-1 max-w-full lg:ml-64 xl:ml-52 mr-3 ">
+        {/* <div className="flex-1 max-w-full lg:ml-64 xl:ml-52 mr-3 "> */}
+        <div className="flex-1 max-w-full mr-3 ">
           {/* Hamburger Menu Button for Mobile */}
           {/* <div className="p-4 lg:hidden">
                     <button onClick={toggleSidebar} className="text-2xl">
@@ -58,6 +61,7 @@ const SuperDash = () => {
           <LeadsReport />
           {/* <ToDoList /> */}
         </div>
+      </div>
       </div>
     </>
   );

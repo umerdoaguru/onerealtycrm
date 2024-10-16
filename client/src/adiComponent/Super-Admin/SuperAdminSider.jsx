@@ -6,7 +6,7 @@ import { RiSecurePaymentLine } from "react-icons/ri";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
-const SuperAdminSider = () => {
+const SuperAdminSider = () => { 
   const location = useLocation(); // To get the current route
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,7 +24,7 @@ const SuperAdminSider = () => {
       {/* Hamburger Button - Hidden on large screens */}
       <button
         className="fixed top-16 md:top-20 left-4 z-50 text-black 
-             sm:hidden md:block lg:hidden xl:block 2xl:hidden"
+             sm:hidden md:block max-xl:hidden xl:block 2xl:hidden"
         onClick={toggleSidebar}
       >
         <AiOutlineMenu size={25} />
@@ -32,13 +32,13 @@ const SuperAdminSider = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed mt-16 md:mt-[70px] lg:mt-[60px] inset-y-0 left-0 bg-[#01060c] overflow-hidden xl:translate-x-0 transform ${
+        className={`fixed mt-16 md:mt-[70px] lg:mt-[60px] inset-y-0 bg-[#01060c] overflow-hidden 2xl:translate-x-0 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out w-20 md:w-[150px] z-50`}
       >
         {/* Close (Cross) Button - Hidden on large screens */}
         <button
-          className="absolute left-14 md:left-32 lg-left-32 text-gray-400 xl:hidden" // Hidden on large screens (lg)
+          className="absolute left-14 md:left-32 lg-left-32 text-gray-400 2xl:hidden" // Hidden on large screens (lg)
           onClick={toggleSidebar}
         >
           <AiOutlineClose size={25} />

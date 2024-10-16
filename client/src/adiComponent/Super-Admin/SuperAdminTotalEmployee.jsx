@@ -31,10 +31,19 @@ function SuperAdminTotalEmployee() {
 
 <MainHeader/>
   <SuperAdminSider/>
-<div className="container">
-<h1 className="text-2xl text-center mt-[5rem]">Total Employees </h1>
-<div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-</div>
+  <div className="container">
+        <div className="mt-[5rem]">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+
+        <h1 className="text-2xl text-center ">Total Employees </h1>
+        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+      </div>
        <div className="overflow-x-auto rounded-lg shadow-md">
 <button>f</button>
           <table className="container bg-white">
