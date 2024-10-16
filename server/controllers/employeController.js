@@ -48,7 +48,7 @@ const getEmployeeLeads = async (req, res) => {
     } 
 }
 
-const updateOnlyLeadStatus = async (req, res) => {
+const updateOnlyLeadStatus =  async (req, res) => {
   try {
     const { id } = req.params;
     const { lead_status } = req.body;
