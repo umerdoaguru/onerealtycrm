@@ -1,32 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const NotesTable = ({ quotationId }) => {
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState('');
+  const [newNote, setNewNote] = useState("");
 
   useEffect(() => {
     // Fetch notes for the given quotationId
-    axios.get(`http://localhost:9000/api/notes?quotationId=${quotationId}`)
+    axios
+      .get(`http://localhost:9000/api/notes?quotationId=${quotationId}`)
       .then((response) => setNotes(response.data))
-      .catch((error) => console.error('Error fetching notes:', error));
+      .catch((error) => console.error("Error fetching notes:", error));
   }, [quotationId]);
 
   const handleAddNote = () => {
     // Add a new note
-    axios.post('http://localhost:9000/api/notes', { noteText: newNote, quotationId })
+    axios
+      .post("http://localhost:9000/api/notes", {
+        noteText: newNote,
+        quotationId,
+      })
       .then((response) => {
         setNotes([...notes, { id: response.data.id, note_text: newNote }]);
-        setNewNote('');
+        setNewNote("");
       })
-      .catch((error) => console.error('Error adding note:', error));
+      .catch((error) => console.error("Error adding note:", error));
   };
 
   const handleDeleteNote = (id) => {
     // Delete a note
-    axios.delete(`http://localhost:9000/api/notes/${id}`)
+    axios
+      .delete(`http://localhost:9000/api/notes/${id}`)
       .then(() => setNotes(notes.filter((note) => note.id !== id)))
-      .catch((error) => console.error('Error deleting note:', error));
+      .catch((error) => console.error("Error deleting note:", error));
   };
 
   return (
@@ -45,14 +51,20 @@ const NotesTable = ({ quotationId }) => {
               <td>{note.id}</td>
               <td>{note.note_text}</td>
               <td>
-                <button onClick={() => handleDeleteNote(note.id)}>Delete</button>
+                <button onClick={() => handleDeleteNote(note.id)}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div>
-        <input type="text" value={newNote} onChange={(e) => setNewNote(e.target.value)} />
+        <input
+          type="text"
+          value={newNote}
+          onChange={(e) => setNewNote(e.target.value)}
+        />
         <button onClick={handleAddNote}>Add Note</button>
       </div>
     </div>

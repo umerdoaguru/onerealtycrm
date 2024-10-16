@@ -9,17 +9,14 @@
 
 // import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 
-
-
-
 // function Login() {
 //   const [isScrolled, setIsScrolled] = useState(false);
 //   const [formData , setFormData] = useState({});
 //   const navigate = useNavigate();
 //   const dispatch = useDispatch();
- 
+
 //   const [showPassword, setShowPassword] = useState(false);
-  
+
 //   window.onscroll = () => {
 //     setIsScrolled(window.pageYOffset === 0 ? false : true);
 //     return () => (window.onscroll = null);
@@ -34,14 +31,14 @@
 //       const res  = await axios.post("http://localhost:9000/api/login", formData)
 //       console.log(res)
 //       if(res.data.success === true){
-//         dispatch(loginUser(res.data.user)); 
+//         dispatch(loginUser(res.data.user));
 //         cogoToast.success(`${res.data.message}`)
 //         navigate("/dashboard");
 //       }
 //       else{
 //         cogoToast.error(`${res.data.message}`)
 //       }
-    
+
 //     }
 //     catch(error){
 //       console.log(error?.response?.data?.error)
@@ -52,10 +49,10 @@
 //   const togglePasswordVisibility = () => {
 //     setShowPassword(!showPassword);
 //   };
-  
+
 //   return (
 //     <Wrapper>
- 
+
 //  <div className="container mx-auto">
 //   <div className="flex justify-center">
 //     <div className="w-full max-w-lg border rounded-4 mb-2" id="size">
@@ -122,8 +119,6 @@
 //   </div>
 // </div>
 
-
-
 //     </Wrapper>
 //   )
 // }
@@ -133,11 +128,8 @@
 //   .form1{
 //   margin-bottom: 4rem;
 //      margin-top: 3rem;
-     
 
- 
-  
-//   }  
+//   }
 //   .container{
 //     height:36rem;
 //     margin-top: 3rem;
@@ -177,14 +169,13 @@
 // }
 // `
 
-
-import React, { useState } from 'react';
-import axios from 'axios';
-import cogoToast from 'cogo-toast';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../store/UserSlice';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import React, { useState } from "react";
+import axios from "axios";
+import cogoToast from "cogo-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../store/UserSlice";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 function AdminLogin() {
   const [formData, setFormData] = useState({});
@@ -199,16 +190,19 @@ function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:9000/api/admin-login", formData);
+      const res = await axios.post(
+        "http://localhost:9000/api/admin-login",
+        formData
+      );
       if (res.data.success) {
-        dispatch(loginUser(res.data.user));
-        cogoToast.success(res.data.message);
+        dispatch(loginUser(res.data.admin));
+        // cogoToast.success(res.data.message);
         navigate("/admin-dashboard");
       } else {
         cogoToast.error(res.data.message);
       }
     } catch (error) {
-      cogoToast.error(error?.response?.data?.message || 'An error occurred');
+      cogoToast.error(error?.response?.data?.message || "An error occurred");
     }
   };
 
@@ -222,7 +216,12 @@ function AdminLogin() {
         <h1 className="mb-6 text-2xl font-bold text-center">Admin Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -234,7 +233,12 @@ function AdminLogin() {
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPassword ? "text" : "password"}
@@ -250,7 +254,11 @@ function AdminLogin() {
                 className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                 onClick={togglePasswordVisibility}
               >
-                {showPassword ? <AiFillEye className="text-gray-500" /> : <AiFillEyeInvisible className="text-gray-500" />}
+                {showPassword ? (
+                  <AiFillEye className="text-gray-500" />
+                ) : (
+                  <AiFillEyeInvisible className="text-gray-500" />
+                )}
               </button>
             </div>
           </div>

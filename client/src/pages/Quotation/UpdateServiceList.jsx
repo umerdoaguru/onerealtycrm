@@ -1,7 +1,7 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 function UpdateServiceList() {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ function UpdateServiceList() {
         setUpdatedServices(response.data.map((service) => ({ ...service })));
       }
     } catch (error) {
-      console.error('Error fetching ServiceList', error);
+      console.error("Error fetching ServiceList", error);
     }
   };
 
@@ -28,15 +28,18 @@ function UpdateServiceList() {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:9000/api/servicelist`, {
-        services: updatedServices,
-      });
+      const response = await axios.put(
+        `http://localhost:9000/api/servicelist`,
+        {
+          services: updatedServices,
+        }
+      );
       if (response.data.success) {
-        console.log('Services updated successfully');
+        console.log("Services updated successfully");
         navigate(`/servicenamelist`);
       }
     } catch (error) {
-      console.error('Error updating services:', error);
+      console.error("Error updating services:", error);
     }
   };
 

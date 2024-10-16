@@ -4,39 +4,148 @@ import * as XLSX from "xlsx";
 
 import axios from "axios";
 
-import Pagination from './../../adiComponent/comp/pagination';
+import Pagination from "./../../adiComponent/comp/pagination";
 import MainHeader from "../MainHeader";
 import EmployeeSider from "./EmployeeSider";
 import { useSelector } from "react-redux";
 import moment from "moment";
 
 const d_fileds = {
-  quotation: {
-    heading: ["Id", "Quotation Name", "Employee Name", "Date"],  
-    columns: ["quotation_id", "quotation_name", "employee_name", "created_date"],
-    quotation: [],
-  },
-  invoice: {
-    heading: ["id ", "Invoice Name", "Employee Name", "Amount", "Payment Mode", "Date"],
-    columns: ["invoice_id", "invoice_name", "employee_name", "offer_price", "payment_mode", "created_date"],
-    invoice: [],
-  },
- 
+  // quotation: {
+  //   heading: ["Id", "Quotation Name", "Employee Name", "Date"],
+  //   columns: [
+  //     "quotation_id",
+  //     "quotation_name",
+  //     "employee_name",
+  //     "created_date",
+  //   ],
+  //   quotation: [],
+  // },
+  // invoice: {
+  //   heading: [
+  //     "id ",
+  //     "Invoice Name",
+  //     "Employee Name",
+  //     "Amount",
+  //     "Payment Mode",
+  //     "Date",
+  //   ],
+  //   columns: [
+  //     "invoice_id",
+  //     "invoice_name",
+  //     "employee_name",
+  //     "offer_price",
+  //     "payment_mode",
+  //     "created_date",
+  //   ],
+  //   invoice: [],
+  // },
+
   leads: {
-    heading: ["Lead No.", "Assigned To", "Lead Name", "Phone Number", "Date", "Lead Source", "Quotation Status", "Invoice Status", "Deal Status",  "FollowUp Status"],
-    columns: ["lead_no", "assignedTo", "name",  "phone", "createdTime", "leadSource", "quotation_status", "invoice_status", "deal_status", "follow_up_status"],
+    heading: [
+      "Lead No.",
+      "Assigned To",
+      "Lead Name",
+      "subject",
+      "Phone Number",
+      "Date",
+      "Lead Source",
+      "Quotation Status",
+      "Invoice Status",
+      "Deal Status",
+      "FollowUp Status",
+    ],
+    columns: [
+      "lead_no",
+      "assignedTo",
+      "name",
+      "subject",
+      "phone",
+      "createdTime",
+      "leadSource",
+      "quotation_status",
+      "invoice_status",
+      "deal_status",
+      "follow_up_status",
+    ],
     leads: [],
   },
-}
- 
+  visit: {
+    heading: [
+      "Lead No.",
+      "Assigned To",
+      "Lead Name",
+      "subject",
+      "Phone Number",
+      // "Date",
+      "Lead Source",
+      "visit date",
+      "visit",
+      // "Quotation Status",
+      // "Invoice Status",
+      "Deal Status",
+      "FollowUp Status",
+    ],
+    columns: [
+      "lead_no",
+      "assignedTo",
+      "name",
+      "subject",
+      "phone",
+      // "createdTime",
+      "leadSource",
+      "visit_date",
+      "visit",
+      // "quotation_status",
+      // "invoice_status",
+      "deal_status",
+      "follow_up_status",
+    ],
+    visit: [],
+  },
+  closed: {
+    heading: [
+      "Lead No.",
+      "Assigned To",
+      "Lead Name",
+      "subject",
+      "Phone Number",
+      // "Date",
+      "Lead Source",
+      "visit date",
+      "visit",
+      // "Quotation Status",
+      // "Invoice Status",
+      "Deal Status",
+      "FollowUp Status",
+    ],
+    columns: [
+      "lead_no",
+      "assignedTo",
+      "name",
+      "subject",
+      "phone",
+      // "createdTime",
+      "leadSource",
+      "visit_date",
+      "visit",
+      // "quotation_status",
+      // "invoice_status",
+      "deal_status",
+      "follow_up_status",
+    ],
+    closed: [],
+  },
+};
+
 const EmployeeReport = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState("All");
-  const [selectedCategory, setSelectedCategory] = useState("quotation");
+  const [selectedCategory, setSelectedCategory] = useState("leads");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPerPage, setRowPerPage] = useState(5);
   const [dataFields, setDataFields] = useState(d_fileds);
-  const EmpId = useSelector(state => state.auth.user.id); 
+  const EmpId = useSelector((state) => state.auth.user.id);
   useEffect(() => {
     filterData();
   }, [selectedCategory, filter]);
@@ -141,128 +250,112 @@ const EmployeeReport = () => {
     );
   };
 
-  // const getQuotationData = async () => {
-  //   try {
-  //     const formatData = (data) => {
-  //       return data.map((item) => ({
-  //         ...item,
-  //         created_date: moment(item.created_date).format('DD/MM/YYYY'),
-  //         createdTime: moment(item.createdTime).format('DD/MM/YYYY'),
-  //       }));
-  //     };
-  
-  //     const [
-  //       quotationResponse,
-  //       invoiceResponse,
-  //       leadsResponse,
-  //     ] = await Promise.all([
-  //       axios.get(`http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`),
-  //       axios.get(`http://localhost:9000/api/get-employee-invoice/${EmpId}`),
-  //       axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`),
-  //     ]);
-  
-  //     // Use formatData to format the response data
-  //     const combinedData = {
-  //       quotation: formatData(quotationResponse.data),
-  //       invoice: formatData(invoiceResponse.data),
-  //       leads: formatData(leadsResponse.data),
-  //     };
-  
-  //     console.log(combinedData);
-  
-  //     const updatedDataFields = {
-  //       ...dataFields,
-  //       quotation: { ...dataFields.quotation, quotation: combinedData.quotation },
-  //       invoice: { ...dataFields.invoice, invoice: combinedData.invoice },
-  //       leads: { ...dataFields.leads, leads: combinedData.leads },
-  //     };
-  
-  //     setDataFields(updatedDataFields);
-  //     setData(combinedData);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  
-  
-  const quotationAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
-  });
-  
-  const invoiceAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
-  });
-  
+  // const quotationAxios = axios.create({
+  //   baseURL: "http://localhost:9000/api",
+  // });
 
-  
+  // const invoiceAxios = axios.create({
+  //   baseURL: "http://localhost:9000/api",
+  // });
+
   const leadsAxios = axios.create({
     baseURL: "http://localhost:9000/api",
   });
-  
+
+  const visitAxios = axios.create({
+    baseURL: "http://localhost:9000/api",
+  });
+
+  const closedAxios = axios.create({
+    baseURL: "http://localhost:9000/api",
+  });
+
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format('DD/MM/YYYY'),
-      createdTime: moment(item.createdTime).format('DD/MM/YYYY'),
+      created_date: moment(item.created_date).format("DD/MM/YYYY"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
     }));
   };
-  
+
   const getQuotationData = async () => {
     try {
       const results = await Promise.allSettled([
-        quotationAxios.get(`/get-quotation-byEmploye/${EmpId}`),
-        invoiceAxios.get(`/get-employee-invoice/${EmpId}`),
+        // quotationAxios.get(`/get-quotation-byEmploye/${EmpId}`),
+        // invoiceAxios.get(`/get-employee-invoice/${EmpId}`),
         leadsAxios.get(`/employe-leads/${EmpId}`),
+        visitAxios.get(`/employe-leads/${EmpId}`),
+        closedAxios.get(`/employe-leads/${EmpId}`),
       ]);
-  
+
       // Initialize empty response objects
-      let quotationData = [];
-      let invoiceData = [];
+      // let quotationData = [];
+      // let invoiceData = [];
       let leadsData = [];
-  
+      let visitData = [];
+      let closedData = [];
       // Handle each result
       results.forEach((result, index) => {
-        if (result.status === 'fulfilled') {
+        if (result.status === "fulfilled") {
           switch (index) {
+            // case 0:
+            //   quotationData = formatData(result.value.data);
+            //   break;
+            // case 1:
+            //   invoiceData = formatData(result.value.data);
+            //   break;
             case 0:
-              quotationData = formatData(result.value.data);
+              leadsData = formatData(result.value.data);
               break;
             case 1:
-              invoiceData = formatData(result.value.data);
+              visitData = formatData(result.value.data);
               break;
             case 2:
-              leadsData = formatData(result.value.data);
+              closedData = formatData(result.value.data);
               break;
             default:
               break;
           }
         } else {
-          console.error(`Error fetching data for index ${index}:`, result.reason);
+          console.error(
+            `Error fetching data for index ${index}:`,
+            result.reason
+          );
         }
       });
-  
+
       const combinedData = {
-        quotation: quotationData,
-        invoice: invoiceData,
+        // quotation: quotationData,
+        // invoice: invoiceData,
         leads: leadsData,
+        visit: visitData,
+        closed: closedData,
       };
-  
+
       const updatedDataFields = {
         ...dataFields,
-        quotation: {
-          ...dataFields.quotation,
-          quotation: combinedData.quotation,
-        },
-        invoice: {
-          ...dataFields.invoice,
-          invoice: combinedData.invoice,
-        },
+        // quotation: {
+        //   ...dataFields.quotation,
+        //   quotation: combinedData.quotation,
+        // },
+        // invoice: {
+        //   ...dataFields.invoice,
+        //   invoice: combinedData.invoice,
+        // },
         leads: {
           ...dataFields.leads,
           leads: combinedData.leads,
         },
+        visit: {
+          ...dataFields.visit,
+          visit: combinedData.visit,
+        },
+        closed: {
+          ...dataFields.closed,
+          closed: combinedData.closed,
+        },
       };
-  
+
       setDataFields(updatedDataFields);
       console.log(combinedData);
       setData(combinedData);
@@ -270,7 +363,7 @@ const EmployeeReport = () => {
       console.log("Unexpected error:", error);
     }
   };
-  
+
   useEffect(() => {
     getQuotationData();
   }, []);
@@ -280,12 +373,12 @@ const EmployeeReport = () => {
       <MainHeader />
       <EmployeeSider />
       <h1 className="text-2xl text-center mt-[5rem] ">Employee Report</h1>
-        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+      <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
       <div className="container flex flex-col min-h-screen p-4 lg:p-8">
         <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between mb-8">
           <div className="flex flex-wrap justify-center max-sm:justify-start">
-            {["quotation", "invoice", "leads"].map((category) => (
+            {["leads", "visit", "closed"].map((category) => (
               <button
                 key={category}
                 onClick={() => handleCategoryClick(category)}
@@ -339,7 +432,6 @@ const EmployeeReport = () => {
             </button>
           </div>
         </div>
-        
 
         <div className="overflow-x-auto rounded-lg shadow-md">
           <table className="min-w-full bg-white">
@@ -354,6 +446,25 @@ const EmployeeReport = () => {
               {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
               0 ? (
                 dataFields?.[selectedCategory]?.[selectedCategory]
+
+                  .filter((item, index, array) => {
+                    // For the visit category, filter out rows where the visit status is 'Pending'
+                    if (
+                      selectedCategory === "visit" &&
+                      item.visit === "pending"
+                    ) {
+                      return false;
+                    }
+                    // For the closed category, filter out rows where the deal_status is 'Pending'
+                    if (
+                      selectedCategory === "closed" &&
+                      item.deal_status === "pending" // Ensure correct case for 'pending'
+                    ) {
+                      return false;
+                    }
+
+                    return true; // Include all other rows
+                  })
                   .slice(
                     (currentPage - 1) * rowPerPage,
                     currentPage * rowPerPage

@@ -1,4 +1,3 @@
-
 // export default FacebookLeads;
 
 import { useState, useEffect } from "react";
@@ -23,11 +22,9 @@ const FacebookLeads = () => {
     employeeId: "",
   });
 
-   // Pagination state
-   const [currentPage, setCurrentPage] = useState(0);
-   const [leadsPerPage] = useState(10);
-
-
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [leadsPerPage] = useState(10);
 
   // Meta API Token
   const ACCESS_TOKEN =
@@ -68,15 +65,11 @@ const FacebookLeads = () => {
       const response = await axios.get("http://localhost:9000/api/leads");
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
-      
     } catch (error) {
       console.error("Error fetching employees:", error);
     }
   };
-  
 
-  
-  
   useEffect(() => {
     fetchLeads();
     fetchEmployees();
@@ -105,7 +98,6 @@ const FacebookLeads = () => {
   };
 
   const saveChanges = async () => {
-
     try {
       await axios.post("http://localhost:9000/api/leads", {
         lead_no:  selectedLead.leadId,    
@@ -118,7 +110,7 @@ const FacebookLeads = () => {
         subject:  selectedLead.subject, 
       });
       fetchLeads(); // Refresh the list
-    fetchLeadassigned();
+      fetchLeadassigned();
 
       closePopup();
     } catch (error) {
@@ -147,18 +139,14 @@ const FacebookLeads = () => {
     setShowPopup(false);
     setSelectedLead(null);
   };
- // Pagination logic
- const indexOfLastLead = (currentPage + 1) * leadsPerPage;
- const indexOfFirstLead = indexOfLastLead - leadsPerPage;
- const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
 
- const handlePageClick = (data) => {
-   setCurrentPage(data.selected);
- };
-
-
-
-
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
 
   if (loading)
     return (
@@ -169,8 +157,6 @@ const FacebookLeads = () => {
       </div>
     );
   if (error) return <div>{error}</div>;
-
-  
 
   return (
     <div className="container mx-auto p-4">
@@ -183,7 +169,7 @@ const FacebookLeads = () => {
           <thead>
           <th colSpan="6" className='py-2 px-4 border-b"'>Ad Name : {formName}</th>
             <tr className="bg-gray-100">
-              <th className="py-2 px-4 border-b">Lead S.no</th> 
+              <th className="py-2 px-4 border-b">Lead S.no</th>
               <th className="py-2 px-4 border-b">Lead ID</th>
               <th className="py-2 px-4 border-b">Full Name</th>
               <th className="py-2 px-4 border-b">Phone Number</th>
@@ -194,10 +180,12 @@ const FacebookLeads = () => {
             </tr>
           </thead>
           <tbody>
-          {currentLeads
+            {currentLeads
               .filter(
                 (lead) =>
-                  !leadsAssigned.some((assigned) => assigned.lead_no === lead.id)
+                  !leadsAssigned.some(
+                    (assigned) => assigned.lead_no === lead.id
+                  )
               )
               .map((lead, index) => (
                 <tr key={lead.id}>
@@ -227,7 +215,6 @@ const FacebookLeads = () => {
                   </td>
                 </tr>
               ))}
-
           </tbody>
         </table>
       </div>
@@ -369,29 +356,28 @@ const FacebookLeads = () => {
         </div>
       )}
 
-       {/* Pagination */}
-       <div className="mt-4 flex justify-center">
-  <ReactPaginate
-    previousLabel={"Previous"}
-    nextLabel={"Next"}
-    breakLabel={"..."}
-    pageCount={Math.ceil(leads.length / leadsPerPage)}
-    marginPagesDisplayed={2}
-    pageRangeDisplayed={3}
-    onPageChange={handlePageClick}
-    containerClassName={"pagination"}
-    activeClassName={"active"}
-    pageClassName={"page-item"}
-    pageLinkClassName={"page-link"}
-    previousClassName={"page-item"}
-    nextClassName={"page-item"}
-    previousLinkClassName={"page-link"}
-    nextLinkClassName={"page-link"}
-    breakClassName={"page-item"}
-    breakLinkClassName={"page-link"}
-  />
-</div>
-
+      {/* Pagination */}
+      <div className="mt-4 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(leads.length / leadsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+      </div>
     </div>
   );
 };

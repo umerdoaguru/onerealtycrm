@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 const EditInvoiceName = () => {
   const { id } = useParams();
   const [newName, setNewName] = useState("");
- 
 
   const [showModal, setShowModal] = useState(true);
   const [message, setMessage] = useState("");
@@ -14,10 +13,11 @@ const EditInvoiceName = () => {
   useEffect(() => {
     const fetchInvoiceData = async () => {
       try {
-        const response = await axios.get(`http://localhost:9000/api/invoice-name/${id}`);
+        const response = await axios.get(
+          `http://localhost:9000/api/invoice-name/${id}`
+        );
         if (response.data) {
           setNewName(response.data[0].invoice_name);
-          
         }
       } catch (error) {
         console.error("Error fetching invoice data:", error);
@@ -30,10 +30,12 @@ const EditInvoiceName = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.put(`http://localhost:9000/api/invoice-data/${id}`, {
-        newName,
-      
-      });
+      const response = await axios.put(
+        `http://localhost:9000/api/invoice-data/${id}`,
+        {
+          newName,
+        }
+      );
 
       if (response.status === 200) {
         setMessage(response.data.message);
@@ -64,7 +66,10 @@ const EditInvoiceName = () => {
             </div>
             <form onSubmit={handleSubmit} className="mt-4">
               <div className="mb-4">
-                <label htmlFor="formNewName" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="formNewName"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   New Invoice Name
                 </label>
                 <input
@@ -76,7 +81,7 @@ const EditInvoiceName = () => {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
               </div>
-   
+
               <div className="flex justify-end">
                 <button
                   type="button"

@@ -6,23 +6,46 @@ import Sider from "../components/Sider";
 import axios from "axios";
 import Pagination from "./comp/pagination";
 import moment from "moment";
+import SuperAdminSider from "./vinay/SuperAdminSider";
 
 const Reporting = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState("All");
-  const [selectedCategory, setSelectedCategory] = useState("employee");
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("quotation");
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredData, setFilteredData] = useState(data);
   const [rowPerPage, setRowPerPage] = useState(5);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [dataFields, setDataFields] = useState({
     quotation: {
-      heading: ["Id", "Quotation Name", "Employee Name", "Date"],  
-      columns: ["quotation_id", "quotation_name", "employee_name", "created_date"],
+      heading: ["Id", "Quotation Name", "Employee Name", "Date"],
+      columns: [
+        "quotation_id",
+        "quotation_name",
+        "employee_name",
+        "created_date",
+      ],
       quotation: [],
     },
     invoice: {
-      heading: ["id ", "Invoice Name", "Employee Name", "Amount", "Payment Mode", "Date"],
-      columns: ["invoice_id", "invoice_name", "employee_name", "offer_price", "payment_mode", "created_date"],
+      heading: [
+        "id ",
+        "Invoice Name",
+        "Employee Name",
+        "Amount",
+        "Payment Mode",
+        "Date",
+      ],
+      columns: [
+        "invoice_id",
+        "invoice_name",
+        "employee_name",
+        "offer_price",
+        "payment_mode",
+        "created_date",
+      ],
       invoice: [],
     },
     employee: {
@@ -31,12 +54,33 @@ const Reporting = () => {
       employee: [],
     },
     leads: {
-      heading: ["Lead No.", "Assigned To", "Lead Name", "Phone Number", "Date", "Lead Source", "Quotation Status", "Invoice Status", "Deal Status",  "FollowUp Status"],
-      columns: ["lead_no", "assignedTo", "name",  "phone", "createdTime", "leadSource", "quotation_status", "invoice_status", "deal_status",  "follow_up_status"],
+      heading: [
+        "Lead No.",
+        "Assigned To",
+        "Lead Name",
+        "Phone Number",
+        "Date",
+        "Lead Source",
+        "Quotation Status",
+        "Invoice Status",
+        "Deal Status",
+        "FollowUp Status",
+      ],
+      columns: [
+        "lead_no",
+        "assignedTo",
+        "name",
+        "phone",
+        "createdTime",
+        "leadSource",
+        "quotation_status",
+        "invoice_status",
+        "deal_status",
+        "follow_up_status",
+      ],
       leads: [],
     },
   });
-
 
   useEffect(() => {
     filterData();
@@ -112,8 +156,14 @@ const Reporting = () => {
     setCurrentPage(1);
   };
 
+  // const handleFilterChange = (event) => {
+  //   setFilter(event.target.value);
+  // };
+
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
+    // Add any additional logic to apply the filter to your data here
+    console.log("Filter changed to:", event.target.value);
   };
 
   const handleDownload = () => {
@@ -145,15 +195,15 @@ const Reporting = () => {
   const quotationAxios = axios.create({
     baseURL: "http://localhost:9000/api",
   });
-  
+
   const invoiceAxios = axios.create({
     baseURL: "http://localhost:9000/api",
   });
-  
+
   const employeeAxios = axios.create({
     baseURL: "http://localhost:9000/api",
   });
-  
+
   const leadsAxios = axios.create({
     baseURL: "http://localhost:9000/api",
   });
@@ -161,11 +211,11 @@ const Reporting = () => {
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format('DD/MM/YYYY'),
-      createdTime: moment(item.createdTime).format('DD/MM/YYYY'),
+      created_date: moment(item.created_date).format("DD/MM/YYYY"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
     }));
   };
-  
+
   const getQuotationData = async () => {
     try {
       const results = await Promise.allSettled([
@@ -174,16 +224,16 @@ const Reporting = () => {
         employeeAxios.get("/employee"),
         leadsAxios.get("/leads"),
       ]);
-  
+
       // Initialize empty response objects
       let quotationData = [];
       let invoiceData = [];
       let employeeData = [];
       let leadsData = [];
-  
+
       // Handle each result
       results.forEach((result, index) => {
-        if (result.status === 'fulfilled') {
+        if (result.status === "fulfilled") {
           switch (index) {
             case 0:
               quotationData = formatData(result.value.data.data);
@@ -201,17 +251,20 @@ const Reporting = () => {
               break;
           }
         } else {
-          console.error(`Error fetching data for index ${index}:`, result.reason);
+          console.error(
+            `Error fetching data for index ${index}:`,
+            result.reason
+          );
         }
       });
-  
+
       const combinedData = {
         quotation: quotationData,
         invoice: invoiceData,
         employee: employeeData,
         leads: leadsData,
       };
-  
+
       const updatedDataFields = {
         ...dataFields,
         quotation: {
@@ -231,7 +284,7 @@ const Reporting = () => {
           leads: combinedData.leads,
         },
       };
-  
+
       setDataFields(updatedDataFields);
       console.log(combinedData);
       setData(combinedData);
@@ -239,118 +292,148 @@ const Reporting = () => {
       console.log("Unexpected error:", error);
     }
   };
-  
 
   useEffect(() => {
     getQuotationData();
   }, []);
 
+  const downloadExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
+    XLSX.writeFile(workbook, "LeadsData.xlsx");
+  };
+
   return (
     <>
       <MainHeader />
-      <Sider />
-      <div className=" container px-3 pt-5">
-      <h1 className="text-2xl text-center mt-[2rem] font-medium">Reports</h1>
-      <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-      </div>
-      <div className=" container mt-16 flex flex-col min-h-screen p-4 lg:p-8">
-        <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row justify-between mb-8">
-          <div className="flex flex-wrap justify-center max-sm:justify-start">
-            {["quotation", "invoice", "employee", "leads"].map((category) => (
-              <button
-                key={category}
-                onClick={() => handleCategoryClick(category)}
-                className={`mb-2 mr-2 px-4 py-2 rounded-lg  font-medium ${
-                  selectedCategory === category
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
-            ))}
-          </div>
+      <SuperAdminSider />
+      <div className="flex flex-col lg:flex-row">
+        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
+          <center className="text-2xl text-center mt-8 font-medium">
+            Reports
+          </center>
+          <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
-          <div className="flex flex-wrap items-center lg:flex-row justify-center max-sm:justify-start">
-            <div className="flex items-center p-2 bg-gray-100 mr-2 mb-2 border rounded-lg">
-              <label htmlFor="rowsPerPage" className="mr-2">
-                Rows per page:
-              </label>
-              <select
-                id="rowsPerPage"
-                value={rowPerPage}
-                onChange={(e) => setRowPerPage(Number(e.target.value))}
-                className="bg-transparent border-none outline-none"
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-              </select>
+          <div className="gap-4 mb-3">
+            <div className="flex flex-col space-y-4 lg:space-y-0 md:flex-row justify-between  mb-8">
+              <div className="flex flex-wrap justify-center max-sm:justify-center">
+                <div className="flex flex-wrap justify-center items-center p-2   rounded-lg mt-0">
+                  {["quotation", "invoice", "employee", "leads"].map(
+                    (category) => (
+                      <button
+                        key={category}
+                        onClick={() => handleCategoryClick(category)}
+                        className={`mb-2 mr-2 px-3 py-1 rounded-lg  font-medium ${
+                          selectedCategory === category
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-200"
+                        }`}
+                      >
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </button>
+                    )
+                  )}
+                </div>
+
+                <div className="md:flex sm:w-auto sm:flex-1 md:w-full items-center justify-center ">
+                  {/* Date Filter */}
+                  <div className="flex   md:items-center sm:items-center md:mr-2 mb-2 rounded-lg mt-0">
+                    <input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="border lg:px-2 py-1 rounded"
+                    />
+                    <div className="p-2">
+                      <p>to</p>
+                    </div>
+                    <input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="border px-2 py-1 rounded"
+                    />
+                  </div>
+                  <div className="respo md:mx-2 mb-2 ">
+                    <button
+                      onClick={downloadExcel}
+                      className="bg-blue-500 text-white lg:font-medium font-base  lg:px-3 px-1 py-1 rounded hover:bg-blue-700 sm:auto w-full"
+                    >
+                      Download
+                    </button>
+                  </div>
+                  {/* </div> */}
+
+                  <div className="flex justify-start items-center px-1 py-1 bg-gray-100 border mr-2 mb-2 rounded-lg mt-0">
+                    <BsFilter className="lg:mr-2 mr-0" />
+                    <select
+                      value={filter}
+                      onChange={handleFilterChange}
+                      className="bg-transparent  border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none "
+                    >
+                      <option value="All">All</option>
+                      <option value="week">Week</option>
+                      <option value="month">Month</option>
+                      <option value="half-year">Half Year</option>
+                      <option value="year">Year</option>
+                    </select>
+                  </div>
+
+                  <div className="respo flex-1 md:mx-2 mb-2 ">
+                    <button
+                      onClick={handleDownload}
+                      className="bg-blue-500 flex justify-center items-center text-white lg:font-medium font-base  lg:px-3 px-1 py-1 rounded hover:bg-blue-700 sm:auto w-full"
+                    >
+                      <BsDownload className="mr-2" /> Download
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <div className="flex items-center p-2 bg-gray-100 border mr-2 mb-2 rounded-lg mt-0">
-              <BsFilter className="mr-2" />
-              <select
-                value={filter}
-                onChange={handleFilterChange}
-                className="bg-transparent border-none outline-none"
-              >
-                <option value="All">All</option>
-                <option value="week">Week</option>
-                <option value="month">Month</option>
-                <option value="year">Year</option>
-              </select>
-            </div>
-
-            <button
-              onClick={handleDownload}
-              className="flex items-center  font-medium  px-4 py-2 text-white mr-2 mb-2 bg-blue-500 rounded-lg hover:bg-blue-600 mt-0"
-            >
-              <BsDownload className="mr-2 " /> Download
-            </button>
           </div>
-        </div>
-
-        <div className="overflow-x-auto rounded-lg shadow-md">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
-                {dataFields?.[selectedCategory].heading.map((heading) => (
-                  <th className="px-4 py-3">{heading}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
-              0 ? (
-                dataFields?.[selectedCategory]?.[selectedCategory]
-                  .slice(
-                    (currentPage - 1) * rowPerPage,
-                    currentPage * rowPerPage
-                  )
-                  .map((item, index) => (
-                    <tr key={index} className="border-b border-gray-200">
-                      {dataFields[selectedCategory]?.columns.map((column) => (
-                        <td className="px-4 py-3">{item[column]}</td>
-                      ))}
-                    </tr>
-                  ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="py-4 text-center">
-                    No data found
-                  </td>
+          <div className="overflow-x-auto rounded-lg shadow-md">
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
+                  {dataFields?.[selectedCategory].heading.map((heading) => (
+                    <th className="px-4 py-3">{heading}</th>
+                  ))}
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
+                0 ? (
+                  dataFields?.[selectedCategory]?.[selectedCategory]
+                    .slice(
+                      (currentPage - 1) * rowPerPage,
+                      currentPage * rowPerPage
+                    )
+                    .map((item, index) => (
+                      <tr key={index} className="border-b border-gray-200">
+                        {dataFields[selectedCategory]?.columns.map((column) => (
+                          <td className="px-4 py-3">{item[column]}</td>
+                        ))}
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="py-4 text-center">
+                      No data found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalItems={data?.[selectedCategory]?.length}
+            itemsPerPage={rowPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
-        <Pagination
-          currentPage={currentPage}
-          totalItems={data?.[selectedCategory]?.length}
-          itemsPerPage={rowPerPage}
-          onPageChange={setCurrentPage}
-        />
       </div>
     </>
   );
