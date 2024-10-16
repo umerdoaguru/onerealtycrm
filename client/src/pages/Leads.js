@@ -224,7 +224,7 @@ function Leads() {
     <>
       <Header />
       <Sider />
-      <Wrapper>
+      <>
         <div className="container">
           <div className="main">
             <h1 className="text-2xl text-center mt-[5rem] font-medium">
@@ -274,7 +274,7 @@ function Leads() {
             </div>
           </div>
 
-          <div className="tt overflow-x-auto mt-4">
+          <div className=" overflow-x-auto mt-4 whitespace-nowrap  lg:w-[100%]">
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>
@@ -611,25 +611,11 @@ function Leads() {
             />
           </div>
         </div>
-      </Wrapper>
+      </>
     </>
   );
 }
 
 export default Leads;
 
-const Wrapper = styled.div`
-  .tt {
-    white-space: nowrap;
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      width: 89%;
-      margin-left: 10rem;
-      white-space: nowrap;
-    }
-  }
-  .main {
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      margin-left: 10rem;
-    }
-  }
-`;
+

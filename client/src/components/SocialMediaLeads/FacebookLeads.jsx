@@ -44,7 +44,11 @@ const FacebookLeads = () => {
       // setLeads(leadsData); // Update local state with leads
       // console.log(leads);
       setLeads(response.data.leads?.data);
+  
+      
       setFormName(response.data.name);
+    
+      
       setLoading(false);
     } catch (err) {
       setError("Failed to fetch leads data");
@@ -98,6 +102,10 @@ const FacebookLeads = () => {
   };
 
   const saveChanges = async () => {
+    if (!currentLead.assignedTo) {
+      alert("Please assign the lead to an employee."); // Show an alert message
+      return; // Stop further execution if the field is empty
+    }
     try {
       await axios.post("http://localhost:9000/api/leads", {
         lead_no:  selectedLead.leadId,    
@@ -107,7 +115,7 @@ const FacebookLeads = () => {
         name: selectedLead.fullName,         
         phone:  selectedLead.phoneNumber,   
         leadSource: "Facebook Campaign", 
-        subject:  selectedLead.subject, 
+        subject:  formName, 
       });
       fetchLeads(); // Refresh the list
       fetchLeadassigned();
@@ -122,6 +130,7 @@ const FacebookLeads = () => {
     console.log(lead);
     setSelectedLead({
       leadId: lead.id,
+     
       fullName: extractFieldValue(lead.field_data, "full_name"),
       phoneNumber: extractFieldValue(lead.field_data, "phone_number"),
       date: moment(lead.created_time).format("YYYY-MM-DD"), // Format the createdTime
@@ -320,7 +329,7 @@ const FacebookLeads = () => {
               <input
                 type="text"
                 name="subject"
-                value={"Query"}
+                value={formName}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-2 border  rounded`}
                 disabled

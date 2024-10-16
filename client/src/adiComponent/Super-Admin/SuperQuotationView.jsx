@@ -112,75 +112,75 @@ function SuperQuotationVIew() {
     return (
       actualPriceTotal > 0 && (
         <div className="mt-4">
-        <h5 className="font-bold text-lg">{`${serviceTypeTitle} Services - ${subscriptionFrequency}`}</h5>
-        <div className="">
-          <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Sr.No
-                </th>
-                <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Service Name
-                </th>
-                <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Service Description
-                </th>
-                <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actual Price (INR)
-                </th>
-                <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Offer Price (INR)
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {services.map((q, index) => (
-                <tr key={q.id}>
-                  <td className="px-6 py-4 border border-gray-300 text-center text-sm font-bold">
-                    {index + 1}
+          <h5 className="font-bold text-lg">{`${serviceTypeTitle} Services - ${subscriptionFrequency}`}</h5>
+          <div className="">
+            <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Sr.No
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Name
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Description
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actual Price (INR)
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Offer Price (INR)
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {services.map((q, index) => (
+                  <tr key={q.id}>
+                    <td className="px-6 py-4 border border-gray-300 text-center text-sm font-bold">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm font-bold">
+                      {q.service_name}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.service_description.split(".").map((part, index) => (
+                        <p key={index}>
+                          {part.trim()}
+                          {index !==
+                            q.service_description.split(".").length - 1 && "."}
+                        </p>
+                      ))}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.actual_price}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.offer_price}
+                    </td>
+                  </tr>
+                ))}
+
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="px-6 py-4 border border-gray-300 font-bold text-sm"
+                  >
+                    Total {`${serviceTypeTitle} Amount`}
                   </td>
-                  <td className="px-6 py-4 border border-gray-300 text-sm font-bold">
-                    {q.service_name}
+                  <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
+                    {actualPriceTotal}
                   </td>
-                  <td className="px-6 py-4 border border-gray-300 text-sm">
-                    {q.service_description.split(".").map((part, index) => (
-                      <p key={index}>
-                        {part.trim()}
-                        {index !==
-                          q.service_description.split(".").length - 1 && "."}
-                      </p>
-                    ))}
-                  </td>
-                  <td className="px-6 py-4 border border-gray-300 text-sm">
-                    {q.actual_price}
-                  </td>
-                  <td className="px-6 py-4 border border-gray-300 text-sm">
-                    {q.offer_price}
+                  <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
+                    {offerPriceTotal}
                   </td>
                 </tr>
-              ))}
 
-              <tr>
-                <td
-                  colSpan="3"
-                  className="px-6 py-4 border border-gray-300 font-bold text-sm"
-                >
-                  Total {`${serviceTypeTitle} Amount`}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  {actualPriceTotal}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  {offerPriceTotal}
-                </td>
-              </tr>
-
-              <tr className="bg-gray-50 btn-print"></tr>
-            </tbody>
-          </table>
+                <tr className="bg-gray-50 btn-print"></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
       )
     );
   };
@@ -264,46 +264,59 @@ function SuperQuotationVIew() {
     fetchQuotations();
     fetchNotes();
   }, []);
+
   return (
     <>
-       
-       <MainHeader />
-        <SuperAdminSider />
-     <div className="min-h-screen bg-gray-100 mt-5">
+      <MainHeader />
+      <SuperAdminSider />
 
-      <div className="flex">
-        <div className="flex-grow p-6">
-          <div className="max-w-7xl mx-auto bg-white p-8 rounded-lg shadow-md">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">
-                Quotation: {quotationName}
-              </h2>
-              <p className="text-sm text-gray-600">
-                Date: {moment(quotationDate).format("DD-MM-YYYY")}
-              </p>
+      <div className="flex flex-col lg:flex-row lg:space-x-4">
+        <div className="w-full lg:w-9/12 mx-auto px-4 lg:px-0">
+          <div className="container mx-auto">
+            <Link
+              to={`/quotationlist`}
+              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded w-full sm:w-auto block sm:inline-block mb-3"
+            >
+              <i className="bi bi-arrow-return-left mx-1"></i> Back
+            </Link>
+          </div>
+
+          <div className="w-full flex flex-wrap mt-3 space-y-4 lg:space-y-0 lg:space-x-4">
+            <div className="w-full lg:w-9/12">
+              {/* Placeholder for content */}
             </div>
-  
-            {/* Paid Services Table */}
-            <div>{renderPaidServices()}</div>
-  
-            {/* Complimentary Services Table */}
-            <div>{renderComplimentaryServices()}</div>
-  
-            <div className="mt-6">
-              <EditableSeoPayment quotationId={id} />
+            <div className="w-full lg:w-3/12">
+              {/* Placeholder for sidebar or additional content */}
             </div>
-            <div className="mt-6">
-              <EditablePaymentTable quotationId={id} />
+          </div>
+
+          {/* <Header companyName={selectedCompany} quotationName={quotationName} /> */}
+
+          <div className="container mt-5 max-w-full">
+            <h2 className="text-2xl font-bold">
+              Plan & Quotation for {quotationName}
+            </h2>
+            {renderPaidServices()}
+            {renderComplimentaryServices()}
+
+            <div className="mt-3 mb-5">
+              <h5 className="font-bold">Notes:</h5>
+              <ul>
+                {notes.map((note) => (
+                  <li key={note.id}>
+                    {note.note_text}
+                    <p>{note.additional_info}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
       </div>
-    
-    </div>
+
+      {/* <Lastpage/> */}
     </>
-   
   );
-  
 }
 
 export default SuperQuotationVIew;

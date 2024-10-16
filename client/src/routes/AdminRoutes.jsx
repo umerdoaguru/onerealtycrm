@@ -40,6 +40,7 @@ import TotalQuotation from "../components/AdminDashBoardCards/TotalQuotation";
 import TotalInvoice from "../components/AdminDashBoardCards/TotalInvoice";
 import MainSocialLeads from "../components/SocialMediaLeads/MainSocialLeads";
 import TotalVisit from "../components/AdminDashBoardCards/ToatalVisit";
+import QuotationlistAdmin from "../components/AdminDashBoardCards/AdminQuotationlist/QuotationlistAdmin";
 
 function AdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -66,6 +67,10 @@ function AdminRoutes() {
         <Route path="/quotation-section" element={<CreateCompanyProfile />} />
         <Route path="/data-export" element={<DataExport />} />
 
+        <Route
+          path="/admin-quotationlist"
+          element={<QuotationlistAdmin />}
+        />
         <Route
           path="/admin-view-quotation/:id"
           element={<AdminQuotationVIew />}

@@ -79,6 +79,7 @@ function CreateCompanyProfile() {
         console.log("Error deleting Company Data");
       }
     }
+  }
 
     // const handleUpload = async (e) => {
     const handleHeaderImageChange = (e) => {
@@ -212,7 +213,7 @@ function CreateCompanyProfile() {
             </div> */}
                 <div className="col-span-1">
                   <Link
-                    to="/quotationlist"
+                    to="/admin-quotationlist"
                     className="bg-blue-500 text-white px-4 py-2 rounded block text-center font-medium"
                   >
                     Quotation List
@@ -525,6 +526,6 @@ function CreateCompanyProfile() {
       </>
     );
   };
-}
+
 export default CreateCompanyProfile;
 const Wrapper = styled.div``;

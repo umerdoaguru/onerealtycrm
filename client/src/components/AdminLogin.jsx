@@ -195,7 +195,7 @@ function AdminLogin() {
         formData
       );
       if (res.data.success) {
-        dispatch(loginUser(res.data.admin));
+        dispatch(loginUser(res.data.user));
         // cogoToast.success(res.data.message);
         navigate("/admin-dashboard");
       } else {

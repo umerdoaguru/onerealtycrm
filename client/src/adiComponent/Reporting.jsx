@@ -307,7 +307,7 @@ const Reporting = () => {
   return (
     <>
       <MainHeader />
-      <SuperAdminSider />
+      <Sider />
       <div className="flex flex-col lg:flex-row">
         <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
