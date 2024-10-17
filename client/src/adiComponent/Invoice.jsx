@@ -61,10 +61,10 @@ const LeadVisitChart = () => {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height={300}>
             <BarChart
               width={400}
-              height={600}
+              height={300}
               data={visitData}
               margin={{
                 top: 5,

@@ -142,28 +142,7 @@ const Overview2 = () => {
             </div>
           </Link>
         </div>
-        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-          <Link to="/super-admin-quotationlist">
-            <div
-              className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600" // Change background color if active
-              //   onClick={() => setSelectedComponent('EmployeeData')}  // Set selected component
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div className=" text-3xl text-gray-700">
-                  {/* <SiMoneygram /> */}
-                </div>
-                <div className="mt-2">
-                  <h5 className="text-gray-800 text-xl font-semibold ">
-                    Total Quotation{" "}
-                  </h5>
-                  <p className="text-gray-800 text-xl font-semibold ">
-                    {employeeCount}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
+        
       </div>
     </>
   );

@@ -118,7 +118,7 @@ function SuperEmployeeLeads() {
             <div>
             <button
             onClick={() => navigate(-1)}
-            className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
           >
             Back
           </button>

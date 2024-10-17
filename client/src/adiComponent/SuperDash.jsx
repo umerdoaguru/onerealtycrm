@@ -13,6 +13,7 @@ import LeadsGraph from "./LeadsGraph";
 import QuotationGraph from "./QuotationGraph";
 import SuperAdminSider from "./Super-Admin/SuperAdminSider";
 import SuperHeader from "./Super-Admin/SuperHeader";
+import DealGraph from "./dealGraph";
 
 const SuperDash = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -53,9 +54,10 @@ const SuperDash = () => {
           <div>
             <Overview />
           </div>
-          <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
             <Invoice />
             <LeadsGraph />
+            <DealGraph />
           </div>
 
           <LeadsReport />
