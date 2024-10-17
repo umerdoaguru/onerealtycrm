@@ -252,8 +252,6 @@ const GetQuotation = async (req, res) => {
   }
 };
 
-
-
 const getAllQuotation = async (req, res) => {
   try {
     const sql = "SELECT * FROM quotations_data";

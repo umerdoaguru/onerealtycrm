@@ -8,7 +8,8 @@ import Sider from "../Sider";
 import EmployeeeSider from "../EmployeeModule/EmployeeSider";
 import cogoToast from "cogo-toast";
 import UpdateLeadField from "../EmployeeModule/updateLeadField";
-function Employee_Single_Lead_Profile() {
+
+const ViewAllQuotationsByLead = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
@@ -198,9 +199,9 @@ function Employee_Single_Lead_Profile() {
       <EmployeeeSider />
       <div className="flex flex-col 2xl:ml-44 mt-2">
         <div className="container mt-5 px-2 mx-auto p-4">
-          <h1 className="text-2xl text-center mt-[2rem]">Leads Profile</h1>
+          <h1 className="text-2xl text-center mt-[2rem]">All Quotations</h1>
           <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-          <div className="flex flex-wrap mb-4">
+          {/* <div className="flex flex-wrap mb-4">
             <div className="w-full lg:w-1/3">
               <img src={img} alt="doctor-profile" className=" rounded-lg" />
             </div>
@@ -265,9 +266,9 @@ function Employee_Single_Lead_Profile() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
 
-          <div className=" flex justify-between">
+          {/* <div className=" flex justify-between">
             <button
               onClick={() => handleQuotation(leads[0])}
               className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -275,7 +276,7 @@ function Employee_Single_Lead_Profile() {
               Quotation Creation
             </button>
 
-            {/* Conditionally render the View Quotation button */}
+           
             {quotationCreated ? (
               <button
                 onClick={() => handleViewQuotation(leads[0])}
@@ -288,7 +289,7 @@ function Employee_Single_Lead_Profile() {
                 Quotation not yet created
               </p>
             )}
-          </div>
+          </div> */}
 
           <div className="overflow-x-auto mt-5">
             <table className="min-w-full bg-white border">
@@ -519,6 +520,6 @@ function Employee_Single_Lead_Profile() {
       </div>
     </>
   );
-}
+};
 
-export default Employee_Single_Lead_Profile;
+export default ViewAllQuotationsByLead;

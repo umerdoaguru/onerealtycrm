@@ -380,7 +380,6 @@
 // export default MainQuotationPage;
 // const Wrapper = styled.div``;
 
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -395,6 +394,7 @@ import QuotationForm1 from "../../../pages/Quotation/QuotationForm1";
 import CreateInvoice from "../../Invoice/CreateInvoice";
 import EmployeeInvoiceList from "./EmployeeInvoiceList";
 import EmployeeQuotationList from "./EmployeeQuotationList";
+import EmployeeeSider from "../EmployeeSider";
 
 function MainQuotationPage() {
   const { id } = useParams();
@@ -521,103 +521,101 @@ function MainQuotationPage() {
 
   return (
     <>
-      <>
-        <MainHeader />
-        <EmployeeSider />
+      <MainHeader />
+      <EmployeeeSider />
+      <div className="flex flex-col 2xl:ml-44 mt-14 max-w-7xl">
         <div className="container px-3 ">
           <div className="flex justify-between">
             <div className="mx-3 mt-3">
               <UserLogin />
             </div>
-            <div className="mt-1 mx-3">
+            {/* <div className="mt-1 mx-3">
               <Logout />
-            </div>
+            </div> */}
           </div>
         </div>
 
-        <h1 className="text-2xl text-center mt-[2rem]">Quotation & Invoice Management</h1>
+        <h1 className="text-2xl text-center mt-[2rem]">Quotation Management</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
         <div className="container flex flex-wrap justify-around mt-5">
           {/* Render buttons */}
-         
 
-            <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-              <div
-                className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                  selectedComponent === "QuotationData"
-                    ? "bg-blue-500 text-white"
-                    : ""
-                }`} // Change background color if active
-                onClick={() => setSelectedComponent("QuotationData")} // Set selected component
-              >
-                <div className="p-4 flex flex-col items-center text-center">
-                  <div
-                    className={`text-3xl ${
+          {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+            <div
+              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "QuotationData"
+                  ? "bg-blue-500 text-white"
+                  : ""
+              }`} // Change background color if active
+              onClick={() => setSelectedComponent("QuotationData")} // Set selected component
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div
+                  className={`text-3xl ${
+                    selectedComponent === "QuotationData"
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
+                > */}
+          {/* <MdOutlineNextWeek /> */}
+          {/* </div>
+                <div className="mt-2">
+                  <h5
+                    className={`text-xl font-semibold ${
                       selectedComponent === "QuotationData"
                         ? "text-white"
-                        : "text-gray-700"
+                        : "text-gray-800"
                     }`}
                   >
-                    {/* <MdOutlineNextWeek /> */}
-                  </div>
-                  <div className="mt-2">
-                    <h5
-                      className={`text-xl font-semibold ${
-                        selectedComponent === "QuotationData"
-                          ? "text-white"
-                          : "text-gray-800"
-                      }`}
-                    >
-                      {" "}
-                      Quotation List
-                    </h5>
-                    {/* <p className={`${selectedComponent === 'QuotationData' ? 'text-white' : 'text-gray-600'}`}>{"quotationCount"}</p> */}
-                  </div>
-                </div>
+                    {" "}
+                    Quotation List
+                  </h5> */}
+          {/* <p className={`${selectedComponent === 'QuotationData' ? 'text-white' : 'text-gray-600'}`}>{"quotationCount"}</p> */}
+          {/* </div>
               </div>
             </div>
+          </div> */}
 
-            <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-              <div
-                className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                  selectedComponent === "InvoiceData"
-                    ? "bg-blue-500 text-white"
-                    : ""
-                }`} // Change background color if active
-                onClick={() => setSelectedComponent("InvoiceData")} // Set selected component
-              >
-                <div className="p-4 flex flex-col items-center text-center">
-                  <div
-                    className={`text-3xl ${
+          {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
+            <div
+              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "InvoiceData"
+                  ? "bg-blue-500 text-white"
+                  : ""
+              }`} // Change background color if active
+              onClick={() => setSelectedComponent("InvoiceData")} // Set selected component
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div
+                  className={`text-3xl ${
+                    selectedComponent === "InvoiceData"
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
+                >
+                 
+                </div>
+                <div className="mt-2">
+                  <h5
+                    className={`text-xl font-semibold ${
                       selectedComponent === "InvoiceData"
                         ? "text-white"
-                        : "text-gray-700"
+                        : "text-gray-800"
                     }`}
                   >
-                    {/* <GiMoneyStack /> */}
-                  </div>
-                  <div className="mt-2">
-                    <h5
-                      className={`text-xl font-semibold ${
-                        selectedComponent === "InvoiceData"
-                          ? "text-white"
-                          : "text-gray-800"
-                      }`}
-                    >
-                      {" "}
-                      Invoice List
-                    </h5>
-                    {/* <p className={`${selectedComponent === 'InvoiceData' ? 'text-white' : 'text-gray-600'}`}>{"invoiceCount"}</p> */}
-                  </div>
-                </div>
+                    {" "}
+                    Invoice List
+                  </h5> */}
+          {/* <p className={`${selectedComponent === 'InvoiceData' ? 'text-white' : 'text-gray-600'}`}>{"invoiceCount"}</p> */}
+          {/* </div>
               </div>
             </div>
-            <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
+          </div> */}
+          <div className="w-full">
+            {/* <div className="w-full h-full"> */}
 
-          {/* <div className="w-full h-full"> */}
-         
             {selectedComponent === "QuotationData" && <EmployeeQuotationList />}
-            {selectedComponent === "InvoiceData" && <EmployeeInvoiceList />}
+            {/* {selectedComponent === "InvoiceData" && <EmployeeInvoiceList />} */}
           </div>
         </div>
 
@@ -645,13 +643,12 @@ function MainQuotationPage() {
             </table>
           </div>
         </div> */}
-      </>
+      </div>
     </>
   );
 }
 
 export default MainQuotationPage;
-
 
 // <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
 // <div

@@ -169,19 +169,19 @@ const AddServiceByLead = () => {
     <>
       <MainHeader />
       <EmployeeeSider />
-      <div className="flex flex-col  2xl:ml-44 mt-14 ">
+      <div className="flex flex-col  2xl:ml-44 mt-14 2xl:mr-5 ">
         <form
           className="form-control p-4 bg-white rounded shadow"
           onSubmit={handleSubmit}
         >
           <h5 className="mb-4 text-center text-lg font-bold">
             Add Services to Quotation: {quotationName}
-            <Link
+            {/* <Link
               to={`/final-quotation/${id}`}
               className="btn bg-green-600 text-white mx-3 mb-2 float-end hover:bg-green-700"
             >
               <i className="bi bi-arrow-return-left mx-1"></i> Back
-            </Link>
+            </Link> */}
           </h5>
 
           {services.map((service, index) => (
