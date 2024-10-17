@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import MainHeader from "../../MainHeader";
+import EmployeeeSider from "../EmployeeSider";
 
 const AddServiceByLead = () => {
   const { id } = useParams();
@@ -164,8 +166,10 @@ const AddServiceByLead = () => {
   };
 
   return (
-    <Wrapper>
-      <div className="container mt-5">
+    <>
+      <MainHeader />
+      <EmployeeeSider />
+      <div className="flex flex-col  2xl:ml-44 mt-14 ">
         <form
           className="form-control p-4 bg-white rounded shadow"
           onSubmit={handleSubmit}
@@ -360,7 +364,7 @@ const AddServiceByLead = () => {
           </button>
         </form>
       </div>
-    </Wrapper>
+    </>
   );
 };
 

@@ -26,8 +26,8 @@ const EmployeeeSider = () => {
     <>
       {/* Hamburger Button - Hidden on large screens */}
       <button
-        // className="fixed top-18 md:top-14 left-4 z-50 text-black lg:hidden" // Hidden on large screens (lg)
-        className="fixed top-18 top-14 left-4 z-50 text-black 2xl:hidden" // Hidden on large screens (lg)
+        className="fixed top-16 md:top-20 left-4 z-50 text-black 
+             sm:hidden md:block max-xl:hidden xl:block 2xl:hidden"
         onClick={toggleSidebar}
       >
         <AiOutlineMenu size={25} />
@@ -35,13 +35,13 @@ const EmployeeeSider = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed mt-12 inset-y-0 left-0 bg-[#01060c] overflow-hidden 2xl:translate-x-0 transform ${
+        className={`fixed mt-16 md:mt-[70px] lg:mt-[60px] inset-y-0 bg-[#01060c] overflow-hidden 2xl:translate-x-0 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out w-20 md:w-40 lg:block z-50`}
+        } transition-transform duration-300 ease-in-out w-20 md:w-[150px] z-50`}
       >
         {/* Close (Cross) Button - Hidden on large screens */}
         <button
-          className="absolute top-3 right-3 text-white 2xl:hidden" // Hidden on large screens (lg)
+          className="absolute left-14 md:left-32 lg-left-32 text-gray-400 2xl:hidden" // Hidden on large screens (lg)
           onClick={toggleSidebar}
         >
           <AiOutlineClose size={25} />

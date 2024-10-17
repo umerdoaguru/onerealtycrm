@@ -1,6 +1,11 @@
-import React from 'react';
+import React from "react";
 
-const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => {
+const Pagination = ({
+  currentPage,
+  totalItems,
+  itemsPerPage,
+  onPageChange,
+}) => {
   console.log(itemsPerPage);
   // Calculate the total number of pages
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -15,7 +20,13 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
         <li key={i}>
           <p
             onClick={() => onPageChange(i)}
-            className={`flex items-center justify-center px-4 h-10 leading-tight  font-medium ${i === currentPage ? 'text-blue-600 bg-blue-50' : 'text-gray-500 bg-white border-gray-300'} border border-gray-300 ${i === 1 ? 'rounded-s-lg' : ''} ${i === safeTotalPages ? 'rounded-e-lg' : ''} hover:bg-gray-100 hover:text-gray-700 cursor-pointer`}
+            className={`flex items-center justify-center px-4 h-10 leading-tight  font-medium ${
+              i === currentPage
+                ? "text-white bg-blue-500"
+                : "text-white bg-blue-500 border-gray-300"
+            } border border-gray-300 ${i === 1 ? "rounded-s-lg" : ""} ${
+              i === safeTotalPages ? "rounded-e-lg" : ""
+            } hover:bg-blue-600 hover:text-gray-700 cursor-pointer`}
           >
             {i}
           </p>
@@ -32,7 +43,11 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
         <li>
           <p
             onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-            className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100'} border border-e-0 rounded-s-lg`}
+            className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight ${
+              currentPage === 1
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-gray-500 bg-white border-gray-300 hover:bg-gray-100"
+            } border border-e-0 rounded-s-lg`}
           >
             Previous
           </p>
@@ -43,7 +58,11 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
         {/* Next Button */}
         <li>
           <p
-            className={`flex items-center justify-center px-4 h-10 leading-tight cursor-pointer ${currentPage === safeTotalPages ? 'text-gray-400 cursor-not-allowed' : 'text-gray-500 bg-white border-gray-300 hover:bg-gray-100'} border border-gray-300 rounded-e-lg`}
+            className={`flex items-center justify-center px-4 h-10 leading-tight cursor-pointer ${
+              currentPage === safeTotalPages
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-gray-500 bg-white border-gray-300 hover:bg-gray-100"
+            } border border-gray-300 rounded-e-lg`}
           >
             Next
           </p>
