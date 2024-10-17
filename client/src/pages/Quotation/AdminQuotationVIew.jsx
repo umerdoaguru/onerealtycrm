@@ -12,8 +12,9 @@ import { useSelector } from "react-redux";
 import UserLogin from "../../components/UserLogin";
 import Logout from "../../components/Logout";
 import MainHeader from "../../components/MainHeader";
-import Sider from "../../components/Sider";
-import SuperAdminSider from "../../adiComponent/vinay/SuperAdminSider";
+
+
+import Sider from './../../components/Sider';
 
 function AdminQuotationVIew() {
   const { id } = useParams();
@@ -270,7 +271,7 @@ function AdminQuotationVIew() {
   return (
     <>
       <MainHeader />
-      <SuperAdminSider />
+      <Sider />
 
       <div className="flex flex-col lg:flex-row lg:space-x-4">
         <Wrapper className="w-full lg:w-9/12 mx-auto px-4 lg:px-0">

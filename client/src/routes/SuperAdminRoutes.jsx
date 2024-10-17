@@ -54,7 +54,7 @@ function SuperAdminRoutes() {
           element={<SuperQuotationList />}
         />
         <Route
-          path="/admin-view-quotation/:id"
+          path="/super-admin-view-quotation/:id"
           element={<SuperQuotationVIew />}
         />
         <Route path="/super-admin-reporting" element={<SuperReports />} />

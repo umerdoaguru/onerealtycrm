@@ -46,10 +46,10 @@ const Sider = () => {
         <div className="flex flex-col items-center pt-10 max-h-screen overflow-auto	">
           <ul className="flex flex-col items-center space-y-4 w-full pb-16">
             <li
-              className={`w-full ${getSidebarClass("/Super-Admin-Dashboard")}`}
+              className={`w-full ${getSidebarClass("/admin-dashboard")}`}
             >
               <Link
-                to="/Super-Admin-Dashboard"
+                to="/admin-dashboard"
                 className="flex flex-col items-center py-3"
               >
                 <BsHouse className="text-white text-2xl md:text-3xl" />
@@ -70,7 +70,7 @@ const Sider = () => {
               </Link>
             </li>
 
-            {/* <hr className="w-full border-gray-400" />
+            <hr className="w-full border-gray-400" />
               <li className={`w-full ${getSidebarClass("/social-media-leads")}`}>
                 <Link
                   to="/social-media-leads"
@@ -81,7 +81,7 @@ const Sider = () => {
                     Social Media <br /> <span>Leads</span>
                   </h3>
                 </Link>
-              </li> */}
+              </li>
 
             <hr className="w-full border-gray-400" />
 
@@ -136,18 +136,7 @@ const Sider = () => {
               </Link>
             </li>
 
-            {/* <hr className="w-full border-gray-400" />
-            <li className={`w-full ${getSidebarClass("/AdminManagement")}`}>
-              <Link
-                to="/AdminManagement"
-                className="flex flex-col items-center py-3"
-              >
-                <MdOutlineManageAccounts className="text-white text-2xl md:text-3xl" />
-                <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
-                  Admin Management
-                </h3>
-              </Link>
-            </li> */}
+         
           </ul>
         </div>
       </div>
