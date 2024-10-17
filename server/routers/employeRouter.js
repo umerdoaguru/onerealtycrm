@@ -9,6 +9,7 @@ const {
   updateOnlyLeadStatus,
   updateOnlyQuotationStatus,
   getAllEmployeeTotalLeads,
+  getLeadQuotation,
 } = require("../controllers/employeController");
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.put("/updateLeadStatus/:id", updateLeadStatus);
 router.put("/updateOnlyLeadStatus/:id", updateOnlyLeadStatus);
 router.put("/updateOnlyQuotationStatus/:id", updateOnlyQuotationStatus);
 router.get("/get-quotation-byEmploye/:id", getEmployeeQuotation);
+router.get("/get-quotation-byLead/:id", getLeadQuotation);
 router.get("/getAllEmployee-Toal-lead", getAllEmployeeTotalLeads);
 
 module.exports = router;

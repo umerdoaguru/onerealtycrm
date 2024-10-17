@@ -312,9 +312,12 @@ function DataExport() {
     <>
       <MainHeader />
       <EmployeeSider />
-      <div className="container mt-[5rem]">
-        <h1 className="text-2xl text-center mt-[2rem]">Employee Data Export</h1>
-        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+      {/* <div className="container mt-[5rem]"> */}
+      <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
+        <center className="text-2xl text-center mt-8 font-medium">
+          Employee Data Export
+        </center>
+        <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
         <div className="flex flex-wrap justify-around mt-5">
           <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
@@ -534,7 +537,7 @@ function DataExport() {
         </div>
 
         {/* Conditionally render the selected component */}
-        <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto mb-20">
+        <div className="w-full mb-20">
           {selectedComponent === "LeadData" && <EmployeeLeadData />}
           {selectedComponent === "QuotationData" && <EmployeeQuotationData />}
           {selectedComponent === "InvoiceData" && <EmployeeInvoiceData />}

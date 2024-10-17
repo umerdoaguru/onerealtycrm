@@ -124,6 +124,7 @@ const QuotationByLeads = () => {
         services: servicesToSave,
         // employeeId: userId,
         employeeId: EmpId,
+        lead_id: id,
         employee_name: EmpName,
       });
 
@@ -197,7 +198,7 @@ const QuotationByLeads = () => {
     <>
       <MainHeader />
       <EmployeeeSider />
-      <div className="container">
+      <div className="flex flex-col  2xl:ml-44 ">
         <div className="p-4 mt-5">
           {/* <button
             onClick={handleBackClick}
@@ -218,12 +219,15 @@ const QuotationByLeads = () => {
                 onSubmit={handleSubmit}
               >
                 <div className="grid lg:grid-cols-12  gap-4 p-2">
-                  <div className="lg:col-span-2 ">
+                  <div className="lg:col-span-2 font-medium ">
                     <UserLogin />
                   </div>
 
                   <div className="lg:col-span-7 lg:text-center  ">
-                    <h5 className="mb-4">Quotation Generation System</h5>
+                    <center className="text-2xl text-center mt-8 font-medium">
+                      Quotation Generation System
+                    </center>
+                    <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
                   </div>
 
                   {/* <div className="lg:col-span-2">
@@ -242,7 +246,7 @@ const QuotationByLeads = () => {
                 <div className="mb-3">
                   <input
                     type="text"
-                    className="w-full p-2 border rounded text-center"
+                    className="w-full p-2 border rounded text-center text-2xl bg-green-400 text-white font-medium"
                     id="quotationName"
                     name="quotation_name"
                     placeholder="Quotation Name"
@@ -254,7 +258,7 @@ const QuotationByLeads = () => {
                 {services.map((service, index) => (
                   <div key={index} className="mb-6">
                     <div className="grid gap-4 lg:grid-cols-12">
-                      <h6 className="">Service {index + 1}</h6>
+                      <h6 className=" w-24">Service {index + 1}</h6>
 
                       <div className="lg:col-span-12">
                         <label className="block">

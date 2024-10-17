@@ -11,6 +11,8 @@ import EditablePaymentTable from "./EditablePaymentWebTable";
 import { useSelector } from "react-redux";
 import UserLogin from "../../components/UserLogin";
 import Logout from "../../components/Logout";
+import MainHeader from "../../components/MainHeader";
+import EmployeeeSider from "../../components/EmployeeModule/EmployeeSider";
 
 function Print_Page() {
   const { id } = useParams();
@@ -407,33 +409,32 @@ function Print_Page() {
 
   return (
     <>
-      <Wrapper>
-        <div className="flex justify-between px-4">
+      <MainHeader />
+      <EmployeeeSider />
+      <div className="flex flex-col 2xl:ml-44 mt-14 max-w-7xl">
+        <div className="md:flex  max-sm:flex-col md:justify-between sm:justify-start  px-4">
           <div className="mx-3 btn-print mt-2">
             <UserLogin />
           </div>
-          <div className="mx-3 btn-print mt-2">
-            <Logout />
+          <div className=" mt-3 print:hidden">
+            <Link
+              to="/quotationlist"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600  w-75 btn-print"
+            >
+              Quotation List
+            </Link>
           </div>
         </div>
 
         <div className="flex justify-between items-center px-4 mt-3 mb-2">
-          <div className="">
+          {/* <div className="">
             <Link
               to={`/final-quotation/${id}`}
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mx-1 w-25 btn-print"
             >
               <i className="bi bi-arrow-return-left mx-1"></i> Back
             </Link>
-          </div>
-          <div className="">
-            <Link
-              to="/quotationlist"
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mx-5 w-75 btn-print"
-            >
-              Quotation List
-            </Link>
-          </div>
+          </div> */}
         </div>
 
         {/* <div className="container px-4">
@@ -522,7 +523,7 @@ function Print_Page() {
         </div>
 
         <Footer companyName={selectedCompany} />
-      </Wrapper>
+      </div>
 
       {/* <Lastpage/> */}
     </>
@@ -531,38 +532,38 @@ function Print_Page() {
 
 export default Print_Page;
 const Wrapper = styled.div`
-  .thbold {
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
-  th {
-    font-weight: bold;
-    font-size: 1rem;
-  }
-  .table {
-    border: black;
-  }
-  .th {
-    font-weight: bold;
-    font-size: 1rem;
-  }
-  li {
-    font-weight: bold;
-    font-size: 1rem;
-  }
+  // .thbold {
+  //   font-weight: bold;
+  //   font-size: 1.2rem;
+  // }
+  // th {
+  //   font-weight: bold;
+  //   font-size: 1rem;
+  // }
+  // .table {
+  //   border: black;
+  // }
+  // .th {
+  //   font-weight: bold;
+  //   font-size: 1rem;
+  // }
+  // li {
+  //   font-weight: bold;
+  //   font-size: 1rem;
+  // }
 
-  .btn-print {
-    @media print {
-      display: none;
-    }
-  }
+  // .btn-print {
+  //   @media print {
+  //     display: none;
+  //   }
+  // }
 
-  .footimage {
-    @media print {
-      /* position: fixed; */
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-  }
+  // .footimage {
+  //   @media print {
+  //     /* position: fixed; */
+  //     bottom: 0;
+  //     left: 0;
+  //     right: 0;
+  //   }
+  // }
 `;

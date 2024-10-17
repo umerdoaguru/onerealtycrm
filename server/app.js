@@ -1,43 +1,42 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const  cors = require('cors');
-const path = require('path');
-const axios = require('axios');
+const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const path = require("path");
+const axios = require("axios");
 const { db } = require("./db");
 dotenv.config();
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 const Router4 = require("./routers/employeRouter");
 const Router2 = require("./routers/organizationRoutes");
 const Router3 = require("./routers/dashboardRoutes");
-const Router = require("./routers/userdataroutes")
-const Router5 = require("./routers/response_99acres")
+const Router = require("./routers/userdataroutes");
+const Router5 = require("./routers/response_99acres");
 
 const app = express();
 
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cors());
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
-app.use('/api', Router3);
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+app.use("/api", Router3);
 app.use("/api", Router2);
 app.use("/api", Router4);
-app.use('/api', Router);
-app.use('/api', Router5);
-app.use(cors({ origin: 'http://localhost:3000' }));
-app.use('/Assets', express.static(path.join(__dirname, 'Assets')));
-
+app.use("/api", Router);
+app.use("/api", Router5);
+app.use(cors({ origin: "http://localhost:3000" }));
+app.use("/Assets", express.static(path.join(__dirname, "Assets")));
 
 console.log("Fetching data from API...Kar raha he");
 
 function formatDate(date) {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
@@ -53,9 +52,12 @@ console.log("Start Date:", formattedStartDate, "End Date:", formattedEndDate);
 
 // Function to extract text from XML tag
 const getValueBetweenTags = (xml, tag) => {
-  const regex = new RegExp(`<${tag}>(<!\\[CDATA\\[)?(.*?)(\\]\\]>|<\/${tag}>)`, 'i');
+  const regex = new RegExp(
+    `<${tag}>(<!\\[CDATA\\[)?(.*?)(\\]\\]>|<\/${tag}>)`,
+    "i"
+  );
   const match = xml.match(regex);
-  return match ? match[2].trim() : '';
+  return match ? match[2].trim() : "";
 };
 
 // Function to convert the XML data into JSON
@@ -69,28 +71,34 @@ const convertXMLToJSON = (xml) => {
 
     // Extract data from within each <Resp> block
     const qryDtl = {
-      ResType: getValueBetweenTags(respXML, 'QryDtl ResType'),
-      QueryId: getValueBetweenTags(respXML, 'QryDtl QueryId'),
-      CmpctLabl: getValueBetweenTags(respXML, 'CmpctLabl'),
-      QryInfo: getValueBetweenTags(respXML, 'QryInfo'),
-      RcvdOn: getValueBetweenTags(respXML, 'RcvdOn'),
-      ProjId: getValueBetweenTags(respXML, 'ProjId'),
-      ProjName: getValueBetweenTags(respXML, 'ProjName'),
-      CityName: getValueBetweenTags(respXML, 'CityName'),
-      ResCom: getValueBetweenTags(respXML, 'ResCom'),
-      Price: getValueBetweenTags(respXML, 'Price'),
-      PhoneVerificationStatus: getValueBetweenTags(respXML, 'PhoneVerificationStatus'),
-      EmailVerificationStatus: getValueBetweenTags(respXML, 'EmailVerificationStatus'),
-      IDENTITY: getValueBetweenTags(respXML, 'IDENTITY'),
-      ProdId: getValueBetweenTags(respXML, 'ProdId'),
-      ProdStatus: getValueBetweenTags(respXML, 'ProdId Status'),  // Extract the ProdId status attribute
-      ProdType: getValueBetweenTags(respXML, 'ProdId Type'),     // Extract the ProdId type attribute
+      ResType: getValueBetweenTags(respXML, "QryDtl ResType"),
+      QueryId: getValueBetweenTags(respXML, "QryDtl QueryId"),
+      CmpctLabl: getValueBetweenTags(respXML, "CmpctLabl"),
+      QryInfo: getValueBetweenTags(respXML, "QryInfo"),
+      RcvdOn: getValueBetweenTags(respXML, "RcvdOn"),
+      ProjId: getValueBetweenTags(respXML, "ProjId"),
+      ProjName: getValueBetweenTags(respXML, "ProjName"),
+      CityName: getValueBetweenTags(respXML, "CityName"),
+      ResCom: getValueBetweenTags(respXML, "ResCom"),
+      Price: getValueBetweenTags(respXML, "Price"),
+      PhoneVerificationStatus: getValueBetweenTags(
+        respXML,
+        "PhoneVerificationStatus"
+      ),
+      EmailVerificationStatus: getValueBetweenTags(
+        respXML,
+        "EmailVerificationStatus"
+      ),
+      IDENTITY: getValueBetweenTags(respXML, "IDENTITY"),
+      ProdId: getValueBetweenTags(respXML, "ProdId"),
+      ProdStatus: getValueBetweenTags(respXML, "ProdId Status"), // Extract the ProdId status attribute
+      ProdType: getValueBetweenTags(respXML, "ProdId Type"), // Extract the ProdId type attribute
     };
 
     const cntctDtl = {
-      Name: getValueBetweenTags(respXML, 'Name'),
-      Email: getValueBetweenTags(respXML, 'Email'),
-      Phone: getValueBetweenTags(respXML, 'Phone'),
+      Name: getValueBetweenTags(respXML, "Name"),
+      Email: getValueBetweenTags(respXML, "Email"),
+      Phone: getValueBetweenTags(respXML, "Phone"),
     };
 
     // Combine into one response object
@@ -100,7 +108,10 @@ const convertXMLToJSON = (xml) => {
     });
   }
 
-  return { ActionStatus: getValueBetweenTags(xml, 'Xml ActionStatus'), Responses: responses };
+  return {
+    ActionStatus: getValueBetweenTags(xml, "Xml ActionStatus"),
+    Responses: responses,
+  };
 };
 
 // // Fetch and Save Data Function
@@ -173,7 +184,8 @@ const convertXMLToJSON = (xml) => {
 // setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 <minutes></minutes>
 const fetchDataAndSave = async () => {
   try {
-    const url = 'https://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/';
+    const url =
+      "https://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/";
     const xmlRequest = `<?xml version='1.0'?><query><user_name>onenirvana</user_name><pswd>onerealty@123</pswd><start_date>${formattedStartDate}</start_date><end_date>${formattedEndDate}</end_date></query>`;
 
     // Make the API request
@@ -181,7 +193,7 @@ const fetchDataAndSave = async () => {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
 
-    console.log('API Response:', response.data);
+    console.log("API Response:", response.data);
 
     // Convert the XML response to JSON
     const jsonResponse = convertXMLToJSON(response.data);
@@ -189,13 +201,14 @@ const fetchDataAndSave = async () => {
 
     // Check if there are any responses to save
     if (jsonResponse.Responses.length === 0) {
-      console.log('No responses to save.');
+      console.log("No responses to save.");
       return;
     }
 
     // Sequentially insert data into the database
     for (const response of jsonResponse.Responses) {
-      const { QueryId, ProjName, CityName, QryInfo, RcvdOn } = response.QueryDetails;
+      const { QueryId, ProjName, CityName, QryInfo, RcvdOn } =
+        response.QueryDetails;
       const { Name, Email, Phone } = response.ContactDetails;
 
       // Check if the entry already exists
@@ -240,9 +253,8 @@ const fetchDataAndSave = async () => {
         });
       });
     }
-
   } catch (error) {
-    console.error('Error fetching and saving 99Acres responses:', error);
+    console.error("Error fetching and saving 99Acres responses:", error);
   }
 };
 

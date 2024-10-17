@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { styled } from "styled-components";
+import MainHeader from "../../components/MainHeader";
+import EmployeeeSider from "../../components/EmployeeModule/EmployeeSider";
 
 function Reviews({ handleClose }) {
   const { id } = useParams();
@@ -200,91 +202,93 @@ function Reviews({ handleClose }) {
 
   return (
     <>
-      <Wrapper>
-        <div className="container mx-auto p-4">
-          <Link
-            to={`/final-quotation/${id}`}
-            className="btn btn-success mx-1 mt-3 mb-2 bg-green-600 text-white hover:bg-green-700 rounded py-2 px-4 inline-flex items-center"
-          >
-            <i className="bi bi-arrow-return-left mx-1"></i> Back
-          </Link>
+      <MainHeader />
+      <EmployeeeSider />
+      <div className="flex flex-col 2xl:ml-44 mt-14 max-w-7xl">
+        {/* <Link
+          to={`/final-quotation/${id}`}
+          className="btn btn-success mx-1 mt-3 mb-2 bg-green-600 text-white hover:bg-green-700 rounded py-2 px-4 inline-flex items-center"
+        >
+          <i className="bi bi-arrow-return-left mx-1"></i> Back
+        </Link> */}
 
-          <div className="mt-4">
-            {/* Example: Display date if needed */}
-            {/* <p className="text-sm font-medium">Date: {moment(quotationDate).format('DD/MM/YYYY')}</p> */}
+        <div className="mt-4">
+          {/* Example: Display date if needed */}
+          {/* <p className="text-sm font-medium">Date: {moment(quotationDate).format('DD/MM/YYYY')}</p> */}
 
-            {renderPaidServices()}
-            {renderComplimentaryServices()}
+          {renderPaidServices()}
+          {renderComplimentaryServices()}
 
-            <div className="mt-6">
-              <h5 className="text-lg font-semibold mb-3">Notes:</h5>
-              <ul className="list-disc pl-5">
-                {notes.map((note) => (
-                  <li key={note.id} className="mb-2">
-                    <p>{note.note_text}</p>
-                    {note.additional_info && (
-                      <p className="text-gray-600">{note.additional_info}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="mt-6">
+            <h5 className="text-lg font-semibold mb-3">Notes:</h5>
+            <ul className="list-disc pl-5">
+              {notes.map((note) => (
+                <li key={note.id} className="mb-2">
+                  <p>{note.note_text}</p>
+                  {note.additional_info && (
+                    <p className="text-gray-600">{note.additional_info}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
+        </div>
 
-          {/* Example: Add footer or any additional content if needed */}
-          {/* <div className="mt-6">
+        {/* Example: Add footer or any additional content if needed */}
+        {/* <div className="mt-6">
           <Footer />
         </div> */}
 
+        <button>
           <Link
             to={`/final-quotation/${id}`}
             className="btn btn-success mx-1 mt-3 mb-2 bg-green-600 text-white hover:bg-green-700 rounded py-2 px-4 inline-flex items-center"
           >
             <i className="bi bi-arrow-return-left mx-1"></i> Back
           </Link>
-        </div>
-      </Wrapper>
+        </button>
+      </div>
     </>
   );
 }
 
 export default Reviews;
 const Wrapper = styled.div`
-  th {
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
-  .table {
-    border: black;
-  }
-  .th {
-    font-weight: bold;
-    font-size: 1.2rem;
-  }
-  li {
-    font-weight: bold;
-    font-size: 1rem;
-  }
+  // th {
+  //   font-weight: bold;
+  //   font-size: 1.2rem;
+  // }
+  // .table {
+  //   border: black;
+  // }
+  // .th {
+  //   font-weight: bold;
+  //   font-size: 1.2rem;
+  // }
+  // li {
+  //   font-weight: bold;
+  //   font-size: 1rem;
+  // }
 
-  .btn-print {
-    @media print {
-      display: none;
-    }
-  }
-  .no-print {
-    display: none;
+  // .btn-print {
+  //   @media print {
+  //     display: none;
+  //   }
+  // }
+  // .no-print {
+  //   display: none;
 
-    @media print {
-      display: block;
-    }
-  }
+  //   @media print {
+  //     display: block;
+  //   }
+  // }
 
-  .footimage {
-    @media print {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-  }
+  // .footimage {
+  //   @media print {
+  //     position: fixed;
+  //     bottom: 0;
+  //     left: 0;
+  //     right: 0;
+  //   }
+  // }
 `;

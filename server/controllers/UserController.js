@@ -68,7 +68,7 @@ const JWT = require("jsonwebtoken");
 const Quotation = async (req, res) => {
   try {
     const { quotation_name, services } = req.body;
-    const { employeeId, employee_name } = req.body; // Assuming employeeId is retrieved from the authenticated user
+    const { employeeId, employee_name, lead_id } = req.body; // Assuming employeeId is retrieved from the authenticated user
 
     if (!quotation_name || !services || services.length === 0) {
       return res
@@ -78,11 +78,11 @@ const Quotation = async (req, res) => {
 
     // Insert quotation with employeeId
     const sqlQuotation =
-      "INSERT INTO quotations_data (quotation_name, employeeId, employee_name) VALUES (?, ?,?)";
+      "INSERT INTO quotations_data (quotation_name, employeeId, employee_name, lead_id) VALUES (?, ?,?, ?)";
     const resultQuotation = await new Promise((resolve, reject) => {
       db.query(
         sqlQuotation,
-        [quotation_name, employeeId, employee_name],
+        [quotation_name, employeeId, employee_name, lead_id],
         (err, result) => {
           if (err) {
             reject(err);
@@ -252,8 +252,6 @@ const GetQuotation = async (req, res) => {
   }
 };
 
-
-
 const getAllQuotation = async (req, res) => {
   try {
     const sql = "SELECT * FROM quotations_data";
@@ -355,7 +353,8 @@ const CopyQuotationData = async (req, res) => {
     });
 
     // Check if the quotation data exists
-    if (!quotation) {
+    console.log(quotation);
+        if (!quotation) {
       return res.status(404).json({ error: "Quotation not found" });
     }
 

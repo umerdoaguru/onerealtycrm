@@ -65,6 +65,7 @@ import FinalQuotationByLeads from "./../components/EmployeeModule/QuotationByLea
 import EmployeeVisitData from "../components/EmployeeModule/EmployeeDataExport/EmployeeVisitData";
 import VisitTable from "../components/EmployeeModule/VisitTable";
 import CloseTable from "../components/EmployeeModule/CloseTable";
+import ViewAllQuotationsByLead from "../components/Leads/ViewAllQuotationsByLead";
 
 function EmployeeRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -160,6 +161,10 @@ function EmployeeRoutes() {
           <Route
             path="/employee-lead-single-data/:id"
             element={<Employee_Single_Lead_Profile />}
+          />
+          <Route
+            path="/View_quotations/:id"
+            element={<ViewAllQuotationsByLead />}
           />
 
           <Route path="/overview" element={<Overview />} />
