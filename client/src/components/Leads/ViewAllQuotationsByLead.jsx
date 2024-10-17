@@ -1,525 +1,206 @@
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import img from "../../images/lead_profile.png";
+import { useSelector } from "react-redux";
+import ReactPaginate from "react-paginate";
 import MainHeader from "../MainHeader";
-import Sider from "../Sider";
 import EmployeeeSider from "../EmployeeModule/EmployeeSider";
-import cogoToast from "cogo-toast";
-import UpdateLeadField from "../EmployeeModule/updateLeadField";
 
-const ViewAllQuotationsByLead = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [leads, setLeads] = useState([]);
-
-  const [quotationCreated, setQuotationCreated] = useState(false);
-
-  // const leads = [{ /* lead data */ }];
-
-  const fieldConfig = [
-    {
-      name: "lead_status",
-      label: "Lead Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Lead Status" },
-        { value: "pending", label: "Pending" },
-        { value: "in progress", label: "In Progress" },
-        { value: "completed", label: "Completed" },
-      ],
-    },
-    {
-      name: "quotation_status",
-      label: "Quotation Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Quotation Status" },
-        { value: "pending", label: "Pending" },
-        { value: "in progress", label: "In Progress" },
-        { value: "approved", label: "Aprroved" },
-        { value: "not approved", label: "Not Aprroved" },
-      ],
-    },
-    {
-      name: "invoice_status",
-      label: "Invoice Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Invoice Status" },
-        { value: "pending", label: "Pending" },
-        { value: "in progress", label: "In Progress" },
-        { value: "approved", label: "Aprroved" },
-        { value: "not approved", label: "Not Aprroved" },
-      ],
-    },
-    {
-      name: "deal_status",
-      label: "Deal Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Deal Status" },
-        { value: "pending", label: "Pending" },
-        { value: "crack", label: "Crack" },
-        { value: "not crack", label: "Not Crack" },
-      ],
-    },
-    {
-      name: "reason",
-      label: "Reason",
-      type: "textarea",
-    },
-
-    {
-      name: "follow_up_status",
-      label: "Follow Up Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Follow Up Status" },
-        { value: "pending", label: "Pending" },
-        { value: "in progress", label: "In Progress" },
-        { value: "done", label: "Done" },
-      ],
-    },
-  ];
-
-  const [currentLead, setCurrentLead] = useState({
-    lead_status: "",
-    quotation_status: "",
-    invoice_status: "",
-    deal_status: "",
-    reason: "",
-
-    follow_up_status: "",
-  });
-  const [showPopup, setShowPopup] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+const EmployeeQuotationList = () => {
+  const [quotations, setQuotations] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage] = useState(10); // Number of items per page
+  const [filterText, setFilterText] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
   const [render, setRender] = useState(false);
+  const {id} = useParams();
 
   useEffect(() => {
-    fetchLeads();
-  }, [id]);
-  // const fetchLeads = async () => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
-  //     setLeads(response.data);
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.error("Error fetching quotations:", error);
-  //   }
-  // };
-
-  const fetchLeads = async () => {
-    try {
-      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
-      setLeads(response.data);
-
-      // Debugging: Log the exact value of the quotation field
-      response.data.forEach((lead) => {
-        console.log("Lead Quotation Status (raw):", lead.quotation);
-      });
-
-      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
-      const hasCreatedQuotation = response.data.some(
-        (lead) =>
-          lead.quotation && lead.quotation.trim().toLowerCase() === "created"
-      );
-
-      console.log(
-        "Has created quotation (normalized check)?",
-        hasCreatedQuotation
-      ); // Debugging
-      setQuotationCreated(hasCreatedQuotation);
-    } catch (error) {
-      console.error("Error fetching quotations:", error);
-    }
-  };
-  const handleBackClick = () => {
-    navigate(-1); // -1 navigates to the previous page in history
-  };
-  const handleQuotation = async (lead) => {
-    const name = lead.name;
-    navigate(`/quotation-by-lead/${lead.lead_id}`, { state: { name } });
-  };
-
-  const handleViewQuotation = (lead) => {
-    console.log("Lead Object:", lead); // Log the lead object
-    const name = lead.name;
-    console.log("Lead Name:", name); // Log the name
-    navigate(`/View_quotations/${lead.lead_id}`);
-    // navigate(`/View_quotations`);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCurrentLead((prevLead) => ({
-      ...prevLead,
-      [name]: value,
-    }));
-  };
-
-  const handleUpdate = (lead) => {
-    setIsEditing(true);
-    setCurrentLead(lead);
-    setShowPopup(true);
-  };
-
-  const saveChanges = async () => {
-    try {
-      // Send updated data to the backend using Axios
-      const response = await axios.put(
-        `http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`,
-        currentLead
-      );
-
-      if (response.status === 200) {
-        console.log("Updated successfully:", response.data);
-        cogoToast.success("Lead status updated successfully");
-        setRender(!render);
-        closePopup(); // Close the popup on success
-        fetchLeads();
-      } else {
-        console.error("Error updating:", response.data);
-        cogoToast.error({ general: "Failed to update the lead status." });
+    const fetchQuotations = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/api/get-quotation-byLead/${id}`
+        );
+        setQuotations(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching quotations:", error);
       }
-    } catch (error) {
-      console.error("Request failed:", error);
-      cogoToast.error("Failed to update the lead status.");
+    };
+
+    fetchQuotations();
+  }, [id]);
+
+  const handleDelete = async (id) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this quotation?"
+    );
+    if (isConfirmed) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:9000/api/quotation/${id}`
+        );
+        if (response.status === 200) {
+          console.log("Quotation deleted successfully");
+          // window.location.reload();
+          setRender(!render);
+        }
+      } catch (error) {
+        console.error("Error deleting quotation:", error);
+      }
     }
   };
 
-  const closePopup = () => {
-    setShowPopup(false);
+  const handleCopyQuotation = async (quotationId) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:9000/api/copy-quotation/${quotationId}`
+      );
+      console.log(response.data.message);
+      // window.location.reload();
+      setRender(!render);
+    } catch (error) {
+      console.error("Error copying quotation:", error);
+    }
   };
+
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const handleFilterChange = (event) => {
+    setFilterText(event.target.value);
+  };
+
+  const handleSortChange = () => {
+    setSortAsc(!sortAsc);
+  };
+
+  const filteredQuotations = quotations.filter((quotation) =>
+    quotation.quotation_name.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  const offset = currentPage * itemsPerPage;
+  const currentQuotations = filteredQuotations.slice(
+    offset,
+    offset + itemsPerPage
+  );
+  const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
+
+    useEffect(() => {
+      setRender(!render);
+    }, [render]);
 
   return (
     <>
-      <MainHeader />
-      <EmployeeeSider />
-      <div className="flex flex-col 2xl:ml-44 mt-2">
-        <div className="container mt-5 px-2 mx-auto p-4">
-          <h1 className="text-2xl text-center mt-[2rem]">All Quotations</h1>
-          <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-          {/* <div className="flex flex-wrap mb-4">
-            <div className="w-full lg:w-1/3">
-              <img src={img} alt="doctor-profile" className=" rounded-lg" />
-            </div>
-            {leads.map((lead, index) => (
-              <div className="w-full lg:w-2/3 ">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                  <div>
-                    <label className="text-info">Lead Number</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0">{lead.lead_no}</p>
-                    </div>
-                  </div>
+    <MainHeader />
+    <EmployeeeSider />
+    <div className="container mt-4">
+      <div className="w-full px-2 mx-auto p-4">
 
-                  <div>
-                    <label className="text-info">Name</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0 break-words">{lead.name}</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-info">Assigned To</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0">{lead.assignedTo}</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-info">Mobile Number</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0">{lead.phone}</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-info">Lead Source</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0">{lead.leadSource}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-info">Subject</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0">{lead.subject}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-info">Lead Status</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0">{lead.lead_status}</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-info">Created Date</label>
-                    <div className="p-2 bg-gray-100 rounded">
-                      <p className="m-0">
-                        {moment(lead.createdTime).format("DD/MM/YYYY")}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div> */}
-
-          {/* <div className=" flex justify-between">
-            <button
-              onClick={() => handleQuotation(leads[0])}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Quotation Creation
-            </button>
-
-           
-            {quotationCreated ? (
-              <button
-                onClick={() => handleViewQuotation(leads[0])}
-                className="bg-green-500 text-white px-4 py-2 rounded"
-              >
-                View Quotation
-              </button>
-            ) : (
-              <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
-                Quotation not yet created
-              </p>
-            )}
-          </div> */}
-
-          <div className="overflow-x-auto mt-5">
-            <table className="min-w-full bg-white border">
-              <thead>
+        <div className="w-full px-2 mt-4">
+          <h2 className="text-2xl font-bold mb-4 text-center">All Leads Quotation</h2>
+          <div className="">
+            <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+              <thead className="bg-gray-100">
                 <tr>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Assigned To
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Quotation
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Quotation Name
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
-                    Quotation Status
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Created Date
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Invoice
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
-                    Invoice Status
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
-                    Deal Status
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
-                    Reason
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
-                    Follow Up Status
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Lead Status
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {leads.map((lead, index) => (
-                  <tr
-                    key={lead.id}
-                    className={index % 2 === 0 ? "bg-gray-100" : ""}
-                  >
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.name}
+              <tbody className="bg-white divide-y divide-gray-200">
+                {currentQuotations.map((quotation, index) => (
+                  <tr key={quotation.quotation_id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {offset + index + 1}
                     </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.assignedTo}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {quotation.quotation_name}
                     </td>
-
-                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
-                      {lead.quotation}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {moment(quotation.created_date).format("DD/MM/YYYY")}
                     </td>
-
-                    {lead.quotation_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
-
-                    {lead.quotation_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
-                    {lead.quotation_status === "approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
-                    {lead.quotation_status === "not approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
-
-                    <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
-                      {lead.invoice}
-                    </td>
-
-                    {lead.invoice_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.invoice_status}
-                      </td>
-                    )}
-
-                    {lead.invoice_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.invoice_status}
-                      </td>
-                    )}
-                    {lead.invoice_status === "approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.invoice_status}
-                      </td>
-                    )}
-                    {lead.invoice_status === "not approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
-                        {lead.invoice_status}
-                      </td>
-                    )}
-
-                    {lead.deal_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.deal_status}
-                      </td>
-                    )}
-
-                    {lead.deal_status === "crack" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.deal_status}
-                      </td>
-                    )}
-                    {lead.deal_status === "not crack" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[blue]">
-                        {lead.deal_status}
-                      </td>
-                    )}
-
-                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-gray-800">
-                      {lead.reason}
-                    </td>
-
-                    {lead.lead_working_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.lead_working_status}
-                      </td>
-                    )}
-                    {lead.lead_working_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[yellow]">
-                        {lead.lead_working_status}
-                      </td>
-                    )}
-                    {lead.lead_working_status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.lead_working_status}
-                      </td>
-                    )}
-
-                    {lead.follow_up_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.follow_up_status}
-                      </td>
-                    )}
-
-                    {lead.follow_up_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[yellow]">
-                        {lead.follow_up_status}
-                      </td>
-                    )}
-                    {lead.follow_up_status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.follow_up_status}
-                      </td>
-                    )}
-                    {lead.lead_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-
-                    {lead.lead_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-                    {lead.lead_status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-gray-800">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Link to={`/final-quotation/${quotation.quotation_id}`}>
+                        <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded m-1">
+                          View
+                        </button>
+                      </Link>
                       <button
-                        className="text-blue-500 hover:text-blue-700"
-                        onClick={() => handleUpdate(lead)}
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
+                        onClick={() => handleDelete(quotation.quotation_id)}
                       >
-                        Update
+                        Delete
                       </button>
+                      <Link
+                        to={`/update-quotation-name/${quotation.quotation_id}`}
+                      >
+                        <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1">
+                          Edit
+                        </button>
+                      </Link>
+                      {/* <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded m-1"
+                        onClick={() =>
+                          handleCopyQuotation(quotation.quotation_id)
+                        }
+                      >
+                        Copy
+                      </button> */}
+                      <Link to={`/quotation-invoice/${quotation.quotation_id}`}>
+                        <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded m-1">
+                          Invoice
+                        </button>
+                      </Link>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <ReactPaginate
+              previousLabel={"previous"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={"flex justify-center space-x-2 mt-4"}
+              pageClassName={"bg-white border border-gray-300 rounded-md"}
+              pageLinkClassName={
+                "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
+              }
+              previousClassName={"bg-white border border-gray-300 rounded-md"}
+              previousLinkClassName={
+                "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
+              }
+              nextClassName={"bg-white border border-gray-300 rounded-md"}
+              nextLinkClassName={
+                "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
+              }
+              breakClassName={"bg-white border border-gray-300 rounded-md"}
+              breakLinkClassName={
+                "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
+              }
+              activeClassName={"bg-gray-200"}
+            />
           </div>
-          {showPopup && (
-            <div className=" fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-              <div className="w-75 bg-white p-6 rounded-lg shadow-lg max-h-[100vh] overflow-auto mx-4 my-5">
-                <h2 className="text-xl font-semibold mb-4">
-                  {isEditing ? "Update Status" : ""}
-                </h2>
-
-                {/* Render Form Fields */}
-                {fieldConfig.map((field) => (
-                  <UpdateLeadField
-                    key={field.name}
-                    field={field}
-                    value={currentLead[field.name]}
-                    onChange={handleInputChange}
-                  />
-                ))}
-
-                {/* Save and Cancel Buttons */}
-                <div className="flex justify-end">
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                    onClick={saveChanges}
-                  >
-                    Save
-                  </button>
-                  <button
-                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
-                    onClick={closePopup}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
+      </div>
       </div>
     </>
   );
 };
 
-export default ViewAllQuotationsByLead;
+export default EmployeeQuotationList;

@@ -287,6 +287,28 @@ const getAllEmployeeTotalLeads = async (req, res) => {
     });
   }
 };
+const getLeadQuotation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sql = "SELECT * FROM quotations_data WHERE lead_id = ?";
+
+    const result = await new Promise((resolve, reject) => {
+      db.query(sql, [id], (err, results) => {
+        if (err) {
+          reject(err); // Reject the promise with the error
+        } else {
+          resolve(results); // Resolve the promise with the results
+        }
+      });
+    });
+
+    // Send the result as a response
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Database query error:", err); // Log the error for debugging
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
+};
 
 module.exports = {
   getEmployeeInvoice,
@@ -297,4 +319,6 @@ module.exports = {
   updateOnlyLeadStatus,
   updateOnlyQuotationStatus,
   getAllEmployeeTotalLeads,
+  getLeadQuotation,
 };
+ 

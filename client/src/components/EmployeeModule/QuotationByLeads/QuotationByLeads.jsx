@@ -124,6 +124,7 @@ const QuotationByLeads = () => {
         services: servicesToSave,
         // employeeId: userId,
         employeeId: EmpId,
+        lead_id: id,
         employee_name: EmpName,
       });
 

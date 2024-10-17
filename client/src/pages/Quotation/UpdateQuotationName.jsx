@@ -117,7 +117,7 @@ const UpdateQuotationName = () => {
       );
       if (response.status === 200) {
         setMessage(response.data.message);
-        navigate("/quotationlist");
+        navigate(-1);
       } else {
         setMessage(response.data.error || "Failed to update quotation name");
       }
@@ -129,7 +129,7 @@ const UpdateQuotationName = () => {
 
   const handleClose = () => {
     setShowModal(false);
-    navigate("/quotationlist");
+    navigate(-1);
   };
 
   return (
