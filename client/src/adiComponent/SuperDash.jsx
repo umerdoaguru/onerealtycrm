@@ -13,6 +13,7 @@ import LeadsGraph from "./LeadsGraph";
 import QuotationGraph from "./QuotationGraph";
 import SuperAdminSider from "./Super-Admin/SuperAdminSider";
 import SuperHeader from "./Super-Admin/SuperHeader";
+import DealGraph from "./dealGraph";
 
 const SuperDash = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,13 +33,16 @@ const SuperDash = () => {
       <SuperAdminSider />
       {/* <SuperHeader /> */}
 
+<div className="container">
+  
       <h1 className="text-2xl text-center mt-[5rem] font-medium">
         Super Admin Dashboard
       </h1>
       <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       <div className="flex min-h-screen overflow-hidden ">
         {/* Main Content */}
-        <div className="flex-1 max-w-full lg:ml-64 xl:ml-52 mr-3 ">
+        {/* <div className="flex-1 max-w-full lg:ml-64 xl:ml-52 mr-3 "> */}
+        <div className="flex-1 max-w-full mr-3 ">
           {/* Hamburger Menu Button for Mobile */}
           {/* <div className="p-4 lg:hidden">
                     <button onClick={toggleSidebar} className="text-2xl">
@@ -50,14 +54,16 @@ const SuperDash = () => {
           <div>
             <Overview />
           </div>
-          <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
             <Invoice />
             <LeadsGraph />
+            <DealGraph />
           </div>
 
           <LeadsReport />
           {/* <ToDoList /> */}
         </div>
+      </div>
       </div>
     </>
   );

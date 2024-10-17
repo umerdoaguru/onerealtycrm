@@ -77,7 +77,7 @@ const Overview2 = () => {
   return (
     <>
       <div className="flex flex-wrap justify-around mt-5">
-        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3  ">
+        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
           <Link to="/super-admin-total-lead">
             <div
               className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600 border-1" // Change background color if active
@@ -142,6 +142,7 @@ const Overview2 = () => {
             </div>
           </Link>
         </div>
+        
       </div>
     </>
   );

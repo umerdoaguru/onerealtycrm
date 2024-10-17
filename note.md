@@ -8,3 +8,6 @@
 7. responsive karna hai poora ka poora
 8. mujhe jitni table bani hai usme dekhna padega ki field kitni hai
 9. mjhgf
+- > routes mai se dekhe to 2 comoent bas bache hai and report mai bhi
+8. mujhe jitni table bani hai usme dekhna padega ki field kitni hai 
+9. 
