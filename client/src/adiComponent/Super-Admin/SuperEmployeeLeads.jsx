@@ -49,7 +49,7 @@ function SuperEmployeeLeads() {
     let filtered = leads;
     console.log(filtered);
     // Filter by search term
-    if (searchTerm) {
+    if (searchTerm) { 
       filtered = filtered.filter(
         (lead) =>
           lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -115,13 +115,21 @@ function SuperEmployeeLeads() {
       <Wrapper>
         <div className="container mt-16">
           <div className="main">
-            <h1 className="text-2xl text-center mt-[5rem]">
+            <div>
+            <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
+          >
+            Back
+          </button>
+            <h1 className="text-2xl text-center">
               Leads Management{" "}
             </h1>
+            </div>
             <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
             {/* Button to create a new lead */}
-            <div className="grid grid-cols-5 gap-4 mb-4">
+            <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
                 <input

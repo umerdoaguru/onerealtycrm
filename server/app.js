@@ -168,9 +168,9 @@ const fetchDataAndSave = async () => {
 };
 
 
-fetchDataAndSave();
+// fetchDataAndSave();
 // Fetch data every 10 minutes
-setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 <minutes></minutes>
+// setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 <minutes></minutes>
 
 const PORT = process.env.PORT;
 
