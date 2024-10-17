@@ -152,7 +152,7 @@ const SuperAdEmployeemanagement = () => {
   };
 
   const handleEmployeeClick = (employeeId) => {
-    navigate(`/employee-single/${employeeId}`); 
+    navigate(`/super-admin-employee-single/${employeeId}`); 
   };
 
   return (

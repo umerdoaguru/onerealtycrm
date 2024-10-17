@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { BsHouse, BsFileEarmarkPerson } from "react-icons/bs";
-import { FaHistory } from "react-icons/fa";
+import { FaHistory, FaUserCircle } from "react-icons/fa";
 import { RiSecurePaymentLine } from "react-icons/ri";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
@@ -145,6 +145,18 @@ const SuperAdminSider = () => {
                 <MdOutlineManageAccounts className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
                   Admin Management
+                </h3>
+              </Link>
+            </li>
+            <hr className="w-full border-gray-400" />
+            <li className={`w-full ${getSidebarClass("/super-admin-profile")}`}>
+              <Link
+                to="/super-admin-profile"
+                className="flex flex-col items-center py-3"
+              >
+                <FaUserCircle className="text-white text-2xl md:text-3xl" />
+                <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
+                  Super Admin Profile
                 </h3>
               </Link>
             </li>
