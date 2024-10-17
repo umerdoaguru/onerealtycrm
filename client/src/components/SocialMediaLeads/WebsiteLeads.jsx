@@ -90,6 +90,7 @@ function WebsiteLeads() {
         phone: selectedLead.phoneNumber,
         leadSource: "One Realty Website",
         subject: selectedLead.subject,
+        address: selectedLead.address,
       });
       fetchLeads();
       fetchLeadassigned();
@@ -105,6 +106,7 @@ function WebsiteLeads() {
       fullName: lead.name,
       phoneNumber: lead.mobile_no,
       subject: lead.subject,
+      address: lead.address,
       date: moment(lead.created_date).format("YYYY-MM-DD"),
     });
     setShowPopup(true);
@@ -156,6 +158,9 @@ console.log("Assigned Leads:", websiteleadsAssigned);
                   Subject
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                 Address
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                   Created Time
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
@@ -175,6 +180,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.email}</td>
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.mobile_no}</td>
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.address}</td>
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
       {moment(lead.created_date).format('DD-MM-YYYY')}
     </td>
@@ -301,6 +307,18 @@ console.log("Assigned Leads:", websiteleadsAssigned);
                 disabled
               />
             </div>
+            <div className="mb-4">
+                  <label className="block text-gray-700">Address</label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={selectedLead.address}
+                    onChange={handleInputChange}
+                    className={`w-full px-3 py-2 border rounded`}
+                    disabled
+                  />
+                  
+                </div>
             <div className="mb-4">
               <label className="block text-gray-700">Date</label>
               <input

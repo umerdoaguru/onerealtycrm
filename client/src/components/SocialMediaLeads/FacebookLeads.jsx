@@ -116,6 +116,7 @@ const FacebookLeads = () => {
         phone:  selectedLead.phoneNumber,   
         leadSource: "Facebook Campaign", 
         subject:  formName, 
+        address:selectedLead.address,
       });
       fetchLeads(); // Refresh the list
       fetchLeadassigned();
@@ -132,6 +133,7 @@ const FacebookLeads = () => {
       leadId: lead.id,
      
       fullName: extractFieldValue(lead.field_data, "full_name"),
+      address: extractFieldValue(lead.field_data, "street_address"),
       phoneNumber: extractFieldValue(lead.field_data, "phone_number"),
       date: moment(lead.created_time).format("YYYY-MM-DD"), // Format the createdTime
     });
@@ -335,6 +337,18 @@ const FacebookLeads = () => {
                 disabled
               />
             </div>
+            <div className="mb-4">
+                  <label className="block text-gray-700">Address</label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={selectedLead.address}
+                    onChange={handleInputChange}
+                    className={`w-full px-3 py-2 border rounded`}
+                    disabled
+                  />
+                  
+                </div>
             <div className="mb-4">
               <label className="block text-gray-700">Date</label>
               <input

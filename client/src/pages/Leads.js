@@ -22,6 +22,7 @@ function Leads() {
     phone: "",
     leadSource: "",
     subject: "",
+    address: "",
   });
   const [showPopup, setShowPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -77,6 +78,10 @@ function Leads() {
       formErrors.name = "Name is required";
       isValid = false;
     }
+    if (!currentLead.createdTime) {
+      formErrors.createdTime = "Date is required";
+      isValid = false;
+    }
 
     if (!currentLead.phone) {
       formErrors.phone = "Phone number is required";
@@ -92,6 +97,10 @@ function Leads() {
     }
     if (!currentLead.subject) {
       formErrors.subject = "Subject is required";
+      isValid = false;
+    }
+    if (!currentLead.address) {
+      formErrors.address = "Address is required";
       isValid = false;
     }
 
@@ -131,6 +140,7 @@ function Leads() {
       leadSource: "",
       createdTime: "", // Clear out createdTime for new lead
       subject: "",
+      address: "",
     });
     setShowPopup(true);
   };
@@ -191,7 +201,8 @@ function Leads() {
         (lead) =>
           lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
+          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())||
+          lead.address.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -246,7 +257,7 @@ function Leads() {
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
-                  placeholder="Search by Name, Lead No, Lead Source"
+                  placeholder="Search by Name, Lead No, Lead Source , Address"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
@@ -300,6 +311,9 @@ function Leads() {
                     Subject
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                    Address
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Lead Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
@@ -347,6 +361,9 @@ function Leads() {
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.subject}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      {lead.address}
                     </td>
                     {lead.lead_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
@@ -491,6 +508,9 @@ function Leads() {
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
                   />
+                {errors.createdTime && (
+                    <span className="text-red-500">{errors.createdTime}</span>
+                  )}
                 </div>
 
                 <div className="mb-4">
@@ -567,9 +587,27 @@ function Leads() {
                     value={currentLead.subject}
                     onChange={handleInputChange}
                     className={`w-full px-3 py-2 border ${
-                      errors.phone ? "border-red-500" : "border-gray-300"
+                      errors.subject ? "border-red-500" : "border-gray-300"
                     } rounded`}
                   />
+                {errors.subject && (
+                    <span className="text-red-500">{errors.subject}</span>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Address</label>
+                  <input
+                    type="text"
+                    name="address"
+                    value={currentLead.address}
+                    onChange={handleInputChange}
+                    className={`w-full px-3 py-2 border ${
+                      errors.address ? "border-red-500" : "border-gray-300"
+                    } rounded`}
+                  />
+                    {errors.address && (
+                    <span className="text-red-500">{errors.address}</span>
+                  )}
                 </div>
 
                 <div className="flex justify-end">

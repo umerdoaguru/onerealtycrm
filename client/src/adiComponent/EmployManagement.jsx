@@ -4,8 +4,8 @@ import { BsPencilSquare, BsTrash, BsPlusCircle } from "react-icons/bs";
 import Modal from "../adiComponent/Modal"; // Assuming you have a modal component
 import Sider from "../components/Sider";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import MainHeader from "../components/MainHeader";
-import SuperAdminSider from "./vinay/SuperAdminSider";
+import MainHeader from "../components/MainHeader"
+
 
 const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([]);
@@ -178,7 +178,7 @@ const EmployeeManagement = () => {
       <MainHeader />
       {/* <div className="flex"> */}
       {/* <Sider /> */}
-      <SuperAdminSider />
+      <Sider />
       <div className="flex flex-col lg:flex-row">
         {/* Main Content Area */}
         <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
