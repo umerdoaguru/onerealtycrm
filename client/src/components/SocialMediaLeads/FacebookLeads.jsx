@@ -1,4 +1,3 @@
-
 // export default FacebookLeads;
 
 import { useState, useEffect } from "react";
@@ -16,16 +15,16 @@ const FacebookLeads = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
+  const [formName, setFormName] = useState([]);
+
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
     employeeId: "",
   });
 
-   // Pagination state
-   const [currentPage, setCurrentPage] = useState(0);
-   const [leadsPerPage] = useState(10);
-
-
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [leadsPerPage] = useState(10);
 
   // Meta API Token
   const ACCESS_TOKEN =
@@ -36,12 +35,19 @@ const FacebookLeads = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(
-        `https://graph.facebook.com/v20.0/${formId}/leads?access_token=${ACCESS_TOKEN}`
-      );
-      const leadsData = response.data.data;
-      setLeads(leadsData); // Update local state with leads
-      console.log(leads);
+      // const response = await axios.get(
+      //   `https://graph.facebook.com/v20.0/${formId}/leads?access_token=${ACCESS_TOKEN}`
+      // );
+      const response = await axios.get(`https://graph.facebook.com/v20.0/${formId}?fields=name%2Cleads&access_token=${ACCESS_TOKEN}`);
+
+      // const leadsData = response.data.data;
+      // setLeads(leadsData); // Update local state with leads
+      // console.log(leads);
+      setLeads(response.data.leads?.data);
+  
+      
+      setFormName(response.data.name);
+    
       
       setLoading(false);
     } catch (err) {
@@ -63,15 +69,11 @@ const FacebookLeads = () => {
       const response = await axios.get("http://localhost:9000/api/leads");
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
-      
     } catch (error) {
       console.error("Error fetching employees:", error);
     }
   };
-  
 
-  
-  
   useEffect(() => {
     fetchLeads();
     fetchEmployees();
@@ -100,7 +102,10 @@ const FacebookLeads = () => {
   };
 
   const saveChanges = async () => {
-
+    if (!currentLead.assignedTo) {
+      alert("Please assign the lead to an employee."); // Show an alert message
+      return; // Stop further execution if the field is empty
+    }
     try {
       await axios.post("http://localhost:9000/api/leads", {
         lead_no:  selectedLead.leadId,    
@@ -110,10 +115,10 @@ const FacebookLeads = () => {
         name: selectedLead.fullName,         
         phone:  selectedLead.phoneNumber,   
         leadSource: "Facebook Campaign", 
-        subject:  'Query', 
+        subject:  formName, 
       });
       fetchLeads(); // Refresh the list
-    fetchLeadassigned();
+      fetchLeadassigned();
 
       closePopup();
     } catch (error) {
@@ -125,6 +130,7 @@ const FacebookLeads = () => {
     console.log(lead);
     setSelectedLead({
       leadId: lead.id,
+     
       fullName: extractFieldValue(lead.field_data, "full_name"),
       phoneNumber: extractFieldValue(lead.field_data, "phone_number"),
       date: moment(lead.created_time).format("YYYY-MM-DD"), // Format the createdTime
@@ -142,18 +148,14 @@ const FacebookLeads = () => {
     setShowPopup(false);
     setSelectedLead(null);
   };
- // Pagination logic
- const indexOfLastLead = (currentPage + 1) * leadsPerPage;
- const indexOfFirstLead = indexOfLastLead - leadsPerPage;
- const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
 
- const handlePageClick = (data) => {
-   setCurrentPage(data.selected);
- };
-
-
-
-
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
 
   if (loading)
     return (
@@ -165,8 +167,6 @@ const FacebookLeads = () => {
     );
   if (error) return <div>{error}</div>;
 
-  
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl text-center font-bold mb-4">
@@ -176,21 +176,25 @@ const FacebookLeads = () => {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
+          <th colSpan="6" className='py-2 px-4 border-b"'>Ad Name : {formName}</th>
             <tr className="bg-gray-100">
-              <th className="py-2 px-4 border-b">Lead S.no</th> 
+              <th className="py-2 px-4 border-b">Lead S.no</th>
               <th className="py-2 px-4 border-b">Lead ID</th>
               <th className="py-2 px-4 border-b">Full Name</th>
               <th className="py-2 px-4 border-b">Phone Number</th>
               <th className="py-2 px-4 border-b">Address</th>
+              <th className="py-2 px-4 border-b">Subject</th>
               <th className="py-2 px-4 border-b">Date</th>
               <th className="py-2 px-4 border-b">Assign Lead</th>
             </tr>
           </thead>
           <tbody>
-          {currentLeads
+            {currentLeads
               .filter(
                 (lead) =>
-                  !leadsAssigned.some((assigned) => assigned.lead_no === lead.id)
+                  !leadsAssigned.some(
+                    (assigned) => assigned.lead_no === lead.id
+                  )
               )
               .map((lead, index) => (
                 <tr key={lead.id}>
@@ -205,6 +209,8 @@ const FacebookLeads = () => {
                   <td className="py-2 px-4 border-b">
                     {extractFieldValue(lead.field_data, "street_address")}
                   </td>
+                  <td className="py-2 px-4 border-b">{formName}</td>
+
                   <td className="py-2 px-4 border-b">
                     {new Date(lead.created_time).toLocaleString()}
                   </td>
@@ -218,7 +224,6 @@ const FacebookLeads = () => {
                   </td>
                 </tr>
               ))}
-
           </tbody>
         </table>
       </div>
@@ -324,7 +329,7 @@ const FacebookLeads = () => {
               <input
                 type="text"
                 name="subject"
-                value={"Query"}
+                value={formName}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-2 border  rounded`}
                 disabled
@@ -360,29 +365,28 @@ const FacebookLeads = () => {
         </div>
       )}
 
-       {/* Pagination */}
-       <div className="mt-4 flex justify-center">
-  <ReactPaginate
-    previousLabel={"Previous"}
-    nextLabel={"Next"}
-    breakLabel={"..."}
-    pageCount={Math.ceil(leads.length / leadsPerPage)}
-    marginPagesDisplayed={2}
-    pageRangeDisplayed={3}
-    onPageChange={handlePageClick}
-    containerClassName={"pagination"}
-    activeClassName={"active"}
-    pageClassName={"page-item"}
-    pageLinkClassName={"page-link"}
-    previousClassName={"page-item"}
-    nextClassName={"page-item"}
-    previousLinkClassName={"page-link"}
-    nextLinkClassName={"page-link"}
-    breakClassName={"page-item"}
-    breakLinkClassName={"page-link"}
-  />
-</div>
-
+      {/* Pagination */}
+      <div className="mt-4 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(leads.length / leadsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+      </div>
     </div>
   );
 };

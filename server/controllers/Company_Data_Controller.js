@@ -9,9 +9,8 @@ const CompanyDataUpload = async (req, res) => {
         .json({ error: "Logo , header_img and footer_img are required" });
     }
 
-    const { header_img, footer_img, logo,	digital_sign } = req.files;
+    const { header_img, footer_img, logo, digital_sign } = req.files;
     const {
-    
       company_name,
       company_name_account_name,
       company_name_account_ifsc,
@@ -22,8 +21,6 @@ const CompanyDataUpload = async (req, res) => {
       gst_no,
       pan_no,
       email_id,
-   
-     
     } = req.body;
 
     const headerImagePath =
@@ -31,7 +28,8 @@ const CompanyDataUpload = async (req, res) => {
     const footerImagePath =
       "http://localhost:9000/uploads/" + footer_img[0].filename;
     const logoImagePath = "http://localhost:9000/uploads/" + logo[0].filename;
-    const DigitalsignImagePath = "http://localhost:9000/uploads/" + digital_sign[0].filename;
+    const DigitalsignImagePath =
+      "http://localhost:9000/uploads/" + digital_sign[0].filename;
 
     // Insert header and footer images with the associated company_id
     const insertHeaderFooterImages = await new Promise((resolve, reject) => {
@@ -40,7 +38,7 @@ const CompanyDataUpload = async (req, res) => {
       const values = [
         headerImagePath,
         footerImagePath,
-     
+
         company_name,
         company_name_account_name,
         company_name_account_ifsc,
@@ -50,13 +48,11 @@ const CompanyDataUpload = async (req, res) => {
         moblie_no,
         gst_no,
         pan_no,
-   
+
         email_id,
         logoImagePath,
 
-        DigitalsignImagePath
-
-        
+        DigitalsignImagePath,
       ];
 
       db.query(sqlImages, values, (err, result) => {
@@ -68,12 +64,10 @@ const CompanyDataUpload = async (req, res) => {
       });
     });
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: " Company profile uploaded successfully",
-      });
+    res.status(201).json({
+      success: true,
+      message: " Company profile uploaded successfully",
+    });
   } catch (error) {
     console.error(
       "Error uploading company data and header/footer images:",
@@ -88,8 +82,7 @@ const company_name_header_footer = async (req, res) => {
     const { company_name } = req.body;
     console.log(company_name);
     const result = await new Promise((resolve, reject) => {
-      const sql =
-        "SELECT * FROM company_profile WHERE company_name = ?";
+      const sql = "SELECT * FROM company_profile WHERE company_name = ?";
       console.log(sql);
       db.query(sql, [company_name], (err, result) => {
         if (err) {
@@ -116,13 +109,12 @@ const company_name_header_footer = async (req, res) => {
   }
 };
 
-  const getcompany_name_data = async (req, res) => {
+const getcompany_name_data = async (req, res) => {
   try {
     const { company_name } = req.body;
     console.log(company_name);
     const result = await new Promise((resolve, reject) => {
-      const sql =
-        "SELECT * FROM  company_profile WHERE company_name = ?";
+      const sql = "SELECT * FROM  company_profile WHERE company_name = ?";
       console.log(sql);
       db.query(sql, [company_name], (err, result) => {
         if (err) {
@@ -168,10 +160,8 @@ const fetchcompanyname = async (req, res) => {
   }
 };
 
-
 const getCompanydata = async (req, res) => {
   try {
-
     const sql = "SELECT * FROM company_profile";
 
     const company_data = await new Promise((resolve, reject) => {
@@ -190,7 +180,6 @@ const getCompanydata = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 const deleteCompanydata = async (req, res) => {
   try {
@@ -234,9 +223,8 @@ const updateCompanyData = async (req, res) => {
         .json({ error: "Both header_img and footer_img are required" });
     }
 
-    const { header_img, footer_img, logo,	digital_sign } = req.files;
+    const { header_img, footer_img, logo, digital_sign } = req.files;
     const {
-     
       company_name,
       company_name_account_name,
       company_name_account_ifsc,
@@ -247,17 +235,15 @@ const updateCompanyData = async (req, res) => {
       gst_no,
       pan_no,
       email_id,
-    
-     
     } = req.body;
 
     const headerImagePath =
       "http://localhost:9000/uploads/" + header_img[0].filename;
     const footerImagePath =
       "http://localhost:9000/uploads/" + footer_img[0].filename;
-      const logoImagePath = "http://localhost:9000/uploads/" + logo[0].filename;
-      const DigitalsignImagePath = "http://localhost:9000/uploads/" + digital_sign[0].filename;
-  
+    const logoImagePath = "http://localhost:9000/uploads/" + logo[0].filename;
+    const DigitalsignImagePath =
+      "http://localhost:9000/uploads/" + digital_sign[0].filename;
 
     // Update header and footer images with the associated company_id
     const updateHeaderFooterImages = await new Promise((resolve, reject) => {
@@ -285,7 +271,7 @@ const updateCompanyData = async (req, res) => {
       const values = [
         headerImagePath,
         footerImagePath,
-     
+
         company_name,
         company_name_account_name,
         company_name_account_ifsc,
@@ -293,13 +279,12 @@ const updateCompanyData = async (req, res) => {
         bank,
         company_address,
         moblie_no,
-      gst_no,
-      pan_no,
+        gst_no,
+        pan_no,
         email_id,
         logoImagePath,
-      
-      
-        DigitalsignImagePath, 
+
+        DigitalsignImagePath,
         req.params.id,
       ];
 
@@ -312,12 +297,10 @@ const updateCompanyData = async (req, res) => {
       });
     });
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Header and Footer images updated successfully",
-      });
+    res.status(200).json({
+      success: true,
+      message: "Header and Footer images updated successfully",
+    });
   } catch (error) {
     console.error(
       "Error updating company data and header/footer images:",
@@ -327,8 +310,6 @@ const updateCompanyData = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   CompanyDataUpload,
   company_name_header_footer,
@@ -336,5 +317,5 @@ module.exports = {
   deleteCompanydata,
   updateCompanyData,
   getCompanydata,
-  getcompany_name_data
+  getcompany_name_data,
 };

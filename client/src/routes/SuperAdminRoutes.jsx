@@ -3,28 +3,24 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-
-
 import Leads from "../pages/Leads";
 
 import CreateCompanyProfile from "../pages/Quotation/CreateCompanyProfile";
 
-
 import EmployeeManagement from "../adiComponent/EmployManagement";
 
 import Reporting from "../adiComponent/Reporting";
-
 
 import QuotationList from "../pages/Quotation/QuotationList";
 import AdminQuotationVIew from "../pages/Quotation/AdminQuotationVIew";
 
 import SuperDash from "../adiComponent/SuperDash";
 import AdminManagement from "../adiComponent/AdminManagement";
-import SuperAdminLead from '../adiComponent/Super-Admin/SuperAdminLead';
+import SuperAdminLead from "../adiComponent/Super-Admin/SuperAdminLead";
 import SuperAdEmployeemanagement from "../adiComponent/Super-Admin/SuperAdEmployeemanagement";
 import SuperQuotationList from "../adiComponent/Super-Admin/SuperQuotationList";
 import SuperQuotationVIew from "../adiComponent/Super-Admin/SuperQuotationView";
-import SuperReports from './../adiComponent/Super-Admin/SuperReports';
+import SuperReports from "./../adiComponent/Super-Admin/SuperReports";
 import Super_Admin_Adminmanagement from "../adiComponent/Super-Admin/Super_Admin_AdminManagement";
 import Employee_Single_Lead_Profile from "../components/Leads/Employee_Single_Lead_Profile";
 import Single_Lead_Profile from "../components/Leads/Single_Lead_Profile";
@@ -53,13 +49,19 @@ function SuperAdminRoutes() {
         <Route path="/super-admin-employee-leads/:id" element={<SuperEmployeeLeads />} />
 {/*         
         <Route path="/super-admin-quotation-section" element={<CreateCompanyProfile />} /> */}
-        <Route path="/super-admin-quotationlist" element={<SuperQuotationList />} />
         <Route
-          path="/admin-view-quotation/:id"
-          element={<SuperQuotationVIew />} 
+          path="/super-admin-quotationlist"
+          element={<SuperQuotationList />}
+        />
+        <Route
+          path="/super-admin-view-quotation/:id"
+          element={<SuperQuotationVIew />}
         />
         <Route path="/super-admin-reporting" element={<SuperReports />} />
-        <Route path="/super-admin-lead-single-data/:id" element={  <Super_Single_Lead_Profile/>} />
+        <Route
+          path="/super-admin-lead-single-data/:id"
+          element={<Super_Single_Lead_Profile />}
+        />
 
         {/* <Route path="/" element={user? <Dashboard/> :<Landingpage/>} /> */}
         {/* <Route path="/admin-login" element={<AdminLogin/>} /> */}

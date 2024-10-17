@@ -224,7 +224,7 @@ function Leads() {
     <>
       <Header />
       <Sider />
-      <Wrapper>
+      <>
         <div className="container">
           <div className="main">
             <h1 className="text-2xl text-center mt-[5rem] font-medium">
@@ -274,7 +274,7 @@ function Leads() {
             </div>
           </div>
 
-          <div className="tt overflow-x-auto mt-4">
+          <div className=" overflow-x-auto mt-4 whitespace-nowrap  lg:w-[100%]">
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>
@@ -303,7 +303,7 @@ function Leads() {
                     Lead Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                     Status
+                    Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Visit
@@ -312,7 +312,7 @@ function Leads() {
                     Visit Date
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                 Date
+                    Date
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Action
@@ -381,7 +381,6 @@ function Leads() {
                       </td>
                     )}
 
-
                     {lead.visit === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
                         {lead.visit}
@@ -399,19 +398,15 @@ function Leads() {
                       </td>
                     )}
 
-                   
-
-{lead.visit_date === "pending" ? (
-  <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-    {lead.visit_date}
-  </td>
-) : (
-  <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-    {moment(lead.visit_date).format("DD-MM-YYYY")}
-  </td>
-)}
-
-
+                    {lead.visit_date === "pending" ? (
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
+                        {lead.visit_date}
+                      </td>
+                    ) : (
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
+                        {moment(lead.visit_date).format("DD-MM-YYYY")}
+                      </td>
+                    )}
 
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {moment(lead.createdTime).format("DD-MM-YYYY")}
@@ -549,8 +544,10 @@ function Leads() {
                     <option value="SEO">Search Engine Optimization</option>
                     <option value="Trade Shows">Trade Shows</option>
                     <option value="Facebook Campaign">Facebook Campaign</option>
-                    <option value="One Realty Website">One Realty Website</option>
-                    <option value="Affiliate Marketing">    
+                    <option value="One Realty Website">
+                      One Realty Website
+                    </option>
+                    <option value="Affiliate Marketing">
                       Affiliate Marketing
                     </option>
                     <option value="Direct Mail">Direct Mail</option>
@@ -614,25 +611,11 @@ function Leads() {
             />
           </div>
         </div>
-      </Wrapper>
+      </>
     </>
   );
 }
 
 export default Leads;
 
-const Wrapper = styled.div`
-  .tt {
-    white-space: nowrap;
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      width: 89%;
-      margin-left: 10rem;
-      white-space: nowrap;
-    }
-  }
-  .main {
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      margin-left: 10rem;
-    }
-  }
-`;
+

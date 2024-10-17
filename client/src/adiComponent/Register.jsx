@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import cogoToast from 'cogo-toast';
-import { Link, useNavigate } from 'react-router-dom';
-import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import React, { useState } from "react";
+import axios from "axios";
+import cogoToast from "cogo-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const Registration = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -28,7 +28,10 @@ const Registration = () => {
     }
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:9000/api/register", formData);
+      const res = await axios.post(
+        "http://localhost:9000/api/register",
+        formData
+      );
       setLoading(false);
       if (res.data.success) {
         cogoToast.success(res.data.message);
@@ -38,7 +41,7 @@ const Registration = () => {
       }
     } catch (error) {
       setLoading(false);
-      cogoToast.error(error?.response?.data?.error || 'An error occurred');
+      cogoToast.error(error?.response?.data?.error || "An error occurred");
     }
   };
 
@@ -53,10 +56,17 @@ const Registration = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h1 className="mb-6 text-2xl font-bold text-center text-gray-700">Register</h1>
+        <h1 className="mb-6 text-2xl font-bold text-center text-gray-700">
+          Register
+        </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Fullname</label>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Fullname
+            </label>
             <input
               type="text"
               id="name"
@@ -68,7 +78,12 @@ const Registration = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -80,7 +95,12 @@ const Registration = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
             <div className="relative mt-1">
               <input
                 type={showPassword ? "text" : "password"}
@@ -96,12 +116,21 @@ const Registration = () => {
                 className="absolute inset-y-0 right-0 flex items-center pr-3"
                 onClick={togglePasswordVisibility}
               >
-                {showPassword ? <AiFillEye className="text-gray-500" /> : <AiFillEyeInvisible className="text-gray-500" />}
+                {showPassword ? (
+                  <AiFillEye className="text-gray-500" />
+                ) : (
+                  <AiFillEyeInvisible className="text-gray-500" />
+                )}
               </button>
             </div>
           </div>
           <div className="mb-6">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Confirm Password
+            </label>
             <div className="relative mt-1">
               <input
                 type={showConfirmPassword ? "text" : "password"}
@@ -117,20 +146,28 @@ const Registration = () => {
                 className="absolute inset-y-0 right-0 flex items-center pr-3"
                 onClick={toggleConfirmPasswordVisibility}
               >
-                {showConfirmPassword ? <AiFillEye className="text-gray-500" /> : <AiFillEyeInvisible className="text-gray-500" />}
+                {showConfirmPassword ? (
+                  <AiFillEye className="text-gray-500" />
+                ) : (
+                  <AiFillEyeInvisible className="text-gray-500" />
+                )}
               </button>
             </div>
           </div>
           <button
             type="submit"
-            className={`w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={loading}
           >
-            {loading ? 'Loading...' : "Register"}
+            {loading ? "Loading..." : "Register"}
           </button>
           <p className="mt-4 text-sm text-center text-gray-600">
-            Already have an account?{' '}
-            <Link to="/login" className="text-blue-500 hover:text-blue-600">Login</Link>
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500 hover:text-blue-600">
+              Login
+            </Link>
           </p>
         </form>
       </div>

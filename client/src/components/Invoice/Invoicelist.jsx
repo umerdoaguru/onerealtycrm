@@ -21,8 +21,7 @@
 
 //     fetchinvoice();
 //   }, [UserId]);
-  
-   
+
 //   const handleDelete = async (id) => {
 //     // Display a confirmation dialog
 //     const isConfirmed = window.confirm(
@@ -87,7 +86,7 @@
 //                 <button className="btn btn-danger mx-sm-0 mx-lg-2 m-1" onClick={() => handleDelete(invoice.invoice_id)}>Delete</button>
 //                 <button className="btn btn-primary m-1" onClick={() => handleCopyInvoice(invoice.invoice_id)}>Copy</button>
 //                 </td>
-               
+
 //               </tr>
 //             ))}
 //           </tbody>
@@ -106,9 +105,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import moment from 'moment';
+import moment from "moment";
 import { useSelector } from "react-redux";
-import ReactPaginate from 'react-paginate';
+import ReactPaginate from "react-paginate";
 import MainHeader from "../MainHeader";
 import Sider from "../Sider";
 
@@ -117,12 +116,14 @@ const Invoicelist = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage] = useState(10); // Number of items per page
   const [filterText, setFilterText] = useState("");
-  const UserId = useSelector(state => state.auth.user.id);
+  const UserId = useSelector((state) => state.auth.user.id);
 
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
-        const response = await axios.get(`http://localhost:9000/api/invoice-data`);
+        const response = await axios.get(
+          `http://localhost:9000/api/invoice-data`
+        );
         setInvoices(response.data);
         console.log(response);
       } catch (error) {
@@ -134,10 +135,14 @@ const Invoicelist = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    const isConfirmed = window.confirm("Are you sure you want to delete this invoice?");
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this invoice?"
+    );
     if (isConfirmed) {
       try {
-        const response = await axios.delete(`http://localhost:9000/api/invoice/${id}`);
+        const response = await axios.delete(
+          `http://localhost:9000/api/invoice/${id}`
+        );
         if (response.status === 200) {
           console.log("Invoice deleted successfully");
           window.location.reload();
@@ -150,7 +155,9 @@ const Invoicelist = () => {
 
   const handleCopyInvoice = async (invoiceId) => {
     try {
-      const response = await axios.post(`http://localhost:9000/api/copy-invoice/${invoiceId}`);
+      const response = await axios.post(
+        `http://localhost:9000/api/copy-invoice/${invoiceId}`
+      );
       console.log(response.data.message);
       window.location.reload();
     } catch (error) {
@@ -166,7 +173,7 @@ const Invoicelist = () => {
     setFilterText(event.target.value);
   };
 
-  const filteredInvoices = invoices.filter(invoice =>
+  const filteredInvoices = invoices.filter((invoice) =>
     invoice.invoice_name.toLowerCase().includes(filterText.toLowerCase())
   );
 
@@ -176,90 +183,101 @@ const Invoicelist = () => {
 
   return (
     <>
-    <MainHeader/>
-    <Sider/>
+      <MainHeader />
+      <Sider />
 
-    <div className="container mt-16  mx-auto px-4">
-  <Link to="/quotation-section" className="text-white">
-    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 flex items-center">
-      <i className="bi bi-arrow-return-left mr-1"></i>Back
-    </button>
-  </Link>
+      <div className="container mt-16  mx-auto px-4">
+        <Link to="/quotation-section" className="text-white">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 flex items-center">
+            <i className="bi bi-arrow-return-left mr-1"></i>Back
+          </button>
+        </Link>
 
-  <div className="container mx-auto mt-4">
-    <h2 className="text-2xl font-bold mb-4">List of Invoices</h2>
-    <div className="flex justify-between mb-2">
-      <input
-        type="text"
-        placeholder="Filter by Invoice Name"
-        value={filterText}
-        onChange={handleFilterChange}
-        className="form-control w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-      />
-    </div>
-    <div className="overflow-y-auto">
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead>
-          <tr className="bg-gray-100 border-b">
-            <th className="border border-gray-200 px-4 py-2">ID</th>
-            <th className="border border-gray-200 px-4 py-2">Invoice Name</th>
-            <th className="border border-gray-200 px-4 py-2">Invoice Number</th>
-            <th className="border border-gray-200 px-4 py-2">Created Date</th>
-            <th className="border border-gray-200 px-4 py-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentInvoices.map((invoice, index) => (
-            <tr key={invoice.invoice_id} className="border-b">
-              <td className="border border-gray-200 px-4 py-2">
-                {offset + index + 1}
-              </td>
-              <td className="border border-gray-200 px-4 py-2">
-                {invoice.invoice_name}
-              </td>
-              <td className="border border-gray-200 px-4 py-2">
-                {invoice.invoice_no}
-              </td>
-              <td className="border border-gray-200 px-4 py-2">
-                {moment(invoice.created_date).format("DD/MM/YYYY")}
-              </td>
-              <td className="border border-gray-200 px-4 py-2 flex flex-wrap space-x-2">
-                <Link to={`/admin-view-invoice/${invoice.invoice_id}`}>
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded m-1">
-                    View
-                  </button>
-                </Link>
-              
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <ReactPaginate
-        previousLabel={"previous"}
-        nextLabel={"next"}
-        breakLabel={"..."}
-        pageCount={pageCount}
-        marginPagesDisplayed={2}
-        pageRangeDisplayed={5}
-        onPageChange={handlePageClick}
-        containerClassName={"pagination flex justify-center mt-4"}
-        pageClassName={"page-item"}
-        pageLinkClassName={"page-link bg-blue-500 border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"}
-        previousClassName={"page-item"}
-        previousLinkClassName={"page-link bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"}
-        nextClassName={"page-item"}
-        nextLinkClassName={"page-link bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"}
-        breakClassName={"page-item"}
-        breakLinkClassName={"page-link bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"}
-        activeClassName={"active  hover:bg-blue-700"}
-      />
-    </div>
-  </div>
-</div>
-
+        <div className="container mx-auto mt-4">
+          <h2 className="text-2xl font-bold mb-4">List of Invoices</h2>
+          <div className="flex justify-between mb-2">
+            <input
+              type="text"
+              placeholder="Filter by Invoice Name"
+              value={filterText}
+              onChange={handleFilterChange}
+              className="form-control w-1/2 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+          <div className="overflow-y-auto">
+            <table className="min-w-full bg-white border border-gray-200">
+              <thead>
+                <tr className="bg-gray-100 border-b">
+                  <th className="border border-gray-200 px-4 py-2">ID</th>
+                  <th className="border border-gray-200 px-4 py-2">
+                    Invoice Name
+                  </th>
+                  <th className="border border-gray-200 px-4 py-2">
+                    Invoice Number
+                  </th>
+                  <th className="border border-gray-200 px-4 py-2">
+                    Created Date
+                  </th>
+                  <th className="border border-gray-200 px-4 py-2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentInvoices.map((invoice, index) => (
+                  <tr key={invoice.invoice_id} className="border-b">
+                    <td className="border border-gray-200 px-4 py-2">
+                      {offset + index + 1}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {invoice.invoice_name}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {invoice.invoice_no}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2">
+                      {moment(invoice.created_date).format("DD/MM/YYYY")}
+                    </td>
+                    <td className="border border-gray-200 px-4 py-2 flex flex-wrap space-x-2">
+                      <Link to={`/admin-view-invoice/${invoice.invoice_id}`}>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded m-1">
+                          View
+                        </button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <ReactPaginate
+              previousLabel={"previous"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination flex justify-center mt-4"}
+              pageClassName={"page-item"}
+              pageLinkClassName={
+                "page-link bg-blue-500 border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"
+              }
+              previousClassName={"page-item"}
+              previousLinkClassName={
+                "page-link bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"
+              }
+              nextClassName={"page-item"}
+              nextLinkClassName={
+                "page-link bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"
+              }
+              breakClassName={"page-item"}
+              breakLinkClassName={
+                "page-link bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 mx-1 hover:bg-gray-200"
+              }
+              activeClassName={"active  hover:bg-blue-700"}
+            />
+          </div>
+        </div>
+      </div>
     </>
-   
   );
 };
 

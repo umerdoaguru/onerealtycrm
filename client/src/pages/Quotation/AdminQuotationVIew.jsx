@@ -12,8 +12,9 @@ import { useSelector } from "react-redux";
 import UserLogin from "../../components/UserLogin";
 import Logout from "../../components/Logout";
 import MainHeader from "../../components/MainHeader";
-import Sider from "../../components/Sider";
 
+
+import Sider from './../../components/Sider';
 
 function AdminQuotationVIew() {
   const { id } = useParams();
@@ -66,7 +67,6 @@ function AdminQuotationVIew() {
     }
   };
 
-
   useEffect(() => {
     // Fetch company names from the backend
     const fetchCompanyNames = async () => {
@@ -86,10 +86,6 @@ function AdminQuotationVIew() {
 
     fetchCompanyNames();
   }, []);
-
- 
-
- 
 
   const renderServiceTables = (subscriptionFrequency, serviceTypeTitle) => {
     const actualPriceTotal = quotations.reduce(
@@ -115,82 +111,81 @@ function AdminQuotationVIew() {
         q.subscription_frequency === subscriptionFrequency &&
         q.service_type === serviceTypeTitle
     );
- 
-  
-   return (
-  actualPriceTotal > 0 && (
-    <div className="mt-4">
-      <h5 className="font-bold text-lg">{`${serviceTypeTitle} Services - ${subscriptionFrequency}`}</h5>
-      <div className="">
-        <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Sr.No
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Service Name
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Service Description
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actual Price (INR)
-              </th>
-              <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Offer Price (INR)
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {services.map((q, index) => (
-              <tr key={q.id}>
-                <td className="px-6 py-4 border border-gray-300 text-center text-sm font-bold">
-                  {index + 1}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm font-bold">
-                  {q.service_name}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm">
-                  {q.service_description.split(".").map((part, index) => (
-                    <p key={index}>
-                      {part.trim()}
-                      {index !== q.service_description.split(".").length - 1 && "."}
-                    </p>
-                  ))}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm">
-                  {q.actual_price}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 text-sm">
-                  {q.offer_price}
-                </td>
-              </tr>
-            ))}
-         
-              <tr>
-                <td colSpan="3" className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  Total {`${serviceTypeTitle} Amount`}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  {actualPriceTotal}
-                </td>
-                <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                  {offerPriceTotal}
-                </td>
-              </tr>
-          
-            <tr className="bg-gray-50 btn-print">
-             
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )
-);
 
-    
+    return (
+      actualPriceTotal > 0 && (
+        <div className="mt-4">
+          <h5 className="font-bold text-lg">{`${serviceTypeTitle} Services - ${subscriptionFrequency}`}</h5>
+          <div className="">
+            <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Sr.No
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Name
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Service Description
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actual Price (INR)
+                  </th>
+                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Offer Price (INR)
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {services.map((q, index) => (
+                  <tr key={q.id}>
+                    <td className="px-6 py-4 border border-gray-300 text-center text-sm font-bold">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm font-bold">
+                      {q.service_name}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.service_description.split(".").map((part, index) => (
+                        <p key={index}>
+                          {part.trim()}
+                          {index !==
+                            q.service_description.split(".").length - 1 && "."}
+                        </p>
+                      ))}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.actual_price}
+                    </td>
+                    <td className="px-6 py-4 border border-gray-300 text-sm">
+                      {q.offer_price}
+                    </td>
+                  </tr>
+                ))}
+
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="px-6 py-4 border border-gray-300 font-bold text-sm"
+                  >
+                    Total {`${serviceTypeTitle} Amount`}
+                  </td>
+                  <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
+                    {actualPriceTotal}
+                  </td>
+                  <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
+                    {offerPriceTotal}
+                  </td>
+                </tr>
+
+                <tr className="bg-gray-50 btn-print"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )
+    );
   };
 
   const renderPaidServices = () => {
@@ -228,8 +223,6 @@ function AdminQuotationVIew() {
       </>
     );
   };
-
-
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -275,67 +268,54 @@ function AdminQuotationVIew() {
     fetchNotes();
   }, []);
 
- 
-
-
-
   return (
     <>
-      <MainHeader/>
-      <Sider/>
-      <div className="container mt-5 px-2 mx-auto p-4">
-   <Wrapper>
-    <div className="container">
-   <Link
-        // to={`/admin-view-quotation/${id}`}
-        to={`/quotationlist`}
-        className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded mx-1 w-25 btn-print"
-      >
-        <i className="bi bi-arrow-return-left mx-1"></i> Back
-      </Link></div>
+      <MainHeader />
+      <Sider />
 
-  
-  <div className="w-full flex flex-wrap mt-3">
-    <div className="w-full lg:w-9/12 mb-2 lg:mb-0 mx-3">
-     
-    </div>
-    <div className="w-full lg:w-3/12 mx-3">
-      
-    </div>
-  </div>
+      <div className="flex flex-col lg:flex-row lg:space-x-4">
+        <Wrapper className="w-full lg:w-9/12 mx-auto px-4 lg:px-0">
+          <div className="container mx-auto">
+            <Link
+              to={`/quotationlist`}
+              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded w-full sm:w-auto block sm:inline-block mb-3"
+            >
+              <i className="bi bi-arrow-return-left mx-1"></i> Back
+            </Link>
+          </div>
 
+          <div className="w-full flex flex-wrap mt-3 space-y-4 lg:space-y-0 lg:space-x-4">
+            <div className="w-full lg:w-9/12">
+              {/* Placeholder for content */}
+            </div>
+            <div className="w-full lg:w-3/12">
+              {/* Placeholder for sidebar or additional content */}
+            </div>
+          </div>
 
+          {/* <Header companyName={selectedCompany} quotationName={quotationName} /> */}
 
+          <div className="container mt-5 max-w-full">
+            <h2 className="text-2xl font-bold">
+              Plan & Quotation for {quotationName}
+            </h2>
+            {renderPaidServices()}
+            {renderComplimentaryServices()}
 
-  {/* <Header companyName={selectedCompany} quotationName={quotationName} /> */}
-
-  <div className="container mt-5">
-    <h2 className="text-2xl font-bold">Plan & Quotation for {quotationName}</h2>
-    {renderPaidServices()}
-    {renderComplimentaryServices()}
-
-    <div className="mt-3 mb-5">
-      <h5 className="font-bold">Notes:</h5>
-      <ul>
-        {notes.map((note) => (
-          <li key={note.id}>
-            {note.note_text}
-            <p>{note.additional_info}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-
-
-  </div>
-
-
-
-
-  
-
-</Wrapper>
-  </div>
+            <div className="mt-3 mb-5">
+              <h5 className="font-bold">Notes:</h5>
+              <ul>
+                {notes.map((note) => (
+                  <li key={note.id}>
+                    {note.note_text}
+                    <p>{note.additional_info}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Wrapper>
+      </div>
 
       {/* <Lastpage/> */}
     </>
@@ -379,4 +359,3 @@ const Wrapper = styled.div`
     }
   }
 `;
-

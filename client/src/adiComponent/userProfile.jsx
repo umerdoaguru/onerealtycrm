@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { FaCamera } from 'react-icons/fa'; // Import the upload (camera) icon from react-icons
+import React, { useState, useEffect } from "react";
+import { FaCamera } from "react-icons/fa"; // Import the upload (camera) icon from react-icons
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({
-    user_name: '',
-    email: '',
-    phone: '',
-    mobile: '',
-    address: '',
-    bio: '', // Added bio to the profile state
+    user_name: "",
+    email: "",
+    phone: "",
+    mobile: "",
+    address: "",
+    bio: "", // Added bio to the profile state
     image: null, // Store file object here instead of Data URL
   });
 
@@ -23,17 +23,16 @@ const UserProfile = () => {
 
   const calculateProfileStrength = () => {
     if (!profile) return; // Return early if profile is null
-  
+
     let score = 0;
-    const fields = ['user_name', 'email', 'phone', 'mobile', 'address', 'bio'];
-    fields.forEach(field => {
+    const fields = ["user_name", "email", "phone", "mobile", "address", "bio"];
+    fields.forEach((field) => {
       if (profile[field]) {
         score += 100 / fields.length;
       }
     });
     setProfileStrength(Math.round(score));
   };
-  
 
   const handleChange = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -52,29 +51,29 @@ const UserProfile = () => {
 
     // Use FormData for file and text fields
     const formData = new FormData();
-    formData.append('user_name', profile.user_name);
-    formData.append('email', profile.email);
-    formData.append('phone', profile.phone);
-    formData.append('mobile', profile.mobile);
-    formData.append('address', profile.address);
-    formData.append('bio', profile.bio); // Added bio to FormData
+    formData.append("user_name", profile.user_name);
+    formData.append("email", profile.email);
+    formData.append("phone", profile.phone);
+    formData.append("mobile", profile.mobile);
+    formData.append("address", profile.address);
+    formData.append("bio", profile.bio); // Added bio to FormData
     // Add image file to the formData if an image is present
     if (profile.image) {
-      formData.append('profile_picture', profile.image); // Match field name with backend
+      formData.append("profile_picture", profile.image); // Match field name with backend
     }
 
     try {
-      const response = await fetch('http://localhost:9000/api/editProfile', {
-        method: 'POST',
+      const response = await fetch("http://localhost:9000/api/editProfile", {
+        method: "POST",
         body: formData, // Send the formData instead of JSON
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save profile');
+        throw new Error("Failed to save profile");
       }
 
       const result = await response.json();
-      alert('Profile saved successfully!');
+      alert("Profile saved successfully!");
       console.log(result);
     } catch (err) {
       setError(err.message);
@@ -85,28 +84,27 @@ const UserProfile = () => {
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete your profile?')) {
+    if (window.confirm("Are you sure you want to delete your profile?")) {
       try {
-        const response = await fetch('http://localhost:9000/api/deleteUser', {
-          method: 'DELETE',
+        const response = await fetch("http://localhost:9000/api/deleteUser", {
+          method: "DELETE",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ email: profile.email }), // Pass email in the request body
         });
-  
+
         if (!response.ok) {
-          throw new Error('Failed to delete profile');
+          throw new Error("Failed to delete profile");
         }
-  
-        alert('Profile deleted successfully!');
+
+        alert("Profile deleted successfully!");
         setProfile(null); // Clear profile data on successful deletion
       } catch (err) {
         setError(err.message);
       }
     }
   };
-  
 
   if (profile === null) {
     return (
@@ -119,14 +117,17 @@ const UserProfile = () => {
   return (
     <div className="flex flex-col w-full h-full p-6 bg-gray-100">
       <div className="flex flex-col w-full h-full max-w-full overflow-hidden bg-white rounded-lg shadow-lg lg:flex-row">
-        
         {/* Left Section */}
         <div className="flex flex-col items-center p-4 border-r border-gray-200 lg:w-1/3">
           {/* Profile Image */}
           <div className="relative mb-4">
-            <img 
-              src={profile.image ? URL.createObjectURL(profile.image) : 'https://via.placeholder.com/150'} 
-              alt="User" 
+            <img
+              src={
+                profile.image
+                  ? URL.createObjectURL(profile.image)
+                  : "https://via.placeholder.com/150"
+              }
+              alt="User"
               className="object-cover w-32 h-32 border-2 border-gray-200 rounded-full shadow-md"
             />
             <label className="absolute bottom-0 right-0 p-2 bg-gray-800 rounded-full cursor-pointer hover:bg-gray-700">
@@ -169,19 +170,25 @@ const UserProfile = () => {
         <div className="flex flex-col p-4 overflow-auto lg:w-2/3">
           {/* User Information */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {['user_name', 'email', 'phone', 'mobile', 'address'].map((field) => (
-              <div className="text-left" key={field}>
-                <h3 className="font-semibold text-gray-700 capitalize">{field.replace(/([A-Z])/g, ' $1').toLowerCase()}</h3>
-                <input
-                  type="text"
-                  name={field}
-                  value={profile[field]}
-                  onChange={handleChange}
-                  placeholder={`Enter your ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`}
-                  className="w-full p-2 mt-1 border border-gray-300 rounded-lg outline-none"
-                />
-              </div>
-            ))}
+            {["user_name", "email", "phone", "mobile", "address"].map(
+              (field) => (
+                <div className="text-left" key={field}>
+                  <h3 className="font-semibold text-gray-700 capitalize">
+                    {field.replace(/([A-Z])/g, " $1").toLowerCase()}
+                  </h3>
+                  <input
+                    type="text"
+                    name={field}
+                    value={profile[field]}
+                    onChange={handleChange}
+                    placeholder={`Enter your ${field
+                      .replace(/([A-Z])/g, " $1")
+                      .toLowerCase()}`}
+                    className="w-full p-2 mt-1 border border-gray-300 rounded-lg outline-none"
+                  />
+                </div>
+              )
+            )}
           </div>
 
           {/* Save and Delete Buttons */}
@@ -191,7 +198,7 @@ const UserProfile = () => {
               className="px-6 py-2 text-white transition bg-green-600 rounded-lg hover:bg-green-700"
               disabled={loading}
             >
-              {loading ? 'Saving...' : 'Save Profile'}
+              {loading ? "Saving..." : "Save Profile"}
             </button>
             <button
               onClick={handleDelete}
