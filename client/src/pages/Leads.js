@@ -403,13 +403,13 @@ function Leads() {
                         {lead.visit}
                       </td>
                     )}
-                    {lead.visit === "in progress" && (
+                    {lead.visit === "Fresh Visit" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
                         {lead.visit}
                       </td>
                     )}
 
-                    {lead.visit === "completed" && (
+                    {lead.visit === "Repeated Visit" && (
                       <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
                         {lead.visit}
                       </td>
