@@ -276,6 +276,7 @@ function Super_Admin_Adminmanagement() {
                     .map((admin, index) => (
                       <tr
                         key={admin.admin_id}
+                        onClick={() => navigate(`/super-admin-admin-employe/${admin.admin_id}`)}
                         className="border-b border-gray-200 hover:bg-gray-100"
                        
                       >
