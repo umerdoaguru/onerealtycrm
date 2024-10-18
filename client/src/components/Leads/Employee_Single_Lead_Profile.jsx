@@ -122,7 +122,7 @@ function Employee_Single_Lead_Profile() {
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
-  //     const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+  //     const response = await axios.get(http://localhost:9000/api/leads/${id});
   //     setLeads(response.data);
   //     console.log(response);
   //   } catch (error) {
@@ -168,7 +168,7 @@ function Employee_Single_Lead_Profile() {
     const name = lead.name;
     console.log("Lead Name:", name); // Log the name
     navigate(`/View_quotations/${lead.lead_id}`);
-    // navigate(`/View_quotations`);
+    // navigate("/View_quotations");
   };
 
   const handleInputChange = (e) => {
@@ -519,7 +519,6 @@ function Employee_Single_Lead_Profile() {
             </table>
           </div>
 
-          
           {showPopup && (
             <div className=" fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
               <div className="w-75 bg-white p-6 rounded-lg shadow-lg max-h-[100vh] overflow-auto mx-4 my-5">

@@ -464,7 +464,7 @@ const CopyQuotationData = async (req, res) => {
   }
 };
 
-const Quotationviaid = (req, res) => {
+Quotationviaid = (req, res) => {
   try {
     const quotation_id = req.params.id;
 
