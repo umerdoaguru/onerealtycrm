@@ -30,6 +30,23 @@ function Employee_Single_Lead_Profile() {
       ],
     },
     {
+      name: "visit_date",
+      label: "Visit Date",
+      type: "date", // Changed to "date" for consistency
+    },
+    {
+      name: "visit",
+      label: "Visit",
+      type: "select",
+      options: [
+        { value: "", label: "Select Lead Status" },
+        { value: "Fresh Visit", label: "Fresh Visit" },
+        { value: "Repeated Visit", label: "Repeated Visit" },
+        // { value: "completed", label: "Completed" },
+      ],
+    },
+
+    {
       name: "quotation_status",
       label: "Quotation Status",
       type: "select",
@@ -59,9 +76,10 @@ function Employee_Single_Lead_Profile() {
       type: "select",
       options: [
         { value: "", label: "Select Deal Status" },
-        { value: "pending", label: "Pending" },
-        { value: "crack", label: "Crack" },
-        { value: "not crack", label: "Not Crack" },
+        { value: "pending", label: "pending" },
+        { value: "close", label: "close" },
+        { value: "not close", label: "not close" },
+        { value: "in-progress", label: "in-progress" },
       ],
     },
     {
@@ -85,6 +103,8 @@ function Employee_Single_Lead_Profile() {
 
   const [currentLead, setCurrentLead] = useState({
     lead_status: "",
+    visit_date: " ",
+    visit: "",
     quotation_status: "",
     invoice_status: "",
     deal_status: "",
@@ -101,7 +121,7 @@ function Employee_Single_Lead_Profile() {
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
-  //     const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+  //     const response = await axios.get(http://localhost:9000/api/leads/${id});
   //     setLeads(response.data);
   //     console.log(response);
   //   } catch (error) {
@@ -147,7 +167,7 @@ function Employee_Single_Lead_Profile() {
     const name = lead.name;
     console.log("Lead Name:", name); // Log the name
     navigate(`/View_quotations/${lead.lead_id}`);
-    // navigate(`/View_quotations`);
+    // navigate("/View_quotations");
   };
 
   const handleInputChange = (e) => {
@@ -299,6 +319,12 @@ function Employee_Single_Lead_Profile() {
                     Assigned To
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Visit Date
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Visit
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
                     Quotation
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
@@ -346,6 +372,12 @@ function Employee_Single_Lead_Profile() {
                       {lead.assignedTo}
                     </td>
 
+                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
+                      {lead.visit_date}
+                    </td>
+                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
+                      {lead.visit}
+                    </td>
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
                       {lead.quotation}
                     </td>
@@ -404,12 +436,17 @@ function Employee_Single_Lead_Profile() {
                       </td>
                     )}
 
-                    {lead.deal_status === "crack" && (
+                    {lead.deal_status === "close" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
                         {lead.deal_status}
                       </td>
                     )}
-                    {lead.deal_status === "not crack" && (
+                    {lead.deal_status === "not close" && (
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[blue]">
+                        {lead.deal_status}
+                      </td>
+                    )}
+                    {lead.deal_status === "in-progress" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[blue]">
                         {lead.deal_status}
                       </td>
@@ -480,6 +517,7 @@ function Employee_Single_Lead_Profile() {
               </tbody>
             </table>
           </div>
+
           {showPopup && (
             <div className=" fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
               <div className="w-75 bg-white p-6 rounded-lg shadow-lg max-h-[100vh] overflow-auto mx-4 my-5">
