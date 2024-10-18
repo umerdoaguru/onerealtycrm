@@ -163,14 +163,14 @@ const EmployeeQuotationList = () => {
                           Edit
                         </button>
                       </Link>
-                      <button
+                      {/* <button
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded m-1"
                         onClick={() =>
                           handleCopyQuotation(quotation.quotation_id)
                         }
                       >
                         Copy
-                      </button>
+                      </button> */}
                       {/* <Link to={`/quotation-invoice/${quotation.quotation_id}`}>
                         <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded m-1">
                           Invoice

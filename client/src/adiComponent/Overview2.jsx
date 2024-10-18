@@ -9,7 +9,8 @@ import axios from "axios";
 // import Sider from '../components/Sider';
 import { SiMoneygram } from "react-icons/si";
 import { MdOutlineNextWeek } from "react-icons/md";
-import { GiFiles, GiMoneyStack } from "react-icons/gi";
+import { GiFiles, GiMoneyStack  } from "react-icons/gi";
+import { FaCheckCircle } from "react-icons/fa"; 
 import { Link } from "react-router-dom";
 
 const Overview2 = () => {
@@ -71,6 +72,9 @@ const Overview2 = () => {
 
   const employeeCount = employee.length;
   const leadCount = leads.length;
+  const closedCount = leads.filter(
+    (lead) => lead.deal_status === "close"
+  ).length; // Get count for Closed Data
   // const quotationCount = quotation.length;
   // const invoiceCount = invoice.length;
 
@@ -136,6 +140,51 @@ const Overview2 = () => {
                   </h5>
                   <p className="text-gray-800 text-xl font-semibold ">
                     {employeeCount}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+         {/* Card for Closed Data */}
+         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+          <Link to="/super-admin-close-data">
+            <div
+              className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "ClosedData"
+                  ? "bg-blue-500 text-white"
+                  : ""
+              }`}
+              onClick={() => setSelectedComponent("ClosedData")}
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div
+                  className={`text-3xl ${
+                    selectedComponent === "ClosedData"
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
+                >
+                  <FaCheckCircle />
+                </div>
+                <div className="mt-2">
+                  <h5
+                    className={`text-xl font-semibold ${
+                      selectedComponent === "ClosedData"
+                        ? "text-white"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    Closed Data
+                  </h5>
+                  <p
+                    className={`${
+                      selectedComponent === "ClosedData"
+                        ? "text-white"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {closedCount}
                   </p>
                 </div>
               </div>
