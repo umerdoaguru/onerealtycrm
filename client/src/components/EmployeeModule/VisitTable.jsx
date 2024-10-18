@@ -159,9 +159,8 @@ const VisitTable = () => {
             currentPage={currentPage}
             totalItems={filteredLeads.length}
             itemsPerPage={itemsPerPage}
-            onPageChange={(selectedPage) => setCurrentPage(selectedPage)}
-            pageCount={pageCount}
-          />
+            onPageChange={setCurrentPage}
+            />
         </div>
       </div>
     </>
