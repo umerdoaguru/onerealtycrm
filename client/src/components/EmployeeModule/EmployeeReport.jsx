@@ -157,10 +157,20 @@ const EmployeeReport = () => {
       const currentDate = new Date();
 
       // Parse the date from created_date or createdTime, whichever exists
-      const itemDate = new Date(item.created_date || item.createdTime);
+
+      let itemDate;
+      if (selectedCategory === "visit") {
+        itemDate = new Date(item.visit_date);
+      } else if (selectedCategory === "closed") {
+        if(item.deal_status !== "close"){ 
+          return;
+        }
+        itemDate = new Date(item.d_closeDate);
+      } else {
+        itemDate = new Date(item.createdTime); // Default date if no specific category
+      }
 
       let filterCondition = false;
-
       if (filter === "week") {
         // Get the last Sunday and the current date for the week range
         const lastSunday = new Date(currentDate);
@@ -220,6 +230,7 @@ const EmployeeReport = () => {
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1);
+    filterData();
   };
 
   const handleFilterChange = (event) => {
@@ -275,8 +286,9 @@ const EmployeeReport = () => {
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format("DD/MM/YYYY"),
-      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
+      createdTime: moment(item.createdTime).format("MM/DD/YYYY"),
+      visit_date: moment(item.visit_date).format("MM/DD/YYYY"),
+      d_closeDate: moment(item.d_closeDate).format("MM/DD/YYYY"),
     }));
   };
 
@@ -456,14 +468,12 @@ const EmployeeReport = () => {
                   dataFields?.[selectedCategory]?.[selectedCategory]
 
                     .filter((item, index, array) => {
-                      // For the visit category, filter out rows where the visit status is 'Pending'
                       if (
                         selectedCategory === "visit" &&
                         item.visit === "pending"
                       ) {
                         return false;
                       }
-                      // For the closed category, filter out rows where the deal_status is 'Pending'
                       if (
                         selectedCategory === "closed" &&
                         item.deal_status === "pending" // Ensure correct case for 'pending'

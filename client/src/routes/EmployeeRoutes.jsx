@@ -66,6 +66,7 @@ import EmployeeVisitData from "../components/EmployeeModule/EmployeeDataExport/E
 import VisitTable from "../components/EmployeeModule/VisitTable";
 import CloseTable from "../components/EmployeeModule/CloseTable";
 import ViewAllQuotationsByLead from "../components/Leads/ViewAllQuotationsByLead";
+import Final_quotationBy_emp from "../pages/Quotation/Final_quotationBy_emp";
 
 function EmployeeRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -98,6 +99,7 @@ function EmployeeRoutes() {
           <Route path="/quotation-form" element={<QuotationForm1 />} />
 
           <Route path="/final-quotation/:id" element={<Final_quotation />} />
+          <Route path="/final-quotationBy-emp/:leadId/:id" element={<Final_quotationBy_emp />} />
 
           <Route path="/print/:id" element={<Print_Page />} />
 

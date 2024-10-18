@@ -9,7 +9,28 @@ const Addservices = () => {
   const userId = useSelector((state) => state.auth.user.id);
   const navigate = useNavigate();
   const [quotationName, setQuotationName] = useState("");
-  const [serviceslist, setServiceslist] = useState([]);
+  const [serviceslist, setServiceslist] = useState([
+    { service_name: "Lead Generation" },
+    { service_name: "Sales Pipeline Management" },
+    { service_name: "Customer Segmentation" },
+    { service_name: "Email Marketing Automation" },
+    { service_name: "Data Analytics and Reporting" },
+    { service_name: "Campaign Management" },
+    { service_name: "Customer Support Management" },
+    { service_name: "Social Media Integration" },
+    { service_name: "Workflow Automation" },
+    { service_name: "Customer Relationship Management (CRM) Setup" },
+    { service_name: "Client Onboarding Services" },
+    { service_name: "Marketing Analytics" },
+    { service_name: "Contact Management" },
+    { service_name: "Sales Forecasting" },
+    { service_name: "Customer Feedback Analysis" },
+    { service_name: "Performance Tracking" },
+    { service_name: "Task Management" },
+    { service_name: "Integration Services (API)" },
+    { service_name: "Consulting Services" },
+    { service_name: "Training and Support" },
+  ]);
 
   const [services, setServices] = useState([
     {
@@ -39,10 +60,8 @@ const Addservices = () => {
 
   const handleServiceChange = (index, field, value) => {
     const newServices = [...services];
-    // newServices[index][field] = value;
 
     if (field === "service_type" && value === "Complimentary") {
-      // If the service type is 'Complimentary', disable the offer price and set it to 0
       newServices[index]["offer_price"] = 0;
     }
 
@@ -50,17 +69,14 @@ const Addservices = () => {
       field === "offer_price" &&
       newServices[index].service_type === "Complimentary"
     ) {
-      // If the service type is 'Complimentary', set offer price to 0 and disable the input
       newServices[index][field] = 0;
     } else if (
       field === "offer_price" &&
       value > newServices[index].actual_price
     ) {
-      // If offer price is greater than actual price, set it to actual price and alert
       alert("Offer price cannot be greater than actual price");
       newServices[index][field] = newServices[index].actual_price;
     } else {
-      // Otherwise, update the field normally
       newServices[index][field] = value;
     }
     setServices(newServices);
@@ -210,7 +226,6 @@ const Addservices = () => {
                       <option value="Complimentary">
                         Complimentary Service
                       </option>
-                      {/* Add other service types as needed */}
                     </select>
                   </label>
                 </div>
@@ -292,7 +307,7 @@ const Addservices = () => {
                           e.target.value
                         )
                       }
-                    />
+                    ></textarea>
                   </label>
                 </div>
                 <div className="col-span-12 md:col-span-2">
@@ -306,7 +321,7 @@ const Addservices = () => {
                         handleServiceChange(
                           index,
                           "actual_price",
-                          parseFloat(e.target.value)
+                          e.target.value
                         )
                       }
                       required
@@ -324,23 +339,21 @@ const Addservices = () => {
                         handleServiceChange(
                           index,
                           "offer_price",
-                          parseFloat(e.target.value)
+                          e.target.value
                         )
                       }
                       required
                     />
                   </label>
                 </div>
-                <div className="col-span-12">
-                  <button
-                    type="button"
-                    className="btn bg-red-600 text-white float-end mb-2 mt-2 hover:bg-red-700"
-                    onClick={() => removeService(index)}
-                  >
-                    Remove
-                  </button>
-                </div>
               </div>
+              <button
+                type="button"
+                className="btn bg-red-600 text-white mt-2 hover:bg-red-700"
+                onClick={() => removeService(index)}
+              >
+                Remove Service
+              </button>
             </div>
           ))}
 

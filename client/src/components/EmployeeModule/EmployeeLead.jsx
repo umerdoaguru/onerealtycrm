@@ -172,6 +172,7 @@ function EmployeeLead() {
         `http://localhost:9000/api/employe-leads/${EmpId}`
       );
       const data = response.data;
+      console.log(data);
       setLeads(data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -311,58 +312,73 @@ function EmployeeLead() {
                 </tr>
               </thead>
               <tbody>
-                {currentLeads.map((lead, index) => (
-                  <tr
-                    key={lead.id}
-                    className={index % 2 === 0 ? "bg-gray-100" : ""}
-                  >
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-                      <Link to={`/employee-lead-single-data/${lead.lead_id}`}>
-                        {lead.lead_no}
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.assignedTo}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {moment(lead.createdTime).format("DD/MM/YYYY")}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.name}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.phone}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.leadSource}
-                    </td>
+  {currentLeads.length > 0 ? (
+    currentLeads.map((lead, index) => (
+      <tr
+        key={lead.id}
+        className={index % 2 === 0 ? "bg-gray-100" : ""}
+      >
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {index + 1}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+          <Link to={`/employee-lead-single-data/${lead.lead_id}`}>
+            {lead.lead_no}
+          </Link>
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.assignedTo}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {moment(lead.createdTime).format("DD/MM/YYYY")}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.name}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.phone}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.leadSource}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.lead_status === "in progress" ? (
+            <button
+              className="text-[green] font-semibold hover:text-blue-700"
+              onClick={() => handleUpdate(lead)}
+            >
+              Started Work
+            </button>
+          ) : lead.lead_status === "pending" ? (
+            <button
+              className="text-blue-500 font-semibold hover:text-blue-700"
+              onClick={() => handleUpdate(lead)}
+            >
+              Start Work
+            </button>
+          ) : (
+            <button
+              className="text-gray-400 font-semibold cursor-not-allowed"
+              disabled
+            >
+              Work Completed
+            </button>
+          )}
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        colSpan="8"
+        className="text-center py-4 text-gray-500"
+      >
+        No Data Available
+      </td>
+    </tr>
+  )}
+</tbody>
 
-                    {lead.lead_status === "in progress" && (
-                      <td className="px-6 py-4 border-b  border-gray-200 text-gray-800">
-                        <button
-                          className="text-[green] font-semibold hover:text-blue-700"
-                          onClick={() => handleUpdate(lead)}
-                        >
-                          Started Work
-                        </button>
-                      </td>
-                    )}
-                    {lead.lead_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        <button
-                          className="text-blue-500 font-semibold hover:text-blue-700"
-                          onClick={() => handleUpdate(lead)}
-                        >
-                          Start Work
-                        </button>
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
             </table>
           </div>
           <div className="mt-4 flex justify-center">

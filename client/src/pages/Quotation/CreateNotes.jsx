@@ -5,7 +5,28 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 const CreateNotes = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [noteTexts, setNoteTexts] = useState([]);
+  const [noteTexts, setNoteTexts] = useState([
+    "Follow up with leads after the first contact.",
+    "Schedule a demo for potential clients.",
+    "Check in with existing clients for feedback.",
+    "Review the sales pipeline for opportunities.",
+    "Send thank-you emails after meetings.",
+    "Update client information in the CRM.",
+    "Prepare for the upcoming sales presentation.",
+    "Set reminders for contract renewals.",
+    "Document customer interactions for future reference.",
+    "Analyze last quarter's sales performance.",
+    "Create a marketing campaign for product launch.",
+    "Conduct a training session for new CRM features.",
+    "Gather feedback from the sales team on CRM usage.",
+    "Track customer complaints and resolutions.",
+    "Identify potential upsell opportunities with existing clients.",
+    "Evaluate competitors' offerings and strategies.",
+    "Plan a customer appreciation event.",
+    "Follow up on outstanding invoices.",
+    "Assess customer satisfaction through surveys.",
+    "Maintain a list of FAQs for customer service.",
+  ]);
   const [selectedNotes, setSelectedNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
 
@@ -16,7 +37,8 @@ const CreateNotes = () => {
         const response = await axios.get(
           `http://localhost:9000/api/notes_data`
         );
-        setNoteTexts(response.data);
+        // If you still want to merge fetched notes with dummy notes, you can do so
+        // setNoteTexts(prevNotes => [...prevNotes, ...response.data]);
       } catch (error) {
         console.error("Error fetching notes:", error);
       }

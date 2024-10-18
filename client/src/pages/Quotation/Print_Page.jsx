@@ -411,19 +411,19 @@ function Print_Page() {
     <>
       <MainHeader />
       <EmployeeeSider />
-      <div className="flex flex-col 2xl:ml-44 mt-14 max-w-7xl">
+      <div className="flex flex-col 2xl:ml-44 mt-14 max-w-9xl">
         <div className="md:flex  max-sm:flex-col md:justify-between sm:justify-start  px-4">
-          <div className="mx-3 btn-print mt-2">
+          <div className="mx-3 btn-print mt-2 font-medium">
             <UserLogin />
           </div>
-          <div className=" mt-3 print:hidden">
+          {/* <div className=" mt-3 print:hidden">
             <Link
               to="/quotationlist"
               className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600  w-75 btn-print"
             >
               Quotation List
             </Link>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-between items-center px-4 mt-3 mb-2">

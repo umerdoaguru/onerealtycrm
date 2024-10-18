@@ -4,15 +4,11 @@ import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import UpdateServicesForm from "./UpdateServicesForm";
-import UpdateHeaderImageForm from "./UpdateHeaderImageForm";
-import UpdateFooterImageForm from "./UpdatFooterImageForm";
-import Footer from "./Footer";
 import UserLogin from "../../components/UserLogin";
-import Logout from "../../components/Logout";
 
-function Final_quotation() {
+function Final_quotationBy_emp() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id, leadId } = useParams();
   const [quotations, setQuotations] = useState([]);
   const [quotationName, setQuotationName] = useState("");
   const [quotationServiceDescription, setQuotationServiceDescription] =
@@ -35,7 +31,7 @@ function Final_quotation() {
 
         // Set the status from the response using the correct field name
         setQuotationStatus(response.data[0].status); // Changed to status
-        console.log("Quotation Status:", response.data[0].status);
+        console.log("Quotation Status:", response.data);
 
         const actualPriceTotal = response.data.reduce(
           (total, q) => total + q.actual_price,
@@ -191,7 +187,7 @@ function Final_quotation() {
                 </div>
                 <div className="">
                   <Link
-                    to="/employee-quotation-invoice"
+                    to={`/View_quotations/${leadId}`}
                     className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-full block text-center"
                   >
                     Quotation List
@@ -387,12 +383,17 @@ function Final_quotation() {
               {/* Print Button */}
               {/* <div className="flex space-x-3 items-center mt-4"> */}
               <button
-                className="bg-green-700 hover:bg-green-600 text-white rounded p-2 mt-1"
+                className={`bg-green-700 ${
+                  quotationStatus !== "Approved"
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-green-600"
+                } text-white rounded p-2 mt-1`}
                 onClick={handlePrintPage}
-                disabled={quotationStatus !== "	Approved"} // Enable button if approved
+                disabled={quotationStatus !== "Approved"}
               >
                 Print Page
               </button>
+
               {/* </div> */}
             </div>
           </div>
@@ -449,7 +450,7 @@ function Final_quotation() {
   );
 }
 
-export default Final_quotation;
+export default Final_quotationBy_emp;
 
 const Wrapper = styled.div`
   th {
