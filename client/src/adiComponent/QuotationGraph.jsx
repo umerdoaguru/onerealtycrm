@@ -1,18 +1,20 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   LineChart,
   Line,
   XAxis,
   YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
-  CartesianGrid,
   ResponsiveContainer,
 } from "recharts";
-import axios from "axios";
+import styled from "styled-components";
 
-const QuotationGraph = () => {
-  const [quotationData, setQuotationData] = useState([]);
+const EmployeeCloseGraph = () => {
+  const [dealStatusData, setDealStatusData] = useState([]);
 
   // Function to format the date to "DD MMM" format
   const formatDate = (dateString) => {
@@ -32,25 +34,22 @@ const QuotationGraph = () => {
     for (let i = 0; i < 28; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() - i);
-      const formattedDay = date.toLocaleDateString("default", {
-        day: "2-digit",
-        month: "short",
-      });
+      const formattedDay = formatDate(date);
       const formattedDate = date.toISOString().split("T")[0]; // Format date as "YYYY-MM-DD"
 
-      // Filter quotations that match the `created_date` for this specific day
-      const matchedQuotations = fetchedData.filter(
-        (item) => item.created_date.split("T")[0] === formattedDate
+      // Filter leads that match the `d_closeDate` for this specific day
+      const matchedLeads = fetchedData.filter(
+        (item) =>
+          item.d_closeDate.split("T")[0] === formattedDate &&
+          item.deal_status?.trim().toLowerCase() !== "pending"
       );
 
-      console.log(
-        `Date: ${formattedDate}, Quotations: ${matchedQuotations.length}`
-      );
+      console.log(`Date: ${formattedDate}, Leads: ${matchedLeads.length}`);
 
-      // Push the day and the number of quotations created on that day
+      // Push the day and the number of closed deals for that day
       data.push({
         day: formattedDay, // Day in "DD MMM" format
-        Quotation: matchedQuotations.length, // Count the number of matched quotations
+        Close_Deal: matchedLeads.length, // Count the number of matched leads
       });
     }
 
@@ -61,14 +60,14 @@ const QuotationGraph = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-quotation-data`
-      ); // Adjust the API route as necessary
-      const data = response.data.data;
+        `http://localhost:9000/api/leads`
+      );
+      const data = response.data;
 
       const formattedData = generateStaticData(data);
-      console.log(formattedData);
+      console.log("Formatted Data: ", formattedData);
 
-      setQuotationData(formattedData);
+      setDealStatusData(formattedData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -79,31 +78,48 @@ const QuotationGraph = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
-      <h2 className="text-xl font-bold mb-2">Daily Quotation Overview</h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Quotation for the past 28 days
-      </p>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          data={quotationData}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="day" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="Quotation"
-            stroke="#1C4E80"
-            strokeWidth={2}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <Wrapper>
+      <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
+        <h2 className="text-xl font-bold mb-2">Closed Deal Overview</h2>
+        <p className="text-sm text-gray-500 mb-4">
+          Deal statuses for the past 28 days
+        </p>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart
+            data={dealStatusData}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="Close_Deal"
+              stroke="#1C4E80"
+              strokeWidth={3}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </Wrapper>
   );
 };
 
-export default QuotationGraph;
+export default EmployeeCloseGraph;
+
+const Wrapper = styled.div`
+  #main {
+    width: 100%;
+    border-radius: 5px;
+    padding: 2rem;
+    box-shadow: 0px 2px 18px #bdbaba;
+    display: flex;
+    justify-content: center;
+  }
+  // @media screen and (max-width: 768px) {
+  //   padding: 20px;
+  //   font-size: small;
+  // }
+`;

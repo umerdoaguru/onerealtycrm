@@ -20,6 +20,7 @@ const FacebookLeads = () => {
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
     employeeId: "",
+    employeephone: "",
   });
 
   // Pagination state
@@ -31,7 +32,7 @@ const FacebookLeads = () => {
     "EAAMAWRBboPIBO87PPmdJdsBd0WjJUw3GZBhYaS1fzmHE97k41JXyRIMhjTmV6lk3VGRRZCJvlrF2fZAJJgANlIwVosGuH30Qaz5eAimreSB57CNisVZArX5tLke0JqMkhZBDuJdlhXlGA5SZBSa1BQjZBUqBVNdUiUXmsPoZB7212Wg2rlPaNelheIlVm1g6Dc96APXfMoX7";
 
   // Meta API formId
-  const formId = 1564826437399879;
+  const formId = 1935750583597667;
 
   const fetchLeads = async () => {
     try {
@@ -42,7 +43,7 @@ const FacebookLeads = () => {
 
       // const leadsData = response.data.data;
       // setLeads(leadsData); // Update local state with leads
-      // console.log(leads);
+      console.log(leads);
       setLeads(response.data.leads?.data);
   
       
@@ -84,22 +85,25 @@ const FacebookLeads = () => {
     const { name, value } = e.target;
     setCurrentLead((prevLead) => {
       const updatedLead = { ...prevLead, [name]: value };
-
-      // If assignedTo changes, update employeeId accordingly
+  
+      // If assignedTo changes, update employeeId and employeephone accordingly
       if (name === "assignedTo") {
         const selectedEmployee = employees.find(
           (employee) => employee.name === value
         );
         if (selectedEmployee) {
           updatedLead.employeeId = selectedEmployee.employeeId;
+          updatedLead.employeephone = selectedEmployee.phone; // Store employee's phone number in employeephone
         } else {
-          updatedLead.employeeId = ""; // Reset employeeId if no match found
+          updatedLead.employeeId = ""; // Reset if no match
+          updatedLead.employeephone = ""; // Reset employeephone if no match
         }
       }
-
+  
       return updatedLead;
     });
   };
+  
 
   const saveChanges = async () => {
     if (!currentLead.assignedTo) {
@@ -120,8 +124,12 @@ const FacebookLeads = () => {
       });
       fetchLeads(); // Refresh the list
       fetchLeadassigned();
-
       closePopup();
+      const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Lead%20No.%20${selectedLead.leadId}%0A2)%20Name:%20${selectedLead.fullName}%0A3)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A4)%20Lead%20Source:%20${`Facebook Campaign`}%0A5)%20Address:%20${selectedLead.address}%0A6)%20Subject:%20${formName}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+      // Open WhatsApp link
+      window.open(whatsappLink, "_blank");
+
+
     } catch (error) {
       console.error("Error adding lead:", error);
     }

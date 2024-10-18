@@ -17,6 +17,7 @@ function Accrs() {
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
     employeeId: "",
+    employeephone: "",
   });
   console.log(responses, 'Line number 7 data check');
 
@@ -57,23 +58,25 @@ function Accrs() {
     const { name, value } = e.target;
     setCurrentLead((prevLead) => {
       const updatedLead = { ...prevLead, [name]: value };
-
-      // If assignedTo changes, update employeeId accordingly
+  
+      // If assignedTo changes, update employeeId and employeephone accordingly
       if (name === "assignedTo") {
         const selectedEmployee = employees.find(
           (employee) => employee.name === value
         );
         if (selectedEmployee) {
           updatedLead.employeeId = selectedEmployee.employeeId;
+          updatedLead.employeephone = selectedEmployee.phone; // Store employee's phone number in employeephone
         } else {
-          updatedLead.employeeId = ""; // Reset employeeId if no match found
+          updatedLead.employeeId = ""; // Reset if no match
+          updatedLead.employeephone = ""; // Reset employeephone if no match
         }
       }
-
+  
       return updatedLead;
     });
   };
-
+  
   const saveChanges = async () => {
     if (!currentLead.assignedTo) {
       alert("Please assign the lead to an employee."); // Show an alert message
@@ -95,6 +98,11 @@ function Accrs() {
       fetchLeadassigned();
 
       closePopup();
+      const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Lead%20No.%20${selectedLead.leadId}%0A2)%20Name:%20${selectedLead.fullName}%0A3)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A4)%20Lead%20Source:%20${`99 Acres`}%0A5)%20Address:%20${selectedLead.address}%0A6)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+      // Open WhatsApp link
+      window.open(whatsappLink, "_blank");
+
+     
     } catch (error) {
       console.error("Error adding lead:", error);
     }

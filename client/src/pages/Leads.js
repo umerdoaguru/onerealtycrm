@@ -17,6 +17,7 @@ function Leads() {
     lead_no: "",
     assignedTo: "",
     employeeId: "",
+    employeephone: "",
     createdTime: "", // Added here
     name: "",
     phone: "",
@@ -112,22 +113,26 @@ function Leads() {
     const { name, value } = e.target;
     setCurrentLead((prevLead) => {
       const updatedLead = { ...prevLead, [name]: value };
-
-      // If assignedTo changes, update employeeId accordingly
+  
+      // If assignedTo changes, update employeeId and employeephone accordingly
       if (name === "assignedTo") {
         const selectedEmployee = employees.find(
           (employee) => employee.name === value
         );
         if (selectedEmployee) {
           updatedLead.employeeId = selectedEmployee.employeeId;
+          updatedLead.employeephone = selectedEmployee.phone; // Store employee's phone number in employeephone
         } else {
-          updatedLead.employeeId = ""; // Reset employeeId if no match found
+          updatedLead.employeeId = ""; // Reset if no match
+          updatedLead.employeephone = ""; // Reset employeephone if no match
         }
       }
-
+  
       return updatedLead;
     });
   };
+  
+  
 
   const handleCreateClick = () => {
     setIsEditing(false);
@@ -135,6 +140,7 @@ function Leads() {
       lead_no: "",
       assignedTo: "",
       employeeId: "",
+      employeephone: "",
       name: "",
       phone: "",
       leadSource: "",
@@ -156,28 +162,32 @@ function Leads() {
 
   const saveChanges = async () => {
     if (validateForm()) {
-      if (isEditing) {
-        try {
+      try {
+        if (isEditing) {
           await axios.put(
             `http://localhost:9000/api/leads/${currentLead.lead_id}`,
             currentLead
           );
-          fetchLeads(); // Refresh the list
-          closePopup();
-        } catch (error) {
-          console.error("Error updating lead:", error);
-        }
-      } else {
-        try {
+        } else {
           await axios.post("http://localhost:9000/api/leads", currentLead);
-          fetchLeads(); // Refresh the list
-          closePopup();
-        } catch (error) {
-          console.error("Error adding lead:", error);
+          const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Lead%20No.%20${currentLead.lead_no}%0A2)%20Name:%20${currentLead.name}%0A3)%20Phone%20Number:%20${currentLead.phone}%0A4)%20Lead%20Source:%20${currentLead.leadSource}%0A5)%20Address:%20${currentLead.address}%0A6)%20Subject:%20${currentLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+
+          // Open WhatsApp link
+          window.open(whatsappLink, "_blank");
         }
+  
+        fetchLeads(); // Refresh the list
+        closePopup();
+  
+        // Create WhatsApp URL
+       
+  
+      } catch (error) {
+        console.error("Error saving lead:", error);
       }
     }
   };
+  
 
   const handleDeleteClick = async (id) => {
     const isConfirmed = window.confirm(
