@@ -83,6 +83,11 @@ function Employee_Single_Lead_Profile() {
       ],
     },
     {
+      name: "d_closeDate",
+      label: "Deal Close Date",
+      type: "date", // Changed to "date" for consistency
+    },
+    {
       name: "reason",
       label: "Reason",
       type: "textarea",
@@ -344,6 +349,10 @@ function Employee_Single_Lead_Profile() {
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
+                    Deal Close Date
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    {" "}
                     Reason
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
@@ -451,6 +460,10 @@ function Employee_Single_Lead_Profile() {
                         {lead.deal_status}
                       </td>
                     )}
+
+                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
+                      {lead.d_closeDate}
+                    </td>
 
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-gray-800">
                       {lead.reason}

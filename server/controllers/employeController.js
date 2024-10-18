@@ -27,28 +27,28 @@ const getEmployeeInvoice = async (req, res) => {
 };
 
 const getEmployeeLeads = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const sql = "SELECT * FROM leads WHERE employeeId = ?";
-    
-        const result = await new Promise((resolve, reject) => {
-            db.query(sql, [id], (err, results) => {
-                if (err) {
-                    reject(err); // Reject the promise with the error
-                } else {
-                    resolve(results); // Resolve the promise with the results
-                }
-            });
-        });
-        // Send the result as a response
-        res.status(200).json(result);
-    } catch (err) {
-        console.error('Database query error:', err); // Log the error for debugging
-        res.status(500).json({ message: "Internal Server Erro, error: errr"});
-    } 
-}
+  try {
+    const { id } = req.params;
+    const sql = "SELECT * FROM leads WHERE employeeId = ?";
 
-const updateOnlyLeadStatus =  async (req, res) => {
+    const result = await new Promise((resolve, reject) => {
+      db.query(sql, [id], (err, results) => {
+        if (err) {
+          reject(err); // Reject the promise with the error
+        } else {
+          resolve(results); // Resolve the promise with the results
+        }
+      });
+    });
+    // Send the result as a response
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Database query error:", err); // Log the error for debugging
+    res.status(500).json({ message: "Internal Server Erro, error: errr" });
+  }
+};
+
+const updateOnlyLeadStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { lead_status } = req.body;
@@ -106,40 +106,6 @@ const updateOnlyQuotationStatus = async (req, res) => {
   }
 };
 
-// const updateLeadStatus = async (req, res) => {
-//     try {
-//       const { id } = req.params;
-//       const { lead_status, quotation_status, invoice_status, deal_status, reason,  follow_up_status } = req.body;
-
-//       console.log(lead_status, quotation_status, invoice_status, deal_status, reason,  follow_up_status, id);
-
-//       const sql = `UPDATE leads SET
-//                     lead_status = ?,
-//                     quotation_status = ?,
-//                     invoice_status = ?,
-//                     deal_status = ?,
-//                     reason = ?,
-
-//                     follow_up_status = ?
-//                     WHERE lead_id = ?`;
-
-//       await new Promise((resolve, reject) => {
-//         db.query(sql, [lead_status, quotation_status, invoice_status, deal_status, reason,  follow_up_status, id], (err, result) => {
-//           if (err) {
-//             reject(err);
-//           } else {
-//             resolve(result);
-//           }
-//         });
-//       });
-
-//       res.status(200).json({ message: "Lead updated successfully" });
-//     } catch (error) {
-//       console.error('Database update error:', error);
-//       res.status(500).json({ message: "Internal Server Error", error: err });
-//     }
-//   };
-
 const updateLeadStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -152,6 +118,7 @@ const updateLeadStatus = async (req, res) => {
       follow_up_status,
       visit, // Add visit to destructured body
       visit_date, // Add visit_date to destructured body
+      d_closeDate, // Add d_closeDate (Deal Close Date) to destructured body
     } = req.body;
 
     console.log(
@@ -163,6 +130,7 @@ const updateLeadStatus = async (req, res) => {
       follow_up_status,
       visit,
       visit_date,
+      d_closeDate, // Log d_closeDate
       id
     );
 
@@ -174,7 +142,8 @@ const updateLeadStatus = async (req, res) => {
                       reason = ?, 
                       follow_up_status = ?, 
                       visit = ?,            -- Include visit in the SQL query
-                      visit_date = ?       -- Include visit_date in the SQL query
+                      visit_date = ?,       -- Include visit_date in the SQL query
+                      d_closeDate = ?       -- Include d_closeDate in the SQL query
                   WHERE lead_id = ?`;
 
     await new Promise((resolve, reject) => {
@@ -189,6 +158,7 @@ const updateLeadStatus = async (req, res) => {
           follow_up_status,
           visit, // Pass visit to the query
           visit_date, // Pass visit_date to the query
+          d_closeDate, // Pass d_closeDate to the query
           id,
         ],
         (err, result) => {
@@ -321,4 +291,3 @@ module.exports = {
   getAllEmployeeTotalLeads,
   getLeadQuotation,
 };
- 

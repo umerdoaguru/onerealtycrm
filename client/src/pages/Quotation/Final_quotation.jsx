@@ -21,6 +21,7 @@ function Final_quotation() {
   const [totalOfferPrice, setTotalOfferPrice] = useState(0);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [notes, setNotes] = useState([]);
+  const [quotationStatus, setQuotationStatus] = useState(""); // New state for status
 
   const fetchQuotations = async () => {
     try {
@@ -31,6 +32,10 @@ function Final_quotation() {
       if (response.status === 200) {
         setQuotationName(response.data[0].quotation_name);
         setQuotations(response.data);
+
+        // Set the status from the response using the correct field name
+        setQuotationStatus(response.data[0].status); // Changed to status
+        console.log("Quotation Status:", response.data[0].status);
 
         const actualPriceTotal = response.data.reduce(
           (total, q) => total + q.actual_price,
@@ -69,6 +74,7 @@ function Final_quotation() {
     console.log("Services updated successfully");
     setIsUpdateMode(false);
     // window.location.reload();
+    fetchQuotations();
   };
 
   const handleUpdateError = () => {
@@ -116,6 +122,7 @@ function Final_quotation() {
   useEffect(() => {
     fetchQuotations();
     fetchNotes();
+    handleUpdateSuccess();
   }, []);
 
   const filterServicesByType = (type) => {
@@ -128,6 +135,10 @@ function Final_quotation() {
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
+  // const handleNavigation = (quotations_data) => {
+  //   // Replace `lead.lead_id` with the actual lead ID you want to navigate to
+  //   navigate(`/View_quotations/${quotations_data.lead_id}`);
+  // };
 
   return (
     <>
@@ -135,74 +146,31 @@ function Final_quotation() {
         <div className="w-full px-2">
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-12 lg:col-span-4 mt-3">
-              <div className="mx-lg-4">
+              <div className="mx-lg-4 font-medium">
                 <UserLogin />
               </div>
             </div>
             <div className="col-span-12 lg:col-span-4 mt-3">
-              <h5 className="text-center">Quotation Name: {quotationName}</h5>
+              <h5 className="text-center text-xl font-medium">
+                Quotation Name: {quotationName}
+              </h5>
             </div>
-            <div className="col-span-12 lg:col-span-4 mt-3">
+            {/* <div className="col-span-12 lg:col-span-4 mt-3">
               <div className="flex justify-end mx-lg-2">
                 <Logout />
               </div>
-            </div>
+            </div> */}
           </div>
-
-          {/* 
-  <div className="w-full px-2 mt-4">
-    <div className="grid grid-cols-12 gap-2">
-      <div className="col-span-12 lg:col-span-3">
-        <Link
-          to="/quotation-form"
-          className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-full block text-center"
-        >
-          <i className="bi bi-arrow-return-left mx-1"></i>Back
-        </Link>
-      </div>
-      <div className="col-span-12 lg:col-span-3">
-        <button
-          className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 w-full"
-          onClick={() => setIsUpdateMode(true)}
-        >
-          Update Services
-        </button>
-      </div>
-      {isUpdateMode && (
-        <UpdateServicesForm
-          quotationId={id}
-          onUpdateSuccess={handleUpdateSuccess}
-          onUpdateError={handleUpdateError}
-        />
-      )}
-      <div className="col-span-12 lg:col-span-3">
-        <button
-          className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 w-full"
-          onClick={handleAddServices}
-        >
-          Add Services
-        </button>
-      </div>
-      <div className="col-span-12 lg:col-span-3">
-        <Link
-          to="/quotationlist"
-          className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-full block text-center"
-        >
-          Quotation List
-        </Link>
-      </div>
-    </div>
-  </div> */}
 
           <div className="w-full px-2 mt-4">
             <div className="flex justify-between">
               <div className="">
-                <Link
-                  to="/employee-quotation-invoice"
+                <button
+                  onClick={() => navigate(-1)}
                   className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-auto block text-center"
                 >
                   <i className="bi bi-arrow-return-left mx-1"></i>Back
-                </Link>
+                </button>
               </div>
               <div className="flex space-x-3">
                 <div className="">
@@ -228,6 +196,12 @@ function Final_quotation() {
                   >
                     Quotation List
                   </Link>
+                  {/* <button
+                    onClick={handleNavigation}
+                    className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-full block text-center"
+                  >
+                    Quotation List
+                  </button> */}
                 </div>
               </div>
             </div>
@@ -410,12 +384,16 @@ function Final_quotation() {
               >
                 Review Quotation Data
               </button>
+              {/* Print Button */}
+              {/* <div className="flex space-x-3 items-center mt-4"> */}
               <button
                 className="bg-green-700 hover:bg-green-600 text-white rounded p-2 mt-1"
                 onClick={handlePrintPage}
+                disabled={quotationStatus !== "	Approved"} // Enable button if approved
               >
                 Print Page
               </button>
+              {/* </div> */}
             </div>
           </div>
         </div>
