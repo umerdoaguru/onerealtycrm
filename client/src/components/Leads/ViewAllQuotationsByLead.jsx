@@ -17,20 +17,20 @@ const EmployeeQuotationList = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchQuotations = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/api/get-quotation-byLead/${id}`
-        );
-        setQuotations(response.data);
-        console.log(response);
-      } catch (error) {
-        console.error("Error fetching quotations:", error);
-      }
-    };
-
     fetchQuotations();
-  }, [id]);
+  }, [id, render]);
+
+  const fetchQuotations = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/get-quotation-byLead/${id}`
+      );
+      setQuotations(response.data);
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
 
   const handleDelete = async (id) => {
     const isConfirmed = window.confirm(
@@ -43,9 +43,9 @@ const EmployeeQuotationList = () => {
         );
         if (response.status === 200) {
           console.log("Quotation deleted successfully");
-          // window.location.reload();
-          setRender(!render);
         }
+        console.log(response);
+        setRender(!render);
       } catch (error) {
         console.error("Error deleting quotation:", error);
       }
@@ -57,8 +57,6 @@ const EmployeeQuotationList = () => {
       const response = await axios.post(
         `http://localhost:9000/api/copy-quotation/${quotationId}`
       );
-      console.log(response.data.message);
-      // window.location.reload();
       setRender(!render);
     } catch (error) {
       console.error("Error copying quotation:", error);
@@ -88,9 +86,6 @@ const EmployeeQuotationList = () => {
   );
   const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
 
-  useEffect(() => {
-    setRender(!render);
-  }, [render]);
 
   return (
     <>
@@ -139,7 +134,7 @@ const EmployeeQuotationList = () => {
                         {quotation.status}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link to={`/final-quotation/${quotation.quotation_id}`}>
+                        <Link to={`/final-quotationBy-emp/${id}/${quotation.quotation_id}`}>
                           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded m-1">
                             View
                           </button>
@@ -165,13 +160,6 @@ const EmployeeQuotationList = () => {
                       >
                         Copy
                       </button> */}
-                        <Link
-                          to={`/quotation-invoice/${quotation.quotation_id}`}
-                        >
-                          <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded m-1">
-                            Invoice
-                          </button>
-                        </Link>
                       </td>
                     </tr>
                   ))}

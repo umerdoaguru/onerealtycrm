@@ -468,19 +468,25 @@ const Quotationviaid = (req, res) => {
   try {
     const quotation_id = req.params.id;
 
-    const getQuery = `SELECT * FROM services_data WHERE quotation_id = ?`;
+    const getQuery = `
+      SELECT sd.*, qd.* 
+      FROM services_data sd
+      JOIN quotations_data qd ON sd.quotation_id = qd.quotation_id 
+      WHERE sd.quotation_id = ?
+    `;
 
     db.query(getQuery, quotation_id, (error, result) => {
       if (error) {
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: error, message: "Internal Server Error" });
       } else {
         res.status(200).json(result);
       }
     });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error, message: "Internal Server Error" });
   }
 };
+
 
 // const addServices = async (req, res) => {
 //   try {

@@ -97,7 +97,7 @@ function TotalEmpLead() {
                       {index + 1 + indexOfFirstLead}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-                      <Link to={`/lead-single-data/${lead.lead_id}`}>
+                      <Link to={`/employee-lead-single-data/${lead.lead_id}`}>
                         {lead.lead_no}
                       </Link>
                     </td>

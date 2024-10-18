@@ -8,3 +8,9 @@
 7. responsive karna hai poora ka poora
 8. mujhe jitni table bani hai usme dekhna padega ki field kitni hai
 9. mjhgf
+
+<!-- 10. employee-lead-single-data/ iska quotyaion status field table mai se gayab  -->
+<!-- 11. /final-quotation/269 ka compoennt mai do banne hai jo all quaiton ke liye alag rahega aur indicusual lead ke liye alag rahega -->
+<!-- 12. and print quoation sttus ke hisaahb se quoation ho na hcahiye -->
+13. closed deal lagana hai sueradmin dash mai
+14. 

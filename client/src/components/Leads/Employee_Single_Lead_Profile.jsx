@@ -46,18 +46,18 @@ function Employee_Single_Lead_Profile() {
       ],
     },
 
-    {
-      name: "quotation_status",
-      label: "Quotation Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Quotation Status" },
-        { value: "pending", label: "Pending" },
-        { value: "in progress", label: "In Progress" },
-        { value: "approved", label: "Aprroved" },
-        { value: "not approved", label: "Not Aprroved" },
-      ],
-    },
+    // {
+    //   name: "quotation_status",
+    //   label: "Quotation Status",
+    //   type: "select",
+    //   options: [
+    //     { value: "", label: "Select Quotation Status" },
+    //     { value: "pending", label: "Pending" },
+    //     { value: "in progress", label: "In Progress" },
+    //     { value: "approved", label: "Aprroved" },
+    //     { value: "not approved", label: "Not Aprroved" },
+    //   ],
+    // },
     {
       name: "invoice_status",
       label: "Invoice Status",
@@ -137,6 +137,7 @@ function Employee_Single_Lead_Profile() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      console.log(response.data);
       setLeads(response.data);
 
       // Debugging: Log the exact value of the quotation field
@@ -333,10 +334,6 @@ function Employee_Single_Lead_Profile() {
                     Quotation
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
-                    Quotation Status
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
                     Invoice
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
@@ -390,28 +387,6 @@ function Employee_Single_Lead_Profile() {
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
                       {lead.quotation}
                     </td>
-
-                    {lead.quotation_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
-
-                    {lead.quotation_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
-                    {lead.quotation_status === "approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
-                    {lead.quotation_status === "not approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
-                        {lead.quotation_status}
-                      </td>
-                    )}
 
                     <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
                       {lead.invoice}
@@ -492,11 +467,11 @@ function Employee_Single_Lead_Profile() {
                     )}
 
                     {lead.follow_up_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[yellow]">
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-amber-600">
                         {lead.follow_up_status}
                       </td>
                     )}
-                    {lead.follow_up_status === "completed" && (
+                    {lead.follow_up_status === "done" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
                         {lead.follow_up_status}
                       </td>

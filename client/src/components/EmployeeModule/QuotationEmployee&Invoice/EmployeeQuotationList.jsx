@@ -15,20 +15,22 @@ const EmployeeQuotationList = () => {
   const EmpId = useSelector((state) => state.auth.user.id);
 
   useEffect(() => {
-    const fetchQuotations = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
-        );
-        setQuotations(response.data);
-        console.log(response);
-      } catch (error) {
-        console.error("Error fetching quotations:", error);
-      }
-    };
+ 
 
     fetchQuotations();
-  }, [EmpId]);
+  }, [EmpId, render]);
+
+  const fetchQuotations = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
+      );
+      setQuotations(response.data);
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
 
   const handleDelete = async (id) => {
     const isConfirmed = window.confirm(
@@ -169,11 +171,11 @@ const EmployeeQuotationList = () => {
                       >
                         Copy
                       </button>
-                      <Link to={`/quotation-invoice/${quotation.quotation_id}`}>
+                      {/* <Link to={`/quotation-invoice/${quotation.quotation_id}`}>
                         <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded m-1">
                           Invoice
                         </button>
-                      </Link>
+                      </Link> */}
                     </td>
                   </tr>
                 ))}
