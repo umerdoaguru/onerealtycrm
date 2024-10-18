@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Overview from "./Overview2";
+
 import PaymentsGraph from "./QuotationGraph";
 import DevicesGraph from "./LeadsGraph";
 import LeadsReport from "./LeadsReport";
@@ -11,6 +11,7 @@ import Invoice from "./Invoice";
 import axios from "axios";
 import LeadsGraph from "./LeadsGraph";
 import QuotationGraph from "./QuotationGraph";
+import AdminOverviewDash from "./AdminOverviewDash";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -44,7 +45,7 @@ const Dashboard = () => {
 
           {/* Adjust grid layout for different screen sizes */}
           <div>
-            <Overview />
+            <AdminOverviewDash />
           </div>
           <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
             <Invoice />

@@ -55,11 +55,11 @@ function AdminRoutes() {
         {/* <Route path="/admin-login" element={<AdminLogin/>} /> */}
 
         <Route path="/admin-dashboard" element={<Dashboard />} />
-        <Route path="/total-leads" element={<TotalLead />} />
-        <Route path="/total-employees" element={<TotalEmployee />} />
-        <Route path="/total-quotations" element={<TotalQuotation />} />
-        <Route path="/total-invoices" element={<TotalInvoice />} />
-        <Route path="/total-visit" element={<TotalVisit />} />
+        <Route path="/admin-total-leads" element={<TotalLead />} />
+        <Route path="/admin-total-employees" element={<TotalEmployee />} />
+        {/* <Route path="/admin-total-quotations" element={<TotalQuotation />} />
+        <Route path="/admin-total-invoices" element={<TotalInvoice />} /> */}
+        <Route path="/admin-total-visit" element={<TotalVisit />} />
 
         <Route path="/leads" element={<Leads />} />
         <Route path="/social-media-leads" element={<MainSocialLeads />} />

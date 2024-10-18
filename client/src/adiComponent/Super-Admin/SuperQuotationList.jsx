@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ const SuperQuotationList = () => {
   const [itemsPerPage] = useState(10); // Number of items per page
   const [filterText, setFilterText] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchQuotations = async () => {
@@ -99,15 +100,17 @@ const SuperQuotationList = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
+      <div className="container">
       <div className="flex flex-col lg:flex-row">
-        {/* <Link to="/quotation-section" className="text-white">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
+        
+        
+
+        <div className="flex-grow p-4 mt-14 sm:ml-0">
+          
+          <button onClick={() => navigate(-1)}  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-10 rounded mt-2">
             <i className="bi bi-arrow-return-left mx-1"></i>Back
           </button>
-        </Link> */}
-
-        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
-          <center className="text-2xl text-center mt-8 font-medium">
+          <center className="text-2xl text-center  font-medium">
             Total Quotations
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
@@ -225,6 +228,7 @@ const SuperQuotationList = () => {
             activeClassName={"bg-gray-200"}
           />
         </div>
+      </div>
       </div>
     </>
   );

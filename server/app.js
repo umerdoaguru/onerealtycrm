@@ -114,33 +114,98 @@ const convertXMLToJSON = (xml) => {
   };
 };
 
-// Fetch and Save Data Function
+// // Fetch and Save Data Function
+// const fetchDataAndSave = async () => {
+//   try {
+//     const url = 'https://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/';
+//     const xmlRequest = `<?xml version='1.0'?><query><user_name>onenirvana</user_name><pswd>onerealty@123</pswd><start_date>${formattedStartDate}</start_date><end_date>${formattedEndDate}</end_date></query>`;
+//     const response = await axios.post(url, { xml: xmlRequest }, {
+//       headers: { 'Content-Type': 'multipart/form-data' }
+//     });
+
+//     console.log('API Response:', response.data);
+
+//     // Convert the XML response to JSON change ho gya
+//     const jsonResponse = convertXMLToJSON(response.data);
+//     console.log(jsonResponse);
+
+//     // Check if there are responses to save yadi hua to nhi to respose
+//     if (jsonResponse.Responses.length === 0) {
+//       console.log('No responses to save.');
+//       return;
+//     }
+
+//     // Insert karte me database with validation
+//     for (const response of jsonResponse.Responses) {
+//       const { QueryId, ProjName, CityName, QryInfo, RcvdOn } = response.QueryDetails;
+//       const { Name, Email, Phone } = response.ContactDetails;
+
+//       // Check if the entry already exists
+//       const existingEntryQuery = `
+//         SELECT * FROM responses_99acres 
+//         WHERE email = ? AND phone = ? AND project_name = ?
+//       `;
+//       const existingEntryValues = [Email, Phone, ProjName]; // Get the date from received_on
+
+//       db.query(existingEntryQuery, existingEntryValues, (error, results) => {
+//         if (error) {
+//           console.error('Error checking for existing entry:', error);
+//           return;
+//         }
+
+//         if (results.length > 0) {
+//           console.log(`Entry already exists for ${Name} on ${ProjName}. Skipping...`);
+//           return; // vo entry save nhi hogii
+//         }
+
+//         // jo entry pehle se vo save nhi hogi, save the new entry
+//         const sql = 'INSERT INTO responses_99acres (query_id, project_name, city_name, query_info, received_on, contact_name, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+//         const leadData = [QueryId, ProjName, CityName, QryInfo, RcvdOn, Name, Email, Phone];
+//         console.log('Checking lead data:', leadData);
+
+//         db.query(sql, leadData, (err) => {
+//           if (err) {
+//             console.error('Error inserting into database:', err);
+//           } else {
+//             console.log('Data inserted:', { QueryId, Name });
+//           }
+//         });
+//       });
+//     }
+
+//   } catch (error) {
+//     console.error('Error fetching and saving 99Acres responses:', error);
+//   }
+// };
+
+
+// fetchDataAndSave();
+// // Fetch data every 10 minutes
+// setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 <minutes></minutes>
 const fetchDataAndSave = async () => {
   try {
     const url =
       "https://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/";
     const xmlRequest = `<?xml version='1.0'?><query><user_name>onenirvana</user_name><pswd>onerealty@123</pswd><start_date>${formattedStartDate}</start_date><end_date>${formattedEndDate}</end_date></query>`;
-    const response = await axios.post(
-      url,
-      { xml: xmlRequest },
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+
+    // Make the API request
+    const response = await axios.post(url, { xml: xmlRequest }, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
 
     console.log("API Response:", response.data);
 
-    // Convert the XML response to JSON change ho gya
+    // Convert the XML response to JSON
     const jsonResponse = convertXMLToJSON(response.data);
     console.log(jsonResponse);
 
-    // Check if there are responses to save yadi hua to nhi to respose
+    // Check if there are any responses to save
     if (jsonResponse.Responses.length === 0) {
       console.log("No responses to save.");
       return;
     }
 
-    // Insert karte me database with validation
+    // Sequentially insert data into the database
     for (const response of jsonResponse.Responses) {
       const { QueryId, ProjName, CityName, QryInfo, RcvdOn } =
         response.QueryDetails;
@@ -149,44 +214,42 @@ const fetchDataAndSave = async () => {
       // Check if the entry already exists
       const existingEntryQuery = `
         SELECT * FROM responses_99acres 
-        WHERE email = ? AND phone = ? AND DATE(received_on) = ?
+        WHERE email = ? AND phone = ? AND project_name = ?
       `;
-      const existingEntryValues = [Email, Phone, RcvdOn.split(" ")[0]]; // Get the date from received_on
+      const existingEntryValues = [Email, Phone, ProjName];
 
-      db.query(existingEntryQuery, existingEntryValues, (error, results) => {
-        if (error) {
-          console.error("Error checking for existing entry:", error);
-          return;
-        }
-
-        if (results.length > 0) {
-          console.log(
-            `Entry already exists for ${Name} on ${RcvdOn}. Skipping...`
-          );
-          return; // vo entry save nhi hogii
-        }
-
-        // jo entry pehle se vo save nhi hogi, save the new entry
-        const sql =
-          "INSERT INTO responses_99acres (query_id, project_name, city_name, query_info, received_on, contact_name, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        const leadData = [
-          QueryId,
-          ProjName,
-          CityName,
-          QryInfo,
-          RcvdOn,
-          Name,
-          Email,
-          Phone,
-        ];
-        console.log("Checking lead data:", leadData);
-
-        db.query(sql, leadData, (err) => {
-          if (err) {
-            console.error("Error inserting into database:", err);
-          } else {
-            console.log("Data inserted:", { QueryId, Name });
+      // Check for existing entries in a Promise
+      const existingEntry = await new Promise((resolve, reject) => {
+        db.query(existingEntryQuery, existingEntryValues, (error, results) => {
+          if (error) {
+            return reject(error);
           }
+          resolve(results);
+        });
+      });
+
+      // If entry already exists, skip to the next one
+      if (existingEntry.length > 0) {
+        console.log(`Entry already exists for ${Name} on ${ProjName}. Skipping...`);
+        continue;
+      }
+
+      // Insert new entry
+      const insertQuery = `
+        INSERT INTO responses_99acres 
+        (query_id, project_name, city_name, query_info, received_on, contact_name, email, phone) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+      const leadData = [QueryId, ProjName, CityName, QryInfo, RcvdOn, Name, Email, Phone];
+
+      // Insert data into the database with a Promise
+      await new Promise((resolve, reject) => {
+        db.query(insertQuery, leadData, (error) => {
+          if (error) {
+            return reject(error);
+          }
+          console.log('Data inserted:', { QueryId, Name });
+          resolve();
         });
       });
     }
@@ -195,9 +258,12 @@ const fetchDataAndSave = async () => {
   }
 };
 
-// fetchDataAndSave();
-// // Fetch data every 10 minutes
-// setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 <minutes></minutes>
+// Call the function initially
+fetchDataAndSave();
+
+// Fetch data every 10 minutes
+setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 minutes
+
 
 const PORT = process.env.PORT;
 

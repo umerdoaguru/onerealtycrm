@@ -31,6 +31,9 @@ import SuperAdminVisit from "../adiComponent/Super-Admin/SuperAdminVisit";
 import SuperAdminTotalLead from "../adiComponent/Super-Admin/SuperAdminTotalLead";
 import SuperAdminTotalEmployee from "../adiComponent/Super-Admin/SuperAdminTotalEmployee";
 import SuperAdminTotalClosedDeal from "../adiComponent/Super-Admin/SuperAdminTotalClosedDeal";
+import EmployeeProfile from "../adiComponent/Super-Admin/employeProfile";
+import AdminProfile from "../adiComponent/Super-Admin/adminProfile";
+import SuperAdminProfile from "../adiComponent/Super-Admin/superAdminProfile";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -63,6 +66,18 @@ function SuperAdminRoutes() {
         <Route
           path="/super-admin-lead-single-data/:id"
           element={<Super_Single_Lead_Profile />}
+        />
+        <Route
+          path="/super-admin-employee-single/:employeeId"
+          element={<EmployeeProfile />}
+        />
+        <Route
+          path="/super-admin-admin-employe/:adminId"
+          element={<AdminProfile />}
+        />
+        <Route
+          path="/super-admin-profile"
+          element={<SuperAdminProfile />}
         />
 
         {/* <Route path="/" element={user? <Dashboard/> :<Landingpage/>} /> */}
@@ -106,10 +121,7 @@ function SuperAdminRoutes() {
 
         <Route path="/edit-profile" element={<UserProfile />} />
 
-        <Route
-          path="/employee-single/:employeeId"
-          element={<EmployeeSingle />}
-        />
+        
         <Route
           path="/singleOrganization/:id"
           element={<SingleOrganization />}

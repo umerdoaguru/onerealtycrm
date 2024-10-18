@@ -9,11 +9,10 @@ import axios from "axios";
 // import Sider from '../components/Sider';
 import { SiMoneygram } from "react-icons/si";
 import { MdOutlineNextWeek } from "react-icons/md";
-import { GiFiles, GiMoneyStack  } from "react-icons/gi";
-import { FaCheckCircle } from "react-icons/fa"; 
+import { GiFiles, GiMoneyStack } from "react-icons/gi";
 import { Link } from "react-router-dom";
 
-const Overview2 = () => {
+const AdminOverviewDash = () => {
   // const [metrics, setMetrics] = useState([
   //     { title: 'Total Leads', value: 0, positive: true },
   //     { title: 'Total Invoices', value: 0, positive: false },
@@ -72,9 +71,6 @@ const Overview2 = () => {
 
   const employeeCount = employee.length;
   const leadCount = leads.length;
-  const closedCount = leads.filter(
-    (lead) => lead.deal_status === "close"
-  ).length; // Get count for Closed Data
   // const quotationCount = quotation.length;
   // const invoiceCount = invoice.length;
 
@@ -82,7 +78,7 @@ const Overview2 = () => {
     <>
       <div className="flex flex-wrap justify-around mt-5">
         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-          <Link to="/super-admin-total-lead">
+          <Link to="/admin-total-leads">
             <div
               className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600 border-1" // Change background color if active
               //   onClick={() => setSelectedComponent('LeadData')}  // Set selected component
@@ -105,7 +101,7 @@ const Overview2 = () => {
         </div>
 
         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-          <Link to="/super-admin-total-visit">
+          <Link to="/admin-total-visit">
             <div className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600">
               <div className="p-4 flex flex-col items-center text-center">
                 <div className=" text-3xl text-gray-700">
@@ -125,7 +121,7 @@ const Overview2 = () => {
         </div>
 
         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-          <Link to="/super-admin-total-employee">
+          <Link to="/admin-total-employees">
             <div
               className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600" // Change background color if active
               //   onClick={() => setSelectedComponent('EmployeeData')}  // Set selected component
@@ -146,55 +142,10 @@ const Overview2 = () => {
             </div>
           </Link>
         </div>
-         {/* Card for Closed Data */}
-         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-          <Link to="/super-admin-close-data">
-            <div
-              className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                selectedComponent === "ClosedData"
-                  ? "bg-blue-500 text-white"
-                  : ""
-              }`}
-              onClick={() => setSelectedComponent("ClosedData")}
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div
-                  className={`text-3xl ${
-                    selectedComponent === "ClosedData"
-                      ? "text-white"
-                      : "text-gray-700"
-                  }`}
-                >
-                  <FaCheckCircle />
-                </div>
-                <div className="mt-2">
-                  <h5
-                    className={`text-xl font-semibold ${
-                      selectedComponent === "ClosedData"
-                        ? "text-white"
-                        : "text-gray-800"
-                    }`}
-                  >
-                    Closed Data
-                  </h5>
-                  <p
-                    className={`${
-                      selectedComponent === "ClosedData"
-                        ? "text-white"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    {closedCount}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div>
         
       </div>
     </>
   );
 };
 
-export default Overview2;
+export default AdminOverviewDash;

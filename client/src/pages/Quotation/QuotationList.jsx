@@ -7,7 +7,8 @@ import ReactPaginate from "react-paginate";
 import Header from "./Header";
 import MainHeader from "../../components/MainHeader";
 import Sider from "../../components/Sider";
-import SuperAdminSider from "../../adiComponent/vinay/SuperAdminSider";
+
+import SuperAdminSider from './../../adiComponent/Super-Admin/SuperAdminSider';
 
 const QuotationList = () => {
   const [quotations, setQuotations] = useState([]);

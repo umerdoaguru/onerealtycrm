@@ -19,7 +19,7 @@ const SuperReports = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredData, setFilteredData] = useState(data);
   const [rowPerPage, setRowPerPage] = useState(5);
-  const [date, setDate] = useState({startDate: "", endDate: ""});
+  const [date, setDate] = useState({ startDate: "", endDate: "" });
   const [dataFields, setDataFields] = useState({
     "Visited lead": {
       heading: [
@@ -300,29 +300,34 @@ const SuperReports = () => {
 
   const searchByDate = () => {
     // console.log(dataFields?.[selectedCategory]);
-    if(date.startDate === "" || date.endDate === "") {
+    if (date.startDate === "" || date.endDate === "") {
       cogoToast.info("Date is set");
-      return
+      return;
     }
-    const filteredData = dataFields?.[selectedCategory]?.[selectedCategory].filter((item) => {
+    const filteredData = dataFields?.[selectedCategory]?.[
+      selectedCategory
+    ].filter((item) => {
       const currentDate = new Date(item.createdTime);
-      return currentDate.getTime() >= new Date(date.startDate).getTime() && currentDate.getTime() <= new Date(date.endDate).getTime();
+      return (
+        currentDate.getTime() >= new Date(date.startDate).getTime() &&
+        currentDate.getTime() <= new Date(date.endDate).getTime()
+      );
     });
 
     setDataFields({
       ...dataFields,
       [selectedCategory]: {
         ...dataFields[selectedCategory],
-        [selectedCategory]: filteredData
-      }
-    })
-  }
+        [selectedCategory]: filteredData,
+      },
+    });
+  };
 
   const clearDate = () => {
     // Clear the date states
     console.log(dataFields);
-    setDate({startDate: "", endDate: ""});
-    
+    setDate({ startDate: "", endDate: "" });
+
     let defaultEmployeLead = data?.leads.filter(
       (lead) => lead.employeeId == selectEmploye
     );
@@ -336,7 +341,7 @@ const SuperReports = () => {
     };
 
     // console.log(combinedData);
-  
+
     const updatedDataFields = {
       ...dataFields,
       "Visited lead": {
@@ -356,10 +361,9 @@ const SuperReports = () => {
     // Update the state with the unfiltered data
     setDataFields(updatedDataFields);
     setData(combinedData);
-  
+
     console.log("Date filter cleared, showing all data");
   };
-  
 
   // const downloadExcel = () => {
   //   const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
@@ -376,158 +380,177 @@ const SuperReports = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="flex flex-col lg:flex-row">
-        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
-          <center className="text-2xl text-center mt-8 font-medium">
-            Reports
-          </center>
-          <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-          <div className="gap-4 mb-3">
-            <div className="flex flex-col space-y-4 lg:space-y-0 md:flex-row justify-between  mb-8">
-              <div className="flex flex-wrap justify-center max-sm:justify-center">
-                <div className="flex flex-wrap justify-center items-center p-2 rounded-lg mt-0">
-                  {["Visited lead", "leads"].map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => handleCategoryClick(category)}
-                      className={`px-3 py-1 mr-3 rounded-lg hover:bg-blue-600 transition-colors rounded-lg  font-medium ${
-                        selectedCategory === category
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200"
-                      }`}
-                    >
-                      {category.charAt(0).toUpperCase() + category.slice(1)}
-                    </button>
-                  ))}
-                </div>
+      <div className="container p-4 mt-14">
+        <center className="text-2xl text-center mt-8 font-medium">
+          Reports
+        </center>
+        <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
+        {/* <div className="gap-4 mb-3"> */}
+        {/* <div className="flex flex-wrap justify-center mb-8"> */}
+        <div className="flex md:flex-row max-sm:flex-col mb-8">
+          <div className="flex">
+            <div className="flex  justify-center items-center p-2 rounded-lg mt-0">
+              {["Visited lead", "leads"].map((category) => (
+                <button
+                  key={category}
+                  onClick={() => handleCategoryClick(category)}
+                  className={`px-3 py-1 mr-3 hover:bg-blue-600 transition-colors rounded-lg  font-medium ${
+                    selectedCategory === category
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  {category.charAt(0).toUpperCase() + category.slice(1)}
+                </button>
+              ))}
+            </div>
 
-                <div className="md:flex sm:w-auto sm:flex-1 md:w-full items-center justify-center ">
-                  {/* Date Filter */}
-                  <div className="flex md:items-center sm:items-center md:mr-2 rounded-lg mt-0  p-1 ">
-                    <input
-                      type="date"
-                      value={date.startDate}
-                      onChange={(e) => setDate({...date, startDate: e.target.value})}
-                      className="border border-gray-300 px-2 py-1 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
-                    />
-                    <div className="px-4 text-gray-600">
-                      <p>to</p>
-                    </div>
-                    <input
-                      type="date"
-                      value={date.endDate}
-                      onChange={(e) => setDate({...date, endDate: e.target.value})}
-                      className="border border-gray-300 px-2 py-1 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
-                    />
-                  </div>
-
-                  {/* Buttons */}
-                  <div>
-                    <button onClick={searchByDate}  className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors">
-                      Search by Date
-                    </button>
-                  </div>
-                  <div className="ml-2">
-                    <button onClick={clearDate}  className="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-400 transition-colors">
-                      Clear Date
-                    </button>
-                  </div>
-                  {/* <div className="respo md:mx-2 mb-2 ">
-                    <button
-                      onClick={downloadExcel}
-                      className="bg-blue-500 text-white lg:font-medium font-base  lg:px-3 px-1 py-1 rounded hover:bg-blue-700 sm:auto w-full"
-                    >
-                      Download
-                    </button>
-                  </div> */}
-                  {/* </div> */}
-
-                  <div className="flex justify-center items-center px-1 py-1 bg-gray-100 border mx-2 rounded-lg mt-0">
-                    <BsFilter className="lg:mr-2 mr-0" />
-                    {selectedCategory === "Visited lead" ? (
-                      <select
-                      value={selectEmploye}
-                        onChange={changeVisitedLeadData}
-                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
+            <div className="flex items-center w-full">
+              <div className="flex px-1 py-1.5 border mx-2 rounded-lg mt-0">
+                <BsFilter className="lg:mr-2 mr-0" />
+                {selectedCategory === "Visited lead" ? (
+                  <select
+                    value={selectEmploye}
+                    onChange={changeVisitedLeadData}
+                    className="bg-transparent border-gray-300 rounded sm:px-2 w-full outline-none"
+                  >
+                    {dataFields?.employee?.employee?.map((emp_name) => (
+                      <option
+                        key={emp_name.employeeId}
+                        value={emp_name.employeeId}
                       >
-                        {dataFields?.employee?.employee?.map((emp_name) => (
-                          <option
-                            key={emp_name.employeeId}
-                            value={emp_name.employeeId}
-                          >
-                            Leads of Emp : {emp_name.name.toUpperCase()}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <select
-                        value={filter}
-                        onChange={handleFilterChange}
-                        className="bg-transparent border-gray-300 rounded sm:px-2 sm:py-1 px-0 py-0 w-full outline-none"
-                      >
-                        <option value="All">All</option>
-                        <option value="week">Week</option>
-                        <option value="month">Month</option>
-                        <option value="half-year">Half Year</option>
-                        <option value="year">Year</option>
-                      </select>
-                    )}
-                  </div>
-
-                  <div className="respo flex-1 md:mx-2 ">
-                    <button
-                      onClick={handleDownload}
-                      className="bg-blue-500 flex justify-center items-center text-white lg:font-medium font-base  lg:px-3 px-3 py-1 rounded hover:bg-blue-700 sm:auto w-full"
-                    >
-                      <BsDownload className="mr-2" /> Download
-                    </button>
-                  </div>
-                </div>
+                        Leads of Emp : {emp_name.name.toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <select
+                    value={filter}
+                    onChange={handleFilterChange}
+                    className="bg-transparent border-gray-300 rounded sm:px-2 px-0 w-full outline-none"
+                  >
+                    <option value="All">All</option>
+                    <option value="week">Week</option>
+                    <option value="month">Month</option>
+                    <option value="half-year">Half Year</option>
+                    <option value="year">Year</option>
+                  </select>
+                )}
               </div>
             </div>
           </div>
-          <div className="overflow-x-auto rounded-lg shadow-md">
-            <table className="min-w-full bg-white">
-              <thead>
-                <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
-                  {dataFields?.[selectedCategory].heading.map((heading) => (
-                    <th className="px-4 py-3">{heading}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
-                0 ? (
-                  dataFields?.[selectedCategory]?.[selectedCategory]
-                    .slice(
-                      (currentPage - 1) * rowPerPage,
-                      currentPage * rowPerPage
-                    )
-                    .map((item, index) => (
-                      <tr key={index} className="border-b border-gray-200">
-                        {dataFields[selectedCategory]?.columns.map((column) => (
-                          <td className="px-4 py-3">{item[column]}</td>
-                        ))}
-                      </tr>
-                    ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="py-4 text-center">
-                      No data found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+
+          <div className="flex flex-col md:flex-row items-center ">
+            <div className="flex items-center md:mr-2 rounded-lg mt-2 p-1 w-full md:w-auto">
+              <input
+                type="date"
+                value={date.startDate}
+                onChange={(e) =>
+                  setDate({ ...date, startDate: e.target.value })
+                }
+                className="border border-gray-300 px-2 py-1 rounded-lg focus:outline-none focus:border-blue-500 transition-colors w-full md:w-auto"
+              />
+              <span className="px-1 text-gray-600">
+                <p>to</p>
+              </span>
+              <input
+                type="date"
+                value={date.endDate}
+                onChange={(e) => setDate({ ...date, endDate: e.target.value })}
+                className="border border-gray-300 px-2 py-1 rounded-lg focus:outline-none focus:border-blue-500 transition-colors w-full md:w-auto"
+              />
+            </div>
+
+            <div className="mt-2 md:mt-0 w-full md:w-auto">
+              <button
+                onClick={searchByDate}
+                className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors w-full md:w-auto"
+              >
+                Search by Date
+              </button>
+            </div>
           </div>
 
-          <Pagination
-            currentPage={currentPage}
-            totalItems={data?.[selectedCategory]?.length}
-            itemsPerPage={rowPerPage}
-            onPageChange={setCurrentPage}
-          />
+          <div className="flex items-center justify-center mt-2 md:mt-0 gap-2 flex-wrap">
+            <div className="ml-2">
+              <button
+                onClick={clearDate}
+                className="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-400 transition-colors"
+              >
+                Clear Date
+              </button>
+            </div>
+            <div className="flex-1 md:mx-2 ">
+              <button
+                onClick={handleDownload}
+                className="bg-blue-500 flex justify-center items-center text-white lg:font-medium font-base  lg:px-3 px-3 py-1 rounded hover:bg-blue-700 sm:auto w-full"
+              >
+                <BsDownload className="mr-2" /> Download
+              </button>
+            </div>
+          </div>
         </div>
+        {/* </div> */}
+
+        <div className="overflow-x-auto rounded-lg shadow-md">
+          <table className="bg-white">
+            <thead>
+              {/* <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200"> */}
+              <tr className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                {dataFields?.[selectedCategory].heading.map(
+                  (heading, index) => (
+                    <th key={index} className="px-4 py-3">
+                      {heading}
+                    </th>
+                  )
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
+              0 ? (
+                dataFields?.[selectedCategory]?.[selectedCategory]
+                  .slice(
+                    (currentPage - 1) * rowPerPage,
+                    currentPage * rowPerPage
+                  )
+                  .map((item, index) => (
+                    <tr
+                      key={index}
+                      // className="border-b border-gray-200">
+                      className="px-6 py-4 border-b border-gray-200 text-gray-800"
+                    >
+                      {dataFields[selectedCategory]?.columns.map(
+                        (column, colIndex) => (
+                          <td key={colIndex} className="px-4 py-3">
+                            {item[column]}
+                          </td>
+                        )
+                      )}
+                    </tr>
+                  ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={
+                      dataFields?.[selectedCategory]?.heading.length || 1
+                    }
+                    className="py-4 text-center"
+                  >
+                    No data found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalItems={data?.[selectedCategory]?.length}
+          itemsPerPage={rowPerPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </>
   );

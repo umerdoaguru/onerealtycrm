@@ -464,7 +464,7 @@ const CopyQuotationData = async (req, res) => {
   }
 };
 
-const Quotationviaid = (req, res) => {
+Quotationviaid = (req, res) => {
   try {
     const quotation_id = req.params.id;
 
@@ -791,10 +791,10 @@ const createLead = (req, res) => {
     assignedTo,
     leadSource,
     employeeId,
-    subject,
+    subject,address,
     createdTime,
   } = req.body;
-  const sql = `INSERT INTO leads (lead_no, name, phone, assignedTo, leadSource, employeeId,subject,createdTime) VALUES (?,?,?, ?, ?, ?, ?,?)`;
+  const sql = `INSERT INTO leads (lead_no, name, phone, assignedTo, leadSource, employeeId,subject,address,createdTime) VALUES (?,?,?,?, ?, ?, ?, ?,?)`;
   db.query(
     sql,
     [
@@ -804,7 +804,7 @@ const createLead = (req, res) => {
       assignedTo,
       leadSource,
       employeeId,
-      subject,
+      subject,address,
       createdTime,
     ],
     (err, results) => {
@@ -821,7 +821,7 @@ const createLead = (req, res) => {
 //   const socialmediaLead = (req, res) => {
 //     const { lead_no, name, phone, assignedTo, leadSource, employeeId,subject ,createdTime} = req.body;
 //     const sql = `INSERT INTO leads (lead_no, name, phone, assignedTo, leadSource, employeeId,subject) VALUES (?,?,?, ?, ?, ?, ?,?)`;
-//     db.query(sql, [lead_no, name, phone, assignedTo, leadSource, employeeId,subject,createdTime,], (err, results) => {
+//     db.query(sql, [lead_no, name, phone, assignedTo, leadSource, employeeId,subject,address,createdTime,], (err, results) => {
 //         if (err) {
 //             res.status(500).json({ error: "Error inserting data" });
 //         } else {
@@ -887,7 +887,7 @@ const updateLead = async (req, res) => {
       leadSource,
       employeeId,
       createdTime,
-      subject,
+      subject,address,
     } = req.body;
 
     // Construct SQL query to update the lead
@@ -907,7 +907,7 @@ const updateLead = async (req, res) => {
           employeeId,
           leadSource,
           createdTime,
-          subject,
+          subject,address,
           leadId,
         ],
         (err, results) => {

@@ -172,7 +172,7 @@ function EmployeeRoutes() {
           <Route path="/overview" element={<Overview />} />
 
           <Route path="/edit-profile" element={<UserProfile />} />
-          <Route path="/employee-management" element={<EmployeeManagement />} />
+          {/* <Route path="/employee-management" element={<EmployeeManagement />} /> */}
           <Route
             path="/employee-single/:employeeId"
             element={<EmployeeSingle />}

@@ -6,7 +6,8 @@ import Sider from "../components/Sider";
 import axios from "axios";
 import Pagination from "./comp/pagination";
 import moment from "moment";
-import SuperAdminSider from "./vinay/SuperAdminSider";
+
+import SuperAdminSider from './Super-Admin/SuperAdminSider';
 
 const Reporting = () => {
   const [data, setData] = useState([]);

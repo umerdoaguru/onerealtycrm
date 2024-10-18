@@ -2,10 +2,13 @@ import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import MainHeader from "./../MainHeader";
+
+import { useSelector } from "react-redux";
+import MainHeader from "../MainHeader";
 import Sider from "../Sider";
 
-function TotalLead() {
+
+const AdminTotalLead = () => {
   const [leads, setLeads] = useState([]);
   const navigate = useNavigate();
 
@@ -13,28 +16,30 @@ function TotalLead() {
     fetchLeads();
   }, []);
 
-  useEffect(() => {
-    fetchLeads();
-  }, []);
-
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get(`http://localhost:9000/api/leads`);
+      console.log(response);
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
   };
-  const handleBackClick = () => {
-    navigate(-1); // -1 navigates to the previous page in history
-  };
-
   return (
     <>
       <MainHeader />
       <Sider />
       <div className="container">
-        <h1 className="text-2xl text-center mt-[5rem]">Total Leads </h1>
+        <div className="mt-[5rem]">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+
+        <h1 className="text-2xl text-center ">Total Leads </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
 
@@ -113,6 +118,6 @@ function TotalLead() {
       </div>
     </>
   );
-}
+};
 
-export default TotalLead;
+export default AdminTotalLead;
