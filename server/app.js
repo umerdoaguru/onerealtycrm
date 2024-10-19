@@ -142,7 +142,7 @@ const convertXMLToJSON = (xml) => {
 
 //       // Check if the entry already exists
 //       const existingEntryQuery = `
-//         SELECT * FROM responses_99acres 
+//         SELECT * FROM responses_99acres
 //         WHERE email = ? AND phone = ? AND project_name = ?
 //       `;
 //       const existingEntryValues = [Email, Phone, ProjName]; // Get the date from received_on
@@ -178,7 +178,6 @@ const convertXMLToJSON = (xml) => {
 //   }
 // };
 
-
 // fetchDataAndSave();
 // // Fetch data every 10 minutes
 // setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 <minutes></minutes>
@@ -189,9 +188,13 @@ const fetchDataAndSave = async () => {
     const xmlRequest = `<?xml version='1.0'?><query><user_name>onenirvana</user_name><pswd>onerealty@123</pswd><start_date>${formattedStartDate}</start_date><end_date>${formattedEndDate}</end_date></query>`;
 
     // Make the API request
-    const response = await axios.post(url, { xml: xmlRequest }, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await axios.post(
+      url,
+      { xml: xmlRequest },
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
 
     console.log("API Response:", response.data);
 
@@ -230,7 +233,9 @@ const fetchDataAndSave = async () => {
 
       // If entry already exists, skip to the next one
       if (existingEntry.length > 0) {
-        console.log(`Entry already exists for ${Name} on ${ProjName}. Skipping...`);
+        console.log(
+          `Entry already exists for ${Name} on ${ProjName}. Skipping...`
+        );
         continue;
       }
 
@@ -240,7 +245,16 @@ const fetchDataAndSave = async () => {
         (query_id, project_name, city_name, query_info, received_on, contact_name, email, phone) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `;
-      const leadData = [QueryId, ProjName, CityName, QryInfo, RcvdOn, Name, Email, Phone];
+      const leadData = [
+        QueryId,
+        ProjName,
+        CityName,
+        QryInfo,
+        RcvdOn,
+        Name,
+        Email,
+        Phone,
+      ];
 
       // Insert data into the database with a Promise
       await new Promise((resolve, reject) => {
@@ -248,7 +262,7 @@ const fetchDataAndSave = async () => {
           if (error) {
             return reject(error);
           }
-          console.log('Data inserted:', { QueryId, Name });
+          console.log("Data inserted:", { QueryId, Name });
           resolve();
         });
       });
@@ -258,12 +272,11 @@ const fetchDataAndSave = async () => {
   }
 };
 
-// Call the function initially
-fetchDataAndSave();
+// // Call the function initially
+// fetchDataAndSave();
 
 // Fetch data every 10 minutes
-setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 minutes
-
+// setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 minutes
 
 const PORT = process.env.PORT;
 
