@@ -23,7 +23,7 @@ const EmployeeInvoiceGraph = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/get-employee-invoice/${EmpId}`
+          `https://crm.one-realty.in/api/get-employee-invoice/${EmpId}`
         );
         const invoiceList = response.data;
 

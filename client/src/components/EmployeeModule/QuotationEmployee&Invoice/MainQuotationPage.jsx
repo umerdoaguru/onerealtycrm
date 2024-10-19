@@ -44,7 +44,7 @@
 //     const fetchinvoice = async () => {
 //       try {
 //         const response = await axios.get(
-//           `http://localhost:9000/api/company-data`
+//           `https://crm.one-realty.in/api/company-data`
 //         );
 //         setcompanydata(response.data);
 //         console.log(response);
@@ -63,7 +63,7 @@
 //     if (isConfirmed) {
 //       try {
 //         const response = await axios.post(
-//           "http://localhost:9000/api/companydata",
+//           "https://crm.one-realty.in/api/companydata",
 //           {
 //             company_name: CompanyName,
 //           }
@@ -117,7 +117,7 @@
 //         formData.append("digital_sign", companydigitalsign);
 
 //         const response = await axios.post(
-//           "http://localhost:9000/api/upload-company-profile",
+//           "https://crm.one-realty.in/api/upload-company-profile",
 //           formData,
 //           {
 //             headers: {
@@ -424,7 +424,7 @@ function MainQuotationPage() {
     const fetchInvoice = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/company-data`
+          `https://crm.one-realty.in/api/company-data`
         );
         setCompanyData(response.data);
       } catch (error) {
@@ -442,7 +442,7 @@ function MainQuotationPage() {
     if (isConfirmed) {
       try {
         const response = await axios.post(
-          "http://localhost:9000/api/companydata",
+          "https://crm.one-realty.in/api/companydata",
           {
             company_name: CompanyName,
           }
@@ -495,7 +495,7 @@ function MainQuotationPage() {
       formData.append("digital_sign", companyDigitalSign);
 
       const response = await axios.post(
-        "http://localhost:9000/api/upload-company-profile",
+        "https://crm.one-realty.in/api/upload-company-profile",
         formData,
         {
           headers: {

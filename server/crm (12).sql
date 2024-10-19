@@ -204,9 +204,9 @@ CREATE TABLE `invoice_company_proflie` (
 --
 
 INSERT INTO `invoice_company_proflie` (`id`, `logo`, `company_name`, `company_name_account_name`, `company_name_account_ifsc`, `company_name_account_number`, `company_address`, `charges`, `bank`) VALUES
-(41, 'http://localhost:9000/uploads/logo-1709650245154infosysytems-removebg-preview.png', 'Doaguru Infosystems', 'DOAGuru InfoSystems', 'SBIN0004677', '38666325192', '1815 Wright Town, Jabalpur, Madhya pradesh INDIA 482002', ' GST-18% : - 23AGLPP2890G1Z7', 'SBI Bank , Jabalpur'),
-(42, 'http://localhost:9000/uploads/logo-1709650492239serviceslogo-removebg-preview.png', 'Doaguru IT Solutions', 'For TDS Payment : DOAGuru IT Solutions', 'HDFC0000224', '50200074931981', '1815 Wright Town, Jabalpur, Madhya pradesh INDIA 482002', 'PAN:- ASTPT3654Q', 'HDFC Bank , Jabalpur'),
-(45, 'http://localhost:9000/uploads/logo-1709650245154infosysytems-removebg-preview.png', 'Doaguru Infosystems IGST', 'DOAGuru InfoSystems', 'SBIN0004677', '38666325192', '1815 Wright Town, Jabalpur, Madhya pradesh INDIA 482002', ' IGST-18% : - 23AGLPP2890G1Z7', 'SBI Bank , Jabalpur');
+(41, 'https://crm.one-realty.in/uploads/logo-1709650245154infosysytems-removebg-preview.png', 'Doaguru Infosystems', 'DOAGuru InfoSystems', 'SBIN0004677', '38666325192', '1815 Wright Town, Jabalpur, Madhya pradesh INDIA 482002', ' GST-18% : - 23AGLPP2890G1Z7', 'SBI Bank , Jabalpur'),
+(42, 'https://crm.one-realty.in/uploads/logo-1709650492239serviceslogo-removebg-preview.png', 'Doaguru IT Solutions', 'For TDS Payment : DOAGuru IT Solutions', 'HDFC0000224', '50200074931981', '1815 Wright Town, Jabalpur, Madhya pradesh INDIA 482002', 'PAN:- ASTPT3654Q', 'HDFC Bank , Jabalpur'),
+(45, 'https://crm.one-realty.in/uploads/logo-1709650245154infosysytems-removebg-preview.png', 'Doaguru Infosystems IGST', 'DOAGuru InfoSystems', 'SBIN0004677', '38666325192', '1815 Wright Town, Jabalpur, Madhya pradesh INDIA 482002', ' IGST-18% : - 23AGLPP2890G1Z7', 'SBI Bank , Jabalpur');
 
 -- --------------------------------------------------------
 

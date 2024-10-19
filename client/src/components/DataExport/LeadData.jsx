@@ -15,7 +15,7 @@
 
 //     const fetchLeads = async () => {
 //         try {
-//             const response = await axios.get('http://localhost:9000/api/leads');
+//             const response = await axios.get('https://crm.one-realty.in/api/leads');
 //             setLeads(response.data);
 //         } catch (error) {
 //             console.error('Error fetching leads:', error);
@@ -88,7 +88,7 @@ function LeadData() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads");
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering
     } catch (error) {

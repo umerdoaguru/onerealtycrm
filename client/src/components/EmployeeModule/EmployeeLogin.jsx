@@ -20,7 +20,7 @@ function EmployeeLogin() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:9000/api/employee-login",
+        "https://crm.one-realty.in/api/employee-login",
         formData
       );
       if (res.data.success) {

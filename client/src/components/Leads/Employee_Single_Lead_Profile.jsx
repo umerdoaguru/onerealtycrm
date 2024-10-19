@@ -127,7 +127,7 @@ function Employee_Single_Lead_Profile() {
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
-  //     const response = await axios.get(http://localhost:9000/api/leads/${id});
+  //     const response = await axios.get(https://crm.one-realty.in/api/leads/${id});
   //     setLeads(response.data);
   //     console.log(response);
   //   } catch (error) {
@@ -137,7 +137,7 @@ function Employee_Single_Lead_Profile() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
       console.log(response.data);
       setLeads(response.data);
 
@@ -195,7 +195,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
-        `http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`,
+        `https://crm.one-realty.in/api/updateLeadStatus/${currentLead.lead_id}`,
         currentLead
       );
 
