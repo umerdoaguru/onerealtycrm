@@ -41,6 +41,7 @@ function Super_Admin_Adminmanagement() {
   const handleCancel = () => {
     setNewAdmin(initialAdminState); // Reset the form state
     setShowForm(false); // Close the modal
+    setValidationErrors({})
   };
 
   // Fetch all admins from the backend
@@ -126,7 +127,8 @@ function Super_Admin_Adminmanagement() {
   };
 
   // Save or update admin
-  const handleSaveAdmin = async () => {
+  const handleSaveAdmin = async (e) => {
+    e.preventDefault();
     console.log("Form submission started.");
 
     if (!(await validateForm())) {
@@ -326,10 +328,7 @@ function Super_Admin_Adminmanagement() {
               {editingIndex !== null ? "Edit Employee" : "Add Employee"}
             </h3>
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSaveAdmin();
-              }}
+              onSubmit={handleSaveAdmin}
             >
               <input
                 type="text"

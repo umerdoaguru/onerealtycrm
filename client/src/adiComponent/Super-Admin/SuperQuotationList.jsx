@@ -37,6 +37,9 @@ const SuperQuotationList = () => {
   };
 
   const handleFilterChange = (event) => {
+    let value = event.target.value;
+    if(value === ' ') return;
+    
     setFilterText(event.target.value);
   };
 

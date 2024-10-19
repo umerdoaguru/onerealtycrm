@@ -30,6 +30,7 @@ const SuperReports = () => {
         "Date",
         "Lead Source",
         "Quotation Status",
+        "Visit Status",
         "Invoice Status",
         "Deal Status",
         "FollowUp Status",
@@ -42,6 +43,7 @@ const SuperReports = () => {
         "createdTime",
         "leadSource",
         "quotation_status",
+        "visit",
         "invoice_status",
         "deal_status",
         "follow_up_status",
@@ -89,7 +91,24 @@ const SuperReports = () => {
       const currentDate = new Date();
 
       // Parse the date from created_date or createdTime, whichever exists
-      const itemDate = new Date(item.created_date || item.createdTime);
+      // Function to convert DD/MM/YYYY to MM/DD/YYYY
+      const convertToMMDDYYYY = (dateStr) => {
+        const [day, month, year] = dateStr.split("/"); // Split by "/"
+        return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
+      };
+
+      let itemDate;
+
+      if (selectedCategory === "visit") {
+        itemDate = new Date(convertToMMDDYYYY(item.visit_date));
+      } else if (selectedCategory === "closed") {
+        if (item.deal_status !== "close") {
+          return;
+        }
+        itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
+      } else {
+        itemDate = new Date(convertToMMDDYYYY(item.createdTime)); // Default date if no specific category
+      }
 
       let filterCondition = false;
 
@@ -201,8 +220,9 @@ const SuperReports = () => {
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format("YYYY/MM/DD"),
-      createdTime: moment(item.createdTime).format("YYYY/MM/DD"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
+      visit_date: moment(item.visit_date).format("DD/MM/YYYY"),
+      d_closeDate: moment(item.d_closeDate).format("DD/MM/YYYY"),
     }));
   };
 
@@ -547,7 +567,7 @@ const SuperReports = () => {
 
         <Pagination
           currentPage={currentPage}
-          totalItems={data?.[selectedCategory]?.length}
+          totalItems={dataFields?.[selectedCategory]?.[selectedCategory]?.length}
           itemsPerPage={rowPerPage}
           onPageChange={setCurrentPage}
         />

@@ -26,9 +26,9 @@ function AdminProfile() {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employeeProfile/${adminId}`
+          `https://crm.one-realty.in/api/getAdminById/${adminId}`
         ); // Fetch employee data
-        setUser(response.data[0]); // Set employee data to state
+        setUser(response.data.admin); // Set employee data to state
         console.log(response.data); // Debug: log employee data
       } catch (error) {
         console.error("Error fetching employee data:", error);
@@ -38,8 +38,6 @@ function AdminProfile() {
     fetchEmployee();
   }, [adminId]);
 
-  // Mock data for testing (remove once API is working)
-
   return (
     <>
       <MainHeader />
@@ -47,7 +45,7 @@ function AdminProfile() {
       <div className="flex flex-col justify-center lg:flex-row mt-14">
         <div className="flex-grow md:p-4 mt-14 lg:mt-0 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
-            Employee Profile
+            Admin Profile
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
           <div className="flex flex-wrap justify-center mb-4">
@@ -63,7 +61,7 @@ function AdminProfile() {
                 <div>
                   <label className="text-info">Employee ID</label>
                   <div className="p-2 bg-gray-100 rounded">
-                    <p className="m-0">{user?.employeeId}</p>
+                    <p className="m-0">{user?.admin_id}</p>
                   </div>
                 </div>
 

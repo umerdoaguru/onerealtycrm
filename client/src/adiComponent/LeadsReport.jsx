@@ -28,7 +28,7 @@ const LeadsReport = () => {
 
   return (
     <div className="p-4 mt-6 bg-white rounded-lg shadow-lg">
-      <h3 className="mb-4 text-lg font-semibold">Todays Leads</h3>
+      <h3 className="mb-4 text-lg font-semibold">Todays Assign Leads</h3>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border">
           <thead>

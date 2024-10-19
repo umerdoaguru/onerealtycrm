@@ -158,16 +158,23 @@ const EmployeeReport = () => {
 
       // Parse the date from created_date or createdTime, whichever exists
 
+      
+      const convertToMMDDYYYY = (dateStr) => {
+        const [day, month, year] = dateStr.split("/"); // Split by "/"
+        return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
+      };
+
       let itemDate;
+
       if (selectedCategory === "visit") {
-        itemDate = new Date(item.visit_date);
+        itemDate = new Date(convertToMMDDYYYY(item.visit_date));
       } else if (selectedCategory === "closed") {
-        if(item.deal_status !== "close"){ 
+        if (item.deal_status !== "close") {
           return;
         }
-        itemDate = new Date(item.d_closeDate);
+        itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
       } else {
-        itemDate = new Date(item.createdTime); // Default date if no specific category
+        itemDate = new Date(convertToMMDDYYYY(item.createdTime)); // Default date if no specific category
       }
 
       let filterCondition = false;
@@ -286,9 +293,9 @@ const EmployeeReport = () => {
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      createdTime: moment(item.createdTime).format("MM/DD/YYYY"),
-      visit_date: moment(item.visit_date).format("MM/DD/YYYY"),
-      d_closeDate: moment(item.d_closeDate).format("MM/DD/YYYY"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
+      visit_date: moment(item.visit_date).format("DD/MM/YYYY"),
+      d_closeDate: moment(item.d_closeDate).format("DD/MM/YYYY"),
     }));
   };
 
@@ -506,7 +513,7 @@ const EmployeeReport = () => {
           </div>
           <Pagination
             currentPage={currentPage}
-            totalItems={data?.[selectedCategory]?.length}
+            totalItems={dataFields?.[selectedCategory]?.[selectedCategory]?.length}
             itemsPerPage={rowPerPage}
             onPageChange={setCurrentPage}
           />

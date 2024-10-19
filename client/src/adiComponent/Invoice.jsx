@@ -11,55 +11,75 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import styled from "styled-components";
+import moment from "moment";
 
 const LeadVisitChart = () => {
-  const [loading, setLoading] = useState(false);
-  const [visitData, setVisitData] = useState([]); // Store structured data
+  const [loading, setLoading] = useState(false); // Properly manage loading state
+  const [visitData, setVisitData] = useState([]); // Correct state variable name
+  const [error, setError] = useState(null); // To handle and display errors
 
   useEffect(() => {
-    const getLeadList = async () => {
-      setLoading(true);
+    const fetchLeadsData = async () => {
+      setLoading(true); // Start loading
+
       try {
         const response = await axios.get(`https://crm.one-realty.in/api/leads`);
-        const leadList = response.data;
-        console.log(leadList)
-        // Filter out "pending" visits
-        const filteredLeads = leadList.filter((item) => item.visit !== "pending");
+        const allLeads = response.data;
 
-        // Group data by visit_date and count total visits
-        let result = {};
+        const today = moment();
+        const startDate = moment().subtract(28, "days"); // 28 days range including today
 
-        filteredLeads.forEach((lead) => {
-          const visitDate = lead.visit_date;
-          if (visitDate) {
-            if (!result[visitDate]) {
-              result[visitDate] = { date: visitDate, totalVisits: 0 };
-            }
-            // Increment total visit count for the date
-            result[visitDate].totalVisits += 1;
-          }
+        // Format dates to 'MMM DD' for display
+        const formatDate = (date) => moment(date).format("MMM DD");
+
+        // Filter the data for the last 28 days including today
+        const filteredLeads = allLeads.filter((lead) => {
+          const leadDate = moment(lead.visit_date, "YYYY-MM-DD HH:mm:ss"); // Parse the string
+          return leadDate.isBetween(startDate, today, undefined, "[]"); // Check date range
         });
 
-        // Convert result object to array
-        const structuredData = Object.values(result);
-        setVisitData(structuredData); // Set the structured data in state
-        setLoading(false);
+        // Group by date
+        const groupedLeads = filteredLeads.reduce((acc, lead) => {
+          const date = formatDate(moment(lead.visit_date, "YYYY-MM-DD HH:mm:ss"));
+          if (!acc[date]) {
+            acc[date] = 0;
+          }
+          acc[date] += 1;
+          return acc;
+        }, {});
+
+        const leadsData = [];
+        for (let i = 0; i <= 27; i++) {
+          const date = moment().subtract(i, "days");
+          const formattedDate = formatDate(date);
+          leadsData.push({
+            createdDate: formattedDate, // Change 'date' to 'createdDate'
+            Leads: groupedLeads[formattedDate] || 0,
+          });
+        }
+
+        leadsData.reverse();
+        setVisitData(leadsData); // Correct state function usage
       } catch (error) {
-        setLoading(false);
-        console.error(error);
+        console.error("Error fetching leads data:", error);
+        setError("Failed to load leads data");
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
 
-    getLeadList();
+    fetchLeadsData();
   }, []);
 
   return (
     <Wrapper>
       <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-2">Daily Visit Overview</h2>
-        <p className="text-sm text-gray-500 mb-4">Total visits per day (excluding pending)</p>
+        <p className="text-sm text-gray-500 mb-4"> Leads for the past 28 days</p>
         {loading ? (
           <p>Loading...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p> // Display error message
         ) : (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
@@ -75,7 +95,7 @@ const LeadVisitChart = () => {
             >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
-                dataKey="date"
+                dataKey="createdDate" // Use correct data key 'createdDate'
                 tick={{
                   fontSize: 12,
                   transform: "translate(-10,0)",
@@ -87,9 +107,9 @@ const LeadVisitChart = () => {
               <Tooltip />
               <Legend />
               <Bar
-                dataKey="totalVisits"
+                dataKey="Leads" // Corrected to 'Leads' from 'totalVisits'
                 fill="#8884d8"
-                name="Total Visits"
+                name="Total Leads"
                 barSize={15}
               />
             </BarChart>
