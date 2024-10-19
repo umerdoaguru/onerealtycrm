@@ -18,7 +18,7 @@ const LeadsGraph = () => {
   useEffect(() => {
     const fetchLeadsData = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/api/leads");
+        const response = await axios.get("https://crm.one-realty.in/api/leads");
         const allLeads = response.data;
 
         const today = moment();

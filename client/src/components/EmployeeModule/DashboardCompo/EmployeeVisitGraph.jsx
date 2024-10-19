@@ -23,8 +23,8 @@
 //       setLoading(true);
 //       try {
 //         const response = await axios.get(
-//           // `http://localhost:9000/api/get-employee-invoice/${EmpId}`
-//           `http://localhost:9000/api/employe-leads/${EmpId}`
+//           // `https://crm.one-realty.in/api/get-employee-invoice/${EmpId}`
+//           `https://crm.one-realty.in/api/employe-leads/${EmpId}`
 //         );
 //         const invoiceList = response.data;
 
@@ -174,7 +174,7 @@ const EmployeeVisitGraph = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employe-leads/${EmpId}`
+          `https://crm.one-realty.in/api/employe-leads/${EmpId}`
         );
         const leadList = response.data;
 

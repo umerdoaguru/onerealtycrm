@@ -194,19 +194,19 @@ const Reporting = () => {
   };
 
   const quotationAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://crm.one-realty.in/api",
   });
 
   const invoiceAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://crm.one-realty.in/api",
   });
 
   const employeeAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://crm.one-realty.in/api",
   });
 
   const leadsAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://crm.one-realty.in/api",
   });
 
   const formatData = (data) => {

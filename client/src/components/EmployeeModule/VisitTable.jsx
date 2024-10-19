@@ -25,7 +25,7 @@ const VisitTable = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
       );
       const nonPendingLeads = response.data.filter(
         (lead) => lead.visit !== "pending"

@@ -20,7 +20,7 @@ const LeadVisitChart = () => {
     const getLeadList = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:9000/api/leads`);
+        const response = await axios.get(`https://crm.one-realty.in/api/leads`);
         const leadList = response.data;
         console.log(leadList)
         // Filter out "pending" visits

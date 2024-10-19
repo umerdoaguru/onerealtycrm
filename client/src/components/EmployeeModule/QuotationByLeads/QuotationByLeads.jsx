@@ -119,7 +119,7 @@ const QuotationByLeads = () => {
           subscription_frequency: service.subscription_frequency,
         };
       });
-      const response = await axios.post("http://localhost:9000/api/quotation", {
+      const response = await axios.post("https://crm.one-realty.in/api/quotation", {
         quotation_name: name,
         services: servicesToSave,
         // employeeId: userId,
@@ -133,7 +133,7 @@ const QuotationByLeads = () => {
       try {
         // Send updated data to the backend using Axios
         const response = await axios.put(
-          `http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,
+          `https://crm.one-realty.in/api/updateOnlyQuotationStatus/${id}`,
           { quotation: "created" }
         );
 
@@ -162,7 +162,7 @@ const QuotationByLeads = () => {
 
   const getServicelist = async () => {
     try {
-      const res = await axios.get(`http://localhost:9000/api/servicelist`);
+      const res = await axios.get(`https://crm.one-realty.in/api/servicelist`);
       console.log(res.data);
       setServiceslist(res.data);
     } catch (error) {
