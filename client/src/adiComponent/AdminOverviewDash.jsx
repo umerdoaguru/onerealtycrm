@@ -11,6 +11,7 @@ import { SiMoneygram } from "react-icons/si";
 import { MdOutlineNextWeek } from "react-icons/md";
 import { GiFiles, GiMoneyStack } from "react-icons/gi";
 import { Link } from "react-router-dom";
+import { FaCheckCircle } from "react-icons/fa";
 
 const AdminOverviewDash = () => {
   // const [metrics, setMetrics] = useState([
@@ -73,7 +74,9 @@ const AdminOverviewDash = () => {
   const leadCount = leads.length;
   // const quotationCount = quotation.length;
   // const invoiceCount = invoice.length;
-
+  const closedCount = leads.filter(
+    (lead) => lead.deal_status === "close"
+  ).length; 
   return (
     <>
       <div className="flex flex-wrap justify-around mt-5">
@@ -142,7 +145,50 @@ const AdminOverviewDash = () => {
             </div>
           </Link>
         </div>
-        
+        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+          <Link to="/admin-total-closed">
+            <div
+              className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "ClosedData"
+                  ? "bg-blue-500 text-white"
+                  : ""
+              }`}
+              onClick={() => setSelectedComponent("ClosedData")}
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div
+                  className={`text-3xl ${
+                    selectedComponent === "ClosedData"
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
+                >
+                  <FaCheckCircle />
+                </div>
+                <div className="mt-2">
+                  <h5
+                    className={`text-xl font-semibold ${
+                      selectedComponent === "ClosedData"
+                        ? "text-white"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    Closed Data
+                  </h5>
+                  <p
+                    className={`${
+                      selectedComponent === "ClosedData"
+                        ? "text-white"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {closedCount}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
       </div>
     </>
   );
