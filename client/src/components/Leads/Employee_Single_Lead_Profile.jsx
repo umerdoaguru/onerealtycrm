@@ -192,6 +192,20 @@ function Employee_Single_Lead_Profile() {
   };
 
   const saveChanges = async () => {
+    console.log(currentLead);
+    if(currentLead.deal_status !== leads[0].deal_status){ 
+      if(currentLead.d_closeDate === "pending") {
+        alert("Please update the deal close date as well");
+        return;
+      }
+    }
+
+    if(currentLead.visit !== leads[0].visit){ 
+      if(currentLead.visit_date === "pending") {
+        alert("Please update the visit date as well");
+        return;
+      }
+    }
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
