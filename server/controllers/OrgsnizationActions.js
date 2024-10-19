@@ -179,44 +179,61 @@ const addEmployee = async (req, res) => {
   try {
     const { name, email, password, position, phone, salary } = req.body;
 
-    // Validations
-    const requiredFields = [name, email];
-    if (requiredFields.some((field) => !field)) {
-      return res.status(400).json({ error: "Name and email are required" });
+    // Validations for required fields
+    if (!name || !email) {
+      return res.status(400).json({ message: "Name and email are required" });
     }
 
-    // Insert employee into the database
-    const insertEmployeeQuery = `
-      INSERT INTO employee (name, email,password, position, phone, salary)
-      VALUES (?, ?,?, ?, ?, ?)
-    `;
+    // Query to check if an employee with the same email already exists
+    const checkEmailQuery = `SELECT * FROM employee WHERE email = ?`;
 
-    const insertEmployeeParams = [
-      name,
-      email,
-      password,
-      position || null,
-      phone || null,
-      salary || null,
-    ];
+    db.query(checkEmailQuery, [email], (emailErr, emailResult) => {
+      if (emailErr) {
+        console.error("Error checking email:", emailErr);
+        return res.status(500).json({ message: "Internal server error" , error: emailErr});
+      }
 
-    db.query(
-      insertEmployeeQuery,
-      insertEmployeeParams,
-      (insertErr, insertResult) => {
-        if (insertErr) {
-          console.error("Error inserting employee:", insertErr);
-          return res.status(500).json({ error: "Internal server error" });
-        } else {
-          console.log("Employee added successfully");
+      if (emailResult.length > 0) {
+        // If the email already exists, return a conflict response
+        return res.status(400).json({
+          success: false,
+          message: "Email already exists",
+        });
+      }
+
+      // If the email does not exist, proceed with inserting the employee
+      const insertEmployeeQuery = `
+        INSERT INTO employee (name, email, password, position, phone, salary)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      const insertEmployeeParams = [
+        name,
+        email,
+        password,
+        position || null,
+        phone || null,
+        salary || null,
+      ];
+
+      db.query(
+        insertEmployeeQuery,
+        insertEmployeeParams,
+        (insertErr, insertResult) => {
+          if (insertErr) {
+            console.error("Error inserting employee:", insertErr);
+            return res.status(500).json({ message: "Internal server error" , error: emailErr});
+          }
+
+          // Employee added successfully
           return res.status(201).json({
             success: true,
             message: "Employee added successfully",
-            employeeId: insertResult.insertId, // Returning the auto-generated ID
+            employeeId: insertResult.insertId, // Returning the auto-generated employee ID
           });
         }
-      }
-    );
+      );
+    });
   } catch (error) {
     console.error("Error in adding employee:", error);
     res.status(500).json({
@@ -226,6 +243,7 @@ const addEmployee = async (req, res) => {
     });
   }
 };
+
 
 // const addEmployee = async (req, res) => {
 //   try {
@@ -386,7 +404,7 @@ const updateSingleEmployee = async (req, res) => {
     const { name, email, position, phone, salary } = req.body;
 
     if (!id) {
-      return res.status(400).json({ error: "Employee ID is required" });
+      return res.status(400).json({ message: "Employee ID is required" });
     }
 
     // Retrieve file paths for photo and signature, if available
@@ -417,11 +435,11 @@ const updateSingleEmployee = async (req, res) => {
     db.query(query, params, (err, results) => {
       if (err) {
         console.error("Error updating employee:", err);
-        return res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error", error: err });
       }
 
       if (results.affectedRows === 0) {
-        return res.status(404).json({ error: "Employee not found" });
+        return res.status(404).json({ message: "Employee not found" });
       }
 
       res
@@ -430,7 +448,7 @@ const updateSingleEmployee = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in updateEmployee:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -623,12 +641,11 @@ const getAllAdmins = async (req, res) => {
 };
 
 const getAdminById = async (req, res) => {
-  const { admin_id } = req.params;
-
+  const { adminId } = req.params;
   try {
     const getAdminByIdQuery = "SELECT * FROM admins WHERE admin_id = ?";
 
-    db.query(getAdminByIdQuery, [admin_id], (err, result) => {
+    db.query(getAdminByIdQuery, [adminId], (err, result) => {
       if (err) {
         console.error("Error fetching admin by ID from MySQL:", err);
         return res.status(500).json({ error: "Internal server error" });
@@ -657,26 +674,45 @@ const addAdmin = async (req, res) => {
   const { name, email, password, position, phone, salary } = req.body;
 
   try {
-    const addAdminQuery = `
-      INSERT INTO admins (name, email, password, position, phone, salary)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `;
+    // Query to check if an admin with the same email already exists
+    const checkEmailQuery = `SELECT * FROM admins WHERE email = ?`;
 
-    db.query(
-      addAdminQuery,
-      [name, email, password, position, phone, salary],
-      (err, results) => {
-        if (err) {
-          console.error("Error adding admin:", err);
-          return res.status(500).json({ error: "Internal server error" });
-        }
+    db.query(checkEmailQuery, [email], (err, results) => {
+      if (err) {
+        console.error("Error checking email:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
 
-        res.status(201).json({
-          success: true,
-          message: "Admin added successfully",
+      if (results.length > 0) {
+        // If the email already exists, return an error response
+        return res.status(400).json({
+          success: false,
+          message: "Email already exists",
         });
       }
-    );
+
+      // If the email does not exist, proceed with adding the admin
+      const addAdminQuery = `
+        INSERT INTO admins (name, email, password, position, phone, salary)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      db.query(
+        addAdminQuery,
+        [name, email, password, position, phone, salary],
+        (err, results) => {
+          if (err) {
+            console.error("Error adding admin:", err);
+            return res.status(500).json({ error: "Internal server error" });
+          }
+
+          res.status(201).json({
+            success: true,
+            message: "Admin added successfully",
+          });
+        }
+      );
+    });
   } catch (error) {
     console.error("Error in adding admin:", error);
     res.status(500).json({
@@ -686,6 +722,7 @@ const addAdmin = async (req, res) => {
     });
   }
 };
+
 
 const updateAdmin = async (req, res) => {
   const { admin_id } = req.params;

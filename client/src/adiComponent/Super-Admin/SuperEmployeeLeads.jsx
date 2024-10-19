@@ -45,6 +45,13 @@ function SuperEmployeeLeads() {
     }
   };
 
+  const handleSearch = (value) =>{
+    if(value === ' '){
+      return;
+    }
+    setSearchTerm(value);
+  }
+
   useEffect(() => {
     let filtered = leads;
     console.log(filtered);
@@ -136,7 +143,7 @@ function SuperEmployeeLeads() {
                   type="text"
                   placeholder="Search by Name, Lead No, Lead Source"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => handleSearch(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 />
               </div>
@@ -299,72 +306,76 @@ function SuperEmployeeLeads() {
                 </tr>
               </thead>
               <tbody>
-                {currentLeads.map((lead, index) => (
-                  <tr
-                    key={lead.lead_id}
-                    className={index % 2 === 0 ? "bg-gray-100" : ""}
-                  >
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1}
-                    </td>
-                    <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
-                      <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-                        {lead.lead_no}
-                      </td>
-                    </Link>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.name}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.phone}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.leadSource}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.assignedTo}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.subject}
-                    </td>
-                    {lead.lead_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-                    {lead.lead_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.lead_status}
-                      </td>
-                    )}
+  {currentLeads.length > 0 ? (
+    currentLeads.map((lead, index) => (
+      <tr
+        key={lead.lead_id}
+        className={index % 2 === 0 ? "bg-gray-100" : ""}
+      >
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {index + 1}
+        </td>
+        <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
+          <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+            {lead.lead_no}
+          </td>
+        </Link>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.name}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.phone}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.leadSource}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.assignedTo}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.subject}
+        </td>
+        {lead.lead_status === "pending" && (
+          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
+            {lead.lead_status}
+          </td>
+        )}
+        {lead.lead_status === "in progress" && (
+          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
+            {lead.lead_status}
+          </td>
+        )}
+        {lead.lead_status === "completed" && (
+          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
+            {lead.lead_status}
+          </td>
+        )}
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {moment(lead.createdTime).format("YYYY-MM-DD")}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.status}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.deal_status}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.visit}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.visit_date}
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={13} className="py-4 text-center">
+        No data found
+      </td>
+    </tr>
+  )}
+</tbody>
 
-                    {lead.lead_status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {moment(lead.createdTime).format("YYYY-MM-DD")}
-                    </td>
-
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.status}
-                    </td>
-
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.deal_status}
-                    </td>
-
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.visit}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.visit_date}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
             </table>
           </div>
           <div className="mt-4 flex justify-center">

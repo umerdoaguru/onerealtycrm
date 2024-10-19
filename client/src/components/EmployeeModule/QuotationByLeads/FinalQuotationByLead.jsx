@@ -10,9 +10,11 @@ import Logout from "../../Logout";
 import UpdateServicesFormBylead from "./UpdateServicesFormBylead";
 import MainHeader from "../../MainHeader";
 import EmployeeeSider from "../EmployeeSider";
+import { useSelector } from "react-redux";
 
 function FinalQuotationByLeads() {
   const navigate = useNavigate();
+  const userName = useSelector(state => state.auth.user);
   const { id } = useParams();
   const [quotations, setQuotations] = useState([]);
   const [quotationName, setQuotationName] = useState("");
@@ -30,7 +32,6 @@ function FinalQuotationByLeads() {
 
         // `http://localhost:9000/api/get-quotation-byEmploye/${id}`
       );
-
       if (response.status === 200) {
         setQuotationName(response.data[0].quotation_name);
         setQuotations(response.data);
@@ -137,6 +138,13 @@ function FinalQuotationByLeads() {
       <MainHeader />
       <EmployeeeSider />
       <div className="flex flex-col  2xl:ml-44 mt-14 ">
+        <div className="text-start mt-2">
+          <Link
+            to={`/View_quotations/${quotations[0]?.lead_id}`}>
+
+          <button className="bg-blue-500 hover:bg-blue-600 py-2 px-3 text-white rounded">back</button>
+          </Link>
+        </div>
         <div className="grid grid-cols-12 gap-4 mt-14">
           <div className="col-span-12 lg:col-span-4 mt-3">
             <div className="mx-lg-4 font-medium mx-2">
@@ -383,12 +391,12 @@ function FinalQuotationByLeads() {
             >
               Review Quotation Data
             </button>
-            <button
+            {/* <button
               className="bg-green-700 hover:bg-green-600 text-white rounded p-2 mt-1"
               onClick={handlePrintPage}
             >
               Print Page
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
