@@ -358,21 +358,18 @@ const getEmployeeById = async (req, res) => {
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, position, phone, salary } = req.body;
+    const { name, email, password, position, phone, salary } = req.body;
 
     if (!id) {
       return res.status(400).json({ error: "Employee ID is required" });
     }
 
-    const query = `
-      UPDATE employee
-      SET name = ?, email = ?, position = ?, phone = ?, salary = ?
-      WHERE employeeId = ?
-    `;
+    const query = ` UPDATE employee SET name = ?, email = ?, password = ?, position = ?, phone = ?, salary = ? WHERE employeeId = ?`;
 
     const params = [
       name,
       email,
+      password,
       position || null,
       phone || null,
       salary || null,

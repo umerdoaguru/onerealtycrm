@@ -28,7 +28,7 @@ const SuperAdminTotalLead = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container">
+      <div className="container 2xl:max-w-[1280px]">
         <div className="mt-[5rem]">
           <button
             onClick={() => navigate(-1)}

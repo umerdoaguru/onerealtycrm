@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BsPencilSquare, BsTrash, BsPlusCircle } from "react-icons/bs";
@@ -108,7 +109,7 @@ const SuperAdEmployeemanagement = () => {
 
   const handleSaveEmployee = async () => {
     if (!(await validateForm())) return; // Stop saving if validation fails
-
+    console.log(newEmployee, employees[editingIndex]);
     try {
       let response;
       if (editingIndex !== null) {
@@ -150,6 +151,7 @@ const SuperAdEmployeemanagement = () => {
 
   const handleEditEmployee = (index) => {
     const employeeToEdit = employees[index];
+    console.log(employeeToEdit);
     setNewEmployee({
       name: employeeToEdit.name,
       email: employeeToEdit.email,

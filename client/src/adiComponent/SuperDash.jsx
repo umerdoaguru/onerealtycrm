@@ -33,7 +33,7 @@ const SuperDash = () => {
       <SuperAdminSider />
       {/* <SuperHeader /> */}
 
-<div className="container">
+<div className="container 2xl:max-w-[1280px]">
   
       <h1 className="text-2xl text-center mt-[5rem] font-medium">
         Super Admin Dashboard

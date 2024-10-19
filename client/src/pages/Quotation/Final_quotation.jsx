@@ -386,13 +386,13 @@ function Final_quotation() {
               </button>
               {/* Print Button */}
               {/* <div className="flex space-x-3 items-center mt-4"> */}
-              <button
+              {/* <button
                 className="bg-green-700 hover:bg-green-600 text-white rounded p-2 mt-1"
                 onClick={handlePrintPage}
                 disabled={quotationStatus !== "	Approved"} // Enable button if approved
               >
                 Print Page
-              </button>
+              </button> */}
               {/* </div> */}
             </div>
           </div>
