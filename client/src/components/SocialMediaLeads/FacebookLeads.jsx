@@ -222,8 +222,11 @@ const FacebookLeads = () => {
                   <td className="py-2 px-4 border-b">{formName}</td>
 
                   <td className="py-2 px-4 border-b">
-                    {new Date(lead.created_time).toLocaleString()}
-                  </td>
+  {lead.created_time 
+    ? `${new Date(lead.created_time).toLocaleDateString('en-GB')} ${new Date(lead.created_time).toLocaleTimeString()}`
+    : 'N/A'}
+</td>
+
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     <button
                       className="text-blue-500 hover:text-blue-700"

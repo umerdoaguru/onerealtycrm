@@ -70,9 +70,18 @@ const TotalVisit = () => {
               <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                 Lead Status
               </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Created Time
-              </th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">
+                      Visit
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300">
+                      Visit Date
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300">
+                      FollowUp Status
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300">
+                      Deal Status
+                    </th>
             </tr>
           </thead>
           <tbody>
@@ -110,13 +119,23 @@ const TotalVisit = () => {
                     {lead.lead_status}
                   </td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {moment(lead.createdTime).format("YYYY-MM-DD")}
-                  </td>
+                          {lead.visit}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                          {lead.visit_date}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                          {lead.follow_up_status}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                          {lead.deal_status}
+                        </td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
+      
     </>
   );
 };

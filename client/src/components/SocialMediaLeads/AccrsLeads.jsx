@@ -166,7 +166,12 @@ function Accrs() {
                <td className="py-2 px-4">{lead.project_name || 'N/A'}</td>
                <td className="py-2 px-4">{lead.city_name || 'N/A'}</td>
                <td className="py-2 px-4">{lead.query_info || 'N/A'}</td>
-               <td className="py-2 px-4">{lead.received_on || 'N/A'}</td>
+               <td className="py-2 px-4">
+  {lead.received_on 
+    ? `${new Date(lead.received_on).toLocaleDateString('en-GB')} ${new Date(lead.received_on).toLocaleTimeString()}`
+    : 'N/A'}
+</td>
+
                <td className="py-2 px-4">{lead.contact_name || 'N/A'}</td>
                <td className="py-2 px-4">{lead.email || 'N/A'}</td>
                <td className="py-2 px-4">{lead.phone || 'N/A'}</td>
