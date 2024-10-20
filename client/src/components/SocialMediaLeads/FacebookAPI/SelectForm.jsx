@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const FormSelector = ({  setLoading, setError, onFormSelect  }) => {
+const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
   const [forms, setForms] = useState([]);
   const [selectedFormId, setSelectedFormId] = useState('');
 
@@ -19,6 +19,7 @@ const FormSelector = ({  setLoading, setError, onFormSelect  }) => {
   // Handle form selection change
   const handleFormChange = (e) => {
     const formId = e.target.value;
+    setMe(formId);
     setSelectedFormId(formId);
     onFormSelect(formId); //pass form id to parents me kiya
   };
@@ -70,12 +71,12 @@ const FormSelector = ({  setLoading, setError, onFormSelect  }) => {
         ))}
       </select>
 
-      <button
+      {/* <button
         onClick={handleFetchLeads}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2"
       >
         Fetch Leads
-      </button>
+      </button> */}
     </div>
   );
 };
