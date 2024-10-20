@@ -242,24 +242,23 @@ function SuperEmployeeLeads() {
           </div>
 
           <div className="overflow-x-auto mt-4">
-            <div className="flex gap-10 text-xl font-semibold my-3">
-              <div>
-                Total Lead visit:{" "}
-                {currentLeads.reduce(
-                  (acc, lead) =>
-                    acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
-                  0
-                )}
-              </div>
-              <div>Total Lead: {currentLeads.length}</div>
-              <div>
-                Total Closed Lead:{" "}
-                {
-                  currentLeads.filter((lead) => lead.deal_status === "closed")
-                    .length
-                }
-              </div>
-            </div>
+          <div className="flex gap-10 text-xl font-semibold my-3">
+  <div>
+    Total Lead visit:{" "}
+    {leads.reduce(
+      (acc, lead) =>
+        acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
+      0
+    )}
+  </div>
+  <div>Total Lead: {leads.length}</div>
+  <div>
+    Total Closed Lead:{" "}
+    {
+      leads.filter((lead) => lead.deal_status === "close").length
+    }
+  </div>
+</div>
 
             <table className="tt min-w-full bg-white border">
               <thead>

@@ -35,6 +35,11 @@ function Leads() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
+  const [leadSourceFilter, setLeadSourceFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [visitFilter, setVisitFilter] = useState("");
+  const [dealFilter, setDealFilter] = useState("");
+  const [employeeFilter, setEmployeeFilter] = useState("");
 
   // Fetch leads and employees from the API
   useEffect(() => {
@@ -202,17 +207,23 @@ function Leads() {
       }
     }
   };
+
+  const handleSearch = (value) =>{
+    if(value === ' '){
+      return;
+    }
+    setSearchTerm(value);
+  }
   useEffect(() => {
     let filtered = leads;
-
+    console.log(filtered);
     // Filter by search term
-    if (searchTerm) {
+    if (searchTerm) { 
       filtered = filtered.filter(
         (lead) =>
           lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())||
-          lead.address.toLowerCase().includes(searchTerm.toLowerCase())
+          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -224,8 +235,42 @@ function Leads() {
       });
     }
 
+    // Filter by lead source
+    if (leadSourceFilter) {
+      filtered = filtered.filter(
+        (lead) => lead.leadSource === leadSourceFilter
+      );
+    }
+    // Filter by status
+    if (statusFilter) {
+      filtered = filtered.filter((lead) => lead.status === statusFilter);
+    }
+
+    // Filter by visit
+    if (visitFilter) {
+      filtered = filtered.filter((visit) => visit.visit === visitFilter);
+    }
+
+    // Filter by Deak
+    if (dealFilter) {
+      filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
+    }
+    if (employeeFilter) {
+      filtered = filtered.filter((employee) => employee.assignedTo === employeeFilter);
+    }
+
     setFilteredLeads(filtered);
-  }, [searchTerm, startDate, endDate, leads]);
+  }, [
+    searchTerm,
+    startDate,
+    endDate,
+    leads,
+    leadSourceFilter,
+    statusFilter,
+    visitFilter,
+    dealFilter,
+    employeeFilter,
+  ]);
 
   const closePopup = () => {
     setShowPopup(false);
@@ -262,7 +307,7 @@ function Leads() {
                 Add Lead
               </button>
             </div>
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            {/* <div className="grid grid-cols-3 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
                 <input
@@ -292,10 +337,161 @@ function Leads() {
                   className="border   rounded-2xl p-2 w-full"
                 />
               </div>
+            </div> */}
+              <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
+              <div>
+                <label htmlFor="">Search</label>
+                <input
+                  type="text"
+                  placeholder="Search by Name, Lead No, Lead Source"
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="">Start Date</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="border  rounded-2xl p-2 w-full"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="">End Date</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="border   rounded-2xl p-2 w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="">Lead Source Filter</label>
+                <select
+                  value={leadSourceFilter}
+                  onChange={(e) => setLeadSourceFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Lead Sources</option>
+                  <option value="Facebook Campaign">Facebook Campaign</option>
+                  <option value="One Realty Website">One Realty Website</option>
+                  <option value="Trade Shows">Trade Shows</option>
+                  <option value="Cold Calling">Cold Calling</option>
+                  <option value="Email Campaigns">Email Campaigns</option>
+                  <option value="Networking Events">Networking Events</option>
+                  <option value="Paid Advertising">Paid Advertising</option>
+                  <option value="Content Marketing">Content Marketing</option>
+                  <option value="SEO">Search Engine Optimization</option>
+                  <option value="Trade Shows">Trade Shows</option>
+                  <option value="Affiliate Marketing">
+                    Affiliate Marketing
+                  </option>
+                  <option value="Direct Mail">Direct Mail</option>
+                  <option value="Online Directories">Online Directories</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="">Status Filter</label>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Status</option>
+                  {/* <option value="Facebook Campaign">visited</option>
+                  <option value="One Realty Website">pending</option>
+                  <option value="Trade Shows">confirm</option>
+                  <option value="Cold Calling">Cold Calling</option> */}
+                  <option default value="pending">
+                    Pending
+                  </option>
+                  <option value="interested">Interested</option>
+                  <option value="non interested">Non-Interested</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="">Visit Filter</label>
+                <select
+                  value={visitFilter}
+                  onChange={(e) => setVisitFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All visit</option>
+                  <option value="pending">Pending</option>
+                  <option value="Fresh Visit">Fresh Visit</option>
+                  <option value="Repeated Visit">Repeated Visit</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="">Deal Filter</label>
+                <select
+                  value={dealFilter}
+                  onChange={(e) => setDealFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Deal</option>
+                  <option value="pending">Pending</option>
+                  <option value="in progress">In Progress</option>
+                  <option value="close">Closed</option>
+                  <option value="not closed">Not Closed</option>
+                </select>
+              </div>
+              <div>
+  <label htmlFor="">Employee Filter</label>
+  <select
+    name="assignedTo"
+    value={employeeFilter}
+    onChange={(e) => setEmployeeFilter(e.target.value)}
+    className={`border rounded-2xl p-2 w-full`}
+  >
+    <option value="">Select Employee</option>
+    {employees.map((employee) => (
+      <option key={employee.employee_id} value={employee.name}>
+        {employee.name}
+      </option>
+    ))}
+  </select>
+</div>
             </div>
           </div>
 
           <div className=" overflow-x-auto mt-4 whitespace-nowrap  lg:w-[100%]">
+          <div className="flex gap-10 text-xl font-semibold my-3">
+  {/* Filter leads based on the selected employee */}
+  <div>
+    Total Lead visit:{" "}
+    {leads
+      .filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter) // filter by employee
+      .reduce(
+        (acc, lead) => acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
+        0
+      )}
+  </div>
+  <div>
+    Total Lead:{" "}
+    {
+      leads.filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter)
+        .length
+    }
+  </div>
+  <div>
+    Total Closed Lead:{" "}
+    {
+      leads
+        .filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter)
+        .filter((lead) => lead.deal_status === "close").length
+    }
+  </div>
+</div>
+
+
+
+
+
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>
