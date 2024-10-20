@@ -136,13 +136,24 @@ const LeadsTable = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [gotId, setGotId] = useState("");
   const [selectedFormId, setSelectedFormId] = useState(''); // Store selected form ID
 
   // Fetch leads based on selected form ID
-  const fetchLeadsByFormId = async (formId) => {
+  // const fetchLeadsByFormId = async (formId) => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${formId}`);
+  //     setLeads(response.data);
+  //   } catch (err) {
+  //     console.error('Error fetching leads:', err);
+  //     setError('Failed to fetch leads');
+  //   }
+  // };
+  const fetchLeadsByFormId = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${formId}`);
+      const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${gotId}`);
       setLeads(response.data);
+      setLoading(false);
     } catch (err) {
       console.error('Error fetching leads:', err);
       setError('Failed to fetch leads');
@@ -155,6 +166,23 @@ const LeadsTable = () => {
     fetchLeadsByFormId(formId); // Fetch leads based on selected form ID
   };
 
+  const saveIntoDB = async () => {
+    try {
+      // Fetch leads from Meta API via backend
+      const response = await axios.post('http://localhost:9000/api/leads/fetch', {
+        formId: gotId,
+      });
+      setLoading(true);
+      fetchLeadsByFormId();
+    } catch (err) {
+      console.error('Error fetching leads:', err);
+    }
+  }
+
+  useEffect(() => {
+    saveIntoDB();
+  }, [gotId])
+
   return (
     <div className="container mx-auto p-4">
       <FormInput/>
@@ -162,7 +190,7 @@ const LeadsTable = () => {
 
       {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
 
-      <FormSelector setLoading={setLoading} setError={setError} onFormSelect={handleFormSelect} />
+      <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={handleFormSelect} />
 
       {loading && <p>Loading...</p>}
 
