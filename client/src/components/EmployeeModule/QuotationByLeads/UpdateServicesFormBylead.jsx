@@ -32,6 +32,7 @@ const UpdateServicesFormBylead = ({
       if (response.data.success) {
         console.log("Services updated successfully");
         onUpdateSuccess();
+    
       }
     } catch (error) {
       console.error("Error updating services:", error);
@@ -74,6 +75,7 @@ const UpdateServicesFormBylead = ({
 
   const handleUpdateClose = () => {
     onUpdateSuccess();
+    fetchServices();
   };
 
   return (

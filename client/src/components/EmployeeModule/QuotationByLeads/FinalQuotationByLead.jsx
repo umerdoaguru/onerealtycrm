@@ -73,6 +73,7 @@ function FinalQuotationByLeads() {
     console.log("Services updated successfully");
     setIsUpdateMode(false);
     // window.location.reload();
+    fetchQuotations();
   };
 
   const handleUpdateError = () => {
@@ -120,6 +121,7 @@ function FinalQuotationByLeads() {
   useEffect(() => {
     fetchQuotations();
     fetchNotes();
+    handleUpdateSuccess();
   }, []);
 
   const filterServicesByType = (type) => {

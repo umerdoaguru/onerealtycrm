@@ -59,6 +59,7 @@ const {
   getServicelist,
   deleteServicename,
   updateServiceList,
+  getServiceById,
 } = require("../controllers/ServicesList");
 
 const {
@@ -148,6 +149,7 @@ router.post("/company-name-data", getcompany_name_data); //fcf
 
 router.post("/create-servicelist", createServiceList);
 router.get("/servicelist", getServicelist);
+router.get("/servicelist/:serviceId", getServiceById);
 router.delete("/servicelist/:serviceId", deleteServicename);
 router.put("/servicelist", updateServiceList);
 
