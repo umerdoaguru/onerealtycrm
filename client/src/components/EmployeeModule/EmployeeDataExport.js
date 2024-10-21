@@ -36,7 +36,7 @@
 //   const fetchLeads = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://localhost:9000/api/employe-leads/${EmpId}`
+//         `https://crm.one-realty.in/api/employe-leads/${EmpId}`
 //       );
 //       setLeads(response.data);
 //     } catch (error) {
@@ -46,7 +46,7 @@
 
 //   // const fetchEmployee = async () => {
 //   //   try {
-//   //     const response = await axios.get(`http://localhost:9000/api/employee`);
+//   //     const response = await axios.get(`https://crm.one-realty.in/api/employee`);
 //   //     setEmployee(response.data);
 //   //   } catch (error) {
 //   //     console.error("Error fetching employee data:", error);
@@ -56,7 +56,7 @@
 //   const fetchQuotation = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
+//         `https://crm.one-realty.in/api/get-quotation-byEmploye/${EmpId}`
 //       );
 //       setQuotation(response.data);
 //     } catch (error) {
@@ -67,7 +67,7 @@
 //   const fetchInvoice = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://localhost:9000/api/get-employee-invoice/${EmpId}`
+//         `https://crm.one-realty.in/api/get-employee-invoice/${EmpId}`
 //       );
 //       setInvoice(response.data);
 //     } catch (error) {
@@ -265,7 +265,7 @@ function DataExport() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
       );
       console.log("setLeads", response.data);
       setLeads(response.data);
@@ -277,7 +277,7 @@ function DataExport() {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
+        `https://crm.one-realty.in/api/get-quotation-byEmploye/${EmpId}`
       );
       setQuotation(response.data);
     } catch (error) {
@@ -288,7 +288,7 @@ function DataExport() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-employee-invoice/${EmpId}`
+        `https://crm.one-realty.in/api/get-employee-invoice/${EmpId}`
       );
       setInvoice(response.data);
     } catch (error) {

@@ -104,6 +104,17 @@ function Employee_Single_Lead_Profile() {
         { value: "done", label: "Done" },
       ],
     },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "", label: "Status" },
+        { value: "pending", label: "Pending" },
+        { value: "interested", label: "Interested" },
+        { value: "not-interested", label: "Not-Interested" },
+      ],
+    },
   ];
 
 
@@ -115,6 +126,7 @@ function Employee_Single_Lead_Profile() {
     invoice_status: "",
     deal_status: "",
     reason: "",
+    status: "",
 
     follow_up_status: "",
   });
@@ -357,6 +369,10 @@ function Employee_Single_Lead_Profile() {
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
+                    Status
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    {" "}
                     Deal Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
@@ -428,6 +444,10 @@ function Employee_Single_Lead_Profile() {
                         {lead.invoice_status}
                       </td>
                     )}
+                  
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
+                        {lead.status}
+                      </td>
 
                     {lead.deal_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">

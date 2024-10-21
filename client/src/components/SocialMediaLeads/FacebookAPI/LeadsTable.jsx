@@ -35,7 +35,7 @@ const LeadsTable = () => {
 
   const fetchLeadsByFormId = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${gotId}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/Leads-data-fetch/${gotId}`);
       setLeads(response.data);
       setLoading(false);
     } catch (err) {
@@ -139,7 +139,7 @@ const LeadsTable = () => {
   const saveIntoDB = async () => {
     try {
       // Fetch leads from Meta API via backend
-      const response = await axios.post('http://localhost:9000/api/leads/fetch', {
+      const response = await axios.post('https://crm.one-realty.in/api/leads/fetch', {
         formId: gotId,
       });
       setLoading(true);
