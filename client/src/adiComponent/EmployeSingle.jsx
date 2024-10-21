@@ -270,7 +270,7 @@ const EmployeeSingle = () => {
             Go Back
           </button>
           <main className="flex-1 p-4 lg:p-8">
-            <div className="flex items-center justify-between mb-8">
+            {/* <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-gray-800">
                 Employee Profile
               </h2>
@@ -280,14 +280,14 @@ const EmployeeSingle = () => {
               >
                 <BsPencilSquare className="mr-2" /> Edit Profile
               </button>
-            </div>
+            </div> */}
 
             {error && <p className="text-red-600">{error}</p>}
 
             {employee ? (
               <div className="p-6 bg-white rounded-lg shadow-md">
                 <div className="flex items-center mb-6">
-                  {employee.photo ? (
+                  {/* {employee.photo ? (
                     <img
                       src={`https://crm.one-realty.in${employee.photo}`}
                       alt="Profile"
@@ -295,7 +295,7 @@ const EmployeeSingle = () => {
                     />
                   ) : (
                     <div className="w-24 h-24 bg-gray-300 border-2 border-gray-300 rounded-full"></div>
-                  )}
+                  )} */}
                   <div className="ml-6">
                     <h3 className="text-xl font-semibold text-gray-800">
                       {employee.name || "No Name Available"}

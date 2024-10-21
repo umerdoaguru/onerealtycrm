@@ -21,7 +21,11 @@ const LeadsDisplay = ({ leads }) => {
               <td className="py-2 px-4 border-b">{lead.full_name}</td>
               <td className="py-2 px-4 border-b">{lead.phone_number}</td>
               <td className="py-2 px-4 border-b">{lead.street_address}</td>
-              <td className="py-2 px-4 border-b">{new Date(lead.created_time).toLocaleString()}</td>
+              <td className="py-2 px-4 border-b">
+  {lead.created_time 
+    ? `${new Date(lead.created_time).toLocaleDateString('en-GB')} ${new Date(lead.created_time).toLocaleTimeString()}`
+    : 'N/A'}
+</td>
             </tr>
           ))}
         </tbody>
