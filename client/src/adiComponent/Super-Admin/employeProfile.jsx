@@ -2,7 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import MainHeader from "./../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
 
@@ -22,6 +22,20 @@ const mockEmployeeData = {
 function EmployeeProfile() {
   const [user, setUser] = useState([]); // Initialize state for employee data
   const {employeeId} = useParams();
+  const [leads, setLeads] = useState([]);
+
+
+  const fetchLeads = async () => {
+    try {
+      const response = await axios.get(
+        `https://crm.one-realty.in/api/employe-leads/${employeeId}`);
+      const data = response.data;
+      setLeads(data);
+    } catch (error) {
+      console.error("Error fetching leads:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
@@ -36,6 +50,7 @@ function EmployeeProfile() {
     };
 
     fetchEmployee();
+    fetchLeads();
   }, [employeeId]);
 
   // Mock data for testing (remove once API is working)
@@ -111,6 +126,65 @@ function EmployeeProfile() {
                   </div>
                 </div>
               </div>
+              <table className="min-w-full bg-white border mt-4">
+                    <thead>
+                      <tr>
+                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                          S.no
+                        </th>
+                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                          Lead Number
+                        </th>
+                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                          Assigned To
+                        </th>
+                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                          Created Time
+                        </th>
+                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                          Name
+                        </th>
+                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                          Phone
+                        </th>
+                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                          Lead Source
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {leads.map((lead, index) => (
+                        <tr
+                          key={lead.id}
+                          className={index % 2 === 0 ? "bg-gray-100" : ""}
+                        >
+                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                            {index + 1}
+                          </td>
+                          <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
+                            <td className="px-6 py-4 border-b border-gray-200  underline text-[blue]">
+                              {lead.lead_no}
+                            </td>
+                          </Link>
+                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                            {lead.assignedTo}
+                          </td>
+                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                            {moment(lead.createdTime).format("DD/MM/YYYY")}
+                          </td>
+                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                            {lead.name}
+                          </td>
+                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                            {lead.phone}
+                          </td>
+                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                            {lead.leadSource}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
             </div>
           </div>
         </div>
