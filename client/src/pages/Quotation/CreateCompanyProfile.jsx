@@ -194,7 +194,7 @@ function CreateCompanyProfile() {
               <Logout />
             </div> */}
               </div>
-              <div className="grid lg:grid-cols-3 gap-2 mt-2">
+              <div className="grid lg:grid-cols-2 gap-2 mt-2">
                 {/* <div className="col-span-1">
               <Link
                 to="/quotation-form"
@@ -219,14 +219,14 @@ function CreateCompanyProfile() {
                     Quotation List
                   </Link>
                 </div>
-                <div className="col-span-1">
+                {/* <div className="col-span-1">
                   <Link
                     to="/invoicelist"
                     className="bg-blue-500 text-white px-4 py-2 rounded block text-center font-medium"
                   >
                     Invoice List
                   </Link>
-                </div>
+                </div> */}
                 <div className="col-span-1">
                   <Link
                     to="/servicenamelist"

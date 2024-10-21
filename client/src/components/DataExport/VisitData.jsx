@@ -42,11 +42,12 @@ const VisitData = () => {
   };
 
   // Automatically apply date filter when start or end date changes
+
   useEffect(() => {
     if (startDate && endDate) {
       const filtered = leads.filter((lead) => {
-        const createdTime = moment(lead.createdTime);
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
+        const visitDate = moment(lead.visit_date, "YYYY-MM-DD");
+        return visitDate.isBetween(startDate, endDate, undefined, "[]");
       });
       setFilteredLeads(filtered);
     } else {
