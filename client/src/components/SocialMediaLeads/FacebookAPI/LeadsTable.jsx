@@ -212,38 +212,39 @@ const LeadsTable = () => {
              </tr>
            </thead>
            <tbody>
-             {currentLeads
-               .filter(
-                 (lead) =>
-                   !leadsAssigned.some(
-                     (assigned) => assigned.lead_no === lead.lead_id
-                   )
-               )
-               .map((lead, index) => (
-                 <tr key={lead.id}>
-                  <td className="py-2 px-4 border-b">{index+1}</td>
-              <td className="py-2 px-4 border-b">{lead.lead_id}</td>
-              <td className="py-2 px-4 border-b">{lead.full_name}</td>
-              <td className="py-2 px-4 border-b">{lead.phone_number}</td>
-              <td className="py-2 px-4 border-b">{lead.street_address}</td>
-              <td className="py-2 px-4 border-b">{lead.subject}</td>
-              <td className="py-2 px-4 border-b">
-  {lead.created_time 
-    ? `${new Date(lead.created_time).toLocaleDateString('en-GB')} ${new Date(lead.created_time).toLocaleTimeString()}`
-    : 'N/A'}
-</td>
- 
-                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                     <button
-                       className="text-blue-500 hover:text-blue-700"
-                       onClick={() => handleEditClick(lead)}
-                     >
-                       Assign
-                     </button>
-                   </td>
-                 </tr>
-               ))}
-           </tbody>
+  {Array.isArray(currentLeads) && currentLeads
+    .filter(
+      (lead) =>
+        !leadsAssigned.some(
+          (assigned) => assigned.lead_no === lead.lead_id
+        )
+    )
+    .map((lead, index) => (
+      <tr key={lead.id}>
+        <td className="py-2 px-4 border-b">{index + 1}</td>
+        <td className="py-2 px-4 border-b">{lead.lead_id}</td>
+        <td className="py-2 px-4 border-b">{lead.full_name}</td>
+        <td className="py-2 px-4 border-b">{lead.phone_number}</td>
+        <td className="py-2 px-4 border-b">{lead.street_address}</td>
+        <td className="py-2 px-4 border-b">{lead.subject}</td>
+        <td className="py-2 px-4 border-b">
+          {lead.created_time
+            ? `${new Date(lead.created_time).toLocaleDateString('en-GB')} ${new Date(lead.created_time).toLocaleTimeString()}`
+            : 'N/A'}
+        </td>
+
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          <button
+            className="text-blue-500 hover:text-blue-700"
+            onClick={() => handleEditClick(lead)}
+          >
+            Assign
+          </button>
+        </td>
+      </tr>
+    ))}
+</tbody>
+
          </table>
            {/* Pagination */}
       <div className="mt-4 flex justify-center">
