@@ -89,9 +89,30 @@ const AdminReport = () => {
   const filterData = () => {
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
-
+      console.log(data[selectedCategory]);
       // Parse the date from created_date or createdTime, whichever exists
-      const itemDate = new Date(item.created_date || item.createdTime);
+      // Function to convert DD/MM/YYYY to MM/DD/YYYY
+      const convertToMMDDYYYY = (dateStr) => {
+        const [day, month, year] = dateStr.split("/"); // Split by "/"
+        return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
+      };
+
+      let itemDate;
+      if(item.visit_date === "pending" || item.d_closeDate === "pending") return;
+
+      if (selectedCategory === "Visited lead") {
+
+        itemDate = new Date(convertToMMDDYYYY(item.visit_date));
+      } else if (selectedCategory === "closed") {
+        if (item.deal_status !== "close") {
+          return;
+        }
+        itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
+      } else {
+        itemDate = new Date(convertToMMDDYYYY(item.createdTime)); // Default date if no specific category
+      }
+
+      console.log(itemDate);
 
       let filterCondition = false;
 
@@ -203,8 +224,9 @@ const AdminReport = () => {
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format("YYYY/MM/DD"),
-      createdTime: moment(item.createdTime).format("YYYY/MM/DD"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
+      visit_date: (item.visit_date !== "pending") ? moment(item.visit_date).format("DD/MM/YYYY") : "pending",
+      d_closeDate: (item.d_closeDate !== "pending") ? moment(item.d_closeDate).format("DD/MM/YYYY") : "pending",
     }));
   };
 

@@ -31,6 +31,7 @@ const SuperReports = () => {
         "Lead Source",
         "Quotation Status",
         "Visit Status",
+        "Visit Date",
         "Invoice Status",
         "Deal Status",
         "FollowUp Status",
@@ -44,6 +45,7 @@ const SuperReports = () => {
         "leadSource",
         "quotation_status",
         "visit",
+        "visit_date",
         "invoice_status",
         "deal_status",
         "follow_up_status",
@@ -61,6 +63,7 @@ const SuperReports = () => {
         "Phone Number",
         "Date",
         "Lead Source",
+        "Visit Date",
         "Quotation Status",
         "Invoice Status",
         "Deal Status",
@@ -73,6 +76,7 @@ const SuperReports = () => {
         "phone",
         "createdTime",
         "leadSource",
+        "visit_date",
         "quotation_status",
         "invoice_status",
         "deal_status",
@@ -89,7 +93,7 @@ const SuperReports = () => {
   const filterData = () => {
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
-
+      console.log(data[selectedCategory]);
       // Parse the date from created_date or createdTime, whichever exists
       // Function to convert DD/MM/YYYY to MM/DD/YYYY
       const convertToMMDDYYYY = (dateStr) => {
@@ -98,8 +102,10 @@ const SuperReports = () => {
       };
 
       let itemDate;
+      if(item.visit_date === "pending" || item.d_closeDate === "pending") return;
 
-      if (selectedCategory === "visit") {
+      if (selectedCategory === "Visited lead") {
+
         itemDate = new Date(convertToMMDDYYYY(item.visit_date));
       } else if (selectedCategory === "closed") {
         if (item.deal_status !== "close") {
@@ -109,6 +115,8 @@ const SuperReports = () => {
       } else {
         itemDate = new Date(convertToMMDDYYYY(item.createdTime)); // Default date if no specific category
       }
+
+      console.log(itemDate);
 
       let filterCondition = false;
 
@@ -221,8 +229,8 @@ const SuperReports = () => {
     return data.map((item) => ({
       ...item,
       createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
-      visit_date: moment(item.visit_date).format("DD/MM/YYYY"),
-      d_closeDate: moment(item.d_closeDate).format("DD/MM/YYYY"),
+      visit_date: (item.visit_date !== "pending") ? moment(item.visit_date).format("DD/MM/YYYY") : "pending",
+      d_closeDate: (item.d_closeDate !== "pending") ? moment(item.d_closeDate).format("DD/MM/YYYY") : "pending",
     }));
   };
 

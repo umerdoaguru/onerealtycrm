@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => {
-  console.log(currentPage, totalItems, itemsPerPage, onPageChange);
+  // console.log(currentPage, totalItems, itemsPerPage, onPageChange);
   // Calculate the total number of pages
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
