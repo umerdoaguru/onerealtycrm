@@ -91,6 +91,9 @@ const SuperReports = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
+
+    if(selectedCategory === 'Visited lead') return;
+    
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
       console.log(data[selectedCategory]);
@@ -102,14 +105,14 @@ const SuperReports = () => {
       };
 
       let itemDate;
-      if(item.visit_date === "pending" || item.d_closeDate === "pending") return;
+      if(item.visit_date === "pending" || item.d_closeDate === "pending") return false;
 
       if (selectedCategory === "Visited lead") {
 
         itemDate = new Date(convertToMMDDYYYY(item.visit_date));
       } else if (selectedCategory === "closed") {
         if (item.deal_status !== "close") {
-          return;
+          return false;
         }
         itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
       } else {
