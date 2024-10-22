@@ -91,6 +91,9 @@ const SuperReports = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
+
+    if(selectedCategory === 'Visited lead') return;
+    
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
       console.log(data[selectedCategory]);
@@ -109,7 +112,7 @@ const SuperReports = () => {
         itemDate = new Date(convertToMMDDYYYY(item.visit_date));
       } else if (selectedCategory === "closed") {
         if (item.deal_status !== "close") {
-          return;
+          return false;
         }
         itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
       } else {
