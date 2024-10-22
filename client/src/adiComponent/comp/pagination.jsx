@@ -13,7 +13,6 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
     console.log(safeTotalPages);
     const items = [];
     for (let i = 1; i <= safeTotalPages; i++) {
-      console.log('fsdfs')
       items.push(
         <li key={i}>
           <p
