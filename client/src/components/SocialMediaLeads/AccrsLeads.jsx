@@ -148,7 +148,7 @@ function Accrs() {
              <th className="py-2 px-4 text-left font-semibold text-gray-700">Query ID</th>
              <th className="py-2 px-4 text-left font-semibold text-gray-700">Project Name</th>
              <th className="py-2 px-4 text-left font-semibold text-gray-700">City</th>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Query Info</th>
+         
              <th className="py-2 px-4 text-left font-semibold text-gray-700">Received On</th>
              <th className="py-2 px-4 text-left font-semibold text-gray-700">Contact Name</th>
              <th className="py-2 px-4 text-left font-semibold text-gray-700">Email</th>
@@ -165,7 +165,7 @@ function Accrs() {
                <td className="py-2 px-4">{lead.id || 'N/A'}</td>
                <td className="py-2 px-4">{lead.project_name || 'N/A'}</td>
                <td className="py-2 px-4">{lead.city_name || 'N/A'}</td>
-               <td className="py-2 px-4">{lead.query_info || 'N/A'}</td>
+             
                <td className="py-2 px-4">
   {lead.received_on 
     ? `${new Date(lead.received_on).toLocaleDateString('en-GB')} ${new Date(lead.received_on).toLocaleTimeString()}`
