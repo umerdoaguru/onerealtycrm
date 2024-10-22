@@ -9,8 +9,7 @@ import { MdOutlineNextWeek } from "react-icons/md";
 import { GiFiles, GiMoneyStack } from "react-icons/gi";
 import { useSelector } from "react-redux";
 import LeadData from "../components/DataExport/LeadData";
-import QuotationData from "../components/DataExport/QuotationData";
-import InvoiceData from "../components/DataExport/InvoiceData"; // Add your invoice component here if it exists
+
 import Employees from "../components/DataExport/Employees";
 import { FaCheckCircle, FaClipboardList } from "react-icons/fa";
 import VisitData from "../components/DataExport/VisitData";
@@ -74,8 +73,7 @@ function DataExport() {
 
   const leadCount = leads.length;
   const employeeCount = employee.length;
-  const quotationCount = quotation.length;
-  const invoiceCount = invoice.length;
+ 
   const visitCount = leads.filter(
     (lead) => lead.visit === "Fresh Visit" || lead.visit === "Repeated Visit"
   ).length;

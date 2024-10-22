@@ -102,7 +102,7 @@ const SuperReports = () => {
       };
 
       let itemDate;
-      if(item.visit_date === "pending" || item.d_closeDate === "pending") return;
+      if(item.visit_date === "pending" || item.d_closeDate === "pending") return false;
 
       if (selectedCategory === "Visited lead") {
 

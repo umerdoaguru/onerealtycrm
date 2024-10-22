@@ -34,7 +34,7 @@ function Leads() {
   const [endDate, setEndDate] = useState("");
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
-  const [leadsPerPage] = useState(10);
+  const leadsPerPage = 10; // Default leads per page
   const [leadSourceFilter, setLeadSourceFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [visitFilter, setVisitFilter] = useState("");
@@ -260,6 +260,7 @@ function Leads() {
     }
 
     setFilteredLeads(filtered);
+    setCurrentPage(0); // Reset to first page on filter change
   }, [
     searchTerm,
     startDate,
@@ -277,10 +278,11 @@ function Leads() {
     setErrors({});
   };
 
-  // Use filteredLeads for pagination
-  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
-  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+  const currentLeads = filteredLeads.slice(
+    currentPage * leadsPerPage,
+    (currentPage + 1) * leadsPerPage
+  );
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
@@ -540,117 +542,88 @@ function Leads() {
                 </tr>
               </thead>
               <tbody>
-                {currentLeads.map((lead, index) => (
-                  <tr
-                    key={lead.lead_id}
-                    className={index % 2 === 0 ? "bg-gray-100" : ""}
-                  >
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1}
-                    </td>
-                    <Link to={`/lead-single-data/${lead.lead_id}`}>
-                      <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-                        {lead.lead_no}
-                      </td>
-                    </Link>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.name}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.phone}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.leadSource}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.assignedTo}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.subject}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.address}
-                    </td>
-                    {lead.lead_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-                    {lead.lead_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.lead_status}
-                      </td>
-                    )}
+  {currentLeads.length === 0 ? (
+    <tr>
+      <td
+        colSpan="11"
+        className="px-6 py-4 border-b border-gray-200 text-center text-gray-500"
+      >
+        No data found
+      </td>
+    </tr>
+  ) : (
+    currentLeads.map((lead, index) => (
+      <tr key={lead.lead_id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {index + 1}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+          <Link to={`/lead-single-data/${lead.lead_id}`}>{lead.lead_no}</Link>
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.name}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.phone}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.leadSource}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.assignedTo}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.subject}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.address}
+        </td>
 
-                    {lead.lead_status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-                    {lead.status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
-                        {lead.status}
-                      </td>
-                    )}
-                    {lead.status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.status}
-                      </td>
-                    )}
+        {/* Lead Status */}
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.lead_status === "pending" ? "text-[red]" : lead.lead_status === "in progress" ? "text-[orange]" : "text-[green]"}`}>
+          {lead.lead_status}
+        </td>
 
-                    {lead.status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
-                        {lead.status}
-                      </td>
-                    )}
+        {/* Status */}
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.status === "pending" ? "text-[red]" : lead.status === "in progress" ? "text-[orange]" : "text-[green]"}`}>
+          {lead.status}
+        </td>
 
-                    {lead.visit === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
-                        {lead.visit}
-                      </td>
-                    )}
-                    {lead.visit === "Fresh Visit" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.visit}
-                      </td>
-                    )}
+        {/* Visit Status */}
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.visit === "pending" ? "text-[red]" : lead.visit === "Fresh Visit" ? "text-[orange]" : "text-[green]"}`}>
+          {lead.visit}
+        </td>
 
-                    {lead.visit === "Repeated Visit" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
-                        {lead.visit}
-                      </td>
-                    )}
+        {/* Visit Date */}
+        <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
+          {lead.visit_date === "pending" ? lead.visit_date : moment(lead.visit_date).format("DD-MM-YYYY")}
+        </td>
 
-                    {lead.visit_date === "pending" ? (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.visit_date}
-                      </td>
-                    ) : (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {moment(lead.visit_date).format("DD-MM-YYYY")}
-                      </td>
-                    )}
+        {/* Created Time */}
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {moment(lead.createdTime).format("DD-MM-YYYY")}
+        </td>
 
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {moment(lead.createdTime).format("DD-MM-YYYY")}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      <button
-                        className="text-blue-500 hover:text-blue-700"
-                        onClick={() => handleEditClick(lead)}
-                      >
-                        <BsPencilSquare size={20} />
-                      </button>
-                      <button
-                        className="text-red-500 hover:text-red-700 mx-2"
-                        onClick={() => handleDeleteClick(lead.lead_id)}
-                      >
-                        <BsTrash size={20} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+        {/* Actions */}
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          <button
+            className="text-blue-500 hover:text-blue-700"
+            onClick={() => handleEditClick(lead)}
+          >
+            <BsPencilSquare size={20} />
+          </button>
+          <button
+            className="text-red-500 hover:text-red-700 mx-2"
+            onClick={() => handleDeleteClick(lead.lead_id)}
+          >
+            <BsTrash size={20} />
+          </button>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
             </table>
           </div>
 
@@ -833,26 +806,36 @@ function Leads() {
               </div>
             </div>
           )}
-          <div className="mt-4 flex justify-center">
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
-              pageCount={Math.ceil(leads.length / leadsPerPage)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageClick}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              nextClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextLinkClassName={"page-link"}
-              breakClassName={"page-item"}
-              breakLinkClassName={"page-link"}
-            />
+          <div className="mt-2 mb-2 flex justify-center">
+          <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
+          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
+          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
+          previousClassName={
+            "bg-white border border-gray-300 rounded-md shadow-md"
+          }
+          previousLinkClassName={
+            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+          }
+          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
+          nextLinkClassName={
+            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+          }
+          breakClassName={
+            "bg-white border border-gray-300 rounded-md shadow-md"
+          }
+          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
+          activeClassName={
+            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
+          }
+        />
           </div>
         </div>
       </>

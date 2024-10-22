@@ -14,10 +14,14 @@ const CloseData = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 10; // Number of leads to display per page
   const EmpId = useSelector((state) => state.auth.user.id);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+
 
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
+    fetchEmployees();
   }, []);
 
   const fetchLeads = async () => {
@@ -37,18 +41,35 @@ const CloseData = () => {
     }
   };
 
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      setEmployees(response.data);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
+  };
+
+
   // Automatically apply date filter when start or end date changes
   useEffect(() => {
+    let filtered = leads;
+
     if (startDate && endDate) {
-      const filtered = leads.filter((lead) => {
+      filtered = filtered.filter((lead) => {
         const closeDate = moment(lead.d_closeDate, "YYYY-MM-DD");
         return closeDate.isBetween(startDate, endDate, undefined, "[]");
       });
-      setFilteredLeads(filtered);
-    } else {
-      setFilteredLeads(leads);
     }
-  }, [startDate, endDate, leads]);
+
+    
+      // Filter by selected employee
+    if (selectedEmployee) {
+      filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
+    }
+
+    setFilteredLeads(filtered);
+  }, [startDate, endDate,selectedEmployee, leads]);
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
@@ -93,6 +114,20 @@ const CloseData = () => {
             onChange={(e) => setEndDate(e.target.value)}
             className="border p-2"
           />
+            <div className="">
+            <select
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              className="border p-2"
+            >
+              <option value="">Select Employee</option>
+              {employees.map((employee) => (
+                <option key={employee.id} value={employee.name}>
+                  {employee.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="respo mx-2 ">
             <button
               onClick={downloadExcel}
@@ -194,6 +229,7 @@ const CloseData = () => {
         </div>
 
         {/* Pagination */}
+        <div className="mt-2 mb-2">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
@@ -222,7 +258,7 @@ const CloseData = () => {
           activeClassName={
             "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
           }
-        />
+        /></div>
       </div>
     </Wrapper>
   );
