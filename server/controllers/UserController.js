@@ -793,8 +793,9 @@ const createLead = (req, res) => {
     employeeId,
     subject,address,
     createdTime,
+    actual_date,
   } = req.body;
-  const sql = `INSERT INTO leads (lead_no, name, phone, assignedTo, leadSource, employeeId,subject,address,createdTime) VALUES (?,?,?,?, ?, ?, ?, ?,?)`;
+  const sql = `INSERT INTO leads (lead_no, name, phone, assignedTo, leadSource, employeeId,subject,address,createdTime,actual_date) VALUES (?,?,?,?,?, ?, ?, ?, ?,?)`;
   db.query(
     sql,
     [
@@ -806,6 +807,7 @@ const createLead = (req, res) => {
       employeeId,
       subject,address,
       createdTime,
+      actual_date,
     ],
     (err, results) => {
       if (err) {
@@ -866,7 +868,7 @@ const getvisit = (req, res) => {
 };
 
 const getLeads = (req, res) => {
-  const sql = "SELECT * FROM leads";
+  const sql = "SELECT * FROM leads ORDER BY lead_id DESC"; 
   db.query(sql, (err, results) => {
     if (err) {
       res.status(500).json({ error: "Error fetching data" });
@@ -875,6 +877,7 @@ const getLeads = (req, res) => {
     }
   });
 };
+
 
 const updateLead = async (req, res) => {
   try {
@@ -887,12 +890,14 @@ const updateLead = async (req, res) => {
       leadSource,
       employeeId,
       createdTime,
-      subject,address,
+      actual_date,
+      subject,
+      address,
     } = req.body;
 
     // Construct SQL query to update the lead
     const sql = `UPDATE leads 
-                 SET lead_no = ?, name = ?, phone = ?, assignedTo = ?, employeeId = ?, leadSource = ?, createdTime = ?, subject = ? 
+                 SET lead_no = ?, name = ?, phone = ?, assignedTo = ?, employeeId = ?, leadSource = ?, createdTime = ?, actual_date = ?, subject = ?, address = ? 
                  WHERE lead_id = ?`;
 
     // Execute the update query asynchronously
@@ -907,7 +912,9 @@ const updateLead = async (req, res) => {
           employeeId,
           leadSource,
           createdTime,
-          subject,address,
+          actual_date,
+          subject,
+          address, // added to the SQL query
           leadId,
         ],
         (err, results) => {
