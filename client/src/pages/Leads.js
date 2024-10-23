@@ -24,6 +24,7 @@ function Leads() {
     leadSource: "",
     subject: "",
     address: "",
+    actual_date: "",
   });
   const [showPopup, setShowPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -118,6 +119,12 @@ function Leads() {
     const { name, value } = e.target;
     setCurrentLead((prevLead) => {
       const updatedLead = { ...prevLead, [name]: value };
+
+        // If createdTime changes, update actual_date accordingly
+    if (name === "createdTime") {
+      updatedLead.actual_date = value; // Copy createdTime to actual_date
+    }
+
   
       // If assignedTo changes, update employeeId and employeephone accordingly
       if (name === "assignedTo") {
@@ -152,6 +159,7 @@ function Leads() {
       createdTime: "", // Clear out createdTime for new lead
       subject: "",
       address: "",
+      actual_date: "",
     });
     setShowPopup(true);
   };
@@ -161,6 +169,8 @@ function Leads() {
     setCurrentLead({
       ...lead,
       createdTime: moment(lead.createdTime).format("YYYY-MM-DD"), // Format the createdTime
+      actual_date: moment(lead.createdTime).format("YYYY-MM-DD"), // Format the createdTime
+      
     });
     setShowPopup(true);
   };
@@ -175,10 +185,17 @@ function Leads() {
           );
         } else {
           await axios.post("https://crm.one-realty.in/api/leads", currentLead);
-          const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Lead%20No.%20${currentLead.lead_no}%0A2)%20Name:%20${currentLead.name}%0A3)%20Phone%20Number:%20${currentLead.phone}%0A4)%20Lead%20Source:%20${currentLead.leadSource}%0A5)%20Address:%20${currentLead.address}%0A6)%20Subject:%20${currentLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
 
-          // Open WhatsApp link
-          window.open(whatsappLink, "_blank");
+        // Format the createdTime using moment
+const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as per your requirement
+
+// Generate the WhatsApp link with the formatted date
+const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Assign%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${currentLead.lead_no}%0A3)%20Name:%20${currentLead.name}%0A4)%20Phone%20Number:%20${currentLead.phone}%0A5)%20Lead%20Source:%20Facebook%20Campaign%0A6)%20Address:%20${currentLead.address}%0A7)%20Subject:%20${currentLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+
+// Open WhatsApp link
+window.open(whatsappLink, "_blank");
+
+
         }
   
         fetchLeads(); // Refresh the list
@@ -679,7 +696,7 @@ function Leads() {
                 />
 
                 <div className="mb-4">
-                  <label className="block text-gray-700">Date</label>
+                  <label className="block text-gray-700">Assign Date</label>
                   <input
                     type="date"
                     name="createdTime"
@@ -691,6 +708,7 @@ function Leads() {
                     <span className="text-red-500">{errors.createdTime}</span>
                   )}
                 </div>
+                
 
                 <div className="mb-4">
                   <label className="block text-gray-700">Name</label>

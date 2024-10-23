@@ -18,6 +18,7 @@ function Accrs() {
     assignedTo: "",
     employeeId: "",
     employeephone: "",
+    createdTime:"",
   });
   console.log(responses, 'Line number 7 data check');
 
@@ -87,7 +88,8 @@ function Accrs() {
         lead_no:  selectedLead.leadId,    
         assignedTo:currentLead.assignedTo,
         employeeId:currentLead.employeeId,
-        createdTime:  selectedLead.date,
+        createdTime:  currentLead.createdTime,
+        actual_date:  selectedLead.date,
         name: selectedLead.fullName,         
         phone:  selectedLead.phoneNumber,   
         leadSource: "99 Acres", 
@@ -98,9 +100,14 @@ function Accrs() {
       fetchLeadassigned();
 
       closePopup();
-      const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Lead%20No.%20${selectedLead.leadId}%0A2)%20Name:%20${selectedLead.fullName}%0A3)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A4)%20Lead%20Source:%20${`99 Acres`}%0A5)%20Address:%20${selectedLead.address}%0A6)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
-      // Open WhatsApp link
-      window.open(whatsappLink, "_blank");
+    // Format the createdTime using moment
+const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as 'DD-MM-YYYY'
+
+// Generate the WhatsApp link with the formatted date
+const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${selectedLead.leadId}%0A3)%20Name:%20${selectedLead.fullName}%0A4)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A5)%20Lead%20Source:%2099%20Acres%0A6)%20Address:%20${selectedLead.address}%0A7)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+
+// Open WhatsApp link
+window.open(whatsappLink, "_blank");
 
      
     } catch (error) {
@@ -313,17 +320,29 @@ function Accrs() {
                   />
                   
                 </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Date</label>
+                <div className="mb-4">
+              <label className="block text-gray-700">Assign Date</label>
               <input
-                type=""
+                type="date"
                 name="createdTime"
+                value={currentLead.createdTime}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border  rounded`}
+                
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Actual Date</label>
+              <input
+                type="date"
+                name="actual_date"
                 value={selectedLead.date}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-2 border  rounded`}
                 disabled
               />
             </div>
+
 
             <div className="flex justify-end">
               <button
