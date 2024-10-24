@@ -14,7 +14,7 @@
 
 //     const fetchServices = async () => {
 //         try {
-//           const response = await axios.get(`https://crm.one-realty.in/api/quotation-name/${id}`);
+//           const response = await axios.get(`http://localhost:9000/api/quotation-name/${id}`);
 
 //           setQuotationName(response.data[0].quotation_name);
 
@@ -30,7 +30,7 @@
 //         event.preventDefault();
 
 //         try {
-//             const response = await axios.put(`https://crm.one-realty.in/api/quotation-data/${id}`, { newName });
+//             const response = await axios.put(`http://localhost:9000/api/quotation-data/${id}`, { newName });
 
 //             if (response.status === 200) {
 //                 setMessage(response.data.message);
@@ -95,7 +95,7 @@ const UpdateQuotationName = () => {
     const fetchQuotationName = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/quotation-name/${id}`
+          `http://localhost:9000/api/quotation-name/${id}`
         );
         if (response.data && response.data.length > 0) {
           setNewName(response.data[0].quotation_name); // Set default value for input
@@ -112,7 +112,7 @@ const UpdateQuotationName = () => {
 
     try {
       const response = await axios.put(
-        `https://crm.one-realty.in/api/quotation-data/${id}`,
+        `http://localhost:9000/api/quotation-data/${id}`,
         { newName }
       );
       if (response.status === 200) {

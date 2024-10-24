@@ -50,7 +50,7 @@ function Leads() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads");
       setLeads(response.data);
       console.log(leads);
     } catch (error) {
@@ -60,7 +60,7 @@ function Leads() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -180,11 +180,11 @@ function Leads() {
       try {
         if (isEditing) {
           await axios.put(
-            `https://crm.one-realty.in/api/leads/${currentLead.lead_id}`,
+            `http://localhost:9000/api/leads/${currentLead.lead_id}`,
             currentLead
           );
         } else {
-          await axios.post("https://crm.one-realty.in/api/leads", currentLead);
+          await axios.post("http://localhost:9000/api/leads", currentLead);
 
         // Format the createdTime using moment
 const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as per your requirement
@@ -217,7 +217,7 @@ window.open(whatsappLink, "_blank");
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`https://crm.one-realty.in/api/leads/${id}`);
+        await axios.delete(`http://localhost:9000/api/leads/${id}`);
         fetchLeads(); // Refresh the list after deletion
       } catch (error) {
         console.error("Error deleting lead:", error);

@@ -22,7 +22,7 @@ function Final_quotationBy_emp() {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/quotation/${id}`
+        `http://localhost:9000/api/quotation/${id}`
       );
 
       if (response.status === 200) {
@@ -52,7 +52,7 @@ function Final_quotationBy_emp() {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/notes/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
 
       if (response.status === 200) {
         setNotes(response.data);
@@ -101,7 +101,7 @@ function Final_quotationBy_emp() {
       try {
         // Make an API call to delete the service
         const response = await axios.delete(
-          `https://crm.one-realty.in/api/services/${serviceId}`
+          `http://localhost:9000/api/services/${serviceId}`
         );
 
         if (response.status === 200) {

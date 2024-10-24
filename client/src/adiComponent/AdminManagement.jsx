@@ -44,7 +44,7 @@ function AdminManagement() {
   const fetchAdmins = async () => {
     try {
       const response = await axios.get(
-        "https://crm.one-realty.in/api/getAllAdmins"
+        "http://localhost:9000/api/getAllAdmins"
       );
       const admins = response.data.admins;
       setAdmins(admins || []);
@@ -62,7 +62,7 @@ function AdminManagement() {
 
   //   try {
   //     const response = await axios.get(
-  //       "https://crm.one-realty.in/api/admins/checkEmail",
+  //       "http://localhost:9000/api/admins/checkEmail",
   //       {
   //         params: { email },
   //       }
@@ -144,7 +144,7 @@ function AdminManagement() {
         // console.log("Password to update:", newAdmin.password);
 
         await axios.put(
-          `https://crm.one-realty.in/api/updateAdmin/${adminToUpdate.admin_id}`,
+          `http://localhost:9000/api/updateAdmin/${adminToUpdate.admin_id}`,
           newAdmin
         );
 
@@ -155,7 +155,7 @@ function AdminManagement() {
         console.log("Adding new admin:", newAdmin);
 
         const response = await axios.post(
-          "https://crm.one-realty.in/api/addAdmin",
+          "http://localhost:9000/api/addAdmin",
           newAdmin
         );
 
@@ -218,7 +218,7 @@ function AdminManagement() {
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`https://crm.one-realty.in/api/deleteAdmin/${admin_id}`);
+        await axios.delete(`http://localhost:9000/api/deleteAdmin/${admin_id}`);
         fetchAdmins();
       } catch (error) {
         console.error("Error deleting admin:", error);

@@ -24,7 +24,7 @@ function Accrs() {
 
   const fetchResponses = async () => {
     try {
-      const response = await axios.get('https://crm.one-realty.in/api/get-responses');
+      const response = await axios.get('http://localhost:9000/api/get-responses');
       console.log('Response received from API:', response.data);
       setResponses(response.data);
     } catch (error) {
@@ -33,7 +33,7 @@ function Accrs() {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -41,7 +41,7 @@ function Accrs() {
   };
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads");
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
     } catch (error) {
@@ -84,7 +84,7 @@ function Accrs() {
       return; // Stop further execution if the field is empty
     }
     try {
-      await axios.post("https://crm.one-realty.in/api/leads", {
+      await axios.post("http://localhost:9000/api/leads", {
         lead_no:  selectedLead.leadId,    
         assignedTo:currentLead.assignedTo,
         employeeId:currentLead.employeeId,

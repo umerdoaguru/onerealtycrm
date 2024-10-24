@@ -23,7 +23,7 @@ const Registration = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://crm.one-realty.in/api/register",
+        "http://localhost:9000/api/register",
         formData
       );
       setLoading(false);

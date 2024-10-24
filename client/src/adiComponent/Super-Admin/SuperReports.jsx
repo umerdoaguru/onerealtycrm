@@ -238,11 +238,11 @@ const SuperReports = () => {
   };
 
   const employeeAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const leadsAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const formatData = (data) => {

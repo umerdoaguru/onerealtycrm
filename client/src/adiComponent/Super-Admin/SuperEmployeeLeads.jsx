@@ -35,7 +35,7 @@ function SuperEmployeeLeads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${id}`
+        `http://localhost:9000/api/employe-leads/${id}`
       );
       const data = response.data;
       console.log(data);

@@ -39,7 +39,7 @@ function SuperQuotationVIew() {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/quotation/${id}`
+        `http://localhost:9000/api/quotation/${id}`
       );
 
       if (response.status === 200) {
@@ -54,7 +54,7 @@ function SuperQuotationVIew() {
   };
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/notes/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
 
       if (response.status === 200) {
         setNotes(response.data);
@@ -69,7 +69,7 @@ function SuperQuotationVIew() {
     const fetchCompanyNames = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/header-footer-images/company-names/${UserId}`
+          `http://localhost:9000/api/header-footer-images/company-names/${UserId}`
         );
         if (response.status === 200) {
           setCompanyNames(response.data); // Assuming response.data is an array of company names
@@ -225,7 +225,7 @@ function SuperQuotationVIew() {
     const fetchImages = async () => {
       try {
         const response = await axios.post(
-          "https://crm.one-realty.in/api/company-header-footer",
+          "http://localhost:9000/api/company-header-footer",
           {
             company_name: selectedCompany,
           }

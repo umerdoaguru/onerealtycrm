@@ -19,7 +19,7 @@ function Employees() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployee(response.data);
       setFilteredEmployee(response.data); // Initial data set for filtering
     } catch (error) {

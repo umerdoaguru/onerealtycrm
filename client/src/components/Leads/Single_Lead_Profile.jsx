@@ -14,7 +14,7 @@ function Single_Lead_Profile() {
     const fetchQuotations = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/leads/${id}`
+          `http://localhost:9000/api/leads/${id}`
         );
         setLeads(response.data);
         console.log(response);

@@ -44,7 +44,7 @@ function CreateCompanyProfile() {
     const fetchinvoice = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/company-data`
+          `http://localhost:9000/api/company-data`
         );
         setcompanydata(response.data);
         console.log(response);
@@ -63,7 +63,7 @@ function CreateCompanyProfile() {
     if (isConfirmed) {
       try {
         const response = await axios.post(
-          "https://crm.one-realty.in/api/companydata",
+          "http://localhost:9000/api/companydata",
           {
             company_name: CompanyName,
           }
@@ -118,7 +118,7 @@ function CreateCompanyProfile() {
         formData.append("digital_sign", companydigitalsign);
 
         const response = await axios.post(
-          "https://crm.one-realty.in/api/upload-company-profile",
+          "http://localhost:9000/api/upload-company-profile",
           formData,
           {
             headers: {
