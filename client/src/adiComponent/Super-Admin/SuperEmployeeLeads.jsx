@@ -91,7 +91,9 @@ function SuperEmployeeLeads() {
 
     // Filter by Deak
     if (dealFilter) {
+      console.log(dealFilter);
       filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
+      console.log(filtered);
     }
 
     setFilteredLeads(filtered);
@@ -234,7 +236,7 @@ function SuperEmployeeLeads() {
                   <option value="">All Deal</option>
                   <option value="pending">Pending</option>
                   <option value="in progress">In Progress</option>
-                  <option value="closed">Closed</option>
+                  <option value="close">Closed</option>
                   <option value="not closed">Not Closed</option>
                 </select>
               </div>
