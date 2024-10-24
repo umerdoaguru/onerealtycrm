@@ -20,6 +20,7 @@ function EmployeeDashboard() {
     <>
       <MainHeader />
       <EmployeeSider />
+      <div className="container 2xl:max-w-[1280px]">
       <h1 className="text-2xl text-center mt-[5rem]">Employee Dashboard</h1>
       <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       <div className="flex min-h-screen overflow-hidden">
@@ -40,6 +41,7 @@ function EmployeeDashboard() {
           <EmployeeLeadsReport />
           {/* <ToDoList /> will not use remote it  */}
         </div>
+      </div>
       </div>
     </>
   );

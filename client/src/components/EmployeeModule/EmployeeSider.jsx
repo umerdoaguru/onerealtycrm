@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaHistory } from "react-icons/fa";
@@ -26,8 +22,7 @@ const EmployeeeSider = () => {
     <>
       {/* Hamburger Button - Hidden on large screens */}
       <button
-        className="fixed top-16 md:top-20 left-4 z-50 text-black 
-             sm:hidden md:block max-xl:hidden xl:block 2xl:hidden"
+        className="fixed top-16 md:top-20 left-4 z-50 text-black hidden max-2xl:block"
         onClick={toggleSidebar}
       >
         <AiOutlineMenu size={25} />
