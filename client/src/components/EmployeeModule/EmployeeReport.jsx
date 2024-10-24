@@ -153,31 +153,28 @@ const EmployeeReport = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
+
+    if(selectedCategory === 'Visited lead') return;
+    
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
-
+      console.log(data[selectedCategory], item);
       // Parse the date from created_date or createdTime, whichever exists
-
-      
+      // Function to convert DD/MM/YYYY to MM/DD/YYYY
       const convertToMMDDYYYY = (dateStr) => {
         const [day, month, year] = dateStr.split("/"); // Split by "/"
         return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
       };
 
       let itemDate;
+      if(item.d_closeDate === "pending") return false;
 
-      if (selectedCategory === "visit") {
-        itemDate = new Date(convertToMMDDYYYY(item.visit_date));
-      } else if (selectedCategory === "closed") {
-        if (item.deal_status !== "close") {
-          return;
-        }
-        itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
-      } else {
-        itemDate = new Date(convertToMMDDYYYY(item.createdTime)); // Default date if no specific category
-      }
+      itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
+
+      console.log(itemDate);
 
       let filterCondition = false;
+
       if (filter === "week") {
         // Get the last Sunday and the current date for the week range
         const lastSunday = new Date(currentDate);
@@ -294,8 +291,8 @@ const EmployeeReport = () => {
     return data.map((item) => ({
       ...item,
       createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
-      visit_date: moment(item.visit_date).format("DD/MM/YYYY"),
-      d_closeDate: moment(item.d_closeDate).format("DD/MM/YYYY"),
+      visit_date: (item.visit_date !== "pending") ? moment(item.visit_date).format("DD/MM/YYYY") : "pending",
+      d_closeDate: (item.d_closeDate !== "pending") ? moment(item.d_closeDate).format("DD/MM/YYYY") : "pending",
     }));
   };
 
