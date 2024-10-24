@@ -78,6 +78,7 @@ function LeadData() {
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
   };
   return (
     <Wrapper>
@@ -191,36 +192,27 @@ function LeadData() {
 
         {/* Pagination */}
         <div className="mt-2 mb-2 flex justify-center">
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          breakLabel={"..."}
-          pageCount={pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={handlePageClick}
-          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
-          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
-          previousClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          previousLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          nextLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          breakClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
-          activeClassName={
-            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
-          }
-        />
-          </div>
+  <ReactPaginate
+    previousLabel="Previous"
+    nextLabel="Next"
+    breakLabel="..."
+    pageCount={pageCount}
+    marginPagesDisplayed={2}
+    forcePage={currentPage}
+    pageRangeDisplayed={5}
+    onPageChange={handlePageClick}
+    containerClassName="flex justify-center items-center gap-3 mt-6"
+    pageClassName="bg-white border border-gray-300 rounded-md shadow-sm"
+    pageLinkClassName="px-4 py-2 text-sm text-blue-600 no-underline hover:text-blue-700"
+    previousClassName="bg-white border border-gray-300 rounded-md shadow-sm"
+    previousLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+    nextClassName="bg-white border border-gray-300 rounded-md shadow-sm"
+    nextLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+    breakClassName="bg-white border border-gray-300 rounded-md shadow-sm"
+    breakLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+    activeClassName="bg-blue-600 text-white border border-gray-700 rounded-md shadow-sm"
+  />
+</div>
       </div>
     </Wrapper>
   );
@@ -235,5 +227,98 @@ const Wrapper = styled.div`
     }
   }
 
+  .active {
+  background-color: #1e50ff;
+}
+ /* Container class */
+ .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
 
+  /* Page item */
+  .pagination-page {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Page link */
+  .pagination-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #3b82f6;
+    text-decoration: none;
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  /* Previous button */
+  .pagination-previous {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  } 
+
+  .pagination-link-previous {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Next button */
+  .pagination-next {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-link-next {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Break item */
+  .pagination-break {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-break-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Active page */
+  .pagination-active {
+    background-color: #1e50ff;
+    color: white;
+    border: 1px solid #374151;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-active a {
+    color: white !important;
+  }
 `;

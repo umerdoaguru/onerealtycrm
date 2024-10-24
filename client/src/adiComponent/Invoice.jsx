@@ -109,7 +109,7 @@ const LeadVisitChart = () => {
               <Bar
                 dataKey="Leads" // Corrected to 'Leads' from 'totalVisits'
                 fill="#8884d8"
-                name="Total Leads"
+                name="Total Visit"
                 barSize={15}
               />
             </BarChart>

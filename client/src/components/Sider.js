@@ -117,7 +117,7 @@ const Sider = () => {
               >
                 <BsFileEarmarkPerson className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
-                  Quotation <br /> <span>&</span> <br /> Invoice
+                  Quotation 
                 </h3>
               </Link>
             </li>

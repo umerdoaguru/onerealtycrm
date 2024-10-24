@@ -524,17 +524,6 @@ function MainQuotationPage() {
       <MainHeader />
       <EmployeeeSider />
       <div className="flex flex-col 2xl:ml-44 mt-14 max-w-7xl">
-        <div className="container px-3 ">
-          <div className="flex justify-between">
-            <div className="mx-3 mt-3">
-              <UserLogin />
-            </div>
-            {/* <div className="mt-1 mx-3">
-              <Logout />
-            </div> */}
-          </div>
-        </div>
-
         <h1 className="text-2xl text-center mt-[2rem]">Quotation Management</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
         <div className="container flex flex-wrap justify-around mt-5">
