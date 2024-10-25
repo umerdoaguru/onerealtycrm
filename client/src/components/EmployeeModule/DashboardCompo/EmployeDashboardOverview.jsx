@@ -104,7 +104,7 @@ const EmployeeOverview = () => {
                 </div>
                 <div className="mt-2">
                   <h5 className="text-gray-800 text-xl font-semibold ">
-                    Total Leads{" "}
+                  Total Assign Leads{" "}
                   </h5>
                   <p className="text-gray-800 text-xl font-semibold ">
                     {leadCount}

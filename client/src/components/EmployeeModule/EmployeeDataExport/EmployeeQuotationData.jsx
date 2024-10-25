@@ -105,20 +105,22 @@ const EmployeeQuotationData = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {currentQuotations.map((quotation, index) => (
-                    <tr key={quotation.quotation_id}>
-                      <td className="border border-gray-200 px-4 py-2">
-                        {offset + index + 1}
-                      </td>
-                      <td className="border border-gray-200 px-4 py-2">
-                        {quotation.quotation_name}
-                      </td>
-                      <td className="border border-gray-200 px-4 py-2">
-                        {moment(quotation.created_date).format("DD/MM/YYYY")}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+  {currentQuotations.map((quotation, index) => (
+    <tr key={quotation.quotation_id}>
+      <td className="border border-gray-200 px-4 py-2">
+        {/* Ensure offset is calculated correctly */}
+        {offset + index + 1}
+      </td>
+      <td className="border border-gray-200 px-4 py-2">
+        {quotation.quotation_name}
+      </td>
+      <td className="border border-gray-200 px-4 py-2">
+        {moment(quotation.created_date).format("DD/MM/YYYY")}
+      </td>
+    </tr>
+  ))}
+</tbody>
+
               </table>
 
               {/* Pagination */}

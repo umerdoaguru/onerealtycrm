@@ -147,12 +147,12 @@ const EmployeeInvoiceList = () => {
                       >
                         Delete
                       </button>
-                      <button
+                      {/* <button
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded m-1"
                         onClick={() => handleCopyInvoice(invoice.invoice_id)}
                       >
                         Copy
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 ))}

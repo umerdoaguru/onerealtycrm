@@ -50,7 +50,7 @@ function TotalEmpLead() {
       <div className="flex flex-col 2xl:ml-44 ">
         <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
-            Total Leads
+            Total Assign Leads
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
