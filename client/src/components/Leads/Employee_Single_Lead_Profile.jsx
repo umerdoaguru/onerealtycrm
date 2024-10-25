@@ -29,47 +29,9 @@ function Employee_Single_Lead_Profile() {
         { value: "completed", label: "Completed" },
       ],
     },
-    {
-      name: "visit_date",
-      label: "Visit Date",
-      type: "date", // Changed to "date" for consistency
-    },
-    {
-      name: "visit",
-      label: "Visit",
-      type: "select",
-      options: [
-        { value: "", label: "Select Lead Status" },
-        { value: "Fresh Visit", label: "Fresh Visit" },
-        { value: "Repeated Visit", label: "Repeated Visit" },
-        // { value: "completed", label: "Completed" },
-      ],
-    },
+ 
 
-    // {
-    //   name: "quotation_status",
-    //   label: "Quotation Status",
-    //   type: "select",
-    //   options: [
-    //     { value: "", label: "Select Quotation Status" },
-    //     { value: "pending", label: "Pending" },
-    //     { value: "in progress", label: "In Progress" },
-    //     { value: "approved", label: "Aprroved" },
-    //     { value: "not approved", label: "Not Aprroved" },
-    //   ],
-    // },
-    // {
-    //   name: "invoice_status",
-    //   label: "Invoice Status",
-    //   type: "select",
-    //   options: [
-    //     { value: "", label: "Select Invoice Status" },
-    //     { value: "pending", label: "Pending" },
-    //     { value: "in progress", label: "In Progress" },
-    //     { value: "approved", label: "Aprroved" },
-    //     { value: "not approved", label: "Not Aprroved" },
-    //   ],
-    // },
+
     {
       name: "deal_status",
       label: "Deal Status",
@@ -321,18 +283,26 @@ function Employee_Single_Lead_Profile() {
           </div>
 
           <div className=" flex justify-between">
+            <div className="">
             <button
               onClick={() => handleQuotation(leads[0])}
               className="bg-blue-500 text-white px-4 py-2 rounded"
             >
               Quotation Creation
             </button>
-
+            <button
+              onClick={() => handleQuotation(leads[0])}
+              className="bg-orange-500 text-white px-4 py-2 mx-2 rounded"
+            >
+              Visit Creation
+            </button>
+            </div>
+<div className="">
             {/* Conditionally render the View Quotation button */}
             {quotationCreated ? (
               <button
                 onClick={() => handleViewQuotation(leads[0])}
-                className="bg-green-500 text-white px-4 py-2 rounded"
+                className="bg-orange-500 text-white px-4 py-2 rounded"
               >
                 View Quotation
               </button>
@@ -341,7 +311,25 @@ function Employee_Single_Lead_Profile() {
                 Quotation not yet created
               </p>
             )}
+        
+           
+
+            {/* Conditionally render the View Quotation button */}
+            {quotationCreated ? (
+              <button
+                onClick={() => handleViewQuotation(leads[0])}
+                className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
+              >
+                View Visit
+              </button>
+            ) : (
+              <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                Quotation not yet created
+              </p>
+            )}
+         </div>
           </div>
+          
 
           <div className="overflow-x-auto mt-5">
             <table className="min-w-full bg-white border">

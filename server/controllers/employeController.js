@@ -112,7 +112,7 @@ const updateLeadStatus = async (req, res) => {
     const {
       lead_status,
       quotation_status,
-      invoice_status,
+     
       deal_status,
       reason, 
       status,
@@ -125,13 +125,12 @@ const updateLeadStatus = async (req, res) => {
     console.log(
       lead_status,
       quotation_status,
-      invoice_status,
+     
       deal_status,
       reason, 
       status,
       follow_up_status,
-      visit,
-      visit_date,
+      
       d_closeDate, // Log d_closeDate
       id
     );
@@ -139,13 +138,12 @@ const updateLeadStatus = async (req, res) => {
     const sql = `UPDATE leads SET 
                       lead_status = ?, 
                       quotation_status = ?, 
-                      invoice_status = ?, 
+                     
                       deal_status = ?, 
                       reason = ?, 
                       status = ?, 
                       follow_up_status = ?, 
-                      visit = ?,            -- Include visit in the SQL query
-                      visit_date = ?,       -- Include visit_date in the SQL query
+                   
                       d_closeDate = ?       -- Include d_closeDate in the SQL query
                   WHERE lead_id = ?`;
 
@@ -155,13 +153,12 @@ const updateLeadStatus = async (req, res) => {
         [
           lead_status,
           quotation_status,
-          invoice_status,
+         
           deal_status,
           reason, 
           status,
           follow_up_status,
-          visit, // Pass visit to the query
-          visit_date, // Pass visit_date to the query
+          
           d_closeDate, // Pass d_closeDate to the query
           id,
         ],
