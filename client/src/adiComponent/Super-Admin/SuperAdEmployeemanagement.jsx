@@ -17,7 +17,6 @@ const SuperAdEmployeemanagement = () => {
     password: "",
     position: "",
     phone: "",
-    salary: "", // Added salary to the state
   });
   const [editingIndex, setEditingIndex] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -34,6 +33,7 @@ const SuperAdEmployeemanagement = () => {
         "http://localhost:9000/api/getAllEmployees"
       );
       const { employees } = response.data;
+      console.log(employees);
       setEmployees(employees || []); // Ensure employees is always an array
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -86,11 +86,6 @@ const SuperAdEmployeemanagement = () => {
     else if (!/^\d{10}$/.test(newEmployee.phone))
       errors.phone = "Phone number must be 10 digits";
 
-    // Validate Salary
-    if (!newEmployee.salary) errors.salary = "Salary is required";
-    else if (isNaN(newEmployee.salary) || newEmployee.salary <= 0)
-      errors.salary = "Salary must be a positive number";
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -135,7 +130,6 @@ const SuperAdEmployeemanagement = () => {
         password: "",
         position: "",
         phone: "",
-        salary: "", // Reset salary field
       });
       setShowForm(false);
       fetchEmployees(); // Fetch employees to update the list
@@ -158,7 +152,6 @@ const SuperAdEmployeemanagement = () => {
       password: employeeToEdit.password,
       position: employeeToEdit.position,
       phone: employeeToEdit.phone,
-      salary: employeeToEdit.salary, // Set salary for editing
     });
     setEditingIndex(index);
     setShowForm(true);
@@ -191,7 +184,6 @@ const SuperAdEmployeemanagement = () => {
       password: "",
       position: "",
       phone: "",
-      salary: "", // Reset salary field
     });
     setShowForm(false);
     setValidationErrors({})
@@ -230,8 +222,6 @@ const SuperAdEmployeemanagement = () => {
                   <th className="px-4 py-3 sm:px-6">Email</th>
                   <th className="px-4 py-3 sm:px-6">Role</th>
                   <th className="px-4 py-3 sm:px-6">Phone</th>
-                  <th className="px-4 py-3 sm:px-6">Salary</th>{" "}
-                  {/* Added Salary Column */}
                   <th className="px-4 py-3 sm:px-6">Actions</th>
                 </tr>
               </thead>
@@ -251,10 +241,6 @@ const SuperAdEmployeemanagement = () => {
                           {employee.position}
                         </td>
                         <td className="px-4 py-4 sm:px-6">{employee.phone}</td>
-                        <td className="px-4 py-4 sm:px-6">
-                          {employee.salary}
-                        </td>{" "}
-                        {/* Display Salary */}
                         <td className="px-4 py-4 sm:px-6">
                           <div className="flex space-x-2 sm:space-x-4">
                             <button
@@ -423,30 +409,6 @@ const SuperAdEmployeemanagement = () => {
                 )}
               </div>
 
-              {/* Salary Input */}
-              <div className="flex flex-col">
-                <input
-                  required
-                  type="text"
-                  name="salary"
-                  value={newEmployee.salary}
-                  onChange={handleInputChange}
-                  placeholder="Salary"
-                  className={`p-2 border rounded-lg ${
-                    validationErrors.salary
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-                />
-                {/* Error Messages for Salary */}
-                {validationErrors.salary && (
-                  <div className="flex flex-col text-sm text-red-500 space-y-1">
-                    {validationErrors.salary.split("\n").map((error, index) => (
-                      <p key={index}>{error}</p>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
 
             <div className="flex justify-end mt-4 space-x-4">

@@ -151,8 +151,6 @@ const EmployeeReport = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
-
-    if(selectedCategory === 'Visited lead') return;
     
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
@@ -167,7 +165,13 @@ const EmployeeReport = () => {
       let itemDate;
       if(item.d_closeDate === "pending") return false;
 
-      itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
+      if(selectedCategory == "leads"){
+        itemDate = new Date(convertToMMDDYYYY(item.createdTime));
+      } else if (selectedCategory == "visit") {
+        itemDate = new Date(convertToMMDDYYYY(item.visit_date));
+      } else {
+        itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
+      }
 
       console.log(itemDate);
 
@@ -233,6 +237,30 @@ const EmployeeReport = () => {
     setSelectedCategory(category);
     setCurrentPage(1);
     filterData();
+
+    const combinedData = {
+      leads: data.leads,
+      visit: data.visit,
+      closed: data.closed,
+    };
+
+    const updatedDataFields = {
+      ...dataFields,
+      leads: {
+        ...dataFields.leads,
+        leads: combinedData.leads,
+      },
+      visit: {
+        ...dataFields.visit,
+        visit: combinedData.visit,
+      },
+      closed: {
+        ...dataFields.closed,
+        closed: combinedData.closed,  
+      },
+    };
+    console.log(updatedDataFields, combinedData);
+    setDataFields(updatedDataFields);
   };
 
   const handleFilterChange = (event) => {
@@ -321,13 +349,19 @@ const EmployeeReport = () => {
             //   invoiceData = formatData(result.value.data);
             //   break;
             case 0:
-              leadsData = formatData(result.value.data);
+              leadsData = formatData(result.value.data).filter((item) => {
+                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
+              });
               break;
             case 1:
-              visitData = formatData(result.value.data);
+              visitData = formatData(result.value.data).filter((item) => {
+                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
+              });
               break;
             case 2:
-              closedData = formatData(result.value.data);
+              closedData = formatData(result.value.data).filter((item) => {
+                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
+              });
               break;
             default:
               break;

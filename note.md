@@ -1,13 +1,13 @@
 # 25 Oct
-- > Remove Salary from EveryWhere
+<!-- - > Remove Salary from EveryWhere -->
 - > Check Responsiveness
 - > SuperAdmin 
-    - Dashboard mai daily visit graph mai points mai number na hoye
+    <!-- - Dashboard mai daily visit graph mai points mai number na hoye -->
     - Leads ke filters par kaam shayad option ke value par kaam
     - report section is not that work well
     - 
 - > Emplploye
-    - Report Leads error, when get back to lead tab
+    <!-- - Report Leads error, when get back to lead tab -->
 
 
 <!-- 1. super admin ke total visit ko dekhne ke liye router par super-total-visit use karte hai. -->

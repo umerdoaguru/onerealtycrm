@@ -11,7 +11,6 @@ const mockEmployeeData = {
   name: "John Doe",
   email: "john.doe@example.com",
   phone: "9876543210",
-  salary: "50000.00",
   position: "Software Engineer",
   designation: "Developer",
   createdTime: "2024-09-01 12:00:00",
@@ -90,13 +89,6 @@ function AdminProfile() {
                   <label className="text-info">Position</label>
                   <div className="p-2 bg-gray-100 rounded">
                     <p className="m-0">{user?.position}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-info">Salary</label>
-                  <div className="p-2 bg-gray-100 rounded">
-                    <p className="m-0">{user?.salary}</p>
                   </div>
                 </div>
 

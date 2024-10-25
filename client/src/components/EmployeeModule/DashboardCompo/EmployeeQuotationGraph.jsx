@@ -92,7 +92,8 @@ const EmployeeQuotationGraph = () => {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="day" />
-          <YAxis />
+          <YAxis   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''} />
           <Tooltip />
           <Legend />
           <Line

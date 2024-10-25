@@ -104,8 +104,10 @@ const EmployeeInvoiceGraph = () => {
                   // fontWeight: "bold",
                 }}
               />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
+              <YAxis yAxisId="left"   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
+              <YAxis yAxisId="right" orientation="right"   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
               <Tooltip />
               <Legend />
               <Bar

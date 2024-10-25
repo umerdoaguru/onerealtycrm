@@ -280,7 +280,7 @@ const AdminReport = () => {
             case 1:
               leadsData = formatData(result.value.data).filter((item) => {
                 return (
-                  item.d_closeDate !== "pending" ||
+                  item.d_closeDate !== "pending" &&
                   item.visit_date !== "pending"
                 );
               });

@@ -102,7 +102,7 @@ const SuperReports = () => {
 
       let itemDate;
       if(item.d_closeDate === "pending") return false;
-
+      
       itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
 
       console.log(itemDate);
@@ -271,7 +271,7 @@ const SuperReports = () => {
               break;
             case 1:
               leadsData = formatData(result.value.data).filter((item) => {
-                return item.d_closeDate !== "pending" || item.visit_date !== "pending";
+                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
               });
               break;
             default:
