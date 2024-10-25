@@ -15,7 +15,6 @@ const EmployeeManagement = () => {
     password: "",
     position: "",
     phone: "",
-    salary: "", // Added salary to the state
   });
   const [editingIndex, setEditingIndex] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -85,11 +84,6 @@ const EmployeeManagement = () => {
     else if (!/^\d{10}$/.test(newEmployee.phone))
       errors.phone = "Phone number must be 10 digits";
 
-    // Validate Salary
-    if (!newEmployee.salary) errors.salary = "Salary is required";
-    else if (isNaN(newEmployee.salary) || newEmployee.salary <= 0)
-      errors.salary = "Salary must be a positive number";
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -127,7 +121,6 @@ const EmployeeManagement = () => {
         password: "",
         position: "",
         phone: "",
-        salary: "", // Reset salary field
       });
       setShowForm(false);
       fetchEmployees(); // Fetch employees to update the list
@@ -147,7 +140,6 @@ const EmployeeManagement = () => {
       password: employeeToEdit.password,
       position: employeeToEdit.position,
       phone: employeeToEdit.phone,
-      salary: employeeToEdit.salary, // Set salary for editing
     });
     setEditingIndex(index);
     setShowForm(true);
@@ -208,8 +200,6 @@ const EmployeeManagement = () => {
                   <th className="px-4 py-3 sm:px-6">Email</th>
                   <th className="px-4 py-3 sm:px-6">Role</th>
                   <th className="px-4 py-3 sm:px-6">Phone</th>
-                  <th className="px-4 py-3 sm:px-6">Salary</th>{" "}
-                  {/* Added Salary Column */}
                   <th className="px-4 py-3 sm:px-6">Actions</th>
                 </tr>
               </thead>
@@ -229,10 +219,6 @@ const EmployeeManagement = () => {
                           {employee.position}
                         </td>
                         <td className="px-4 py-4 sm:px-6">{employee.phone}</td>
-                        <td className="px-4 py-4 sm:px-6">
-                          {employee.salary}
-                        </td>{" "}
-                        {/* Display Salary */}
                         <td className="px-4 py-4 sm:px-6">
                           <div className="flex space-x-2 sm:space-x-4">
                             <button
@@ -345,22 +331,6 @@ const EmployeeManagement = () => {
               />
               {validationErrors.phone && (
                 <p className="text-sm text-red-500">{validationErrors.phone}</p>
-              )}
-
-              <input
-                type="text"
-                name="salary"
-                value={newEmployee.salary}
-                onChange={handleInputChange}
-                placeholder="Salary"
-                className={`p-2 border rounded-lg ${
-                  validationErrors.salary ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {validationErrors.salary && (
-                <p className="text-sm text-red-500">
-                  {validationErrors.salary}
-                </p>
               )}
             </div>
             <div className="flex justify-end mt-4 space-x-4">

@@ -179,7 +179,7 @@ function CreateCompanyProfile() {
 
           <div className=" container px-3 pt-5">
             <h1 className="text-2xl text-center mt-[2rem] font-medium">
-              Quotation & Invoice Management
+              Quotation Management
             </h1>
             <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
             <form

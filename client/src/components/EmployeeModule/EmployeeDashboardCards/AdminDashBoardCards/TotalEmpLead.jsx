@@ -128,12 +128,14 @@ function TotalEmpLead() {
             </table>
           </div>
         </div>
+        <div className="text-center">
         <Pagination
           currentPage={currentPage}
           totalItems={leads.length}
           itemsPerPage={rowPerPage}
           onPageChange={setCurrentPage}
         />
+      </div>
       </div>
     </>
   );

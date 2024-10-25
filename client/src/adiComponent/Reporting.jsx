@@ -320,7 +320,7 @@ const Reporting = () => {
             <div className="flex flex-col space-y-4 lg:space-y-0 md:flex-row justify-between  mb-8">
               <div className="flex flex-wrap justify-center max-sm:justify-center">
                 <div className="flex flex-wrap justify-center items-center p-2   rounded-lg mt-0">
-                  {["quotation", "invoice", "employee", "leads"].map(
+                {["quotation", "invoice", "employee", "leads"].map(
                     (category) => (
                       <button
                         key={category}

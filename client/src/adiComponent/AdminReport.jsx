@@ -34,7 +34,6 @@ const AdminReport = () => {
         "Quotation Status",
         "Visit Status",
         "Visit Date",
-        "Invoice Status",
         "Deal Status",
         "FollowUp Status",
       ],
@@ -48,7 +47,6 @@ const AdminReport = () => {
         "quotation_status",
         "visit",
         "visit_date",
-        "invoice_status",
         "deal_status",
         "follow_up_status",
       ],
@@ -67,7 +65,6 @@ const AdminReport = () => {
         "Lead Source",
         "Visit Date",
         "Quotation Status",
-        "Invoice Status",
         "Deal Status",
         "FollowUp Status",
       ],
@@ -80,7 +77,6 @@ const AdminReport = () => {
         "leadSource",
         "visit_date",
         "quotation_status",
-        "invoice_status",
         "deal_status",
         "follow_up_status",
       ],
@@ -284,7 +280,7 @@ const AdminReport = () => {
             case 1:
               leadsData = formatData(result.value.data).filter((item) => {
                 return (
-                  item.d_closeDate !== "pending" ||
+                  item.d_closeDate !== "pending" &&
                   item.visit_date !== "pending"
                 );
               });

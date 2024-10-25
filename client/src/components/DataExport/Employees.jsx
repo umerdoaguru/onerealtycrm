@@ -105,7 +105,6 @@ function Employees() {
                 <th className="px-6 py-3 border-b-2 border-gray-300">Email Id</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Position</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Salary</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Created Date</th>
               </tr>
             </thead>
@@ -118,7 +117,6 @@ function Employees() {
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{employees.email}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{employees.position}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{employees.phone}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{employees.salary}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{moment(employees.createdTime).format("DD/MM/YYYY")}</td>
                 </tr>
               ))}

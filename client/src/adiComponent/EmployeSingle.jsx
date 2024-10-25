@@ -19,7 +19,6 @@ const EmployeeSingle = () => {
     email: "",
     position: "",
     phone: "",
-    salary: "", // Added salary
     signature: null,
     photo: null,
   });
@@ -39,7 +38,6 @@ const EmployeeSingle = () => {
           email: response.data.employee.email || "",
           position: response.data.employee.position || "",
           phone: response.data.employee.phone || "",
-          salary: response.data.employee.salary || "", // Set salary from API
           signature: null,
           photo: null,
         });
@@ -80,11 +78,6 @@ const EmployeeSingle = () => {
       errors.phone = "Phone number must be 10 digits";
     else if (await isPhoneNumberTaken(newEmployee.phone))
       errors.phone = "Phone number is already taken";
-
-    // Validate Salary
-    if (!newEmployee.salary) errors.salary = "Salary is required";
-    else if (isNaN(newEmployee.salary) || newEmployee.salary <= 0)
-      errors.salary = "Salary must be a positive number";
 
     // Validate Files
     if (
@@ -160,7 +153,6 @@ const EmployeeSingle = () => {
       formData.append("email", newEmployee.email);
       formData.append("position", newEmployee.position);
       formData.append("phone", newEmployee.phone);
-      formData.append("salary", newEmployee.salary); // Append salary
 
       if (newEmployee.signature) {
         formData.append("signature", newEmployee.signature);
@@ -188,7 +180,6 @@ const EmployeeSingle = () => {
           email: "",
           position: "",
           phone: "",
-          salary: "", // Reset salary
           signature: null,
           photo: null,
         });
@@ -210,7 +201,6 @@ const EmployeeSingle = () => {
         email: employee.email || "",
         position: employee.position || "",
         phone: employee.phone || "",
-        salary: employee.salary || "", // Set salary for editing
         signature: null,
         photo: null,
       });
@@ -309,12 +299,6 @@ const EmployeeSingle = () => {
                     <p className="text-gray-600">
                       {employee.phone || "No Phone Available"}
                     </p>
-                    <p className="text-gray-600">
-                      {employee.salary
-                        ? `₹${employee.salary}`
-                        : "No Salary Available"}
-                    </p>{" "}
-                    {/* Display salary */}
                   </div>
                 </div>
 
@@ -485,25 +469,6 @@ const EmployeeSingle = () => {
                     {validationErrors.phone}
                   </p>
                 )}
-
-                <input
-                  type="text"
-                  name="salary"
-                  value={newEmployee.salary}
-                  onChange={handleInputChange}
-                  placeholder="Salary"
-                  className={`p-2 border rounded-lg ${
-                    validationErrors.salary
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-                />
-                {validationErrors.salary && (
-                  <p className="text-sm text-red-500">
-                    {validationErrors.salary}
-                  </p>
-                )}
-
                 <input
                   type="file"
                   accept="image/jpeg, image/png"

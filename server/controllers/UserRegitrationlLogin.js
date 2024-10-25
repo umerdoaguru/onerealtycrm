@@ -179,7 +179,6 @@ const employeelogin = async (req, res) => {
           name: user.name,
           email: user.email,
           position: user.position,
-          salary: user.salary,
           roles: user.roles,
         },
         token,

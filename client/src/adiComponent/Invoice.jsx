@@ -103,7 +103,10 @@ const LeadVisitChart = () => {
                   fill: "#666",
                 }}
               />
-              <YAxis />
+             <YAxis 
+  allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}
+/>
               <Tooltip />
               <Legend />
               <Bar

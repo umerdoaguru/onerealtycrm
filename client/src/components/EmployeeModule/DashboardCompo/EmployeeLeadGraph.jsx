@@ -152,11 +152,12 @@ const EmployeeLeadsGraph = () => {
                 angle={0}
                 textAnchor="middle"
               />
-              <YAxis tick={{ fill: "gray" }} />
+              <YAxis tick={{ fill: "gray" }}   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
               <Tooltip />
               <Bar
                 dataKey="Leads"
-                name="Leads"
+                name="Visit"
                 fill="#EA6A47"
                 radius={[10, 10, 0, 0]}
                 barSize={15}

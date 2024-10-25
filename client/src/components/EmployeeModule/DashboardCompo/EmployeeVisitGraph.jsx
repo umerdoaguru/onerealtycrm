@@ -249,7 +249,8 @@ const EmployeeVisitGraph = () => {
                 fill: "#666",
               }}
             />
-            <YAxis />
+            <YAxis   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
             <Tooltip />
             <Legend />
             <Bar dataKey="visits" fill="#82ca9d" name="Visits" barSize={15} />
