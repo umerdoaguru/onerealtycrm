@@ -163,7 +163,6 @@ const EmployeeReport = () => {
       };
 
       let itemDate;
-      if(item.d_closeDate === "pending") return false;
 
       if(selectedCategory == "leads"){
         itemDate = new Date(convertToMMDDYYYY(item.createdTime));
@@ -349,9 +348,7 @@ const EmployeeReport = () => {
             //   invoiceData = formatData(result.value.data);
             //   break;
             case 0:
-              leadsData = formatData(result.value.data).filter((item) => {
-                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
-              });
+              leadsData = formatData(result.value.data);
               break;
             case 1:
               visitData = formatData(result.value.data).filter((item) => {

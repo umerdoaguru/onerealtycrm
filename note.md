@@ -8,6 +8,8 @@
     - 
 - > Emplploye
     <!-- - Report Leads error, when get back to lead tab -->
+- > admin
+    - > admin report mai to sabhi lead dikhnichahiye chaahe koi daer pending ku na h oye
 
 
 <!-- 1. super admin ke total visit ko dekhne ke liye router par super-total-visit use karte hai. -->
