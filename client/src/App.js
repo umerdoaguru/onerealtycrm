@@ -17,6 +17,7 @@ import Registration from "./components/Registration";
 
 // Header & Landing Page
 import Landingpage from "./pages/Landingpage";
+import ForgotPassword from "./components/EmployeeModule/ForgotPassword";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -40,6 +41,7 @@ function App() {
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/employee-login" element={<EmployeeLogin />} />
           <Route path="/SuperAdmin-login" element={<SuperAdminLogin />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           {/* Conditionally render Admin or Employee routes based on user's role
         {user?.roles === 'Admin' ? (<Route path="/*" element={<AdminRoutes />} />) : user?.roles === 'Employee' ? (<Route path="/*" element={<EmployeeRoutes />} />) :
          ( <Route path="/" element={<Navigate to="/main_page_crm" />} /> )} */}

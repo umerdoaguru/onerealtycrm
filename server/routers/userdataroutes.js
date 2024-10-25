@@ -32,6 +32,7 @@ const {
   getleadbyid,
   getAllQuotation,
   updateQuotationStatus,
+
   socialmediaLead,
 } = require("../controllers/UserController");
 const upload = require("../controllers/fileUploadController");
@@ -52,6 +53,9 @@ const {
   login,
   employeelogin,
   adminLogin,
+  resetPassword,
+  verifyOtp,
+  sendOtp,
 } = require("../controllers/UserRegitrationlLogin");
 
 const {
@@ -59,6 +63,7 @@ const {
   getServicelist,
   deleteServicename,
   updateServiceList,
+  getServiceById,
 } = require("../controllers/ServicesList");
 
 const {
@@ -148,6 +153,7 @@ router.post("/company-name-data", getcompany_name_data); //fcf
 
 router.post("/create-servicelist", createServiceList);
 router.get("/servicelist", getServicelist);
+router.get("/servicelist/:serviceId", getServiceById);
 router.delete("/servicelist/:serviceId", deleteServicename);
 router.put("/servicelist", updateServiceList);
 
@@ -214,5 +220,9 @@ router.post("/admin-login", adminLogin);
 
 router.post("/employee-login", employeelogin);
 router.post("/admin-login", adminLogin);
+
+router.post("/sendOtp", sendOtp);
+router.post("/verifyOtp", verifyOtp);
+router.put("/resetPassword", resetPassword);
 
 module.exports = router;

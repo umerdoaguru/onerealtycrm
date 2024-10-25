@@ -37,6 +37,9 @@ const SuperQuotationList = () => {
   };
 
   const handleFilterChange = (event) => {
+    let value = event.target.value;
+    if(value === ' ') return;
+    
     setFilterText(event.target.value);
   };
 
@@ -100,7 +103,7 @@ const SuperQuotationList = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container">
+      <div className="container 2xl:max-w-[1280px]">
       <div className="flex flex-col lg:flex-row">
         
         

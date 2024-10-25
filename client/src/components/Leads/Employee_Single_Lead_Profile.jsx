@@ -58,18 +58,18 @@ function Employee_Single_Lead_Profile() {
     //     { value: "not approved", label: "Not Aprroved" },
     //   ],
     // },
-    {
-      name: "invoice_status",
-      label: "Invoice Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Invoice Status" },
-        { value: "pending", label: "Pending" },
-        { value: "in progress", label: "In Progress" },
-        { value: "approved", label: "Aprroved" },
-        { value: "not approved", label: "Not Aprroved" },
-      ],
-    },
+    // {
+    //   name: "invoice_status",
+    //   label: "Invoice Status",
+    //   type: "select",
+    //   options: [
+    //     { value: "", label: "Select Invoice Status" },
+    //     { value: "pending", label: "Pending" },
+    //     { value: "in progress", label: "In Progress" },
+    //     { value: "approved", label: "Aprroved" },
+    //     { value: "not approved", label: "Not Aprroved" },
+    //   ],
+    // },
     {
       name: "deal_status",
       label: "Deal Status",
@@ -104,6 +104,17 @@ function Employee_Single_Lead_Profile() {
         { value: "done", label: "Done" },
       ],
     },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "", label: "Status" },
+        { value: "pending", label: "Pending" },
+        { value: "interested", label: "Interested" },
+        { value: "not-interested", label: "Not-Interested" },
+      ],
+    },
   ];
 
 
@@ -112,9 +123,10 @@ function Employee_Single_Lead_Profile() {
     visit_date: " ",
     visit: "",
     quotation_status: "",
-    invoice_status: "",
+    // invoice_status: "",
     deal_status: "",
     reason: "",
+    status: "",
 
     follow_up_status: "",
   });
@@ -192,6 +204,20 @@ function Employee_Single_Lead_Profile() {
   };
 
   const saveChanges = async () => {
+    console.log(currentLead);
+    if(currentLead.deal_status !== leads[0].deal_status){ 
+      if(currentLead.d_closeDate === "pending") {
+        alert("Please update the deal close date as well");
+        return;
+      }
+    }
+
+    if(currentLead.visit !== leads[0].visit){ 
+      if(currentLead.visit_date === "pending") {
+        alert("Please update the visit date as well");
+        return;
+      }
+    }
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
@@ -334,12 +360,16 @@ function Employee_Single_Lead_Profile() {
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Quotation
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                  {/* <th className="px-6 py-3 border-b-2 border-gray-300">
                     Invoice
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                  </th> */}
+                  {/* <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
                     Invoice Status
+                  </th> */}
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    {" "}
+                    Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
@@ -389,11 +419,11 @@ function Employee_Single_Lead_Profile() {
                       {lead.quotation}
                     </td>
 
-                    <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
+                    {/* <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
                       {lead.invoice}
-                    </td>
+                    </td> */}
 
-                    {lead.invoice_status === "pending" && (
+                    {/* {lead.invoice_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
                         {lead.invoice_status}
                       </td>
@@ -413,7 +443,11 @@ function Employee_Single_Lead_Profile() {
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
                         {lead.invoice_status}
                       </td>
-                    )}
+                    )} */}
+                  
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
+                        {lead.status}
+                      </td>
 
                     {lead.deal_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">

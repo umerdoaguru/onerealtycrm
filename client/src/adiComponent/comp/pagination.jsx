@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => {
-  console.log(itemsPerPage);
+  console.log(currentPage, totalItems, itemsPerPage, onPageChange);
   // Calculate the total number of pages
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -13,7 +13,6 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
     console.log(safeTotalPages);
     const items = [];
     for (let i = 1; i <= safeTotalPages; i++) {
-      console.log('fsdfs')
       items.push(
         <li key={i}>
           <p

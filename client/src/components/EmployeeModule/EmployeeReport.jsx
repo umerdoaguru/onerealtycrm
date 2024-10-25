@@ -51,7 +51,6 @@ const d_fileds = {
       "Date",
       "Lead Source",
       "Quotation Status",
-      "Invoice Status",
       "Deal Status",
       "FollowUp Status",
     ],
@@ -64,7 +63,6 @@ const d_fileds = {
       "createdTime",
       "leadSource",
       "quotation_status",
-      "invoice_status",
       "deal_status",
       "follow_up_status",
     ],
@@ -153,24 +151,28 @@ const EmployeeReport = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
+
+    if(selectedCategory === 'Visited lead') return;
+    
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
-
+      console.log(data[selectedCategory], item);
       // Parse the date from created_date or createdTime, whichever exists
+      // Function to convert DD/MM/YYYY to MM/DD/YYYY
+      const convertToMMDDYYYY = (dateStr) => {
+        const [day, month, year] = dateStr.split("/"); // Split by "/"
+        return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
+      };
 
       let itemDate;
-      if (selectedCategory === "visit") {
-        itemDate = new Date(item.visit_date);
-      } else if (selectedCategory === "closed") {
-        if(item.deal_status !== "close"){ 
-          return;
-        }
-        itemDate = new Date(item.d_closeDate);
-      } else {
-        itemDate = new Date(item.createdTime); // Default date if no specific category
-      }
+      if(item.d_closeDate === "pending") return false;
+
+      itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
+
+      console.log(itemDate);
 
       let filterCondition = false;
+
       if (filter === "week") {
         // Get the last Sunday and the current date for the week range
         const lastSunday = new Date(currentDate);
@@ -286,9 +288,9 @@ const EmployeeReport = () => {
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      createdTime: moment(item.createdTime).format("MM/DD/YYYY"),
-      visit_date: moment(item.visit_date).format("MM/DD/YYYY"),
-      d_closeDate: moment(item.d_closeDate).format("MM/DD/YYYY"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
+      visit_date: (item.visit_date !== "pending") ? moment(item.visit_date).format("DD/MM/YYYY") : "pending",
+      d_closeDate: (item.d_closeDate !== "pending") ? moment(item.d_closeDate).format("DD/MM/YYYY") : "pending",
     }));
   };
 
@@ -506,7 +508,7 @@ const EmployeeReport = () => {
           </div>
           <Pagination
             currentPage={currentPage}
-            totalItems={data?.[selectedCategory]?.length}
+            totalItems={dataFields?.[selectedCategory]?.[selectedCategory]?.length}
             itemsPerPage={rowPerPage}
             onPageChange={setCurrentPage}
           />

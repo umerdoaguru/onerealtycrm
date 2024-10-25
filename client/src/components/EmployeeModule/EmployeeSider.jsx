@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaHistory } from "react-icons/fa";
@@ -26,8 +22,7 @@ const EmployeeeSider = () => {
     <>
       {/* Hamburger Button - Hidden on large screens */}
       <button
-        className="fixed top-16 md:top-20 left-4 z-50 text-black 
-             sm:hidden md:block max-xl:hidden xl:block 2xl:hidden"
+        className="fixed top-16 md:top-20 left-4 z-50 text-black hidden max-2xl:block"
         onClick={toggleSidebar}
       >
         <AiOutlineMenu size={25} />
@@ -97,7 +92,7 @@ const EmployeeeSider = () => {
               <Link to="/employee-quotation-invoice" className="flex flex-col items-center py-1">
                 <BsFileEarmarkPerson className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
-                  Quotation <br /> <span>&</span> <br /> Invoice
+                  Quotation 
                 </h3>
               </Link>
             </li>

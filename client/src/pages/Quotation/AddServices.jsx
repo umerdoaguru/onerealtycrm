@@ -282,7 +282,7 @@ const Addservices = () => {
                         <option value="" disabled>
                           Select Service Name
                         </option>
-                        {serviceslist.map((item, key) => (
+                        {serviceslist?.map((item, key) => (
                           <option key={key} value={item.service_name}>
                             {item.service_name}
                           </option>

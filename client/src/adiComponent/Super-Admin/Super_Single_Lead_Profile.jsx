@@ -127,13 +127,6 @@ function Super_Single_Lead_Profile() {
                   Quotation Status
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Invoice
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  {" "}
-                  Invoice Status
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
                   {" "}
                   Deal Status
                 </th>
@@ -190,31 +183,6 @@ function Super_Single_Lead_Profile() {
                     </td>
                   )}
 
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.invoice}
-                  </td>
-
-                  {lead.invoice_status === "pending" && (
-                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                      {lead.invoice_status}
-                    </td>
-                  )}
-
-                  {lead.invoice_status === "in progress" && (
-                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                      {lead.invoice_status}
-                    </td>
-                  )}
-                  {lead.invoice_status === "approved" && (
-                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                      {lead.invoice_status}
-                    </td>
-                  )}
-                  {lead.invoice_status === "not approved" && (
-                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
-                      {lead.invoice_status}
-                    </td>
-                  )}
 
                   {lead.deal_status === "pending" && (
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold  text-[red]">

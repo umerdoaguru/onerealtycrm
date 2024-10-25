@@ -28,7 +28,7 @@ const SuperAdminTotalLead = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container">
+      <div className="container 2xl:max-w-[1280px]">
         <div className="mt-[5rem]">
           <button
             onClick={() => navigate(-1)}
@@ -84,11 +84,9 @@ const SuperAdminTotalLead = () => {
                 <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                   {index + 1}
                 </td>
-                <Link to={`/lead-single-data/${lead.lead_id}`}>
-                  <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+                  <td className="px-6 py-4 border-b border-gray-200">
                     {lead.lead_no}
                   </td>
-                </Link>
                 <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                   {lead.name}
                 </td>

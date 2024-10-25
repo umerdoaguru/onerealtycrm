@@ -41,6 +41,8 @@ import TotalInvoice from "../components/AdminDashBoardCards/TotalInvoice";
 import MainSocialLeads from "../components/SocialMediaLeads/MainSocialLeads";
 import TotalVisit from "../components/AdminDashBoardCards/ToatalVisit";
 import QuotationlistAdmin from "../components/AdminDashBoardCards/AdminQuotationlist/QuotationlistAdmin";
+import AdminTotalClosedDeal from "../components/AdminDashBoardCards/AdminTotalClosedDeal";
+import AdminReport from "../adiComponent/AdminReport";
 
 function AdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -56,6 +58,7 @@ function AdminRoutes() {
 
         <Route path="/admin-dashboard" element={<Dashboard />} />
         <Route path="/admin-total-leads" element={<TotalLead />} />
+        <Route path="/admin-total-closed" element={<AdminTotalClosedDeal />} />
         <Route path="/admin-total-employees" element={<TotalEmployee />} />
         {/* <Route path="/admin-total-quotations" element={<TotalQuotation />} />
         <Route path="/admin-total-invoices" element={<TotalInvoice />} /> */}
@@ -108,6 +111,7 @@ function AdminRoutes() {
           element={<SingleOrganization />}
         />
         <Route path="/reporting" element={<Reporting />} />
+        <Route path="/admin-report" element={<AdminReport />} />
       </Routes>
     </>
   );

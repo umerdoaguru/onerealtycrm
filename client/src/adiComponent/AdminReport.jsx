@@ -5,12 +5,14 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 
 import moment from "moment";
-import SuperAdminSider from "./SuperAdminSider";
-import MainHeader from "./../../components/MainHeader";
-import Pagination from "../comp/pagination";
-import cogoToast from "cogo-toast";
 
-const SuperReports = () => {
+import cogoToast from "cogo-toast";
+import MainHeader from "../components/MainHeader";
+
+import Sider from "./../components/Sider";
+import Pagination from "./comp/pagination";
+
+const AdminReport = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState("All");
   const [filteredLeads, setFilteredLeads] = useState([]);
@@ -87,9 +89,8 @@ const SuperReports = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
+    if (selectedCategory === "Visited lead") return;
 
-    if(selectedCategory === 'Visited lead') return;
-    
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
       console.log(data[selectedCategory], item);
@@ -101,7 +102,7 @@ const SuperReports = () => {
       };
 
       let itemDate;
-      if(item.d_closeDate === "pending") return false;
+      if (item.d_closeDate === "pending") return false;
 
       itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
 
@@ -164,23 +165,24 @@ const SuperReports = () => {
       },
     }));
   };
-
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+
     setCurrentPage(1);
-    if(date.startDate !== "" && date.endDate !== "") {
+
+    if (date.startDate !== "" && date.endDate !== "") {
       const combinedData = {
         "Visited lead": data.leads,
         employee: data.employee,
         leads: data.leads,
       };
-  
       const updatedDataFields = {
         ...dataFields,
         "Visited lead": {
           ...dataFields["Visited lead"],
           "Visited lead": combinedData["Visited lead"],
         },
+
         employee: {
           ...dataFields.employee,
           employee: combinedData.employee,
@@ -190,11 +192,11 @@ const SuperReports = () => {
           leads: combinedData.leads,
         },
       };
+
       console.log(updatedDataFields, combinedData);
       setDataFields(updatedDataFields);
     }
     setDate({ startDate: "", endDate: "" });
-   
   };
 
   // const handleFilterChange = (event) => {
@@ -245,8 +247,14 @@ const SuperReports = () => {
     return data.map((item) => ({
       ...item,
       createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
-      visit_date: (item.visit_date !== "pending") ? moment(item.visit_date).format("DD/MM/YYYY") : "pending",
-      d_closeDate: (item.d_closeDate !== "pending") ? moment(item.d_closeDate).format("DD/MM/YYYY") : "pending",
+      visit_date:
+        item.visit_date !== "pending"
+          ? moment(item.visit_date).format("DD/MM/YYYY")
+          : "pending",
+      d_closeDate:
+        item.d_closeDate !== "pending"
+          ? moment(item.d_closeDate).format("DD/MM/YYYY")
+          : "pending",
     }));
   };
 
@@ -271,7 +279,10 @@ const SuperReports = () => {
               break;
             case 1:
               leadsData = formatData(result.value.data).filter((item) => {
-                return item.d_closeDate !== "pending" || item.visit_date !== "pending";
+                return (
+                  item.d_closeDate !== "pending" ||
+                  item.visit_date !== "pending"
+                );
               });
               break;
             default:
@@ -322,13 +333,11 @@ const SuperReports = () => {
     setSelectEmploye(value);
 
     // Optional chaining to safely access `leads` array
-    console.log(data);
-    // const getEmployeeLead = dataFields?.leads?.leads?.filter((data) => {
     const getEmployeeLead = data?.leads?.filter((data) => {
       console.log(data);
-      if(value == "All"){
+      if (value == "All") {
         return true;
-      } 
+      }
       return data.employeeId == value; // Use strict equality for type safety
     });
 
@@ -346,44 +355,36 @@ const SuperReports = () => {
   };
 
   const searchByDate = () => {
-    // console.log(dataFields?.[selectedCategory]);
     if (date.startDate === "" || date.endDate === "") {
       cogoToast.info("Date is set");
       return;
     }
-    console.log(data.leads);
 
+    console.log(data.leads);
     let filteredData;
     let dateVar;
     let currentDate;
 
-    if(selectedCategory == "Visited lead"){
+    if (selectedCategory == "Visited lead") {
       filteredData = data?.leads?.filter((item) => {
-
-        if(item.visit_date == "pending") return false;
-        if(item.employeeId == selectEmploye) {
-
+        if (item.visit_date == "pending") return false;
+        if (item.employeeId == selectEmploye) {
           dateVar = item.visit_date;
           currentDate = new Date(moment(dateVar, "DD/MM/YYYY").toDate());
         } else {
-
           dateVar = item.visit_date;
           currentDate = new Date(moment(dateVar, "DD/MM/YYYY").toDate());
         }
-        
-        if(dateVar == undefined) return false;
 
+        if (dateVar == undefined) return false;
         return (
           currentDate.getTime() >= new Date(date.startDate).getTime() &&
           currentDate.getTime() <= new Date(date.endDate).getTime()
         );
-        
-      });  
+      });
     } else {
       filteredData = data?.leads?.filter((item) => {
-
-        if(item.d_closeDate == "pending") return false;
-
+        if (item.d_closeDate == "pending") return false;
         let dateVar = item.d_closeDate;
         currentDate = new Date(moment(dateVar, "DD/MM/YYYY").toDate());
         return (
@@ -405,21 +406,17 @@ const SuperReports = () => {
   const clearDate = () => {
     // Clear the date states
     console.log(dataFields);
-    if(date.startDate == "" && date.endDate == ""){
+
+    if (date.startDate == "" && date.endDate == "") {
       cogoToast.info("Date is already cleared");
       return;
     }
     setDate({ startDate: "", endDate: "" });
 
-    console.log(data?.leads);
-
-    let defaultEmployeLead = data?.leads.filter(
-      (lead) => {
-        if(selectEmploye == "All") return true;
-        
-        return lead.employeeId == selectEmploye
-      }
-    );
+    let defaultEmployeLead = data?.leads.filter((lead) => {
+      if (selectEmploye == "All") return true;
+      return lead.employeeId == selectEmploye;
+    });
 
     console.log(defaultEmployeLead, selectEmploye);
 
@@ -468,7 +465,7 @@ const SuperReports = () => {
   return (
     <>
       <MainHeader />
-      <SuperAdminSider />
+      <Sider />
       <div className="container p-4 mt-14">
         <center className="text-2xl text-center mt-8 font-medium">
           Reports
@@ -503,11 +500,7 @@ const SuperReports = () => {
                     onChange={changeVisitedLeadData}
                     className="bg-transparent border-gray-300 rounded sm:px-2 w-full outline-none"
                   >
-                     <option
-                        value="All"
-                      >
-                        Leads of Emp : All Emp.
-                      </option>
+                    <option value="All">Leads of Emp : All Emp.</option>
                     {dataFields?.employee?.employee?.map((emp_name) => (
                       <option
                         key={emp_name.employeeId}
@@ -640,7 +633,9 @@ const SuperReports = () => {
 
         <Pagination
           currentPage={currentPage}
-          totalItems={dataFields?.[selectedCategory]?.[selectedCategory]?.length}
+          totalItems={
+            dataFields?.[selectedCategory]?.[selectedCategory]?.length
+          }
           itemsPerPage={rowPerPage}
           onPageChange={setCurrentPage}
         />
@@ -649,4 +644,4 @@ const SuperReports = () => {
   );
 };
 
-export default SuperReports;
+export default AdminReport;

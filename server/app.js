@@ -12,6 +12,7 @@ const Router2 = require("./routers/organizationRoutes");
 const Router3 = require("./routers/dashboardRoutes");
 const Router = require("./routers/userdataroutes");
 const Router5 = require("./routers/response_99acres");
+const Router6 = require("./routers/FacebookRoutes");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use("/api", Router2);
 app.use("/api", Router4);
 app.use("/api", Router);
 app.use("/api", Router5);
+app.use("/api", Router6);
 app.use(cors({ origin: "http://localhost:3000" }));
 app.use("/Assets", express.static(path.join(__dirname, "Assets")));
 
@@ -272,11 +274,10 @@ const fetchDataAndSave = async () => {
   }
 };
 
-// // Call the function initially
-// fetchDataAndSave();
-
+// Call the function initially
+fetchDataAndSave();
 // Fetch data every 10 minutes
-// setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 minutes
+setInterval(fetchDataAndSave, 10 * 60 * 1000); // 10 minutes
 
 const PORT = process.env.PORT;
 

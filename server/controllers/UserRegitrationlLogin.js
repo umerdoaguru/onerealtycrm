@@ -262,4 +262,132 @@ const adminLogin = async (req, res) => {
     });
   }
 };
-module.exports = { register, login, employeelogin, adminLogin };
+
+////////////////
+
+// const crypto = require("crypto");
+// const db = require("../dbConnection"); // import your db connection
+
+// Function to generate OTP and send it
+// const crypto = require('crypto');
+// const nodemailer = require('nodemailer');
+
+const sendOtp = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Email is required" });
+  }
+
+  // Check if user exists
+  const checkUserQuery = "SELECT * FROM registered_data WHERE email = ?";
+  db.query(checkUserQuery, [email], (err, results) => {
+    if (err || results.length === 0) {
+      return res
+        .status(404)
+        .send({ success: false, message: "Email is not registered" });
+    }
+
+    // Generate OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
+    const expiry = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+
+    // Store OTP and expiry in database (assuming `otp` and `otp_expiry` fields exist in `registered_data`)
+    const updateOtpQuery =
+      "UPDATE registered_data SET otp = ?, otp_expiry = ? WHERE email = ?";
+    db.query(updateOtpQuery, [otp, expiry, email], (err) => {
+      if (err)
+        return res
+          .status(500)
+          .send({ success: false, message: "Error saving OTP" });
+
+      // Send OTP to user's email
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Password Reset OTP",
+        text: `Your OTP for password reset is ${otp}`,
+      };
+
+      transporter.sendMail(mailOptions, (err) => {
+        if (err)
+          return res
+            .status(500)
+            .send({ success: false, message: "Error sending OTP" });
+        res.status(200).send({ success: true, message: "OTP sent to email" });
+      });
+    });
+  });
+};
+
+const verifyOtp = (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Email and OTP are required" });
+  }
+
+  const checkOtpQuery =
+    "SELECT otp, otp_expiry FROM registered_data WHERE email = ?";
+  db.query(checkOtpQuery, [email], (err, results) => {
+    if (err || results.length === 0) {
+      return res
+        .status(404)
+        .send({ success: false, message: "Email is not registered" });
+    }
+
+    const { otp: storedOtp, otp_expiry } = results[0];
+    if (storedOtp !== otp || Date.now() > otp_expiry) {
+      return res
+        .status(400)
+        .send({ success: false, message: "Invalid or expired OTP" });
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "OTP verified, proceed to reset password",
+    });
+  });
+};
+
+const resetPassword = async (req, res) => {
+  const { email, newPassword } = req.body;
+  if (!email || !newPassword) {
+    return res
+      .status(400)
+      .send({ success: false, message: "Email and new password are required" });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  const resetPasswordQuery =
+    "UPDATE registered_data SET password = ?, otp = NULL, otp_expiry = NULL WHERE email = ?";
+  db.query(resetPasswordQuery, [hashedPassword, email], (err) => {
+    if (err)
+      return res
+        .status(500)
+        .send({ success: false, message: "Error updating password" });
+    res
+      .status(200)
+      .send({ success: true, message: "Password reset successfully" });
+  });
+};
+
+module.exports = {
+  register,
+  login,
+  employeelogin,
+  adminLogin,
+  sendOtp,
+  resetPassword,
+  verifyOtp,
+};

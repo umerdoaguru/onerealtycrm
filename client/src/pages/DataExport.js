@@ -9,9 +9,11 @@ import { MdOutlineNextWeek } from "react-icons/md";
 import { GiFiles, GiMoneyStack } from "react-icons/gi";
 import { useSelector } from "react-redux";
 import LeadData from "../components/DataExport/LeadData";
-import QuotationData from "../components/DataExport/QuotationData";
-import InvoiceData from "../components/DataExport/InvoiceData"; // Add your invoice component here if it exists
+
 import Employees from "../components/DataExport/Employees";
+import { FaCheckCircle, FaClipboardList } from "react-icons/fa";
+import VisitData from "../components/DataExport/VisitData";
+import CloseData from "../components/DataExport/CloseDateData";
 
 function DataExport() {
   const [leads, setLeads] = useState([]);
@@ -71,8 +73,14 @@ function DataExport() {
 
   const leadCount = leads.length;
   const employeeCount = employee.length;
-  const quotationCount = quotation.length;
-  const invoiceCount = invoice.length;
+ 
+  const visitCount = leads.filter(
+    (lead) => lead.visit === "Fresh Visit" || lead.visit === "Repeated Visit"
+  ).length;
+
+  const closedCount = leads.filter(
+    (lead) => lead.deal_status === "close"
+  ).length; // Get count for Closed Data
 
   return (
     <>
@@ -169,99 +177,102 @@ function DataExport() {
             </div>
           </div>
 
-          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+        {/* Card for Visit Data */}
+        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
             <div
-              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                selectedComponent === "QuotationData"
+              className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "VisitData"
                   ? "bg-blue-500 text-white"
                   : ""
-              }`} // Change background color if active
-              onClick={() => setSelectedComponent("QuotationData")} // Set selected component
+              }`}
+              onClick={() => setSelectedComponent("VisitData")}
             >
               <div className="p-4 flex flex-col items-center text-center">
                 <div
                   className={`text-3xl ${
-                    selectedComponent === "QuotationData"
+                    selectedComponent === "VisitData"
                       ? "text-white"
                       : "text-gray-700"
                   }`}
                 >
-                  <MdOutlineNextWeek />
+                  <FaClipboardList />
                 </div>
                 <div className="mt-2">
                   <h5
                     className={`text-xl font-semibold ${
-                      selectedComponent === "QuotationData"
+                      selectedComponent === "VisitData"
                         ? "text-white"
                         : "text-gray-800"
                     }`}
                   >
-                    Quotation Data
+                    Visit Data
                   </h5>
                   <p
                     className={`${
-                      selectedComponent === "QuotationData"
+                      selectedComponent === "VisitData"
                         ? "text-white"
                         : "text-gray-600"
                     }`}
                   >
-                    {quotationCount}
+                    {visitCount}
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
+          {/* Card for Closed Data */}
+          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
             <div
-              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                selectedComponent === "InvoiceData"
+              className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "ClosedData"
                   ? "bg-blue-500 text-white"
                   : ""
-              }`} // Change background color if active
-              onClick={() => setSelectedComponent("InvoiceData")} // Set selected component
+              }`}
+              onClick={() => setSelectedComponent("ClosedData")}
             >
               <div className="p-4 flex flex-col items-center text-center">
                 <div
                   className={`text-3xl ${
-                    selectedComponent === "InvoiceData"
+                    selectedComponent === "ClosedData"
                       ? "text-white"
                       : "text-gray-700"
                   }`}
                 >
-                  <GiMoneyStack />
+                  <FaCheckCircle />
                 </div>
                 <div className="mt-2">
                   <h5
                     className={`text-xl font-semibold ${
-                      selectedComponent === "InvoiceData"
+                      selectedComponent === "ClosedData"
                         ? "text-white"
                         : "text-gray-800"
                     }`}
                   >
-                    Invoice Data
+                    Closed Data
                   </h5>
                   <p
                     className={`${
-                      selectedComponent === "InvoiceData"
+                      selectedComponent === "ClosedData"
                         ? "text-white"
                         : "text-gray-600"
                     }`}
                   >
-                    {invoiceCount}
+                    {closedCount}
                   </p>
                 </div>
               </div>
             </div>
           </div>
+          
         </div>
 
         {/* Conditionally render the selected component */}
         <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
           {selectedComponent === "LeadData" && <LeadData />}
           {selectedComponent === "EmployeeData" && <Employees />}
-          {selectedComponent === "QuotationData" && <QuotationData />}
-          {selectedComponent === "InvoiceData" && <InvoiceData />}
+          {selectedComponent === "VisitData" && <VisitData />}
+          {selectedComponent === "ClosedData" && <CloseData />}
         </div>
       </div>
     </>

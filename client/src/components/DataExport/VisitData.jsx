@@ -1,33 +1,41 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import ReactPaginate from "react-paginate";
 import * as XLSX from "xlsx";
 import styled from "styled-components";
+import MainHeader from "../MainHeader";
+import Sider from "../Sider";
 
-const EmployeeCloseData = () => {
+
+const VisitData = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 10; // Number of leads to display per page
+  const leadsPerPage = 10; // Default leads per page
   const EmpId = useSelector((state) => state.auth.user.id);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+
 
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
+    fetchEmployees();
   }, []);
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `http://localhost:9000/api/leads`
       );
-      // Filter out leads where deal status is "pending"
+      // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(
-        (lead) => lead.deal_status !== "pending"
+        (lead) => lead.visit !== "pending"
       );
 
       setLeads(nonPendingLeads);
@@ -36,25 +44,42 @@ const EmployeeCloseData = () => {
       console.error("Error fetching leads:", error);
     }
   };
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get("http://localhost:9000/api/employee");
+      setEmployees(response.data);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
+  };
+
 
   // Automatically apply date filter when start or end date changes
+
   useEffect(() => {
+    let filtered = leads;
+
+    // Filter by date
     if (startDate && endDate) {
-      const filtered = leads.filter((lead) => {
-        const closeDate = moment(lead.d_closeDate, "YYYY-MM-DD");
-        return closeDate.isBetween(startDate, endDate, undefined, "[]");
+      filtered = filtered.filter((lead) => {
+        const visitDate = moment(lead.visit_date, "YYYY-MM-DD");
+        return visitDate.isBetween(startDate, endDate, undefined, "[]");
       });
-      setFilteredLeads(filtered);
-    } else {
-      setFilteredLeads(leads);
     }
-  }, [startDate, endDate, leads]);
+
+    // Filter by selected employee
+    if (selectedEmployee) {
+      filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
+    }
+
+    setFilteredLeads(filtered);
+  }, [startDate, endDate, selectedEmployee, leads]);
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-    XLSX.writeFile(workbook, "LeadsData.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Visit");
+    XLSX.writeFile(workbook, "VisitData.xlsx");
   };
 
   // Pagination logic
@@ -72,12 +97,11 @@ const EmployeeCloseData = () => {
     <Wrapper>
       <div className="flex-grow md:p-4 mt-14 lg:mt-0 sm:ml-0">
         <center className="text-2xl text-center mt-8 font-medium">
-          Closed Deal Data
+          Total Visits
         </center>
         <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-
         {/* Date Filter */}
-        <div className="flex space-x-1 mb-4 sm:flex-row flex-col">
+        <div className="flex space-x-1 mb-4 sm:flex-row flex-col ">
           <input
             type="date"
             value={startDate}
@@ -93,14 +117,29 @@ const EmployeeCloseData = () => {
             onChange={(e) => setEndDate(e.target.value)}
             className="border p-2"
           />
-          <div className="respo mx-2 ">
+            <div className="">
+            <select
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              className="border p-2"
+            >
+              <option value="">Select Employee</option>
+              {employees.map((employee) => (
+                <option key={employee.id} value={employee.name}>
+                  {employee.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="respo mx-2">
             <button
               onClick={downloadExcel}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded "
+              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
             >
               Download Excel
             </button>
           </div>
+        
         </div>
 
         {/* Table */}
@@ -138,67 +177,65 @@ const EmployeeCloseData = () => {
               </tr>
             </thead>
             <tbody>
-              {currentLeads.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="11"
-                    className="px-6 py-4 border-b border-gray-200 text-center text-gray-500"
-                  >
-                    No data found
-                  </td>
-                </tr>
-              ) : (
-                currentLeads.map((lead, index) => (
-                  <tr
-                    key={lead.id}
-                    className={index % 2 === 0 ? "bg-gray-100" : ""}
-                  >
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1 + currentPage * leadsPerPage}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.lead_no}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.assignedTo}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.name}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.subject}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.phone}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.leadSource}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.visit}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.visit_date}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.follow_up_status}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.deal_status}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
+  {currentLeads.length === 0 ? (
+    <tr>
+      <td colSpan="11" className="px-6 py-4 border-b border-gray-200 text-center text-gray-500">
+        No data found
+      </td>
+    </tr>
+  ) : (
+    currentLeads.map((lead, index) => (
+      <tr
+        key={lead.id}
+        className={index % 2 === 0 ? "bg-gray-100" : ""}
+      >
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {currentPage * leadsPerPage + index + 1}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.lead_no}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.assignedTo}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.name}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.subject}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.phone}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.leadSource}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.visit}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.visit_date}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.follow_up_status}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.deal_status}
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
           </table>
         </div>
-
-        {/* Pagination */}
+<div className="mt-2 mb-2">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
           breakLabel={"..."}
           pageCount={pageCount}
+          forcePage={currentPage}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
@@ -213,75 +250,108 @@ const EmployeeCloseData = () => {
           breakLinkClassName="pagination-break-link"
           activeClassName="pagination-active"
         />
+        </div>
       </div>
     </Wrapper>
   );
 };
 
-export default EmployeeCloseData;
+export default VisitData;
 
 const Wrapper = styled.div`
-.pagination-container {
+  /* Container class */
+  .active {
+  background-color: #1e50ff;
+}
+
+ .pagination-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem; // Reduced gap for better spacing
+    gap: 0.75rem;
     margin-top: 1.5rem;
   }
 
+  /* Page item */
   .pagination-page {
-    background-color: #ffffff;
+    background-color: white;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
+  /* Page link */
   .pagination-link {
-    padding: 0.5rem 1rem; // Increased padding for better click area
+    padding: 0.25rem 1rem;
     font-size: 0.875rem;
     color: #3b82f6;
     text-decoration: none;
-    transition: color 0.3s;
-
     &:hover {
       color: #2563eb;
     }
   }
 
-  .pagination-previous,
-  .pagination-next,
-  .pagination-break {
-    background-color: #ffffff;
+  /* Previous button */
+  .pagination-previous {
+    background-color: white;
     border: 1px solid #d1d5db;
     border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
-  }
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  } 
 
-  .pagination-link-previous,
-  .pagination-link-next,
-  .pagination-break-link {
-    padding: 0.5rem 1rem; // Increased padding for consistency
+  .pagination-link-previous {
+    padding: 0.25rem 1rem;
     font-size: 0.875rem;
     color: #374151;
-    transition: background-color 0.3s;
-
     &:hover {
-      background-color: #f3f4f6; // Light gray on hover
-      transform: translateY(-1px); // Subtle lift effect
+      background-color: #f3f4f6;
     }
   }
 
+  /* Next button */
+  .pagination-next {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-link-next {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Break item */
+  .pagination-break {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-break-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Active page */
   .pagination-active {
     background-color: #1e50ff;
     color: white;
     border: 1px solid #374151;
     border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
-  .pagination-active .pagination-link {
-    color: white !important; // Ensure link inside active page is white
+  .pagination-active a {
+    color: white !important;
   }
 `;

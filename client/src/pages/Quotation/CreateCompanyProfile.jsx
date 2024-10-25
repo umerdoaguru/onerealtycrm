@@ -179,7 +179,7 @@ function CreateCompanyProfile() {
 
           <div className=" container px-3 pt-5">
             <h1 className="text-2xl text-center mt-[2rem] font-medium">
-              Quotation & Invoice Management
+              Quotation Management
             </h1>
             <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
             <form
@@ -194,7 +194,7 @@ function CreateCompanyProfile() {
               <Logout />
             </div> */}
               </div>
-              <div className="grid lg:grid-cols-3 gap-2 mt-2">
+              <div className="grid lg:grid-cols-2 gap-2 mt-2">
                 {/* <div className="col-span-1">
               <Link
                 to="/quotation-form"
@@ -219,14 +219,14 @@ function CreateCompanyProfile() {
                     Quotation List
                   </Link>
                 </div>
-                <div className="col-span-1">
+                {/* <div className="col-span-1">
                   <Link
                     to="/invoicelist"
                     className="bg-blue-500 text-white px-4 py-2 rounded block text-center font-medium"
                   >
                     Invoice List
                   </Link>
-                </div>
+                </div> */}
                 <div className="col-span-1">
                   <Link
                     to="/servicenamelist"

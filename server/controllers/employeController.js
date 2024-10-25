@@ -114,7 +114,8 @@ const updateLeadStatus = async (req, res) => {
       quotation_status,
       invoice_status,
       deal_status,
-      reason,
+      reason, 
+      status,
       follow_up_status,
       visit, // Add visit to destructured body
       visit_date, // Add visit_date to destructured body
@@ -126,7 +127,8 @@ const updateLeadStatus = async (req, res) => {
       quotation_status,
       invoice_status,
       deal_status,
-      reason,
+      reason, 
+      status,
       follow_up_status,
       visit,
       visit_date,
@@ -140,6 +142,7 @@ const updateLeadStatus = async (req, res) => {
                       invoice_status = ?, 
                       deal_status = ?, 
                       reason = ?, 
+                      status = ?, 
                       follow_up_status = ?, 
                       visit = ?,            -- Include visit in the SQL query
                       visit_date = ?,       -- Include visit_date in the SQL query
@@ -154,7 +157,8 @@ const updateLeadStatus = async (req, res) => {
           quotation_status,
           invoice_status,
           deal_status,
-          reason,
+          reason, 
+          status,
           follow_up_status,
           visit, // Pass visit to the query
           visit_date, // Pass visit_date to the query

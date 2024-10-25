@@ -156,7 +156,7 @@ const EmployeeLeadsGraph = () => {
               <Tooltip />
               <Bar
                 dataKey="Leads"
-                name="Leads"
+                name="Visit"
                 fill="#EA6A47"
                 radius={[10, 10, 0, 0]}
                 barSize={15}

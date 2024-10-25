@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import moment from "moment";
-import { useSelector } from "react-redux";
 import * as XLSX from "xlsx";
-import styled from "styled-components";
-import MainHeader from "./../MainHeader";
-import EmployeeeSider from "./EmployeeSider";
-import Pagination from "../../adiComponent/comp/pagination";
+import MainHeader from "../MainHeader";
+import Sider from "../Sider";
 
-const VisitTable = () => {
+
+const AdminTotalClosedDeal = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const itemsPerPage = 10; // Set how many items you want per page
-  const EmpId = useSelector((state) => state.auth.user.id);
-
+  const [currentPage, setCurrentPage] = useState(0); // Current page state
+  const [itemsPerPage] = useState(10); // Items per page state
+  
+  // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
   }, []);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
-      const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
+      const response = await axios.get(
+        `http://localhost:9000/api/leads`
+      );
+      // Filter out leads where deal_status is not "pending"
+      const nonPendingLeads = response.data.filter(
+        (lead) => lead.deal_status !== "pending"
+      );
 
       setLeads(nonPendingLeads);
       setFilteredLeads(nonPendingLeads); // Initial data set for filtering
@@ -34,6 +37,7 @@ const VisitTable = () => {
     }
   };
 
+  // Automatically apply date filter when start or end date changes
   useEffect(() => {
     if (startDate && endDate) {
       const filtered = leads.filter((lead) => {
@@ -53,46 +57,73 @@ const VisitTable = () => {
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
 
-  // Calculate page data for pagination
-  const pageCount = Math.ceil(filteredLeads.length / itemsPerPage);
-  const displayedLeads = filteredLeads.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // Calculate the index of the last lead on the current page
+  const lastLeadIndex = currentPage * itemsPerPage;
+  const firstLeadIndex = lastLeadIndex + itemsPerPage;
+  const currentLeads = filteredLeads.slice(lastLeadIndex, firstLeadIndex); // Get leads for the current page
 
   return (
     <>
       <MainHeader />
-      <EmployeeeSider />
-      <div className="flex flex-col 2xl:ml-44 ">
+      <Sider />
+      <div className="flex flex-col  2xl:ml-44">
         <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
-            Total Visits
+            Total Closed Deals
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
+
           <div className="overflow-x-auto mt-4">
-            <table className="container bg-white border">
+            <table className="min-w-full bg-white border">
               <thead>
                 <tr>
                   <th className="px-6 py-3 border-b-2 border-gray-300">S.no</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Lead Number</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Assigned To</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Lead Name</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Subject</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Visit Date</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">FollowUp Status</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Deal Status</th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Lead Number
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Assigned To
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Lead Name
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Subject
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Phone
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Lead Source
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Visit
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Visit Date
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    FollowUp Status
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Deal Status
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    Deal Close Date
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {displayedLeads.length > 0 ? (
-                  displayedLeads.map((lead, index) => (
-                    <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+                {currentLeads
+                  .filter((lead) => lead.deal_status === "close") // Filter out closed deals
+                  .map((lead, index) => (
+                    <tr
+                      key={lead.id}
+                      className={index % 2 === 0 ? "bg-gray-100" : ""}
+                    >
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {currentPage * itemsPerPage + index}
+                        {lastLeadIndex + index + 1}{" "}
+                        {/* Adjusted for pagination */}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.lead_no}
@@ -124,35 +155,18 @@ const VisitTable = () => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.deal_status}
                       </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.d_closeDate}
+                      </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={11} className="py-4 text-center">
-                      No data found
-                    </td>
-                  </tr>
-                )}
+                  ))}
               </tbody>
             </table>
           </div>
-          <div className="text-center">
-            
-          <Pagination
-            currentPage={currentPage}
-            totalItems={filteredLeads.length}
-            itemsPerPage={itemsPerPage}
-            onPageChange={setCurrentPage}
-          />
         </div>
-      </div>
       </div>
     </>
   );
 };
 
-export default VisitTable;
-
-const Wrapper = styled.div`
-  // You can add styled-components styles here
-`;
+export default AdminTotalClosedDeal;

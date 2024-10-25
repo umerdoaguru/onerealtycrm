@@ -85,8 +85,8 @@ const Sider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/reporting")}`}>
-              <Link to="/reporting" className="flex flex-col items-center py-3">
+            <li className={`w-full ${getSidebarClass("/admin-report")}`}>
+              <Link to="/admin-report" className="flex flex-col items-center py-3">
                 <RiSecurePaymentLine className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs max-md:pt-3 lg:inline text-white md:text-base">
                   Reports
@@ -117,7 +117,7 @@ const Sider = () => {
               >
                 <BsFileEarmarkPerson className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
-                  Quotation <br /> <span>&</span> <br /> Invoice
+                  Quotation 
                 </h3>
               </Link>
             </li>

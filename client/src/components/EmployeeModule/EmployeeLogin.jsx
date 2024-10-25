@@ -97,10 +97,14 @@ function EmployeeLogin() {
           >
             Submit
           </button>
-          {/* <p className="mt-4 text-sm text-center text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/admincrmdoaguru" className="text-blue-500 hover:text-green-600">Sign up</Link>
-          </p> */}
+          <div className="flex justify-between mt-4 text-sm text-gray-600">
+            <Link
+              to="/forgot-password"
+              className="text-blue-500 hover:text-green-600"
+            >
+              Forgot Password?
+            </Link>
+          </div>
         </form>
       </div>
     </div>

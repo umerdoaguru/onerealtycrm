@@ -1,34 +1,47 @@
+
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "axios";
+import FormSelector from './SelectForm';
+import LeadsDisplay from './LeadsDisplay';
+import FormInput from './FormInput';
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
 
-
-function Accrs() {
-  const [responses, setResponses] = useState([]);
+const LeadsTable = () => {
+  const [leads, setLeads] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [gotId, setGotId] = useState("");
+  const [selectedFormId, setSelectedFormId] = useState(''); // Store selected form ID
+  const [showForm, setShowForm] = useState(false);  
+  
   const [leadsAssigned, setLeadsAssigned] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
   const [showPopup, setShowPopup] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [leadsPerPage] = useState(10);
+  const [formName, setFormName] = useState([]);
+
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
     employeeId: "",
     employeephone: "",
     createdTime:"",
   });
-  console.log(responses, 'Line number 7 data check');
 
-  const fetchResponses = async () => {
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [leadsPerPage] = useState(10);
+  
+
+  const fetchLeadsByFormId = async () => {
     try {
-      const response = await axios.get('http://localhost:9000/api/get-responses');
-      console.log('Response received from API:', response.data);
-      setResponses(response.data);
-    } catch (error) {
-      console.error('Error fetching 99Acres responses:', error);
+      const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${gotId}`);
+      setLeads(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching leads:', err);
+      setError('Failed to fetch leads');
     }
   };
   const fetchEmployees = async () => {
@@ -49,12 +62,13 @@ function Accrs() {
     }
   };
 
-  useEffect(() => {
-    fetchResponses();
-    fetchEmployees();
-    fetchLeadassigned();
-  }, []);
 
+  const handleFormSelect = (formId, formName) => {
+    setSelectedFormId(formId); // Set the selected form ID
+    setFormName(formName); // Set the selected form name
+    fetchLeadsByFormId(formId); // Fetch leads based on selected form ID
+  };
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCurrentLead((prevLead) => {
@@ -78,9 +92,14 @@ function Accrs() {
     });
   };
   
+
   const saveChanges = async () => {
     if (!currentLead.assignedTo) {
       alert("Please assign the lead to an employee."); // Show an alert message
+      return; // Stop further execution if the field is empty
+    }
+    if (!currentLead.createdTime) {
+      alert("Please Select Assign Date."); // Show an alert message
       return; // Stop further execution if the field is empty
     }
     try {
@@ -92,137 +111,180 @@ function Accrs() {
         actual_date:  selectedLead.date,
         name: selectedLead.fullName,         
         phone:  selectedLead.phoneNumber,   
-        leadSource: "99 Acres", 
-        subject: selectedLead.subject,
-        address: selectedLead.address,
+        leadSource: "Facebook Campaign", 
+        subject:  formName, 
+        address:selectedLead.address,
       });
-      fetchResponses(); // Refresh the list
+      fetchLeadsByFormId(); // Refresh the list
       fetchLeadassigned();
-
       closePopup();
-    // Format the createdTime using moment
+// Format the createdTime using moment
 const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as 'DD-MM-YYYY'
 
 // Generate the WhatsApp link with the formatted date
-const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${selectedLead.leadId}%0A3)%20Name:%20${selectedLead.fullName}%0A4)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A5)%20Lead%20Source:%2099%20Acres%0A6)%20Address:%20${selectedLead.address}%0A7)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${selectedLead.leadId}%0A3)%20Name:%20${selectedLead.fullName}%0A4)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A5)%20Lead%20Source:%20Facebook%20Campaign%0A6)%20Address:%20${selectedLead.address}%0A7)%20Subject:%20${formName}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
 
 // Open WhatsApp link
 window.open(whatsappLink, "_blank");
 
-     
+
+
     } catch (error) {
       console.error("Error adding lead:", error);
     }
   };
 
   const handleEditClick = (lead) => {
+    console.log(lead);
     setSelectedLead({
-      leadId: lead.id,
-      fullName: lead.contact_name,
-      phoneNumber: lead.phone ,
-      subject: lead.project_name,
-      address: lead.city_name,
-      date: moment(lead.received_on).format("YYYY-MM-DD"),
+      leadId: lead.lead_id,
+     
+      fullName:lead.full_name,
+      address: lead.street_address,
+      phoneNumber: lead.phone_number,
+      date: moment(lead.created_time).format("YYYY-MM-DD"), // Format the createdTime
+
     });
+
     setShowPopup(true);
   };
+  
+  const saveIntoDB = async () => {
+    try {
+      // Fetch leads from Meta API via backend
+      const response = await axios.post('http://localhost:9000/api/leads/fetch', {
+        formId: gotId,
+      });
+      setLoading(true);
+      fetchLeadsByFormId();
+    } catch (err) {
+      console.error('Error fetching leads:', err);
+    }
+  }
 
- 
+  // const extractFieldValue = (fieldData, fieldName) => {
+  //   const field = fieldData.find((item) => item.name === fieldName);
+  //   return field ? field.values[0] : "";
+  // };
 
   const closePopup = () => {
     setShowPopup(false);
     setSelectedLead(null);
   };
-  
   // Pagination logic
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = responses.slice(indexOfFirstLead, indexOfLastLead);
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
 
+
+  useEffect(() => {
+    saveIntoDB();
+    fetchEmployees();
+    fetchLeadassigned();
+  }, [gotId])
+
   return (
-    <>
-        <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">99Acres Responses</h1>
-      {responses.length > 0 ? (
-       <div className="overflow-x-auto">
-       <table className="min-w-full text-sm bg-white border border-gray-200">
-         <thead className="bg-gray-200">
-           <tr>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Query ID</th>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Project Name</th>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">City</th>
-         
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Received On</th>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Contact Name</th>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Email</th>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Phone</th>
-             <th className="py-2 px-4 text-left font-semibold text-gray-700">Assigned Lead</th>
-           </tr>
-         </thead>
-         <tbody>
-           {currentLeads.filter(
-  (lead) =>
-    !leadsAssigned.some((assigned) => assigned.lead_no === lead.id.toString())
-).map((lead, index) => (
-             <tr key={index} className="border-b">
-               <td className="py-2 px-4">{lead.id || 'N/A'}</td>
-               <td className="py-2 px-4">{lead.project_name || 'N/A'}</td>
-               <td className="py-2 px-4">{lead.city_name || 'N/A'}</td>
-             
-               <td className="py-2 px-4">
-  {lead.received_on 
-    ? `${new Date(lead.received_on).toLocaleDateString('en-GB')} ${new Date(lead.received_on).toLocaleTimeString()}`
-    : 'N/A'}
-</td>
-
-               <td className="py-2 px-4">{lead.contact_name || 'N/A'}</td>
-               <td className="py-2 px-4">{lead.email || 'N/A'}</td>
-               <td className="py-2 px-4">{lead.phone || 'N/A'}</td>
-               <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-      <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
-        Assign
+    <div className="container mx-auto p-4">
+      <button
+        className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
+        onClick={() => setShowForm(!showForm)}  // toggle form visibility
+      >
+        Add Form Details
       </button>
-    </td>
+
+      {showForm && <FormInput />} 
+      
+      <h1 className="text-2xl font-bold mb-4">Select Form to Fetch Leads</h1>
+
+      {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
+
+      <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={(formId, formName) => handleFormSelect(formId, formName)} />
+
+
+      {loading && <p>Loading...</p>}
+
+      {leads.length > 0 &&
+
+         <div className="overflow-x-auto">
+         <table className="min-w-full bg-white border border-gray-200">
+           <thead>
+           <th colSpan="6" className='py-2 px-4 border-b"'>Ad Name : {formName}</th>
+             <tr className="bg-gray-100">
+               <th className="py-2 px-4 border-b">Lead S.no</th>
+               <th className="py-2 px-4 border-b">Lead ID</th>
+               <th className="py-2 px-4 border-b">Full Name</th>
+               <th className="py-2 px-4 border-b">Phone Number</th>
+               <th className="py-2 px-4 border-b">Address</th>
+               <th className="py-2 px-4 border-b">Subject</th>
+               <th className="py-2 px-4 border-b">Date</th>
+               <th className="py-2 px-4 border-b">Assign Lead</th>
              </tr>
-           ))}
-         </tbody>
-       </table>
-     </div>
-      ) : (
-        <p>Loading data...</p>
-      )}
-    </div>
+           </thead>
+           <tbody>
+  {Array.isArray(currentLeads) && currentLeads
+    .filter(
+      (lead) =>
+        !leadsAssigned.some(
+          (assigned) => assigned.lead_no === lead.lead_id
+        )
+    )
+    .map((lead, index) => (
+      <tr key={lead.id}>
+        <td className="py-2 px-4 border-b">{index + 1}</td>
+        <td className="py-2 px-4 border-b">{lead.lead_id}</td>
+        <td className="py-2 px-4 border-b">{lead.full_name}</td>
+        <td className="py-2 px-4 border-b">{lead.phone_number}</td>
+        <td className="py-2 px-4 border-b">{lead.street_address}</td>
+        <td className="py-2 px-4 border-b">{formName}</td>
+        <td className="py-2 px-4 border-b">
+          {lead.created_time
+            ? `${new Date(lead.created_time).toLocaleDateString('en-GB')} ${new Date(lead.created_time).toLocaleTimeString()}`
+            : 'N/A'}
+        </td>
 
-   {/* Pagination Component */}
-   <div className="mt-4 mb-5 flex justify-center">
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
-              pageCount={Math.ceil(responses.length / leadsPerPage)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageClick}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              nextClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextLinkClassName={"page-link"}
-              breakClassName={"page-item"}
-              breakLinkClassName={"page-link"}
-            />
-          </div>
-  
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          <button
+            className="text-blue-500 hover:text-blue-700"
+            onClick={() => handleEditClick(lead)}
+          >
+            Assign
+          </button>
+        </td>
+      </tr>
+    ))}
+</tbody>
 
-        {/* Popup */}
-        {showPopup && selectedLead && (
+         </table>
+           {/* Pagination */}
+      <div className="mt-4 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(leads.length / leadsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+      </div>
+       </div>
+       
+}
+{showPopup && selectedLead && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
             <h2 className="text-xl mb-4">{"Add Lead"}</h2>
@@ -294,7 +356,7 @@ window.open(whatsappLink, "_blank");
                 className="w-full p-2 border rounded"
                 disabled
               >
-                <option value="Website Inquiries">99 Acres</option>
+                <option value="Website Inquiries">Facebook Campaign</option>
               </select>
             </div>
             <div className="mb-4">
@@ -302,7 +364,7 @@ window.open(whatsappLink, "_blank");
               <input
                 type="text"
                 name="subject"
-                value={selectedLead.subject}
+                value={formName}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-2 border  rounded`}
                 disabled
@@ -320,7 +382,7 @@ window.open(whatsappLink, "_blank");
                   />
                   
                 </div>
-                <div className="mb-4">
+            <div className="mb-4">
               <label className="block text-gray-700">Assign Date</label>
               <input
                 type="date"
@@ -343,7 +405,6 @@ window.open(whatsappLink, "_blank");
               />
             </div>
 
-
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
@@ -361,10 +422,12 @@ window.open(whatsappLink, "_blank");
           </div>
         </div>
       )}
+
     
-    </>
 
+    
+    </div>
   );
-}
+};
 
-export default Accrs;
+export default LeadsTable;

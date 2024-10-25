@@ -82,7 +82,7 @@ const EmployeeCloseGraph = () => {
       <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-2">Closed Deal Overview</h2>
         <p className="text-sm text-gray-500 mb-4">
-          Deal statuses for the past 28 days
+          Deal status for the past 28 days
         </p>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart
