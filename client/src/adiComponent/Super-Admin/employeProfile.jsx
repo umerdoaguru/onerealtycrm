@@ -2,9 +2,12 @@ import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import MainHeader from "./../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
+import ReactPaginate from "react-paginate";
+import styled from "styled-components";
+
 
 const mockEmployeeData = {
   employeeId: 1,
@@ -20,19 +23,32 @@ const mockEmployeeData = {
 
 function EmployeeProfile() {
   const [user, setUser] = useState([]); // Initialize state for employee data
-  const {employeeId} = useParams();
+  const { employeeId } = useParams();
   const [leads, setLeads] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+const leadsPerPage = 10; 
+const navigate = useNavigate();
 
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${employeeId}`);
+        `http://localhost:9000/api/employe-leads/${employeeId}`
+      );
       const data = response.data;
       setLeads(data);
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
+  };
+    
+  const displayedLeads = leads.slice(
+    currentPage * leadsPerPage,
+    (currentPage + 1) * leadsPerPage
+  );
+
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
   };
 
   useEffect(() => {
@@ -52,13 +68,23 @@ function EmployeeProfile() {
     fetchLeads();
   }, [employeeId]);
 
-  // Mock data for testing (remove once API is working)
+  
 
   return (
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="flex flex-col justify-center lg:flex-row mt-14">
+      <div className="container px-5 twoXl-1740">
+        <div className="mt-[5rem]">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+      <div className="flex flex-col justify-center lg:flex-row px-5">
         <div className="flex-grow md:p-4 mt-14 lg:mt-0 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
             Employee Profile
@@ -112,70 +138,160 @@ function EmployeeProfile() {
                 </div>
               </div>
               <table className="min-w-full bg-white border mt-4">
-                    <thead>
-                      <tr>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                          S.no
-                        </th>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                          Lead Number
-                        </th>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                          Assigned To
-                        </th>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                          Created Time
-                        </th>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                          Name
-                        </th>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                          Phone
-                        </th>
-                        <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                          Lead Source
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {leads.map((lead, index) => (
-                        <tr
-                          key={lead.id}
-                          className={index % 2 === 0 ? "bg-gray-100" : ""}
-                        >
-                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                            {index + 1}
-                          </td>
-                          <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
-                            <td className="px-6 py-4 border-b border-gray-200  underline text-[blue]">
-                              {lead.lead_no}
-                            </td>
-                          </Link>
-                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                            {lead.assignedTo}
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                            {moment(lead.createdTime).format("DD/MM/YYYY")}
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                            {lead.name}
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                            {lead.phone}
-                          </td>
-                          <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                            {lead.leadSource}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <thead>
+                  <tr>
+                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                      S.no
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                      Lead Number
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                      Assigned To
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                      Created Time
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                      Phone
+                    </th>
+                    <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                      Lead Source
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                {displayedLeads.map((lead, index) => (
+                    <tr
+                      key={lead.id}
+                      className={index % 2 === 0 ? "bg-gray-100" : ""}
+                    >
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      {index + 1 + currentPage * leadsPerPage}
+                      </td>
+                      <Link
+                        to={`/super-admin-lead-single-data/${lead.lead_id}`}
+                      >
+                        <td className="px-6 py-4 border-b border-gray-200  underline text-[blue]">
+                          {lead.lead_no}
+                        </td>
+                      </Link>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.assignedTo}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {moment(lead.createdTime).format("DD/MM/YYYY")}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.name}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.phone}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.leadSource}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
+      <PaginationWrapper>
+
+      <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(leads.length / leadsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName="pagination-container"
+          pageClassName="pagination-page"
+          pageLinkClassName="pagination-link"
+          previousClassName="pagination-previous"
+          previousLinkClassName="pagination-link-previous"
+          nextClassName="pagination-next"
+          nextLinkClassName="pagination-link-next"
+          breakClassName="pagination-break"
+          breakLinkClassName="pagination-break-link"
+          activeClassName="pagination-active"
+          />
+        </PaginationWrapper>
     </>
   );
-}
+};
 
 export default EmployeeProfile;
+const PaginationWrapper = styled.div`
+padding-bottom: 2rem;
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem; // Reduced gap for better spacing
+    margin-top: 1.5rem;
+  }
+
+  .pagination-page {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .pagination-link {
+    padding: 0.5rem 1rem; // Increased padding for better click area
+    font-size: 0.875rem;
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  .pagination-previous,
+  .pagination-next,
+  .pagination-break {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .pagination-link-previous,
+  .pagination-link-next,
+  .pagination-break-link {
+    padding: 0.5rem 1rem; // Increased padding for consistency
+    font-size: 0.875rem;
+    color: #374151;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #f3f4f6; // Light gray on hover
+      transform: translateY(-1px); // Subtle lift effect
+    }
+  }
+
+  .pagination-active {
+    background-color: #1e50ff;
+    color: white;
+    border: 1px solid #374151;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .pagination-active .pagination-link {
+    color: white !important; // Ensure link inside active page is white
+  }
+`;

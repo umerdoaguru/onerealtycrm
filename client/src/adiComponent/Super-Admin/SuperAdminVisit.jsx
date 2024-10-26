@@ -58,16 +58,8 @@ const SuperAdminVisit = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container 2xl:max-w-[1280px]">
-        <div className="mt-[5rem]">
-          <button
-            onClick={() => navigate(-1)}
-            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            Back
-          </button>
-        </div>
-        <div className="flex flex-col 2xl:ml-44 ">
+      <div className="container mt-[5rem] twoXl-1740">
+        <div className="flex flex-col ">
           <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
             <center className="text-2xl text-center mt-8 font-medium">
               Total Visits
