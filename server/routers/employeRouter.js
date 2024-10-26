@@ -10,12 +10,20 @@ const {
   updateOnlyQuotationStatus,
   getAllEmployeeTotalLeads,
   getLeadQuotation,
+  getEmployeeVisit,
+  createVisit,
+  updateVisit,
+  deleteVisit,
 } = require("../controllers/employeController");
 const router = express.Router();
 
 router.get("/get-employee-invoice/:id", getEmployeeInvoice);
 router.get("/employeeProfile/:id", employeeProfile);
 router.get("/employe-leads/:id", getEmployeeLeads);
+router.get("/employe-visit/:id", getEmployeeVisit);
+router.put('/employe-visit', updateVisit);           
+router.delete('/employe-visit/:id', deleteVisit); 
+router.post("/employe-visit", createVisit);
 router.put("/updateLeadStatus/:id", updateLeadStatus);
 router.put("/updateOnlyLeadStatus/:id", updateOnlyLeadStatus);
 router.put("/updateOnlyQuotationStatus/:id", updateOnlyQuotationStatus);

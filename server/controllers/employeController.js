@@ -52,13 +52,13 @@ const updateOnlyLeadStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { lead_status } = req.body;
-
+    
     console.log(lead_status, id);
-
+    
     const sql = `UPDATE leads SET 
-                    lead_status = ?
+    lead_status = ?
                     
-                    WHERE lead_id = ?`;
+    WHERE lead_id = ?`;
 
     await new Promise((resolve, reject) => {
       db.query(sql, [lead_status, id], (err, result) => {
@@ -81,13 +81,13 @@ const updateOnlyQuotationStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { quotation } = req.body;
-
+    
     console.log(quotation, id);
-
+    
     const sql = `UPDATE leads SET 
-                    quotation = ?
-                    
-                    WHERE lead_id = ?`;
+    quotation = ?
+    
+    WHERE lead_id = ?`;
 
     await new Promise((resolve, reject) => {
       db.query(sql, [quotation, id], (err, result) => {
@@ -98,7 +98,7 @@ const updateOnlyQuotationStatus = async (req, res) => {
         }
       });
     });
-
+    
     res.status(200).json({ message: "Quotation Status updated successfully" });
   } catch (error) {
     console.error("Database update error:", error);
@@ -112,7 +112,7 @@ const updateLeadStatus = async (req, res) => {
     const {
       lead_status,
       quotation_status,
-     
+      
       deal_status,
       reason, 
       status,
@@ -121,11 +121,11 @@ const updateLeadStatus = async (req, res) => {
       visit_date, // Add visit_date to destructured body
       d_closeDate, // Add d_closeDate (Deal Close Date) to destructured body
     } = req.body;
-
+    
     console.log(
       lead_status,
       quotation_status,
-     
+      
       deal_status,
       reason, 
       status,
@@ -134,18 +134,18 @@ const updateLeadStatus = async (req, res) => {
       d_closeDate, // Log d_closeDate
       id
     );
-
+    
     const sql = `UPDATE leads SET 
                       lead_status = ?, 
                       quotation_status = ?, 
-                     
+                      
                       deal_status = ?, 
                       reason = ?, 
                       status = ?, 
                       follow_up_status = ?, 
                    
                       d_closeDate = ?       -- Include d_closeDate in the SQL query
-                  WHERE lead_id = ?`;
+                      WHERE lead_id = ?`;
 
     await new Promise((resolve, reject) => {
       db.query(
@@ -153,7 +153,7 @@ const updateLeadStatus = async (req, res) => {
         [
           lead_status,
           quotation_status,
-         
+          
           deal_status,
           reason, 
           status,
@@ -183,7 +183,7 @@ const getEmployeeQuotation = async (req, res) => {
   try {
     const { id } = req.params;
     const sql = "SELECT * FROM quotations_data WHERE employeeId = ?";
-
+    
     const result = await new Promise((resolve, reject) => {
       db.query(sql, [id], (err, results) => {
         if (err) {
@@ -207,11 +207,11 @@ const employeeProfile = async (req, res) => {
     const { id } = req.params;
     const sql =
       "SELECT employeeId, name, email, phone,photo, position, createdTime FROM employee WHERE employeeId = ?";
-
-    const result = await new Promise((resolve, reject) => {
-      db.query(sql, [id], (err, results) => {
-        if (err) {
-          reject(err); // Reject the promise with the error
+      
+      const result = await new Promise((resolve, reject) => {
+        db.query(sql, [id], (err, results) => {
+          if (err) {
+            reject(err); // Reject the promise with the error
         } else {
           resolve(results); // Resolve the promise with the results
         }
@@ -228,15 +228,15 @@ const employeeProfile = async (req, res) => {
 const getAllEmployeeTotalLeads = async (req, res) => {
   try {
     const query = `
-      SELECT 
-          e.employeeId,
-          e.name,
-          e.email,
-          COUNT(l.lead_id) AS total_leads
-      FROM employee e
-      LEFT JOIN leads l ON e.employeeId = l.employeeId
-      
-      GROUP BY e.employeeId;
+    SELECT 
+    e.employeeId,
+    e.name,
+    e.email,
+    COUNT(l.lead_id) AS total_leads
+    FROM employee e
+    LEFT JOIN leads l ON e.employeeId = l.employeeId
+    
+    GROUP BY e.employeeId;
     `;
 
     db.query(query, (err, results) => {
@@ -272,7 +272,7 @@ const getLeadQuotation = async (req, res) => {
         }
       });
     });
-
+    
     // Send the result as a response
     res.status(200).json(result);
   } catch (err) {
@@ -280,6 +280,143 @@ const getLeadQuotation = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: err });
   }
 };
+
+const getEmployeeVisit = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sql = "SELECT * FROM visit WHERE lead_id = ?";
+
+    const result = await new Promise((resolve, reject) => {
+      db.query(sql, [id], (err, results) => {
+        if (err) {
+          reject(err); // Reject the promise with the error
+        } else {
+          resolve(results); // Resolve the promise with the results
+        }
+      });
+    });
+    // Send the result as a response
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Database query error:", err); // Log the error for debugging
+    res.status(500).json({ message: "Internal Server Erro, error: errr" });
+  }
+};
+const createVisit = (req, res) => {
+  const {
+    lead_id,
+    name,
+    employeeId,
+    employee_name,
+    visit,
+    visit_date,
+    report,
+  } = req.body;
+
+  const sql = `INSERT INTO visit (
+    lead_id,
+    name,
+    employeeId,
+    employee_name,
+    visit,
+    visit_date,
+    report
+  ) VALUES (?,?,?,?,?,?,?)`;
+
+  db.query(
+    sql,
+    [
+      lead_id,
+      name,
+      employeeId,
+      employee_name,
+      visit,
+      visit_date,
+      report,
+    ],
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Error inserting data" });
+      } else {
+        res
+          .status(201)
+          .json({ success: true, message: "Visit data successfully submitted" });
+      }
+    }
+  );
+};
+const updateVisit = (req, res) => {
+  const {
+   id, // Unique identifier for the visit
+    lead_id,
+    name,
+    employeeId,
+    employee_name,
+    visit,
+    visit_date,
+    report,
+  } = req.body;
+
+  // Basic validation
+  if (!id || !visit || !visit_date || !report) {
+    return res.status(400).json({ error: "Please provide all required fields." });
+  }
+
+  const sql = `UPDATE visit SET 
+    lead_id = ?, 
+    name = ?, 
+    employeeId = ?, 
+    employee_name = ?, 
+    visit = ?, 
+    visit_date = ?, 
+    report = ? 
+    WHERE id = ?`;
+
+  db.query(
+    sql,
+    [
+      lead_id,
+      name,
+      employeeId,
+      employee_name,
+      visit,
+      visit_date,
+      report,
+     id
+    ],
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Error updating visit data" });
+      } else if (results.affectedRows === 0) {
+        res.status(404).json({ error: "Visit not found" });
+      } else {
+        res.status(200).json({ success: true, message: "Visit data updated successfully" });
+      }
+    }
+  );
+};
+
+const deleteVisit = (req, res) => {
+  const { id } = req.params;
+
+  // Basic validation
+  if (!id) {
+    return res.status(400).json({ error: "Visit ID is required" });
+  }
+
+  const sql = `DELETE FROM visit WHERE id = ?`;
+
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error deleting visit" });
+    } else if (results.affectedRows === 0) {
+      res.status(404).json({ error: "Visit not found" });
+    } else {
+      res.status(200).json({ success: true, message: "Visit deleted successfully" });
+    }
+  });
+};
+
 
 module.exports = {
   getEmployeeInvoice,
@@ -290,5 +427,5 @@ module.exports = {
   updateOnlyLeadStatus,
   updateOnlyQuotationStatus,
   getAllEmployeeTotalLeads,
-  getLeadQuotation,
+  getLeadQuotation,getEmployeeVisit,createVisit,deleteVisit,updateVisit
 };
