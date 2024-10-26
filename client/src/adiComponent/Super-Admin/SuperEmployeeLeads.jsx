@@ -125,17 +125,17 @@ function SuperEmployeeLeads() {
         <div className="container mt-16">
           <div className="main">
             <div>
-            <button
-            onClick={() => navigate(-1)}
-            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
-          >
-            Back
-          </button>
-            <h1 className="text-2xl text-center">
-              Leads Management{" "}
-            </h1>
+              <button
+                onClick={() => navigate(-1)}
+                className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
+              >
+                Back
+              </button>
+              <h1 className="text-xl sm:text-2xl text-center">
+                Leads Management{" "}
+              </h1>
             </div>
-            <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-5 mb-4"></div>
 
             {/* Button to create a new lead */}
             <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
@@ -243,139 +243,139 @@ function SuperEmployeeLeads() {
             </div>
           </div>
 
-          <div className="overflow-x-auto mt-4">
-          <div className="flex gap-10 text-xl font-semibold my-3">
-  <div>
-    Total Lead visit:{" "}
-    {leads.reduce(
-      (acc, lead) =>
-        acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
-      0
-    )}
-  </div>
-  <div>Total Lead: {leads.length}</div>
-  <div>
-    Total Closed Lead:{" "}
-    {
-      leads.filter((lead) => lead.deal_status === "close").length
-    }
-  </div>
-</div>
+          <div className="overflow-x-auto mt-4 flex flex-col items-start ">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-10 text-sm sm:text-lg font-semibold my-3">
+              <div className="text-sm sm:text-lg">
+                <span >Total Lead visit:</span>{" "}
+                {leads.reduce(
+                  (acc, lead) =>
+                    acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
+                  0
+                )}
+              </div>
+              <div className="text-sm sm:text-lg">Total Lead: {leads.length}</div>
+              <div className="text-sm sm:text-lg">
+                Total Closed Lead:{" "}
+                {
+                  leads.filter((lead) => lead.deal_status === "close").length
+                }
+              </div>
+            </div>
 
             <table className="tt min-w-full bg-white border">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     S.no
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Number
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Name
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Phone
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Source
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Subject
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Status
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Created Time
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Status
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Deal Status
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Visit
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Visit date
                   </th>
                 </tr>
               </thead>
               <tbody>
-  {currentLeads.length > 0 ? (
-    currentLeads.map((lead, index) => (
-      <tr
-        key={lead.lead_id}
-        className={index % 2 === 0 ? "bg-gray-100" : ""}
-      >
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {index + 1}
-        </td>
-        <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
-          <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-            {lead.lead_no}
-          </td>
-        </Link>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.name}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.phone}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.leadSource}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.assignedTo}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject}
-        </td>
-        {lead.lead_status === "pending" && (
-          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-            {lead.lead_status}
-          </td>
-        )}
-        {lead.lead_status === "in progress" && (
-          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-            {lead.lead_status}
-          </td>
-        )}
-        {lead.lead_status === "completed" && (
-          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-            {lead.lead_status}
-          </td>
-        )}
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("YYYY-MM-DD")}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.status}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.deal_status}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit_date}
-        </td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan={13} className="py-4 text-center">
-        No data found
-      </td>
-    </tr>
-  )}
-</tbody>
+                {currentLeads.length > 0 ? (
+                  currentLeads.map((lead, index) => (
+                    <tr
+                      key={lead.lead_id}
+                      className={index % 2 === 0 ? "bg-gray-100" : ""}
+                    >
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {index + 1}
+                      </td>
+                      <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
+                        <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+                          {lead.lead_no}
+                        </td>
+                      </Link>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.name}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.phone}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.leadSource}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.assignedTo}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.subject}
+                      </td>
+                      {lead.lead_status === "pending" && (
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
+                          {lead.lead_status}
+                        </td>
+                      )}
+                      {lead.lead_status === "in progress" && (
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
+                          {lead.lead_status}
+                        </td>
+                      )}
+                      {lead.lead_status === "completed" && (
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
+                          {lead.lead_status}
+                        </td>
+                      )}
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {moment(lead.createdTime).format("YYYY-MM-DD")}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.status}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.deal_status}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.visit}
+                      </td>
+                      <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-200">
+                        {lead.visit_date}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={13} className="py-4 text-center">
+                      No data found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
 
             </table>
           </div>
