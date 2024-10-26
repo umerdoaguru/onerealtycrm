@@ -1,6 +1,7 @@
 # 25 Oct
 <!-- - > Remove Salary from EveryWhere -->
 - > Check Responsiveness
+- > forget password
 - > SuperAdmin 
     <!-- - Dashboard mai daily visit graph mai points mai number na hoye -->
     - Leads ke filters par kaam shayad option ke value par kaam
