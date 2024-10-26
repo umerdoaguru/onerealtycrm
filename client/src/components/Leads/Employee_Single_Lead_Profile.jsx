@@ -12,8 +12,25 @@ function Employee_Single_Lead_Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
+  const [visit, setVisit] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showPopupVisit, setShowPopupVisit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [render, setRender] = useState(false);
+
+  const [visitLead, setVisitLead] = useState({
+    
+    lead_id: "",
+    name: "",
+    employeeId: "",
+    employee_name: "",
+    visit: "",
+    visit_date: "",
+    report: "",
+  });
 
   const [quotationCreated, setQuotationCreated] = useState(false);
+  const [visitCreated, setVisitCreated] = useState(false);
 
   // const leads = [{ /* lead data */ }];
 
@@ -29,8 +46,6 @@ function Employee_Single_Lead_Profile() {
         { value: "completed", label: "Completed" },
       ],
     },
- 
-
 
     {
       name: "deal_status",
@@ -79,7 +94,6 @@ function Employee_Single_Lead_Profile() {
     },
   ];
 
-
   const [currentLead, setCurrentLead] = useState({
     lead_status: "",
     visit_date: " ",
@@ -92,12 +106,11 @@ function Employee_Single_Lead_Profile() {
 
     follow_up_status: "",
   });
-  const [showPopup, setShowPopup] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [render, setRender] = useState(false);
 
   useEffect(() => {
     fetchLeads();
+
+    fetchVisit();
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
@@ -135,6 +148,25 @@ function Employee_Single_Lead_Profile() {
       console.error("Error fetching quotations:", error);
     }
   };
+
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-visit/${id}`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+      const hasCreatedvisit = response.data.some(
+        (lead) =>
+          (lead.visit && lead.visit.trim().toLowerCase() === "fresh") ||
+          "repeated"
+      );
+      setVisitCreated(hasCreatedvisit);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
@@ -158,6 +190,13 @@ function Employee_Single_Lead_Profile() {
       [name]: value,
     }));
   };
+  const handleInputChangeVisit = (e) => {
+    const { name, value } = e.target;
+    setVisitLead((prevLead) => ({
+      ...prevLead,
+      [name]: value,
+    }));
+  };
 
   const handleUpdate = (lead) => {
     setIsEditing(true);
@@ -165,17 +204,33 @@ function Employee_Single_Lead_Profile() {
     setShowPopup(true);
   };
 
+  const handleCreateClick = () => {
+    setVisitLead({
+      lead_id: "",
+      name: "",
+      employeeId: "",
+      employee_name: "",
+      visit: "",
+      visit_date: "",
+      report: "",
+    });
+    setShowPopupVisit(true);
+  };
+  const handleViewVisit = () => {
+    navigate(`/view_visit/${leads[0].lead_id}`);
+  };
+
   const saveChanges = async () => {
     console.log(currentLead);
-    if(currentLead.deal_status !== leads[0].deal_status){ 
-      if(currentLead.d_closeDate === "pending") {
+    if (currentLead.deal_status !== leads[0].deal_status) {
+      if (currentLead.d_closeDate === "pending") {
         alert("Please update the deal close date as well");
         return;
       }
     }
 
-    if(currentLead.visit !== leads[0].visit){ 
-      if(currentLead.visit_date === "pending") {
+    if (currentLead.visit !== leads[0].visit) {
+      if (currentLead.visit_date === "pending") {
         alert("Please update the visit date as well");
         return;
       }
@@ -202,9 +257,59 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Failed to update the lead status.");
     }
   };
+  const saveVisit = async () => {
+    // Validate required fields
+    if (!visitLead.visit) {
+      cogoToast.error("Please select a visit type.");
+      return;
+    }
+    if (!visitLead.visit_date) {
+      cogoToast.error("Please select a visit date.");
+      return;
+    }
+    if (!visitLead.report || visitLead.report.trim().length <5) {
+      cogoToast.error("Report is required and must be at least 5 characters.");
+      return;
+    }
+
+    console.log(visitLead);
+
+    try {
+      // Send updated data to the backend using Axios
+      const response = await axios.post(
+        `http://localhost:9000/api/employe-visit`,
+        {
+          lead_id: leads[0].lead_id,
+          name:leads[0].name,
+          employeeId: leads[0].employeeId,
+          employee_name: leads[0].assignedTo,
+          visit: visitLead.visit,
+          visit_date: visitLead.visit_date,
+          report: visitLead.report,
+        }
+      );
+
+      if (response.status === 201) {
+        console.log("Updated successfully:", response.data);
+        cogoToast.success("Visit created successfully");
+
+        closePopupVisit(); // Close the popup on success
+        fetchVisit();
+      } else {
+        console.error("Error updating:", response.data);
+        cogoToast.error("Failed to update the lead status.");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      cogoToast.error("Failed to update the lead status.");
+    }
+  };
 
   const closePopup = () => {
     setShowPopup(false);
+  };
+  const closePopupVisit = () => {
+    setShowPopupVisit(false);
   };
 
   return (
@@ -284,52 +389,51 @@ function Employee_Single_Lead_Profile() {
 
           <div className=" flex justify-between">
             <div className="">
-            <button
-              onClick={() => handleQuotation(leads[0])}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Quotation Creation
-            </button>
-            <button
-              onClick={() => handleQuotation(leads[0])}
-              className="bg-orange-500 text-white px-4 py-2 mx-2 rounded"
-            >
-              Visit Creation
-            </button>
+              <button
+                onClick={() => handleQuotation(leads[0])}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Quotation Creation
+              </button>
+              <button
+                className="bg-orange-500 text-white px-4 py-2 mx-2 rounded"
+                onClick={handleCreateClick}
+              >
+                Visit Creation
+              </button>
             </div>
-<div className="">
-            {/* Conditionally render the View Quotation button */}
-            {quotationCreated ? (
-              <button
-                onClick={() => handleViewQuotation(leads[0])}
-                className="bg-orange-500 text-white px-4 py-2 rounded"
-              >
-                View Quotation
-              </button>
-            ) : (
-              <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
-                Quotation not yet created
-              </p>
-            )}
-        
-           
+            <div className="">
+              {/* Conditionally render the View Quotation button */}
+              <div className="flex">
+                {quotationCreated ? (
+                  <button
+                    onClick={() => handleViewQuotation(leads[0])}
+                    className="bg-blue-500 text-white px-4 py-2 mx-2 rounded"
+                  >
+                    View Quotation
+                  </button>
+                ) : (
+                  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
+                    Quotation not yet created
+                  </p>
+                )}
 
-            {/* Conditionally render the View Quotation button */}
-            {quotationCreated ? (
-              <button
-                onClick={() => handleViewQuotation(leads[0])}
-                className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
-              >
-                View Visit
-              </button>
-            ) : (
-              <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
-                Quotation not yet created
-              </p>
-            )}
-         </div>
+                {/* Conditionally render the View Quotation button */}
+                {visitCreated ? (
+                  <button
+                    onClick={handleViewVisit}
+                    className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
+                  >
+                    View Visit
+                  </button>
+                ) : (
+                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                    Visit not yet created
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
-          
 
           <div className="overflow-x-auto mt-5">
             <table className="min-w-full bg-white border">
@@ -432,10 +536,10 @@ function Employee_Single_Lead_Profile() {
                         {lead.invoice_status}
                       </td>
                     )} */}
-                  
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
-                        {lead.status}
-                      </td>
+
+                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
+                      {lead.status}
+                    </td>
 
                     {lead.deal_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
@@ -557,6 +661,87 @@ function Employee_Single_Lead_Profile() {
                   <button
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
                     onClick={closePopup}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showPopupVisit && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+                <h2 className="text-xl mb-4">{"Add Site Visit"}</h2>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Lead Number</label>
+                  <input
+                    type="number"
+                    name="lead_no"
+                    value={leads[0].lead_no}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={leads[0].name}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+            
+                <div className="mb-4">
+                  <label className="block text-gray-700">Visit</label>
+                  <select
+                    name="visit"
+                    value={visitLead.visit}
+                    onChange={handleInputChangeVisit}
+                    className="border rounded-2xl p-2 w-full"
+                  >
+                    <option value="">Select Visit Type</option>
+                    <option value="fresh">Fresh</option>
+                    <option value="repeated">Repeated</option>
+                    <option value="self">Self</option>
+                    <option value="associative">Associative</option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700">Visit Date</label>
+                  <input
+                    type="date"
+                    name="visit_date"
+                    value={visitLead.visit_date}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700">Report</label>
+                  <input
+                    type="text"
+                    name="report"
+                    value={visitLead.report}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+                    onClick={saveVisit}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    onClick={closePopupVisit}
                   >
                     Cancel
                   </button>
