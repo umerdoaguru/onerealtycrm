@@ -793,8 +793,9 @@ const createLead = (req, res) => {
     employeeId,
     subject,address,
     createdTime,
+    actual_date,
   } = req.body;
-  const sql = `INSERT INTO leads (lead_no, name, phone, assignedTo, leadSource, employeeId,subject,address,createdTime) VALUES (?,?,?,?, ?, ?, ?, ?,?)`;
+  const sql = `INSERT INTO leads (lead_no, name, phone, assignedTo, leadSource, employeeId,subject,address,createdTime,actual_date) VALUES (?,?,?,?,?, ?, ?, ?, ?,?)`;
   db.query(
     sql,
     [
@@ -806,6 +807,7 @@ const createLead = (req, res) => {
       employeeId,
       subject,address,
       createdTime,
+      actual_date,
     ],
     (err, results) => {
       if (err) {
@@ -866,7 +868,7 @@ const getvisit = (req, res) => {
 };
 
 const getLeads = (req, res) => {
-  const sql = "SELECT * FROM leads";
+  const sql = "SELECT * FROM leads ORDER BY lead_id DESC"; 
   db.query(sql, (err, results) => {
     if (err) {
       res.status(500).json({ error: "Error fetching data" });
@@ -875,6 +877,7 @@ const getLeads = (req, res) => {
     }
   });
 };
+
 
 const updateLead = async (req, res) => {
   try {
@@ -887,12 +890,14 @@ const updateLead = async (req, res) => {
       leadSource,
       employeeId,
       createdTime,
-      subject,address,
+      actual_date,
+      subject,
+      address,
     } = req.body;
 
     // Construct SQL query to update the lead
     const sql = `UPDATE leads 
-                 SET lead_no = ?, name = ?, phone = ?, assignedTo = ?, employeeId = ?, leadSource = ?, createdTime = ?, subject = ? 
+                 SET lead_no = ?, name = ?, phone = ?, assignedTo = ?, employeeId = ?, leadSource = ?, createdTime = ?, actual_date = ?, subject = ?, address = ? 
                  WHERE lead_id = ?`;
 
     // Execute the update query asynchronously
@@ -907,7 +912,9 @@ const updateLead = async (req, res) => {
           employeeId,
           leadSource,
           createdTime,
-          subject,address,
+          actual_date,
+          subject,
+          address, // added to the SQL query
           leadId,
         ],
         (err, results) => {
@@ -1158,6 +1165,102 @@ const updateQuotationStatus = async (req, res) => {
     });
   }
 };
+const getLeadsByIdVisit = (req, res) => {
+  const employeeId = req.params.employeeId; // Assuming `employeeId` is passed as a route parameter
+
+  const sql = `
+    SELECT 
+    
+      
+     
+    
+      visit.visit,
+      visit.visit_date,
+      visit.report,
+      leads.lead_no,
+      leads.lead_id,
+      leads.name,
+      leads.assignedTo,
+      leads.employeeId ,
+      leads.createdTime,
+      leads.actual_date,
+      leads.name ,
+      leads.phone,
+      leads.leadSource,
+      leads.lead_status,
+      leads.subject,
+      leads.booking_amount,
+      leads.payment_mode,
+      leads.registry,
+      leads.address,
+      leads.quotation,
+      leads.quotation_status,
+      leads.deal_status,
+      leads.d_closeDate,
+      leads.status,
+      leads.reason,
+      leads.follow_up_status
+    FROM 
+      leads
+    LEFT JOIN 
+      visit ON visit.lead_id = leads.lead_id AND visit.employeeId = leads.employeeId
+    WHERE 
+      leads.employeeId = ?;
+  `;
+
+  db.query(sql, [employeeId], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error fetching data" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+const getLeadsVisit = (req, res) => {
+  const sql = `
+    SELECT 
+      visit.visit,
+      visit.visit_date,
+      visit.report,
+        leads.lead_id,
+      leads.lead_no,
+      leads.name,
+      leads.assignedTo,
+      leads.employeeId,
+      leads.createdTime,
+      leads.actual_date,
+      leads.phone,
+      leads.leadSource,
+      leads.lead_status,
+      leads.subject,
+      leads.booking_amount,
+      leads.payment_mode,
+      leads.registry,
+      leads.address,
+      leads.quotation,
+      leads.quotation_status,
+      leads.deal_status,
+      leads.d_closeDate,
+      leads.status,
+      leads.reason,
+      leads.follow_up_status
+    FROM 
+      leads
+    LEFT JOIN 
+      visit ON visit.lead_id = leads.lead_id AND visit.employeeId = leads.employeeId;
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error fetching data" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+
 
 module.exports = {
   Quotation,
@@ -1186,5 +1289,5 @@ module.exports = {
   getAllUsers,
   deleteProfile,
   getAllQuotation,
-  updateQuotationStatus,
+  updateQuotationStatus,getLeadsByIdVisit,getLeadsVisit
 };

@@ -18,16 +18,20 @@ const VisitData = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 10; // Default leads per page
   const EmpId = useSelector((state) => state.auth.user.id);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+
 
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
+    fetchEmployees();
   }, []);
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/leads`
+        `http://localhost:9000/api/employe-all-visit`
       );
       // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(
@@ -40,19 +44,36 @@ const VisitData = () => {
       console.error("Error fetching leads:", error);
     }
   };
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get("http://localhost:9000/api/employee");
+      setEmployees(response.data);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
+  };
+
 
   // Automatically apply date filter when start or end date changes
+
   useEffect(() => {
+    let filtered = leads;
+
+    // Filter by date
     if (startDate && endDate) {
-      const filtered = leads.filter((lead) => {
-        const createdTime = moment(lead.createdTime);
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
+      filtered = filtered.filter((lead) => {
+        const visitDate = moment(lead.visit_date, "YYYY-MM-DD");
+        return visitDate.isBetween(startDate, endDate, undefined, "[]");
       });
-      setFilteredLeads(filtered);
-    } else {
-      setFilteredLeads(leads);
     }
-  }, [startDate, endDate, leads]);
+
+    // Filter by selected employee
+    if (selectedEmployee) {
+      filtered = filtered.filter((lead) => lead.employee_name === selectedEmployee);
+    }
+
+    setFilteredLeads(filtered);
+  }, [startDate, endDate, selectedEmployee, leads]);
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
@@ -96,6 +117,20 @@ const VisitData = () => {
             onChange={(e) => setEndDate(e.target.value)}
             className="border p-2"
           />
+            <div className="">
+            <select
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              className="border p-2"
+            >
+              <option value="">Select Employee</option>
+              {employees.map((employee) => (
+                <option key={employee.id} value={employee.name}>
+                  {employee.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="respo mx-2">
             <button
               onClick={downloadExcel}
@@ -104,41 +139,37 @@ const VisitData = () => {
               Download Excel
             </button>
           </div>
+        
         </div>
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
           <table className="min-w-full bg-white border">
             <thead>
-              <tr>
-                <th className="px-6 py-3 border-b-2 border-gray-300">S.no</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Lead Number
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Assigned To
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Lead Name
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Subject
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Lead Source
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Visit Date
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  FollowUp Status
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Deal Status
-                </th>
-              </tr>
+            <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      S.no
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Lead Id 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Assigned To
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Report
+                    </th>
+                
+                  </tr>
             </thead>
             <tbody>
   {currentLeads.length === 0 ? (
@@ -148,44 +179,33 @@ const VisitData = () => {
       </td>
     </tr>
   ) : (
-    currentLeads.map((lead, index) => (
+    currentLeads.map((visit, index) => (
       <tr
-        key={lead.id}
+        key={visit.id}
         className={index % 2 === 0 ? "bg-gray-100" : ""}
       >
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {currentPage * leadsPerPage + index + 1}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.lead_no}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.assignedTo}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.name}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.phone}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.leadSource}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit_date}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.follow_up_status}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.deal_status}
-        </td>
+       
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.lead_id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.employee_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit_date}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.report}
+                    </td>
       </tr>
     ))
   )}
@@ -193,36 +213,28 @@ const VisitData = () => {
 
           </table>
         </div>
-
+<div className="mt-2 mb-2">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
           breakLabel={"..."}
           pageCount={pageCount}
+          forcePage={currentPage}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
-          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
-          previousClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          previousLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          nextLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          breakClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
-          activeClassName={
-            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
-          }
+          containerClassName="pagination-container"
+          pageClassName="pagination-page"
+          pageLinkClassName="pagination-link"
+          previousClassName="pagination-previous"
+          previousLinkClassName="pagination-link-previous"
+          nextClassName="pagination-next"
+          nextLinkClassName="pagination-link-next"
+          breakClassName="pagination-break"
+          breakLinkClassName="pagination-break-link"
+          activeClassName="pagination-active"
         />
+        </div>
       </div>
     </Wrapper>
   );
@@ -231,5 +243,99 @@ const VisitData = () => {
 export default VisitData;
 
 const Wrapper = styled.div`
-  // Add responsive styles if necessary
+  /* Container class */
+  .active {
+  background-color: #1e50ff;
+}
+
+ .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Page item */
+  .pagination-page {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Page link */
+  .pagination-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #3b82f6;
+    text-decoration: none;
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  /* Previous button */
+  .pagination-previous {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  } 
+
+  .pagination-link-previous {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Next button */
+  .pagination-next {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-link-next {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Break item */
+  .pagination-break {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-break-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Active page */
+  .pagination-active {
+    background-color: #1e50ff;
+    color: white;
+    border: 1px solid #374151;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-active a {
+    color: white !important;
+  }
 `;

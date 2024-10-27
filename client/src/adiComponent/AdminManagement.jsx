@@ -17,7 +17,6 @@ function AdminManagement() {
     password: "",
     position: "",
     phone: "",
-    salary: "",
   };
   const [newAdmin, setNewAdmin] = useState(initialAdminState);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -44,7 +43,7 @@ function AdminManagement() {
   const fetchAdmins = async () => {
     try {
       const response = await axios.get(
-        "https://crm.one-realty.in/api/getAllAdmins"
+        "http://localhost:9000/api/getAllAdmins"
       );
       const admins = response.data.admins;
       setAdmins(admins || []);
@@ -62,7 +61,7 @@ function AdminManagement() {
 
   //   try {
   //     const response = await axios.get(
-  //       "https://crm.one-realty.in/api/admins/checkEmail",
+  //       "http://localhost:9000/api/admins/checkEmail",
   //       {
   //         params: { email },
   //       }
@@ -114,9 +113,6 @@ function AdminManagement() {
     if (!newAdmin.phone) errors.phone = "Phone number is required";
     else if (!/^\d{10}$/.test(newAdmin.phone))
       errors.phone = "Phone number must be 10 digits";
-    if (!newAdmin.salary) errors.salary = "Salary is required";
-    else if (isNaN(newAdmin.salary) || newAdmin.salary <= 0)
-      errors.salary = "Salary must be a positive number";
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -144,7 +140,7 @@ function AdminManagement() {
         // console.log("Password to update:", newAdmin.password);
 
         await axios.put(
-          `https://crm.one-realty.in/api/updateAdmin/${adminToUpdate.admin_id}`,
+          `http://localhost:9000/api/updateAdmin/${adminToUpdate.admin_id}`,
           newAdmin
         );
 
@@ -155,7 +151,7 @@ function AdminManagement() {
         console.log("Adding new admin:", newAdmin);
 
         const response = await axios.post(
-          "https://crm.one-realty.in/api/addAdmin",
+          "http://localhost:9000/api/addAdmin",
           newAdmin
         );
 
@@ -203,7 +199,6 @@ function AdminManagement() {
       password: adminToEdit.password || "",
       position: adminToEdit.position || "",
       phone: adminToEdit.phone || "",
-      salary: adminToEdit.salary || "",
     });
 
     setEditingIndex(index);
@@ -218,7 +213,7 @@ function AdminManagement() {
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`https://crm.one-realty.in/api/deleteAdmin/${admin_id}`);
+        await axios.delete(`http://localhost:9000/api/deleteAdmin/${admin_id}`);
         fetchAdmins();
       } catch (error) {
         console.error("Error deleting admin:", error);
@@ -264,7 +259,6 @@ function AdminManagement() {
                   <th className="px-4 py-3 sm:px-6">Email</th>
                   <th className="px-4 py-3 sm:px-6">Role</th>
                   <th className="px-4 py-3 sm:px-6">Phone</th>
-                  <th className="px-4 py-3 sm:px-6">Salary</th>
                   <th className="px-4 py-3 sm:px-6">Actions</th>
                 </tr>
               </thead>
@@ -282,7 +276,6 @@ function AdminManagement() {
                         <td className="px-4 py-4 sm:px-6">{admin.email}</td>
                         <td className="px-4 py-4 sm:px-6">{admin.position}</td>
                         <td className="px-4 py-4 sm:px-6">{admin.phone}</td>
-                        <td className="px-4 py-4 sm:px-6">{admin.salary}</td>
                         <td className="px-4 py-4 sm:px-6">
                           <div className="flex space-x-2 sm:space-x-4">
                             <button
@@ -435,22 +428,6 @@ function AdminManagement() {
               />
               {validationErrors.phone && (
                 <p className="text-red-500 text-sm">{validationErrors.phone}</p>
-              )}
-
-              <input
-                type="number"
-                name="salary"
-                value={newAdmin.salary}
-                onChange={handleInputChange}
-                placeholder="Salary"
-                className={`block w-full px-4 py-2 mb-2 border ${
-                  validationErrors.salary ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {validationErrors.salary && (
-                <p className="text-red-500 text-sm">
-                  {validationErrors.salary}
-                </p>
               )}
 
               <div className="flex justify-end mt-4 gap-3">

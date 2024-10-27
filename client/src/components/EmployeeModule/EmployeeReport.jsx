@@ -51,7 +51,6 @@ const d_fileds = {
       "Date",
       "Lead Source",
       "Quotation Status",
-      "Invoice Status",
       "Deal Status",
       "FollowUp Status",
     ],
@@ -64,7 +63,6 @@ const d_fileds = {
       "createdTime",
       "leadSource",
       "quotation_status",
-      "invoice_status",
       "deal_status",
       "follow_up_status",
     ],
@@ -72,34 +70,30 @@ const d_fileds = {
   },
   visit: {
     heading: [
-      "Lead No.",
-      "Assigned To",
-      "Lead Name",
-      "subject",
-      "Phone Number",
-      // "Date",
-      "Lead Source",
-      "visit date",
+      "S.no.",
+      "Lead Id.",
+      "Name",
+      "Employee Name",
+    
+    
+     
+    
       "visit",
-      // "Quotation Status",
-      // "Invoice Status",
-      "Deal Status",
-      "FollowUp Status",
+      "visit date",
+      "report"
+     
     ],
     columns: [
-      "lead_no",
-      "assignedTo",
+      "id",
+      "lead_id",
+      
       "name",
-      "subject",
-      "phone",
-      // "createdTime",
-      "leadSource",
+      "employee_name",
+     
       "visit_date",
       "visit",
-      // "quotation_status",
-      // "invoice_status",
-      "deal_status",
-      "follow_up_status",
+      "report"
+      
     ],
     visit: [],
   },
@@ -153,12 +147,12 @@ const EmployeeReport = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
+    
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
-
+      console.log(data[selectedCategory], item);
       // Parse the date from created_date or createdTime, whichever exists
-
-      
+      // Function to convert DD/MM/YYYY to MM/DD/YYYY
       const convertToMMDDYYYY = (dateStr) => {
         const [day, month, year] = dateStr.split("/"); // Split by "/"
         return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
@@ -166,18 +160,18 @@ const EmployeeReport = () => {
 
       let itemDate;
 
-      if (selectedCategory === "visit") {
+      if(selectedCategory == "leads"){
+        itemDate = new Date(convertToMMDDYYYY(item.createdTime));
+      } else if (selectedCategory == "visit") {
         itemDate = new Date(convertToMMDDYYYY(item.visit_date));
-      } else if (selectedCategory === "closed") {
-        if (item.deal_status !== "close") {
-          return;
-        }
-        itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
       } else {
-        itemDate = new Date(convertToMMDDYYYY(item.createdTime)); // Default date if no specific category
+        itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
       }
 
+      console.log(itemDate);
+
       let filterCondition = false;
+
       if (filter === "week") {
         // Get the last Sunday and the current date for the week range
         const lastSunday = new Date(currentDate);
@@ -238,6 +232,30 @@ const EmployeeReport = () => {
     setSelectedCategory(category);
     setCurrentPage(1);
     filterData();
+
+    const combinedData = {
+      leads: data.leads,
+      visit: data.visit,
+      closed: data.closed,
+    };
+
+    const updatedDataFields = {
+      ...dataFields,
+      leads: {
+        ...dataFields.leads,
+        leads: combinedData.leads,
+      },
+      visit: {
+        ...dataFields.visit,
+        visit: combinedData.visit,
+      },
+      closed: {
+        ...dataFields.closed,
+        closed: combinedData.closed,  
+      },
+    };
+    console.log(updatedDataFields, combinedData);
+    setDataFields(updatedDataFields);
   };
 
   const handleFilterChange = (event) => {
@@ -245,57 +263,54 @@ const EmployeeReport = () => {
   };
 
   const handleDownload = () => {
-    // Items per page (5 in this case, or any other number you are using)
     const itemsPerPage = 5;
-
-    // Calculate the start and end index for the current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-
+  
     // Get the data for the current page
-    const paginatedData = dataFields[selectedCategory][selectedCategory].slice(
-      startIndex,
-      endIndex
-    );
-
-    // Convert the paginated data to Excel
+    const paginatedData = dataFields[selectedCategory][selectedCategory]
+      .slice(startIndex, endIndex)
+      .map(({ createdTime,d_closeDate, ...rest }) => rest); // Remove createdTime and closeDate
+  
+    // Convert the filtered paginated data to Excel
     const ws = XLSX.utils.json_to_sheet(paginatedData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
+  
     // Write the Excel file
     XLSX.writeFile(
       wb,
       `${selectedCategory}-${filter}-data-page-${currentPage}.xlsx`
     );
   };
+  
 
   // const quotationAxios = axios.create({
-  //   baseURL: "https://crm.one-realty.in/api",
+  //   baseURL: "http://localhost:9000/api",
   // });
 
   // const invoiceAxios = axios.create({
-  //   baseURL: "https://crm.one-realty.in/api",
+  //   baseURL: "http://localhost:9000/api",
   // });
 
   const leadsAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const visitAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const closedAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
       createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
-      visit_date: moment(item.visit_date).format("DD/MM/YYYY"),
-      d_closeDate: moment(item.d_closeDate).format("DD/MM/YYYY"),
+      visit_date: (item.visit_date !== "pending") ? moment(item.visit_date).format("DD/MM/YYYY") : "pending",
+      d_closeDate: (item.d_closeDate !== "pending") ? moment(item.d_closeDate).format("DD/MM/YYYY") : "pending",
     }));
   };
 
@@ -305,7 +320,7 @@ const EmployeeReport = () => {
         // quotationAxios.get(`/get-quotation-byEmploye/${EmpId}`),
         // invoiceAxios.get(`/get-employee-invoice/${EmpId}`),
         leadsAxios.get(`/employe-leads/${EmpId}`),
-        visitAxios.get(`/employe-leads/${EmpId}`),
+        visitAxios.get(`/employebyid-visit/${EmpId}`),
         closedAxios.get(`/employe-leads/${EmpId}`),
       ]);
 
@@ -329,10 +344,14 @@ const EmployeeReport = () => {
               leadsData = formatData(result.value.data);
               break;
             case 1:
-              visitData = formatData(result.value.data);
+              visitData = formatData(result.value.data).filter((item) => {
+                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
+              });
               break;
             case 2:
-              closedData = formatData(result.value.data);
+              closedData = formatData(result.value.data).filter((item) => {
+                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
+              });
               break;
             default:
               break;

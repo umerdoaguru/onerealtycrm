@@ -24,7 +24,7 @@ const CloseTable = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `http://localhost:9000/api/employe-leads/${EmpId}`
       );
       // Filter out leads where deal_status is not "pending"
       const nonPendingLeads = response.data.filter(

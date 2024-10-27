@@ -23,7 +23,7 @@ const EmployeeCloseData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `http://localhost:9000/api/employe-leads/${EmpId}`
       );
       // Filter out leads where deal status is "pending"
       const nonPendingLeads = response.data.filter(
@@ -202,26 +202,16 @@ const EmployeeCloseData = () => {
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
-          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
-          previousClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          previousLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          nextLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          breakClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
-          activeClassName={
-            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
-          }
+          containerClassName="pagination-container"
+          pageClassName="pagination-page"
+          pageLinkClassName="pagination-link"
+          previousClassName="pagination-previous"
+          previousLinkClassName="pagination-link-previous"
+          nextClassName="pagination-next"
+          nextLinkClassName="pagination-link-next"
+          breakClassName="pagination-break"
+          breakLinkClassName="pagination-break-link"
+          activeClassName="pagination-active"
         />
       </div>
     </Wrapper>
@@ -231,5 +221,67 @@ const EmployeeCloseData = () => {
 export default EmployeeCloseData;
 
 const Wrapper = styled.div`
-  // Responsive styling can be added here if needed
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem; // Reduced gap for better spacing
+    margin-top: 1.5rem;
+  }
+
+  .pagination-page {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .pagination-link {
+    padding: 0.5rem 1rem; // Increased padding for better click area
+    font-size: 0.875rem;
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  .pagination-previous,
+  .pagination-next,
+  .pagination-break {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .pagination-link-previous,
+  .pagination-link-next,
+  .pagination-break-link {
+    padding: 0.5rem 1rem; // Increased padding for consistency
+    font-size: 0.875rem;
+    color: #374151;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #f3f4f6; // Light gray on hover
+      transform: translateY(-1px); // Subtle lift effect
+    }
+  }
+
+  .pagination-active {
+    background-color: #1e50ff;
+    color: white;
+    border: 1px solid #374151;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .pagination-active .pagination-link {
+    color: white !important; // Ensure link inside active page is white
+  }
 `;

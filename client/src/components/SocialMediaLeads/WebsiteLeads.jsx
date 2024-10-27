@@ -15,6 +15,7 @@ function WebsiteLeads() {
     assignedTo: "",
     employeeId: "",
     employeephone: "",
+    createdTime:"",
   });
 
   // Pagination state
@@ -34,7 +35,7 @@ function WebsiteLeads() {
   // Fetch employees
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -44,7 +45,7 @@ function WebsiteLeads() {
   // Fetch lead assignments
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads");
       setwebsiteLeadsAssigned(response.data);
     } catch (error) {
       console.error("Error fetching assigned leads:", error);
@@ -88,11 +89,12 @@ function WebsiteLeads() {
     }
   
     try {
-      await axios.post("https://crm.one-realty.in/api/leads", {
+      await axios.post("http://localhost:9000/api/leads", {
         lead_no: selectedLead.leadId,
         assignedTo: currentLead.assignedTo,
         employeeId: currentLead.employeeId,
-        createdTime: selectedLead.date,
+        createdTime:  currentLead.createdTime,
+        actual_date:  selectedLead.date,
         name: selectedLead.fullName,
         phone: selectedLead.phoneNumber,
         leadSource: "One Realty Website",
@@ -103,9 +105,15 @@ function WebsiteLeads() {
       fetchLeadassigned();
       closePopup();
 
-      const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Lead%20No.%20${selectedLead.leadId}%0A2)%20Name:%20${selectedLead.fullName}%0A3)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A4)%20Lead%20Source:%20${`One Realty Website`}%0A5)%20Address:%20${selectedLead.address}%0A6)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
-      // Open WhatsApp link
-      window.open(whatsappLink, "_blank");
+      // Format the createdTime using moment
+const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as 'DD-MM-YYYY'
+
+// Generate the WhatsApp link with the formatted date
+const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${selectedLead.leadId}%0A3)%20Name:%20${selectedLead.fullName}%0A4)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A5)%20Lead%20Source:%20One%20Realty%20Website%0A6)%20Address:%20${selectedLead.address}%0A7)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+
+// Open WhatsApp link
+window.open(whatsappLink, "_blank");
+
     } catch (error) {
       console.error("Error adding lead:", error);
     }
@@ -330,17 +338,29 @@ console.log("Assigned Leads:", websiteleadsAssigned);
                   />
                   
                 </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Date</label>
+                <div className="mb-4">
+              <label className="block text-gray-700">Assign Date</label>
               <input
-                type=""
+                type="date"
                 name="createdTime"
+                value={currentLead.createdTime}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border  rounded`}
+                
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Actual Date</label>
+              <input
+                type="date"
+                name="actual_date"
                 value={selectedLead.date}
                 onChange={handleInputChange}
                 className={`w-full px-3 py-2 border  rounded`}
                 disabled
               />
             </div>
+
 
             <div className="flex justify-end">
               <button

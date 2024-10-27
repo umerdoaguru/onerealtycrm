@@ -95,7 +95,7 @@ const fetchLeads = async (req, res) => {
 // Fetch leads for a specific form ID
 const getLeadsByFormId = (req, res) => {
   const formId = req.params.formId;
-  db.query('SELECT * FROM leadstable WHERE form_id = ?', [formId], (err, results) => {
+  db.query('SELECT * FROM leadstable WHERE form_id = ? ORDER BY created_time DESC', [formId], (err, results) => {
     if (err) {
       console.error('Error fetching leads:', err);
       return res.status(500).json({ error: 'Failed to fetch leads' });

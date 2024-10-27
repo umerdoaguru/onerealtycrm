@@ -44,7 +44,7 @@
 //     const fetchinvoice = async () => {
 //       try {
 //         const response = await axios.get(
-//           `https://crm.one-realty.in/api/company-data`
+//           `http://localhost:9000/api/company-data`
 //         );
 //         setcompanydata(response.data);
 //         console.log(response);
@@ -63,7 +63,7 @@
 //     if (isConfirmed) {
 //       try {
 //         const response = await axios.post(
-//           "https://crm.one-realty.in/api/companydata",
+//           "http://localhost:9000/api/companydata",
 //           {
 //             company_name: CompanyName,
 //           }
@@ -117,7 +117,7 @@
 //         formData.append("digital_sign", companydigitalsign);
 
 //         const response = await axios.post(
-//           "https://crm.one-realty.in/api/upload-company-profile",
+//           "http://localhost:9000/api/upload-company-profile",
 //           formData,
 //           {
 //             headers: {
@@ -424,7 +424,7 @@ function MainQuotationPage() {
     const fetchInvoice = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/company-data`
+          `http://localhost:9000/api/company-data`
         );
         setCompanyData(response.data);
       } catch (error) {
@@ -442,7 +442,7 @@ function MainQuotationPage() {
     if (isConfirmed) {
       try {
         const response = await axios.post(
-          "https://crm.one-realty.in/api/companydata",
+          "http://localhost:9000/api/companydata",
           {
             company_name: CompanyName,
           }
@@ -495,7 +495,7 @@ function MainQuotationPage() {
       formData.append("digital_sign", companyDigitalSign);
 
       const response = await axios.post(
-        "https://crm.one-realty.in/api/upload-company-profile",
+        "http://localhost:9000/api/upload-company-profile",
         formData,
         {
           headers: {
@@ -524,17 +524,6 @@ function MainQuotationPage() {
       <MainHeader />
       <EmployeeeSider />
       <div className="flex flex-col 2xl:ml-44 mt-14 max-w-7xl">
-        <div className="container px-3 ">
-          <div className="flex justify-between">
-            <div className="mx-3 mt-3">
-              <UserLogin />
-            </div>
-            {/* <div className="mt-1 mx-3">
-              <Logout />
-            </div> */}
-          </div>
-        </div>
-
         <h1 className="text-2xl text-center mt-[2rem]">Quotation Management</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
         <div className="container flex flex-wrap justify-around mt-5">

@@ -12,8 +12,25 @@ function Employee_Single_Lead_Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
+  const [visit, setVisit] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [showPopupVisit, setShowPopupVisit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [render, setRender] = useState(false);
+
+  const [visitLead, setVisitLead] = useState({
+    
+    lead_id: "",
+    name: "",
+    employeeId: "",
+    employee_name: "",
+    visit: "",
+    visit_date: "",
+    report: "",
+  });
 
   const [quotationCreated, setQuotationCreated] = useState(false);
+  const [visitCreated, setVisitCreated] = useState(false);
 
   // const leads = [{ /* lead data */ }];
 
@@ -29,47 +46,7 @@ function Employee_Single_Lead_Profile() {
         { value: "completed", label: "Completed" },
       ],
     },
-    {
-      name: "visit_date",
-      label: "Visit Date",
-      type: "date", // Changed to "date" for consistency
-    },
-    {
-      name: "visit",
-      label: "Visit",
-      type: "select",
-      options: [
-        { value: "", label: "Select Lead Status" },
-        { value: "Fresh Visit", label: "Fresh Visit" },
-        { value: "Repeated Visit", label: "Repeated Visit" },
-        // { value: "completed", label: "Completed" },
-      ],
-    },
 
-    // {
-    //   name: "quotation_status",
-    //   label: "Quotation Status",
-    //   type: "select",
-    //   options: [
-    //     { value: "", label: "Select Quotation Status" },
-    //     { value: "pending", label: "Pending" },
-    //     { value: "in progress", label: "In Progress" },
-    //     { value: "approved", label: "Aprroved" },
-    //     { value: "not approved", label: "Not Aprroved" },
-    //   ],
-    // },
-    {
-      name: "invoice_status",
-      label: "Invoice Status",
-      type: "select",
-      options: [
-        { value: "", label: "Select Invoice Status" },
-        { value: "pending", label: "Pending" },
-        { value: "in progress", label: "In Progress" },
-        { value: "approved", label: "Aprroved" },
-        { value: "not approved", label: "Not Aprroved" },
-      ],
-    },
     {
       name: "deal_status",
       label: "Deal Status",
@@ -78,7 +55,7 @@ function Employee_Single_Lead_Profile() {
         { value: "", label: "Select Deal Status" },
         { value: "pending", label: "pending" },
         { value: "close", label: "close" },
-        { value: "not close", label: "not close" },
+        { value: "cancelled", label: "cancelled" },
         { value: "in-progress", label: "in-progress" },
       ],
     },
@@ -104,30 +81,40 @@ function Employee_Single_Lead_Profile() {
         { value: "done", label: "Done" },
       ],
     },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "", label: "Status" },
+        { value: "pending", label: "Pending" },
+        { value: "interested", label: "Interested" },
+        { value: "not-interested", label: "Not-Interested" },
+      ],
+    },
   ];
-
 
   const [currentLead, setCurrentLead] = useState({
     lead_status: "",
     visit_date: " ",
     visit: "",
     quotation_status: "",
-    invoice_status: "",
+    // invoice_status: "",
     deal_status: "",
     reason: "",
+    status: "",
 
     follow_up_status: "",
   });
-  const [showPopup, setShowPopup] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [render, setRender] = useState(false);
 
   useEffect(() => {
     fetchLeads();
+
+    fetchVisit();
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
-  //     const response = await axios.get(https://crm.one-realty.in/api/leads/${id});
+  //     const response = await axios.get(http://localhost:9000/api/leads/${id});
   //     setLeads(response.data);
   //     console.log(response);
   //   } catch (error) {
@@ -137,7 +124,7 @@ function Employee_Single_Lead_Profile() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
       console.log(response.data);
       setLeads(response.data);
 
@@ -157,6 +144,25 @@ function Employee_Single_Lead_Profile() {
         hasCreatedQuotation
       ); // Debugging
       setQuotationCreated(hasCreatedQuotation);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
+
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-visit/${id}`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+      const hasCreatedvisit = response.data.some(
+        (lead) =>
+          (lead.visit && lead.visit.trim().toLowerCase() === "fresh") ||
+          "repeated"
+      );
+      setVisitCreated(hasCreatedvisit);
     } catch (error) {
       console.error("Error fetching quotations:", error);
     }
@@ -184,6 +190,13 @@ function Employee_Single_Lead_Profile() {
       [name]: value,
     }));
   };
+  const handleInputChangeVisit = (e) => {
+    const { name, value } = e.target;
+    setVisitLead((prevLead) => ({
+      ...prevLead,
+      [name]: value,
+    }));
+  };
 
   const handleUpdate = (lead) => {
     setIsEditing(true);
@@ -191,17 +204,33 @@ function Employee_Single_Lead_Profile() {
     setShowPopup(true);
   };
 
+  const handleCreateClick = () => {
+    setVisitLead({
+      lead_id: "",
+      name: "",
+      employeeId: "",
+      employee_name: "",
+      visit: "",
+      visit_date: "",
+      report: "",
+    });
+    setShowPopupVisit(true);
+  };
+  const handleViewVisit = () => {
+    navigate(`/view_visit/${leads[0].lead_id}`);
+  };
+
   const saveChanges = async () => {
     console.log(currentLead);
-    if(currentLead.deal_status !== leads[0].deal_status){ 
-      if(currentLead.d_closeDate === "pending") {
+    if (currentLead.deal_status !== leads[0].deal_status) {
+      if (currentLead.d_closeDate === "pending") {
         alert("Please update the deal close date as well");
         return;
       }
     }
 
-    if(currentLead.visit !== leads[0].visit){ 
-      if(currentLead.visit_date === "pending") {
+    if (currentLead.visit !== leads[0].visit) {
+      if (currentLead.visit_date === "pending") {
         alert("Please update the visit date as well");
         return;
       }
@@ -209,7 +238,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
-        `https://crm.one-realty.in/api/updateLeadStatus/${currentLead.lead_id}`,
+        `http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`,
         currentLead
       );
 
@@ -228,10 +257,63 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Failed to update the lead status.");
     }
   };
+  const saveVisit = async () => {
+    // Validate required fields
+    if (!visitLead.visit) {
+      cogoToast.error("Please select a visit type.");
+      return;
+    }
+    if (!visitLead.visit_date) {
+      cogoToast.error("Please select a visit date.");
+      return;
+    }
+    if (!visitLead.report || visitLead.report.trim().length <5) {
+      cogoToast.error("Report is required and must be at least 5 characters.");
+      return;
+    }
+
+    console.log(visitLead);
+
+    try {
+      // Send updated data to the backend using Axios
+      const response = await axios.post(
+        `http://localhost:9000/api/employe-visit`,
+        {
+          lead_id: leads[0].lead_id,
+          name:leads[0].name,
+          employeeId: leads[0].employeeId,
+          employee_name: leads[0].assignedTo,
+          visit: visitLead.visit,
+          visit_date: visitLead.visit_date,
+          report: visitLead.report,
+        }
+      );
+
+      if (response.status === 201) {
+        console.log("Updated successfully:", response.data);
+        cogoToast.success("Visit created successfully");
+
+        closePopupVisit(); // Close the popup on success
+        fetchVisit();
+      } else {
+        console.error("Error updating:", response.data);
+        cogoToast.error("Failed to update the lead status.");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      cogoToast.error("Failed to update the lead status.");
+    }
+  };
 
   const closePopup = () => {
     setShowPopup(false);
   };
+  const closePopupVisit = () => {
+    setShowPopupVisit(false);
+  };
+  
+  const totalVisit = visit.length;
+console.log(totalVisit);
 
   return (
     <>
@@ -309,26 +391,51 @@ function Employee_Single_Lead_Profile() {
           </div>
 
           <div className=" flex justify-between">
-            <button
-              onClick={() => handleQuotation(leads[0])}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Quotation Creation
-            </button>
-
-            {/* Conditionally render the View Quotation button */}
-            {quotationCreated ? (
+            <div className="">
               <button
-                onClick={() => handleViewQuotation(leads[0])}
-                className="bg-green-500 text-white px-4 py-2 rounded"
+                onClick={() => handleQuotation(leads[0])}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
               >
-                View Quotation
+                Quotation Creation
               </button>
-            ) : (
-              <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
-                Quotation not yet created
-              </p>
-            )}
+              <button
+                className="bg-orange-500 text-white px-4 py-2 mx-2 rounded"
+                onClick={handleCreateClick}
+              >
+                Visit Creation
+              </button>
+            </div>
+            <div className="">
+              {/* Conditionally render the View Quotation button */}
+              <div className="flex">
+                {quotationCreated ? (
+                  <button
+                    onClick={() => handleViewQuotation(leads[0])}
+                    className="bg-blue-500 text-white px-4 py-2 mx-2 rounded"
+                  >
+                    View Quotation
+                  </button>
+                ) : (
+                  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
+                    Quotation not yet created
+                  </p>
+                )}
+
+                {/* Conditionally render the View Quotation button */}
+                {visitCreated ? (
+                  <button
+                    onClick={handleViewVisit}
+                    className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
+                  >
+                    View Visit
+                  </button>
+                ) : (
+                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                    Visit not yet created
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="overflow-x-auto mt-5">
@@ -339,21 +446,17 @@ function Employee_Single_Lead_Profile() {
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Visit Date
-                  </th>
+                 
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Visit
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Quotation
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Invoice
-                  </th>
+                
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
-                    Invoice Status
+                    Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
@@ -393,21 +496,19 @@ function Employee_Single_Lead_Profile() {
                       {lead.assignedTo}
                     </td>
 
+                   
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
-                      {lead.visit_date}
-                    </td>
-                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
-                      {lead.visit}
+                      {totalVisit}
                     </td>
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
                       {lead.quotation}
                     </td>
 
-                    <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
+                    {/* <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
                       {lead.invoice}
-                    </td>
+                    </td> */}
 
-                    {lead.invoice_status === "pending" && (
+                    {/* {lead.invoice_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
                         {lead.invoice_status}
                       </td>
@@ -427,7 +528,11 @@ function Employee_Single_Lead_Profile() {
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
                         {lead.invoice_status}
                       </td>
-                    )}
+                    )} */}
+
+                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
+                      {lead.status}
+                    </td>
 
                     {lead.deal_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
@@ -549,6 +654,87 @@ function Employee_Single_Lead_Profile() {
                   <button
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
                     onClick={closePopup}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showPopupVisit && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+                <h2 className="text-xl mb-4">{"Add Site Visit"}</h2>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Lead Number</label>
+                  <input
+                    type="number"
+                    name="lead_no"
+                    value={leads[0].lead_no}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={leads[0].name}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+            
+                <div className="mb-4">
+                  <label className="block text-gray-700">Visit</label>
+                  <select
+                    name="visit"
+                    value={visitLead.visit}
+                    onChange={handleInputChangeVisit}
+                    className="border rounded-2xl p-2 w-full"
+                  >
+                    <option value="">Select Visit Type</option>
+                    <option value="fresh">Fresh</option>
+                    <option value="repeated">Repeated</option>
+                    <option value="self">Self</option>
+                    <option value="associative">Associative</option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700">Visit Date</label>
+                  <input
+                    type="date"
+                    name="visit_date"
+                    value={visitLead.visit_date}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700">Report</label>
+                  <input
+                    type="text"
+                    name="report"
+                    value={visitLead.report}
+                    onChange={handleInputChangeVisit}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+                    onClick={saveVisit}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    onClick={closePopupVisit}
                   >
                     Cancel
                   </button>

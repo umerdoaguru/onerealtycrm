@@ -61,7 +61,7 @@ const EmployeeCloseGraph = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `http://localhost:9000/api/employe-leads/${EmpId}`
       );
       const data = response.data;
 
@@ -92,7 +92,8 @@ const EmployeeCloseGraph = () => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="day" />
-            <YAxis />
+            <YAxis   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
             <Tooltip />
             <Legend />
             <Line

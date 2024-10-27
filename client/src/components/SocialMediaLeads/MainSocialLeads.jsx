@@ -6,6 +6,7 @@ import WebsiteLeads from './WebsiteLeads';
 import { GiFiles } from 'react-icons/gi';
 import { SiMoneygram } from 'react-icons/si';
 import Accrs from './AccrsLeads';
+import LeadsTable from './FacebookAPI/LeadsTable';
 
 
 
@@ -85,7 +86,8 @@ function MainSocialLeads() {
 
         {/* Conditionally render the selected component */}
         <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
-          {selectedComponent === 'FacebookData' && <FacebookLeads />}
+          {/* {selectedComponent === 'FacebookData' && <FacebookLeads />} */}
+          {selectedComponent === 'FacebookData' && <LeadsTable />}
           {selectedComponent === 'WebsiteData' && < WebsiteLeads/>}
           {selectedComponent === '99AcresData' && < Accrs/>}
        

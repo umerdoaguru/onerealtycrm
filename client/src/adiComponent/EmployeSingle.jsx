@@ -19,7 +19,6 @@ const EmployeeSingle = () => {
     email: "",
     position: "",
     phone: "",
-    salary: "", // Added salary
     signature: null,
     photo: null,
   });
@@ -31,7 +30,7 @@ const EmployeeSingle = () => {
   // Fetch employee data
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/getEmployeeById/${employeeId}`);
+      const response = await axios.get(`http://localhost:9000/api/getEmployeeById/${employeeId}`);
       if (response.data.success) {
         setEmployee(response.data.employee);
         setNewEmployee({
@@ -39,7 +38,6 @@ const EmployeeSingle = () => {
           email: response.data.employee.email || "",
           position: response.data.employee.position || "",
           phone: response.data.employee.phone || "",
-          salary: response.data.employee.salary || "", // Set salary from API
           signature: null,
           photo: null,
         });
@@ -81,11 +79,6 @@ const EmployeeSingle = () => {
     else if (await isPhoneNumberTaken(newEmployee.phone))
       errors.phone = "Phone number is already taken";
 
-    // Validate Salary
-    if (!newEmployee.salary) errors.salary = "Salary is required";
-    else if (isNaN(newEmployee.salary) || newEmployee.salary <= 0)
-      errors.salary = "Salary must be a positive number";
-
     // Validate Files
     if (
       newEmployee.photo &&
@@ -104,7 +97,7 @@ const EmployeeSingle = () => {
 
   const isEmailTaken = async (email) => {
     try {
-      const response = await axios.get('https://crm.one-realty.in/api/checkEmail', {
+      const response = await axios.get('http://localhost:9000/api/checkEmail', {
         params: { email },
       });
       return response.data.exists;
@@ -116,7 +109,7 @@ const EmployeeSingle = () => {
 
   const isPhoneNumberTaken = async (phone) => {
     try {
-      const response = await axios.get('https://crm.one-realty.in/api/checkPhoneNumber', {
+      const response = await axios.get('http://localhost:9000/api/checkPhoneNumber', {
         params: { phone },
       });
       return response.data.exists;
@@ -160,7 +153,6 @@ const EmployeeSingle = () => {
       formData.append("email", newEmployee.email);
       formData.append("position", newEmployee.position);
       formData.append("phone", newEmployee.phone);
-      formData.append("salary", newEmployee.salary); // Append salary
 
       if (newEmployee.signature) {
         formData.append("signature", newEmployee.signature);
@@ -172,11 +164,11 @@ const EmployeeSingle = () => {
 
       let response;
       if (editingIndex !== null) {
-        response = await axios.put(`https://crm.one-realty.in/api/updateSingleEmployee/${employee.employeeId}`, formData, {
+        response = await axios.put(`http://localhost:9000/api/updateSingleEmployee/${employee.employeeId}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        response = await axios.post('https://crm.one-realty.in/api/addEmployee', formData, {
+        response = await axios.post('http://localhost:9000/api/addEmployee', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -188,7 +180,6 @@ const EmployeeSingle = () => {
           email: "",
           position: "",
           phone: "",
-          salary: "", // Reset salary
           signature: null,
           photo: null,
         });
@@ -210,7 +201,6 @@ const EmployeeSingle = () => {
         email: employee.email || "",
         position: employee.position || "",
         phone: employee.phone || "",
-        salary: employee.salary || "", // Set salary for editing
         signature: null,
         photo: null,
       });
@@ -226,7 +216,7 @@ const EmployeeSingle = () => {
       );
       if (isConfirmed) {
         try {
-          await axios.delete(`https://crm.one-realty.in/api/deleteEmployee/${employee.employeeId}`);
+          await axios.delete(`http://localhost:9000/api/deleteEmployee/${employee.employeeId}`);
           navigate('/employee-management');
         } catch (error) {
           setError("Error deleting employee");
@@ -243,7 +233,7 @@ const EmployeeSingle = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${employeeId}`);
+        `http://localhost:9000/api/employe-leads/${employeeId}`);
       const data = response.data;
       setLeads(data);
     } catch (error) {
@@ -270,7 +260,7 @@ const EmployeeSingle = () => {
             Go Back
           </button>
           <main className="flex-1 p-4 lg:p-8">
-            <div className="flex items-center justify-between mb-8">
+            {/* <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-gray-800">
                 Employee Profile
               </h2>
@@ -280,22 +270,22 @@ const EmployeeSingle = () => {
               >
                 <BsPencilSquare className="mr-2" /> Edit Profile
               </button>
-            </div>
+            </div> */}
 
             {error && <p className="text-red-600">{error}</p>}
 
             {employee ? (
               <div className="p-6 bg-white rounded-lg shadow-md">
                 <div className="flex items-center mb-6">
-                  {employee.photo ? (
+                  {/* {employee.photo ? (
                     <img
-                      src={`https://crm.one-realty.in${employee.photo}`}
+                      src={`http://localhost:9000${employee.photo}`}
                       alt="Profile"
                       className="w-24 h-24 border-2 border-gray-300 rounded-full"
                     />
                   ) : (
                     <div className="w-24 h-24 bg-gray-300 border-2 border-gray-300 rounded-full"></div>
-                  )}
+                  )} */}
                   <div className="ml-6">
                     <h3 className="text-xl font-semibold text-gray-800">
                       {employee.name || "No Name Available"}
@@ -309,12 +299,6 @@ const EmployeeSingle = () => {
                     <p className="text-gray-600">
                       {employee.phone || "No Phone Available"}
                     </p>
-                    <p className="text-gray-600">
-                      {employee.salary
-                        ? `₹${employee.salary}`
-                        : "No Salary Available"}
-                    </p>{" "}
-                    {/* Display salary */}
                   </div>
                 </div>
 
@@ -324,7 +308,7 @@ const EmployeeSingle = () => {
                       Signature
                     </h4>
                     <img
-                      src={`https://crm.one-realty.in${employee.signature}`}
+                      src={`http://localhost:9000${employee.signature}`}
                       alt="Signature"
                       className="w-32 h-16 border-t border-gray-300"
                     />
@@ -485,25 +469,6 @@ const EmployeeSingle = () => {
                     {validationErrors.phone}
                   </p>
                 )}
-
-                <input
-                  type="text"
-                  name="salary"
-                  value={newEmployee.salary}
-                  onChange={handleInputChange}
-                  placeholder="Salary"
-                  className={`p-2 border rounded-lg ${
-                    validationErrors.salary
-                      ? "border-red-500"
-                      : "border-gray-300"
-                  }`}
-                />
-                {validationErrors.salary && (
-                  <p className="text-sm text-red-500">
-                    {validationErrors.salary}
-                  </p>
-                )}
-
                 <input
                   type="file"
                   accept="image/jpeg, image/png"

@@ -26,7 +26,7 @@ const EmployeeVisitData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `http://localhost:9000/api/employebyid-visit/${EmpId}`
       );
       // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(
@@ -44,8 +44,8 @@ const EmployeeVisitData = () => {
   useEffect(() => {
     if (startDate && endDate) {
       const filtered = leads.filter((lead) => {
-        const createdTime = moment(lead.createdTime);
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
+        const visitDate = moment(lead.visit_date, "YYYY-MM-DD");
+        return visitDate.isBetween(startDate, endDate, undefined, "[]");
       });
       setFilteredLeads(filtered);
     } else {
@@ -109,35 +109,30 @@ const EmployeeVisitData = () => {
         <div className="overflow-x-auto mt-4">
           <table className="min-w-full bg-white border">
             <thead>
-              <tr>
-                <th className="px-6 py-3 border-b-2 border-gray-300">S.no</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Lead Number
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Assigned To
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Lead Name
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Subject
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Lead Source
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Visit Date
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  FollowUp Status
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Deal Status
-                </th>
-              </tr>
+            <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      S.no
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Lead Id 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Assigned To
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Report
+                    </th>
+                
+                  </tr>
             </thead>
             <tbody>
   {currentLeads.length === 0 ? (
@@ -147,44 +142,32 @@ const EmployeeVisitData = () => {
       </td>
     </tr>
   ) : (
-    currentLeads.map((lead, index) => (
+    currentLeads.map((visit, index) => (
       <tr
-        key={lead.id}
+        key={visit.id}
         className={index % 2 === 0 ? "bg-gray-100" : ""}
       >
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {currentPage * leadsPerPage + index + 1}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.lead_no}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.assignedTo}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.name}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.phone}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.leadSource}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit_date}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.follow_up_status}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.deal_status}
-        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.lead_id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.employee_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit_date}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.report}
+                    </td>
       </tr>
     ))
   )}
@@ -201,26 +184,16 @@ const EmployeeVisitData = () => {
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
-          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
-          previousClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          previousLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          nextLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          breakClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
-          activeClassName={
-            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
-          }
+          containerClassName="pagination-container"
+          pageClassName="pagination-page"
+          pageLinkClassName="pagination-link"
+          previousClassName="pagination-previous"
+          previousLinkClassName="pagination-link-previous"
+          nextClassName="pagination-next"
+          nextLinkClassName="pagination-link-next"
+          breakClassName="pagination-break"
+          breakLinkClassName="pagination-break-link"
+          activeClassName="pagination-active"
         />
       </div>
     </Wrapper>
@@ -230,5 +203,68 @@ const EmployeeVisitData = () => {
 export default EmployeeVisitData;
 
 const Wrapper = styled.div`
-  // Add responsive styles if necessary
+  
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem; // Reduced gap for better spacing
+    margin-top: 1.5rem;
+  }
+
+  .pagination-page {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .pagination-link {
+    padding: 0.5rem 1rem; // Increased padding for better click area
+    font-size: 0.875rem;
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  .pagination-previous,
+  .pagination-next,
+  .pagination-break {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .pagination-link-previous,
+  .pagination-link-next,
+  .pagination-break-link {
+    padding: 0.5rem 1rem; // Increased padding for consistency
+    font-size: 0.875rem;
+    color: #374151;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #f3f4f6; // Light gray on hover
+      transform: translateY(-1px); // Subtle lift effect
+    }
+  }
+
+  .pagination-active {
+    background-color: #1e50ff;
+    color: white;
+    border: 1px solid #374151;
+    border-radius: 0.375rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .pagination-active .pagination-link {
+    color: white !important; // Ensure link inside active page is white
+  }
 `;

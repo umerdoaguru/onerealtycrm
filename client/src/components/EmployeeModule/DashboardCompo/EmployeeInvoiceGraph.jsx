@@ -23,7 +23,7 @@ const EmployeeInvoiceGraph = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/get-employee-invoice/${EmpId}`
+          `http://localhost:9000/api/get-employee-invoice/${EmpId}`
         );
         const invoiceList = response.data;
 
@@ -104,8 +104,10 @@ const EmployeeInvoiceGraph = () => {
                   // fontWeight: "bold",
                 }}
               />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
+              <YAxis yAxisId="left"   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
+              <YAxis yAxisId="right" orientation="right"   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
               <Tooltip />
               <Legend />
               <Bar

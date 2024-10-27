@@ -33,6 +33,8 @@ const {
   getAllQuotation,
   updateQuotationStatus,
   socialmediaLead,
+  getLeadsVisit,
+  getLeadsByIdVisit,
 } = require("../controllers/UserController");
 const upload = require("../controllers/fileUploadController");
 const upload1 = require("../config/multerConfig"); // Import multer configuration
@@ -59,6 +61,7 @@ const {
   getServicelist,
   deleteServicename,
   updateServiceList,
+  getServiceById,
 } = require("../controllers/ServicesList");
 
 const {
@@ -148,6 +151,7 @@ router.post("/company-name-data", getcompany_name_data); //fcf
 
 router.post("/create-servicelist", createServiceList);
 router.get("/servicelist", getServicelist);
+router.get("/servicelist/:serviceId", getServiceById);
 router.delete("/servicelist/:serviceId", deleteServicename);
 router.put("/servicelist", updateServiceList);
 
@@ -188,6 +192,8 @@ router.post("/leads", createLead);
 // router.post('/facebook-leads',  socialmediaLead);
 router.get("/leads/:id", getleadbyid);
 router.get("/leads", getLeads);
+router.get("/leads-visits/:employeeId", getLeadsByIdVisit);
+router.get("/leads-all-visits", getLeadsVisit);
 router.put("/leads/:leadId", updateLead);
 router.delete("/leads/:leadId", deleteLead);
 

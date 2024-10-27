@@ -17,7 +17,7 @@ const EmployeeLeadsGraph = () => {
   // useEffect(() => {
   //   const fetchLeadsData = async () => {
   //     try {
-  //       const response = await axios.get(`https://crm.one-realty.in/api/employe-leads/${EmpId}`);
+  //       const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
   //       const allLeads = response.data;
 
   //       // Get today's date and the date 28 days ago (to include today and 27 previous days)
@@ -81,7 +81,7 @@ const EmployeeLeadsGraph = () => {
     const fetchLeadsData = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+          `http://localhost:9000/api/employe-leads/${EmpId}`
         );
         const allLeads = response.data;
 
@@ -152,11 +152,12 @@ const EmployeeLeadsGraph = () => {
                 angle={0}
                 textAnchor="middle"
               />
-              <YAxis tick={{ fill: "gray" }} />
+              <YAxis tick={{ fill: "gray" }}   allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}/>
               <Tooltip />
               <Bar
                 dataKey="Leads"
-                name="Leads"
+                name="Visit"
                 fill="#EA6A47"
                 radius={[10, 10, 0, 0]}
                 barSize={15}

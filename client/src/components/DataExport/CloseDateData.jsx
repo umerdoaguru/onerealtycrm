@@ -14,16 +14,20 @@ const CloseData = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 10; // Number of leads to display per page
   const EmpId = useSelector((state) => state.auth.user.id);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState("");
+
 
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
+    fetchEmployees();
   }, []);
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/leads`
+        `http://localhost:9000/api/leads`
       );
       // Filter out leads where deal status is "pending"
       const nonPendingLeads = response.data.filter(
@@ -37,18 +41,35 @@ const CloseData = () => {
     }
   };
 
+  const fetchEmployees = async () => {
+    try {
+      const response = await axios.get("http://localhost:9000/api/employee");
+      setEmployees(response.data);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
+  };
+
+
   // Automatically apply date filter when start or end date changes
   useEffect(() => {
+    let filtered = leads;
+
     if (startDate && endDate) {
-      const filtered = leads.filter((lead) => {
+      filtered = filtered.filter((lead) => {
         const closeDate = moment(lead.d_closeDate, "YYYY-MM-DD");
         return closeDate.isBetween(startDate, endDate, undefined, "[]");
       });
-      setFilteredLeads(filtered);
-    } else {
-      setFilteredLeads(leads);
     }
-  }, [startDate, endDate, leads]);
+
+    
+      // Filter by selected employee
+    if (selectedEmployee) {
+      filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
+    }
+
+    setFilteredLeads(filtered);
+  }, [startDate, endDate,selectedEmployee, leads]);
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
@@ -93,6 +114,20 @@ const CloseData = () => {
             onChange={(e) => setEndDate(e.target.value)}
             className="border p-2"
           />
+            <div className="">
+            <select
+              value={selectedEmployee}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              className="border p-2"
+            >
+              <option value="">Select Employee</option>
+              {employees.map((employee) => (
+                <option key={employee.id} value={employee.name}>
+                  {employee.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="respo mx-2 ">
             <button
               onClick={downloadExcel}
@@ -194,35 +229,27 @@ const CloseData = () => {
         </div>
 
         {/* Pagination */}
+        <div className="mt-2 mb-2">
         <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          breakLabel={"..."}
+          previousLabel="Previous"
+          nextLabel="Next"
+          breakLabel="..."
           pageCount={pageCount}
           marginPagesDisplayed={2}
+          forcePage={currentPage}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
-          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
-          previousClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          previousLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          nextLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          breakClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
-          activeClassName={
-            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
-          }
-        />
+          containerClassName="pagination-container"
+          pageClassName="pagination-page"
+          pageLinkClassName="pagination-link"
+          previousClassName="pagination-previous"
+          previousLinkClassName="pagination-link-previous"
+          nextClassName="pagination-next"
+          nextLinkClassName="pagination-link-next"
+          breakClassName="pagination-break"
+          breakLinkClassName="pagination-break-link"
+          activeClassName="pagination-active"
+        /></div>
       </div>
     </Wrapper>
   );
@@ -231,5 +258,99 @@ const CloseData = () => {
 export default CloseData;
 
 const Wrapper = styled.div`
-  // Responsive styling can be added here if needed
+   
+  .active {
+  background-color: #1e50ff;
+}
+ /* Container class */
+ .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  /* Page item */
+  .pagination-page {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Page link */
+  .pagination-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #3b82f6;
+    text-decoration: none;
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  /* Previous button */
+  .pagination-previous {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  } 
+
+  .pagination-link-previous {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Next button */
+  .pagination-next {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-link-next {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Break item */
+  .pagination-break {
+    background-color: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-break-link {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  /* Active page */
+  .pagination-active {
+    background-color: #1e50ff;
+    color: white;
+    border: 1px solid #374151;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .pagination-active a {
+    color: white !important;
+  }
 `;

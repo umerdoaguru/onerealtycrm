@@ -87,6 +87,19 @@ const getServicelist = async (req,res)=>{
 
 
 }
+const getServiceById = async(req,res)=>{
+  const {serviceId} = req.params;
+  const sql = `SELECT * FROM services WHERE service_id = ? `
+
+  db.query(sql, [serviceId], (err,result)=>{
+    if(err){
+      console.error('Error feching services:',err);
+      res.status(500).json({error:"Internal Server Error"})
+    } else{
+    res.status(200).json(result);
+    }
+   })
+}
 
 const deleteServicename = async(req,res)=>{
   const {serviceId} = req.params;
@@ -134,5 +147,5 @@ const updateServiceList = async (req, res) => {
 
 
 
-module.exports = { createServiceList,getServicelist,deleteServicename,updateServiceList};
+module.exports = { createServiceList,getServicelist,deleteServicename,updateServiceList, getServiceById};
 

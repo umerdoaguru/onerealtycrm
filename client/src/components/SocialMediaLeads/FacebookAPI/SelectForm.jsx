@@ -4,6 +4,7 @@ import axios from 'axios';
 const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
   const [forms, setForms] = useState([]);
   const [selectedFormId, setSelectedFormId] = useState('');
+  const [selectedFormName, setSelectedFormName] = useState('');
 
   // Fetch forms from backend
   const fetchForms = async () => {
@@ -18,10 +19,21 @@ const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
 
   // Handle form selection change
   const handleFormChange = (e) => {
+    // const formId = e.target.value;
+    // setMe(formId);
+    // setSelectedFormId(formId);
+    // onFormSelect(formId); //pass form id to parents me kiya
     const formId = e.target.value;
+<<<<<<< HEAD
+=======
+    const formName = forms.find((form) => form.form_id === formId)?.form_name; // Get the form name based on the selected form ID
+
+>>>>>>> main
     setMe(formId);
     setSelectedFormId(formId);
-    onFormSelect(formId); //pass form id to parents me kiya
+    setSelectedFormName(formName);
+    onFormSelect(formId, formName); // Pass both form ID and form name to parent
+
   };
 
   // Handle fetch leads button click
@@ -48,7 +60,7 @@ const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
     }
   };
 
-  fetchForms();
+  // fetchForms();
   useEffect(() => {
     fetchForms();
   }, []);

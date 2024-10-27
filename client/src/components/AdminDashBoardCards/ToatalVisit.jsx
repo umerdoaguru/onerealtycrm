@@ -5,11 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import MainHeader from "../MainHeader";
 import Sider from "../Sider";
+import Pagination from "../../adiComponent/comp/pagination";
 
 
 const TotalVisit = () => {
   const [leads, setLeads] = useState([]);
-  const navigate = useNavigate();
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
+  const itemsPerPage = 10; // Set how many items you want per page
+ 
 
   useEffect(() => {
     fetchLeads();
@@ -17,127 +23,126 @@ const TotalVisit = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads`);
-      console.log(response);
-      setLeads(response.data);
+      const response = await axios.get(`http://localhost:9000/api/employe-all-visit`);
+      const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
+
+      setLeads(nonPendingLeads);
+      setFilteredLeads(nonPendingLeads); // Initial data set for filtering
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
   };
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      const filtered = leads.filter((lead) => {
+        const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
+        return createdTime.isBetween(startDate, endDate, undefined, "[]");
+      });
+      setFilteredLeads(filtered);
+    } else {
+      setFilteredLeads(leads);
+    }
+  }, [startDate, endDate, leads]);
+
+
+  // Calculate page data for pagination
+  const pageCount = Math.ceil(filteredLeads.length / itemsPerPage);
+  const displayedLeads = filteredLeads.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <>
       <MainHeader />
       <Sider />
-      <div className="container">
-        <div className="mt-[5rem]">
-          <button
-            onClick={() => navigate(-1)}
-            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
-          >
-            Back
-          </button>
-        </div>
-
-        <h1 className="text-2xl text-center ">Total Visits </h1>
-        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-      </div>
-
-      <div className="overflow-x-auto mt-4">
-        <table className="container bg-white border">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                S.no
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Lead Number
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Phone
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Lead Source
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Assigned To
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Subject
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Lead Status
-              </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Visit
+      <div className="flex flex-col 2xl:ml-44 ">
+        <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
+          <center className="text-2xl text-center mt-8 font-medium">
+            Total Visits
+          </center>
+          <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
+          <div className="overflow-x-auto mt-4">
+            <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+              <thead className="bg-gray-100">
+              <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      S.no
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Lead Id 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Assigned To
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Visit Date
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      FollowUp Status
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Report
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Deal Status
-                    </th>
-            </tr>
-          </thead>
-          <tbody>
-            {leads
-              .filter((lead) => lead.visit !== "pending")
-              .map((lead, index) => (
-                <tr
-                  key={lead.lead_id}
-                  className={index % 2 === 0 ? "bg-gray-100" : ""}
-                >
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {index + 1}
-                  </td>
-                  <Link to={`/lead-single-data/${lead.lead_id}`}>
-                    <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-                      {lead.lead_no}
+                
+                  </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {displayedLeads.length > 0 ? (
+                  displayedLeads.map((visit, index) => (
+                    <tr key={visit.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {index + 1}
                     </td>
-                  </Link>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.name}
-                  </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.phone}
-                  </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.leadSource}
-                  </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.assignedTo}
-                  </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.subject}
-                  </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    {lead.lead_status}
-                  </td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.visit}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.visit_date}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.follow_up_status}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.deal_status}
-                        </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.lead_id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.employee_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit_date}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.report}
+                    </td>
+                   
+                  </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={11} className="py-4 text-center">
+                      No data found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="text-center">
+            
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filteredLeads.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </div>
-      
+      </div>
     </>
   );
 };
+
 
 export default TotalVisit;

@@ -11,7 +11,7 @@ const UpdateServicesFormBylead = ({
   const fetchServices = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/quotation/${quotationId}`
+        `http://localhost:9000/api/quotation/${quotationId}`
       );
       setServices(response.data);
     } catch (error) {
@@ -23,7 +23,7 @@ const UpdateServicesFormBylead = ({
     e.preventDefault();
     try {
       const response = await axios.put(
-        `https://crm.one-realty.in/api/quotation/${quotationId}`,
+        `http://localhost:9000/api/quotation/${quotationId}`,
         {
           services,
         }
@@ -32,6 +32,7 @@ const UpdateServicesFormBylead = ({
       if (response.data.success) {
         console.log("Services updated successfully");
         onUpdateSuccess();
+    
       }
     } catch (error) {
       console.error("Error updating services:", error);
@@ -74,6 +75,7 @@ const UpdateServicesFormBylead = ({
 
   const handleUpdateClose = () => {
     onUpdateSuccess();
+    fetchServices();
   };
 
   return (

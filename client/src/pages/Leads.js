@@ -24,6 +24,7 @@ function Leads() {
     leadSource: "",
     subject: "",
     address: "",
+    actual_date: "",
   });
   const [showPopup, setShowPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -34,17 +35,25 @@ function Leads() {
   const [endDate, setEndDate] = useState("");
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
-  const [leadsPerPage] = useState(10);
+  const leadsPerPage = 10; // Default leads per page
+  const [leadSourceFilter, setLeadSourceFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [visitFilter, setVisitFilter] = useState("");
+  const [dealFilter, setDealFilter] = useState("");
+  const [employeeFilter, setEmployeeFilter] = useState("");
+  const [visit, setVisit] = useState([]);
+
 
   // Fetch leads and employees from the API
   useEffect(() => {
     fetchLeads();
     fetchEmployees();
+    fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads-all-visits");
       setLeads(response.data);
       console.log(leads);
     } catch (error) {
@@ -54,10 +63,23 @@ function Leads() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
+    }
+  };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-all-visit`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
     }
   };
 
@@ -113,6 +135,12 @@ function Leads() {
     const { name, value } = e.target;
     setCurrentLead((prevLead) => {
       const updatedLead = { ...prevLead, [name]: value };
+
+        // If createdTime changes, update actual_date accordingly
+    if (name === "createdTime") {
+      updatedLead.actual_date = value; // Copy createdTime to actual_date
+    }
+
   
       // If assignedTo changes, update employeeId and employeephone accordingly
       if (name === "assignedTo") {
@@ -147,6 +175,7 @@ function Leads() {
       createdTime: "", // Clear out createdTime for new lead
       subject: "",
       address: "",
+      actual_date: "",
     });
     setShowPopup(true);
   };
@@ -156,6 +185,8 @@ function Leads() {
     setCurrentLead({
       ...lead,
       createdTime: moment(lead.createdTime).format("YYYY-MM-DD"), // Format the createdTime
+      actual_date: moment(lead.createdTime).format("YYYY-MM-DD"), // Format the createdTime
+      
     });
     setShowPopup(true);
   };
@@ -165,15 +196,22 @@ function Leads() {
       try {
         if (isEditing) {
           await axios.put(
-            `https://crm.one-realty.in/api/leads/${currentLead.lead_id}`,
+            `http://localhost:9000/api/leads/${currentLead.lead_id}`,
             currentLead
           );
         } else {
-          await axios.post("https://crm.one-realty.in/api/leads", currentLead);
-          const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Lead%20No.%20${currentLead.lead_no}%0A2)%20Name:%20${currentLead.name}%0A3)%20Phone%20Number:%20${currentLead.phone}%0A4)%20Lead%20Source:%20${currentLead.leadSource}%0A5)%20Address:%20${currentLead.address}%0A6)%20Subject:%20${currentLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+          await axios.post("http://localhost:9000/api/leads", currentLead);
 
-          // Open WhatsApp link
-          window.open(whatsappLink, "_blank");
+        // Format the createdTime using moment
+const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as per your requirement
+
+// Generate the WhatsApp link with the formatted date
+const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Assign%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${currentLead.lead_no}%0A3)%20Name:%20${currentLead.name}%0A4)%20Phone%20Number:%20${currentLead.phone}%0A5)%20Lead%20Source:%20Facebook%20Campaign%0A6)%20Address:%20${currentLead.address}%0A7)%20Subject:%20${currentLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+
+// Open WhatsApp link
+window.open(whatsappLink, "_blank");
+
+
         }
   
         fetchLeads(); // Refresh the list
@@ -195,24 +233,30 @@ function Leads() {
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`https://crm.one-realty.in/api/leads/${id}`);
+        await axios.delete(`http://localhost:9000/api/leads/${id}`);
         fetchLeads(); // Refresh the list after deletion
       } catch (error) {
         console.error("Error deleting lead:", error);
       }
     }
   };
+
+  const handleSearch = (value) =>{
+    if(value === ' '){
+      return;
+    }
+    setSearchTerm(value);
+  }
   useEffect(() => {
     let filtered = leads;
-
+    console.log(filtered);
     // Filter by search term
-    if (searchTerm) {
+    if (searchTerm) { 
       filtered = filtered.filter(
         (lead) =>
           lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())||
-          lead.address.toLowerCase().includes(searchTerm.toLowerCase())
+          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -224,18 +268,54 @@ function Leads() {
       });
     }
 
+    // Filter by lead source
+    if (leadSourceFilter) {
+      filtered = filtered.filter(
+        (lead) => lead.leadSource === leadSourceFilter
+      );
+    }
+    // Filter by status
+    if (statusFilter) {
+      filtered = filtered.filter((lead) => lead.status === statusFilter);
+    }
+
+    // Filter by visit
+    if (visitFilter) {
+      filtered = filtered.filter((visit) => visit.visit === visitFilter);
+    }
+
+    // Filter by Deak
+    if (dealFilter) {
+      filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
+    }
+    if (employeeFilter) {
+      filtered = filtered.filter((employee) => employee.assignedTo === employeeFilter);
+    }
+
     setFilteredLeads(filtered);
-  }, [searchTerm, startDate, endDate, leads]);
+    setCurrentPage(0); // Reset to first page on filter change
+  }, [
+    searchTerm,
+    startDate,
+    endDate,
+    leads,
+    leadSourceFilter,
+    statusFilter,
+    visitFilter,
+    dealFilter,
+    employeeFilter,
+  ]);
 
   const closePopup = () => {
     setShowPopup(false);
     setErrors({});
   };
 
-  // Use filteredLeads for pagination
-  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
-  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+  const currentLeads = filteredLeads.slice(
+    currentPage * leadsPerPage,
+    (currentPage + 1) * leadsPerPage
+  );
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
@@ -262,7 +342,7 @@ function Leads() {
                 Add Lead
               </button>
             </div>
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            {/* <div className="grid grid-cols-3 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
                 <input
@@ -292,10 +372,162 @@ function Leads() {
                   className="border   rounded-2xl p-2 w-full"
                 />
               </div>
+            </div> */}
+              <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
+              <div>
+                <label htmlFor="">Search</label>
+                <input
+                  type="text"
+                  placeholder="Search by Name, Lead No, Lead Source"
+                  value={searchTerm}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="">Start Date</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="border  rounded-2xl p-2 w-full"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="">End Date</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="border   rounded-2xl p-2 w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="">Lead Source Filter</label>
+                <select
+                  value={leadSourceFilter}
+                  onChange={(e) => setLeadSourceFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Lead Sources</option>
+                  <option value="Facebook Campaign">Facebook Campaign</option>
+                  <option value="One Realty Website">One Realty Website</option>
+                  <option value="Trade Shows">Trade Shows</option>
+                  <option value="Cold Calling">Cold Calling</option>
+                  <option value="Email Campaigns">Email Campaigns</option>
+                  <option value="Networking Events">Networking Events</option>
+                  <option value="Paid Advertising">Paid Advertising</option>
+                  <option value="Content Marketing">Content Marketing</option>
+                  <option value="SEO">Search Engine Optimization</option>
+                  <option value="Trade Shows">Trade Shows</option>
+                  <option value="Affiliate Marketing">
+                    Affiliate Marketing
+                  </option>
+                  <option value="Direct Mail">Direct Mail</option>
+                  <option value="Online Directories">Online Directories</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="">Status Filter</label>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Status</option>
+                  {/* <option value="Facebook Campaign">visited</option>
+                  <option value="One Realty Website">pending</option>
+                  <option value="Trade Shows">confirm</option>
+                  <option value="Cold Calling">Cold Calling</option> */}
+                  <option default value="pending">
+                    Pending
+                  </option>
+                  <option value="interested">Interested</option>
+                  <option value="not-interested">Non-Interested</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="">Visit Filter</label>
+                <select
+                  value={visitFilter}
+                  onChange={(e) => setVisitFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                    <option value="">All visit</option>
+                  <option value="fresh">Fresh Visit</option>
+                  <option value="repeated">Repeated Visit</option>
+                  <option value="associative">Associative Visit</option>
+                  <option value="self">Self Visit</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="">Deal Filter</label>
+                <select
+                  value={dealFilter}
+                  onChange={(e) => setDealFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Deal</option>
+                  <option value="pending">Pending</option>
+                  <option value="in progress">In Progress</option>
+                  <option value="close">Closed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div>
+  <label htmlFor="">Employee Filter</label>
+  <select
+    name="assignedTo"
+    value={employeeFilter}
+    onChange={(e) => setEmployeeFilter(e.target.value)}
+    className={`border rounded-2xl p-2 w-full`}
+  >
+    <option value="">Select Employee</option>
+    {employees.map((employee) => (
+      <option key={employee.employee_id} value={employee.name}>
+        {employee.name}
+      </option>
+    ))}
+  </select>
+</div>
             </div>
           </div>
 
           <div className=" overflow-x-auto mt-4 whitespace-nowrap  lg:w-[100%]">
+          <div className="flex gap-10 text-xl font-semibold my-3">
+  {/* Filter leads based on the selected employee */}
+  <div>
+    Total Lead visit:{" "}
+    {visit
+      .filter((lead) => !employeeFilter || lead.employee_name === employeeFilter) // filter by employee
+      .reduce(
+        (acc, lead) => acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
+        0
+      )}
+  </div>
+  <div>
+    Total Lead:{" "}
+    {
+      leads.filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter)
+        .length
+    }
+  </div>
+  <div>
+    Total Closed Lead:{" "}
+    {
+      leads
+        .filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter)
+        .filter((lead) => lead.deal_status === "close").length
+    }
+  </div>
+</div>
+
+
+
+
+
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>
@@ -327,7 +559,7 @@ function Leads() {
                     Lead Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Status
+                    Deal Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Visit
@@ -344,117 +576,88 @@ function Leads() {
                 </tr>
               </thead>
               <tbody>
-                {currentLeads.map((lead, index) => (
-                  <tr
-                    key={lead.lead_id}
-                    className={index % 2 === 0 ? "bg-gray-100" : ""}
-                  >
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1}
-                    </td>
-                    <Link to={`/lead-single-data/${lead.lead_id}`}>
-                      <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-                        {lead.lead_no}
-                      </td>
-                    </Link>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.name}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.phone}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.leadSource}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.assignedTo}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.subject}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.address}
-                    </td>
-                    {lead.lead_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-                    {lead.lead_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.lead_status}
-                      </td>
-                    )}
+  {currentLeads.length === 0 ? (
+    <tr>
+      <td
+        colSpan="11"
+        className="px-6 py-4 border-b border-gray-200 text-center text-gray-500"
+      >
+        No data found
+      </td>
+    </tr>
+  ) : (
+    currentLeads.map((lead, index) => (
+      <tr key={lead.lead_id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {index + 1}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+          <Link to={`/lead-single-data/${lead.lead_id}`}>{lead.lead_no}</Link>
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.name}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.phone}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.leadSource}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.assignedTo}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.subject}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.address}
+        </td>
 
-                    {lead.lead_status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
-                        {lead.lead_status}
-                      </td>
-                    )}
-                    {lead.status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
-                        {lead.status}
-                      </td>
-                    )}
-                    {lead.status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.status}
-                      </td>
-                    )}
+        {/* Lead Status */}
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.lead_status === "pending" ? "text-[red]" : lead.lead_status === "in progress" ? "text-[orange]" : "text-[green]"}`}>
+          {lead.lead_status}
+        </td>
 
-                    {lead.status === "completed" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
-                        {lead.status}
-                      </td>
-                    )}
+        {/* Status */}
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.status === "pending" ? "text-[red]" : lead.status === "in progress" ? "text-[orange]" : "text-[black]"}`}>
+          {lead.status}
+        </td>
 
-                    {lead.visit === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[red]">
-                        {lead.visit}
-                      </td>
-                    )}
-                    {lead.visit === "Fresh Visit" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.visit}
-                      </td>
-                    )}
+        {/* Visit Status */}
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold`}>
+          {lead.visit || 'N/A'}
+        </td>
 
-                    {lead.visit === "Repeated Visit" && (
-                      <td className="px-6 py-4 border-b border-gray-200  font-semibold text-[green]">
-                        {lead.visit}
-                      </td>
-                    )}
+        {/* Visit Date */}
+        <td className="px-6 py-4 border-b border-gray-200 font-semibold ">
+        {lead.visit_date || 'N/A'}
+        </td>
 
-                    {lead.visit_date === "pending" ? (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.visit_date}
-                      </td>
-                    ) : (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {moment(lead.visit_date).format("DD-MM-YYYY")}
-                      </td>
-                    )}
+        {/* Created Time */}
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {moment(lead.createdTime).format("DD-MM-YYYY")}
+        </td>
 
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {moment(lead.createdTime).format("DD-MM-YYYY")}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      <button
-                        className="text-blue-500 hover:text-blue-700"
-                        onClick={() => handleEditClick(lead)}
-                      >
-                        <BsPencilSquare size={20} />
-                      </button>
-                      <button
-                        className="text-red-500 hover:text-red-700 mx-2"
-                        onClick={() => handleDeleteClick(lead.lead_id)}
-                      >
-                        <BsTrash size={20} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+        {/* Actions */}
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          <button
+            className="text-blue-500 hover:text-blue-700"
+            onClick={() => handleEditClick(lead)}
+          >
+            <BsPencilSquare size={20} />
+          </button>
+          <button
+            className="text-red-500 hover:text-red-700 mx-2"
+            onClick={() => handleDeleteClick(lead.lead_id)}
+          >
+            <BsTrash size={20} />
+          </button>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
             </table>
           </div>
 
@@ -510,7 +713,7 @@ function Leads() {
                 />
 
                 <div className="mb-4">
-                  <label className="block text-gray-700">Date</label>
+                  <label className="block text-gray-700">Assign Date</label>
                   <input
                     type="date"
                     name="createdTime"
@@ -522,6 +725,7 @@ function Leads() {
                     <span className="text-red-500">{errors.createdTime}</span>
                   )}
                 </div>
+                
 
                 <div className="mb-4">
                   <label className="block text-gray-700">Name</label>
@@ -637,26 +841,36 @@ function Leads() {
               </div>
             </div>
           )}
-          <div className="mt-4 flex justify-center">
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
-              pageCount={Math.ceil(leads.length / leadsPerPage)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageClick}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              nextClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextLinkClassName={"page-link"}
-              breakClassName={"page-item"}
-              breakLinkClassName={"page-link"}
-            />
+          <div className="mt-2 mb-2 flex justify-center">
+          <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
+          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
+          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
+          previousClassName={
+            "bg-white border border-gray-300 rounded-md shadow-md"
+          }
+          previousLinkClassName={
+            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+          }
+          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
+          nextLinkClassName={
+            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+          }
+          breakClassName={
+            "bg-white border border-gray-300 rounded-md shadow-md"
+          }
+          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
+          activeClassName={
+            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
+          }
+        />
           </div>
         </div>
       </>

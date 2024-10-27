@@ -11,7 +11,6 @@ const mockEmployeeData = {
   name: "John Doe",
   email: "john.doe@example.com",
   phone: "9876543210",
-  salary: "50000.00",
   position: "Software Engineer",
   designation: "Developer",
   createdTime: "2024-09-01 12:00:00",
@@ -26,7 +25,7 @@ function EmployeeProfile() {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api//employeeProfile/${EmpId}`
+          `http://localhost:9000/api//employeeProfile/${EmpId}`
         ); // Fetch employee data
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data
@@ -95,13 +94,7 @@ function EmployeeProfile() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="text-info">Salary</label>
-                  <div className="p-2 bg-gray-100 rounded">
-                    <p className="m-0">{user.salary}</p>
-                  </div>
-                </div>
-
+                
                 <div>
                   <label className="text-info">Created Date</label>
                   <div className="p-2 bg-gray-100 rounded">

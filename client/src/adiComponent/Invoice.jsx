@@ -23,7 +23,7 @@ const LeadVisitChart = () => {
       setLoading(true); // Start loading
 
       try {
-        const response = await axios.get(`https://crm.one-realty.in/api/leads`);
+        const response = await axios.get(`http://localhost:9000/api/employe-all-visit`);
         const allLeads = response.data;
 
         const today = moment();
@@ -103,13 +103,16 @@ const LeadVisitChart = () => {
                   fill: "#666",
                 }}
               />
-              <YAxis />
+             <YAxis 
+  allowDecimals={false} 
+  tickFormatter={(value) => Number.isInteger(value) ? value : ''}
+/>
               <Tooltip />
               <Legend />
               <Bar
                 dataKey="Leads" // Corrected to 'Leads' from 'totalVisits'
                 fill="#8884d8"
-                name="Total Leads"
+                name="Total Visit"
                 barSize={15}
               />
             </BarChart>
@@ -119,6 +122,7 @@ const LeadVisitChart = () => {
     </Wrapper>
   );
 };
+
 
 export default LeadVisitChart;
 

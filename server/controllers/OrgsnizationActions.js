@@ -177,7 +177,7 @@ const addOrganization = async (req, res) => {
 
 const addEmployee = async (req, res) => {
   try {
-    const { name, email, password, position, phone, salary } = req.body;
+    const { name, email, password, position, phone } = req.body;
 
     // Validations for required fields
     if (!name || !email) {
@@ -203,8 +203,8 @@ const addEmployee = async (req, res) => {
 
       // If the email does not exist, proceed with inserting the employee
       const insertEmployeeQuery = `
-        INSERT INTO employee (name, email, password, position, phone, salary)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO employee (name, email, password, position, phone)
+        VALUES (?, ?, ?, ?, ?)
       `;
 
       const insertEmployeeParams = [
@@ -213,7 +213,6 @@ const addEmployee = async (req, res) => {
         password,
         position || null,
         phone || null,
-        salary || null,
       ];
 
       db.query(
@@ -358,13 +357,13 @@ const getEmployeeById = async (req, res) => {
 const updateEmployee = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, password, position, phone, salary } = req.body;
+    const { name, email, password, position, phone } = req.body;
 
     if (!id) {
       return res.status(400).json({ error: "Employee ID is required" });
     }
 
-    const query = ` UPDATE employee SET name = ?, email = ?, password = ?, position = ?, phone = ?, salary = ? WHERE employeeId = ?`;
+    const query = ` UPDATE employee SET name = ?, email = ?, password = ?, position = ?, phone = ?  WHERE employeeId = ?`;
 
     const params = [
       name,
@@ -372,7 +371,6 @@ const updateEmployee = async (req, res) => {
       password,
       position || null,
       phone || null,
-      salary || null,
       id,
     ];
 
@@ -398,7 +396,7 @@ const updateEmployee = async (req, res) => {
 const updateSingleEmployee = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, position, phone, salary } = req.body;
+    const { name, email, position, phone } = req.body;
 
     if (!id) {
       return res.status(400).json({ message: "Employee ID is required" });
@@ -414,7 +412,7 @@ const updateSingleEmployee = async (req, res) => {
 
     const query = `
       UPDATE employee
-      SET name = ?, email = ?, position = ?, phone = ?, salary = ?, photo = COALESCE(?, photo), signature = COALESCE(?, signature)
+      SET name = ?, email = ?, position = ?, phone = ?,  photo = COALESCE(?, photo), signature = COALESCE(?, signature)
       WHERE employeeId = ?
     `;
 
@@ -423,7 +421,6 @@ const updateSingleEmployee = async (req, res) => {
       email,
       position || null,
       phone || null,
-      salary || null,
       photoPath,
       signaturePath,
       id,
@@ -668,7 +665,7 @@ const getAdminById = async (req, res) => {
 };
 
 const addAdmin = async (req, res) => {
-  const { name, email, password, position, phone, salary } = req.body;
+  const { name, email, password, position, phone } = req.body;
 
   try {
     // Query to check if an admin with the same email already exists
@@ -690,13 +687,13 @@ const addAdmin = async (req, res) => {
 
       // If the email does not exist, proceed with adding the admin
       const addAdminQuery = `
-        INSERT INTO admins (name, email, password, position, phone, salary)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO admins (name, email, password, position, phone)
+        VALUES (?, ?, ?, ?,?)
       `;
 
       db.query(
         addAdminQuery,
-        [name, email, password, position, phone, salary],
+        [name, email, password, position, phone],
         (err, results) => {
           if (err) {
             console.error("Error adding admin:", err);
@@ -723,7 +720,7 @@ const addAdmin = async (req, res) => {
 
 const updateAdmin = async (req, res) => {
   const { admin_id } = req.params;
-  const { name, email, position, phone, salary, password } = req.body; // Added password
+  const { name, email, position, phone, password } = req.body; // Added password
 
   if (!admin_id) {
     return res.status(400).json({ error: "Admin ID is required" });
@@ -735,15 +732,15 @@ const updateAdmin = async (req, res) => {
     // Update the query to include the password
     const updateAdminQuery = `
       UPDATE admins
-      SET name = ?, email = ?, position = ?, phone = ?, salary = ?, password = ?
+      SET name = ?, email = ?, position = ?, phone = ?, password = ?
       WHERE admin_id = ?
     `;
 
-    console.log(name, email, position, phone, salary, password, admin_id); // Log the new password
+    console.log(name, email, position, phone, password, admin_id); // Log the new password
 
     db.query(
       updateAdminQuery,
-      [name, email, position, phone, salary, password, admin_id], // Include password in the values array
+      [name, email, position, phone, password, admin_id], // Include password in the values array
       (err, results) => {
         if (err) {
           console.error("Error updating admin:", err);

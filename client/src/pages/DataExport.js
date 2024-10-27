@@ -9,8 +9,7 @@ import { MdOutlineNextWeek } from "react-icons/md";
 import { GiFiles, GiMoneyStack } from "react-icons/gi";
 import { useSelector } from "react-redux";
 import LeadData from "../components/DataExport/LeadData";
-import QuotationData from "../components/DataExport/QuotationData";
-import InvoiceData from "../components/DataExport/InvoiceData"; // Add your invoice component here if it exists
+
 import Employees from "../components/DataExport/Employees";
 import { FaCheckCircle, FaClipboardList } from "react-icons/fa";
 import VisitData from "../components/DataExport/VisitData";
@@ -18,6 +17,8 @@ import CloseData from "../components/DataExport/CloseDateData";
 
 function DataExport() {
   const [leads, setLeads] = useState([]);
+  const [visit, setVisit] = useState([]);
+
   const [employee, setEmployee] = useState([]);
   const [quotation, setQuotation] = useState([]);
   const [invoice, setInvoice] = useState([]);
@@ -30,11 +31,12 @@ function DataExport() {
     fetchEmployee();
     fetchQuotation();
     fetchInvoice();
+    fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads");
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -43,7 +45,7 @@ function DataExport() {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employee`);
+      const response = await axios.get(`http://localhost:9000/api/employee`);
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -53,7 +55,7 @@ function DataExport() {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/quotation-data`
+        `http://localhost:9000/api/quotation-data`
       );
       setQuotation(response.data);
     } catch (error) {
@@ -64,21 +66,33 @@ function DataExport() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/invoice-data`
+        `http://localhost:9000/api/invoice-data`
       );
       setInvoice(response.data);
     } catch (error) {
       console.error("Error fetching invoices:", error);
     }
   };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-all-visit`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
 
   const leadCount = leads.length;
   const employeeCount = employee.length;
-  const quotationCount = quotation.length;
-  const invoiceCount = invoice.length;
-  const visitCount = leads.filter(
-    (lead) => lead.visit === "Fresh Visit" || lead.visit === "Repeated Visit"
-  ).length;
+ 
+
+  const visitCount = visit.length;
+
 
   const closedCount = leads.filter(
     (lead) => lead.deal_status === "close"

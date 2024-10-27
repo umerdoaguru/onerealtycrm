@@ -4,12 +4,12 @@ import * as XLSX from "xlsx";
 
 import axios from "axios";
 
-import moment from "moment";   
+import moment from "moment";
 
 import cogoToast from "cogo-toast";
 import MainHeader from "../components/MainHeader";
 
-import Sider from './../components/Sider';
+import Sider from "./../components/Sider";
 import Pagination from "./comp/pagination";
 
 const AdminReport = () => {
@@ -32,7 +32,8 @@ const AdminReport = () => {
         "Date",
         "Lead Source",
         "Quotation Status",
-        "Invoice Status",
+        "Visit Status",
+        "Visit Date",
         "Deal Status",
         "FollowUp Status",
       ],
@@ -44,7 +45,8 @@ const AdminReport = () => {
         "createdTime",
         "leadSource",
         "quotation_status",
-        "invoice_status",
+        "visit",
+        "visit_date",
         "deal_status",
         "follow_up_status",
       ],
@@ -61,8 +63,8 @@ const AdminReport = () => {
         "Phone Number",
         "Date",
         "Lead Source",
+        "Visit Date",
         "Quotation Status",
-        "Invoice Status",
         "Deal Status",
         "FollowUp Status",
       ],
@@ -73,8 +75,8 @@ const AdminReport = () => {
         "phone",
         "createdTime",
         "leadSource",
+        "visit_date",
         "quotation_status",
-        "invoice_status",
         "deal_status",
         "follow_up_status",
       ],
@@ -87,11 +89,24 @@ const AdminReport = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
+    if (selectedCategory === "Visited lead") return;
+
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
-
+      console.log(data[selectedCategory], item);
       // Parse the date from created_date or createdTime, whichever exists
-      const itemDate = new Date(item.created_date || item.createdTime);
+      // Function to convert DD/MM/YYYY to MM/DD/YYYY
+      const convertToMMDDYYYY = (dateStr) => {
+        const [day, month, year] = dateStr.split("/"); // Split by "/"
+        return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
+      };
+
+      let itemDate;
+      if (item.d_closeDate === "pending") return false;
+
+      itemDate = new Date(convertToMMDDYYYY(item.d_closeDate));
+
+      console.log(itemDate);
 
       let filterCondition = false;
 
@@ -150,10 +165,38 @@ const AdminReport = () => {
       },
     }));
   };
-
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+
     setCurrentPage(1);
+
+    if (date.startDate !== "" && date.endDate !== "") {
+      const combinedData = {
+        "Visited lead": data.leads,
+        employee: data.employee,
+        leads: data.leads,
+      };
+      const updatedDataFields = {
+        ...dataFields,
+        "Visited lead": {
+          ...dataFields["Visited lead"],
+          "Visited lead": combinedData["Visited lead"],
+        },
+
+        employee: {
+          ...dataFields.employee,
+          employee: combinedData.employee,
+        },
+        leads: {
+          ...dataFields.leads,
+          leads: combinedData.leads,
+        },
+      };
+
+      console.log(updatedDataFields, combinedData);
+      setDataFields(updatedDataFields);
+    }
+    setDate({ startDate: "", endDate: "" });
   };
 
   // const handleFilterChange = (event) => {
@@ -193,18 +236,25 @@ const AdminReport = () => {
   };
 
   const employeeAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const leadsAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const formatData = (data) => {
     return data.map((item) => ({
       ...item,
-      created_date: moment(item.created_date).format("YYYY/MM/DD"),
-      createdTime: moment(item.createdTime).format("YYYY/MM/DD"),
+      createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
+      visit_date:
+        item.visit_date !== "pending"
+          ? moment(item.visit_date).format("DD/MM/YYYY")
+          : "pending",
+      d_closeDate:
+        item.d_closeDate !== "pending"
+          ? moment(item.d_closeDate).format("DD/MM/YYYY")
+          : "pending",
     }));
   };
 
@@ -228,7 +278,12 @@ const AdminReport = () => {
               employeeData = formatData(result.value.data);
               break;
             case 1:
-              leadsData = formatData(result.value.data);
+              leadsData = formatData(result.value.data).filter((item) => {
+                return (
+                  item.d_closeDate !== "pending" &&
+                  item.visit_date !== "pending"
+                );
+              });
               break;
             default:
               break;
@@ -242,12 +297,8 @@ const AdminReport = () => {
       });
       console.log(leadsData, employeeData);
 
-      let defaultEmployeLead = leadsData.filter(
-        (lead) => lead.employeeId == employeeData[0].employeeId
-      );
-
       const combinedData = {
-        "Visited lead": defaultEmployeLead,
+        "Visited lead": leadsData,
         employee: employeeData,
         leads: leadsData,
       };
@@ -282,8 +333,11 @@ const AdminReport = () => {
     setSelectEmploye(value);
 
     // Optional chaining to safely access `leads` array
-    const getEmployeeLead = dataFields?.leads?.leads?.filter((data) => {
+    const getEmployeeLead = data?.leads?.filter((data) => {
       console.log(data);
+      if (value == "All") {
+        return true;
+      }
       return data.employeeId == value; // Use strict equality for type safety
     });
 
@@ -301,20 +355,44 @@ const AdminReport = () => {
   };
 
   const searchByDate = () => {
-    // console.log(dataFields?.[selectedCategory]);
     if (date.startDate === "" || date.endDate === "") {
       cogoToast.info("Date is set");
       return;
     }
-    const filteredData = dataFields?.[selectedCategory]?.[
-      selectedCategory
-    ].filter((item) => {
-      const currentDate = new Date(item.createdTime);
-      return (
-        currentDate.getTime() >= new Date(date.startDate).getTime() &&
-        currentDate.getTime() <= new Date(date.endDate).getTime()
-      );
-    });
+
+    console.log(data.leads);
+    let filteredData;
+    let dateVar;
+    let currentDate;
+
+    if (selectedCategory == "Visited lead") {
+      filteredData = data?.leads?.filter((item) => {
+        if (item.visit_date == "pending") return false;
+        if (item.employeeId == selectEmploye) {
+          dateVar = item.visit_date;
+          currentDate = new Date(moment(dateVar, "DD/MM/YYYY").toDate());
+        } else {
+          dateVar = item.visit_date;
+          currentDate = new Date(moment(dateVar, "DD/MM/YYYY").toDate());
+        }
+
+        if (dateVar == undefined) return false;
+        return (
+          currentDate.getTime() >= new Date(date.startDate).getTime() &&
+          currentDate.getTime() <= new Date(date.endDate).getTime()
+        );
+      });
+    } else {
+      filteredData = data?.leads?.filter((item) => {
+        if (item.d_closeDate == "pending") return false;
+        let dateVar = item.d_closeDate;
+        currentDate = new Date(moment(dateVar, "DD/MM/YYYY").toDate());
+        return (
+          currentDate.getTime() >= new Date(date.startDate).getTime() &&
+          currentDate.getTime() <= new Date(date.endDate).getTime()
+        );
+      });
+    }
 
     setDataFields({
       ...dataFields,
@@ -328,18 +406,24 @@ const AdminReport = () => {
   const clearDate = () => {
     // Clear the date states
     console.log(dataFields);
+
+    if (date.startDate == "" && date.endDate == "") {
+      cogoToast.info("Date is already cleared");
+      return;
+    }
     setDate({ startDate: "", endDate: "" });
 
-    let defaultEmployeLead = data?.leads.filter(
-      (lead) => lead.employeeId == selectEmploye
-    );
+    let defaultEmployeLead = data?.leads.filter((lead) => {
+      if (selectEmploye == "All") return true;
+      return lead.employeeId == selectEmploye;
+    });
 
     console.log(defaultEmployeLead, selectEmploye);
 
     const combinedData = {
       "Visited lead": defaultEmployeLead,
       employee: data?.employee,
-      leads: data?.leads,
+      leads: data?.leads.filter((lead) => lead.d_closeDate !== "pending"),
     };
 
     // console.log(combinedData);
@@ -362,7 +446,7 @@ const AdminReport = () => {
     console.log(updatedDataFields);
     // Update the state with the unfiltered data
     setDataFields(updatedDataFields);
-    setData(combinedData);
+    // setData(combinedData);
 
     console.log("Date filter cleared, showing all data");
   };
@@ -396,7 +480,7 @@ const AdminReport = () => {
                 <button
                   key={category}
                   onClick={() => handleCategoryClick(category)}
-                  className={`px-3 py-1 mr-3 hover:bg-blue-600 transition-colors rounded-lg  font-medium ${
+                  className={`px-3 py-1 mr-3 hover:bg-blue-600 transition-colors rounded-lg  font-medium w-max ${
                     selectedCategory === category
                       ? "bg-blue-500 text-white"
                       : "bg-gray-200"
@@ -416,6 +500,7 @@ const AdminReport = () => {
                     onChange={changeVisitedLeadData}
                     className="bg-transparent border-gray-300 rounded sm:px-2 w-full outline-none"
                   >
+                    <option value="All">Leads of Emp : All Emp.</option>
                     {dataFields?.employee?.employee?.map((emp_name) => (
                       <option
                         key={emp_name.employeeId}
@@ -434,7 +519,6 @@ const AdminReport = () => {
                     <option value="All">All</option>
                     <option value="week">Week</option>
                     <option value="month">Month</option>
-                    <option value="half-year">Half Year</option>
                     <option value="year">Year</option>
                   </select>
                 )}
@@ -466,7 +550,7 @@ const AdminReport = () => {
             <div className="mt-2 md:mt-0 w-full md:w-auto">
               <button
                 onClick={searchByDate}
-                className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors w-full md:w-auto"
+                className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition-colors w-full md:w-auto w-max"
               >
                 Search by Date
               </button>
@@ -477,7 +561,7 @@ const AdminReport = () => {
             <div className="ml-2">
               <button
                 onClick={clearDate}
-                className="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-400 transition-colors"
+                className="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-400 transition-colors w-max"
               >
                 Clear Date
               </button>
@@ -549,7 +633,9 @@ const AdminReport = () => {
 
         <Pagination
           currentPage={currentPage}
-          totalItems={data?.[selectedCategory]?.length}
+          totalItems={
+            dataFields?.[selectedCategory]?.[selectedCategory]?.length
+          }
           itemsPerPage={rowPerPage}
           onPageChange={setCurrentPage}
         />
