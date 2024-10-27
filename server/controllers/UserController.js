@@ -1165,6 +1165,102 @@ const updateQuotationStatus = async (req, res) => {
     });
   }
 };
+const getLeadsByIdVisit = (req, res) => {
+  const employeeId = req.params.employeeId; // Assuming `employeeId` is passed as a route parameter
+
+  const sql = `
+    SELECT 
+    
+      
+     
+    
+      visit.visit,
+      visit.visit_date,
+      visit.report,
+      leads.lead_no,
+      leads.lead_id,
+      leads.name,
+      leads.assignedTo,
+      leads.employeeId ,
+      leads.createdTime,
+      leads.actual_date,
+      leads.name ,
+      leads.phone,
+      leads.leadSource,
+      leads.lead_status,
+      leads.subject,
+      leads.booking_amount,
+      leads.payment_mode,
+      leads.registry,
+      leads.address,
+      leads.quotation,
+      leads.quotation_status,
+      leads.deal_status,
+      leads.d_closeDate,
+      leads.status,
+      leads.reason,
+      leads.follow_up_status
+    FROM 
+      leads
+    LEFT JOIN 
+      visit ON visit.lead_id = leads.lead_id AND visit.employeeId = leads.employeeId
+    WHERE 
+      leads.employeeId = ?;
+  `;
+
+  db.query(sql, [employeeId], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error fetching data" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+const getLeadsVisit = (req, res) => {
+  const sql = `
+    SELECT 
+      visit.visit,
+      visit.visit_date,
+      visit.report,
+        leads.lead_id,
+      leads.lead_no,
+      leads.name,
+      leads.assignedTo,
+      leads.employeeId,
+      leads.createdTime,
+      leads.actual_date,
+      leads.phone,
+      leads.leadSource,
+      leads.lead_status,
+      leads.subject,
+      leads.booking_amount,
+      leads.payment_mode,
+      leads.registry,
+      leads.address,
+      leads.quotation,
+      leads.quotation_status,
+      leads.deal_status,
+      leads.d_closeDate,
+      leads.status,
+      leads.reason,
+      leads.follow_up_status
+    FROM 
+      leads
+    LEFT JOIN 
+      visit ON visit.lead_id = leads.lead_id AND visit.employeeId = leads.employeeId;
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error fetching data" });
+    } else {
+      res.status(200).json(results);
+    }
+  });
+};
+
+
 
 module.exports = {
   Quotation,
@@ -1193,5 +1289,5 @@ module.exports = {
   getAllUsers,
   deleteProfile,
   getAllQuotation,
-  updateQuotationStatus,
+  updateQuotationStatus,getLeadsByIdVisit,getLeadsVisit
 };

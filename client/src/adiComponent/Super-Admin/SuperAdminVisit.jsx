@@ -13,8 +13,8 @@ const SuperAdminVisit = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const [rowPerPage, setRowPerPage] = useState(5);
-  const navigate = useNavigate();
+  const itemsPerPage = 10; // Set how many items you want per page
+ 
 
   useEffect(() => {
     fetchLeads();
@@ -22,12 +22,9 @@ const SuperAdminVisit = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads`);
-      const nonPendingLeads = response.data.filter(
-        (lead) => lead.visit !== "pending"
-      );
+      const response = await axios.get(`http://localhost:9000/api/employe-all-visit`);
+      const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
 
-      console.log(nonPendingLeads);
       setLeads(nonPendingLeads);
       setFilteredLeads(nonPendingLeads); // Initial data set for filtering
     } catch (error) {
@@ -47,126 +44,100 @@ const SuperAdminVisit = () => {
     }
   }, [startDate, endDate, leads]);
 
+
   // Calculate page data for pagination
-  const pageCount = Math.ceil(filteredLeads.length / rowPerPage);
+  const pageCount = Math.ceil(filteredLeads.length / itemsPerPage);
   const displayedLeads = filteredLeads.slice(
-    (currentPage - 1) * rowPerPage,
-    currentPage * rowPerPage
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   return (
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container mt-[5rem] twoXl-1740">
-        <div className="flex flex-col ">
-          <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
-            <center className="text-2xl text-center mt-8 font-medium">
-              Total Visits
-            </center>
-            <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-            <div className="overflow-x-auto mt-4">
-              <table className="container bg-white border">
-                <thead>
-                  <tr>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
+      <div className="flex flex-col 2xl:ml-44 ">
+        <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
+          <center className="text-2xl text-center mt-8 font-medium">
+            Total Visits
+          </center>
+          <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
+          <div className="overflow-x-auto mt-4">
+            <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+              <thead className="bg-gray-100">
+              <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       S.no
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Lead Number
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Lead Id 
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Assigned To
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Lead Name
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit 
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Subject
-                    </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Phone
-                    </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Lead Source
-                    </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Visit
-                    </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Visit Date
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      FollowUp Status
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Report
                     </th>
-                    <th className="px-6 py-3 border-b-2 border-gray-300">
-                      Deal Status
-                    </th>
+                
                   </tr>
-                </thead>
-                <tbody>
-                  {displayedLeads.length > 0 ? (
-                    displayedLeads.map((lead, index) => (
-                      <tr
-                        key={lead.id}
-                        className={index % 2 === 0 ? "bg-gray-100" : ""}
-                      >
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {currentPage * rowPerPage + index + 1}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200">
-                          {lead.lead_no}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.assignedTo}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.name}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.subject}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.phone}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.leadSource}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.visit}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.visit_date}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.follow_up_status}
-                        </td>
-                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                          {lead.deal_status}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={11} // Adjust the colSpan according to the number of columns
-                        className="py-4 text-center"
-                      >
-                        No data found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-            <Pagination
-              currentPage={currentPage}
-              totalItems={filteredLeads.length}
-              itemsPerPage={rowPerPage}
-              onPageChange={setCurrentPage}
-            />
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {displayedLeads.length > 0 ? (
+                  displayedLeads.map((visit, index) => (
+                    <tr key={visit.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.lead_id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.employee_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit_date}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.report}
+                    </td>
+                   
+                  </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={11} className="py-4 text-center">
+                      No data found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+          <div className="text-center">
+            
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filteredLeads.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
+      </div>
       </div>
     </>
   );

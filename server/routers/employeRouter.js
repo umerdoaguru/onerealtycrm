@@ -14,6 +14,8 @@ const {
   createVisit,
   updateVisit,
   deleteVisit,
+  getEmployeebyidvisit,
+  AllgetEmployeebyvisit,
 } = require("../controllers/employeController");
 const router = express.Router();
 
@@ -21,6 +23,9 @@ router.get("/get-employee-invoice/:id", getEmployeeInvoice);
 router.get("/employeeProfile/:id", employeeProfile);
 router.get("/employe-leads/:id", getEmployeeLeads);
 router.get("/employe-visit/:id", getEmployeeVisit);
+router.get("/employebyid-visit/:id", getEmployeebyidvisit);
+router.get("/employe-all-visit", AllgetEmployeebyvisit);
+
 router.put('/employe-visit', updateVisit);           
 router.delete('/employe-visit/:id', deleteVisit); 
 router.post("/employe-visit", createVisit);

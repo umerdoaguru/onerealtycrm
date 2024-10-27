@@ -33,6 +33,8 @@ const {
   getAllQuotation,
   updateQuotationStatus,
   socialmediaLead,
+  getLeadsVisit,
+  getLeadsByIdVisit,
 } = require("../controllers/UserController");
 const upload = require("../controllers/fileUploadController");
 const upload1 = require("../config/multerConfig"); // Import multer configuration
@@ -190,6 +192,8 @@ router.post("/leads", createLead);
 // router.post('/facebook-leads',  socialmediaLead);
 router.get("/leads/:id", getleadbyid);
 router.get("/leads", getLeads);
+router.get("/leads-visits/:employeeId", getLeadsByIdVisit);
+router.get("/leads-all-visits", getLeadsVisit);
 router.put("/leads/:leadId", updateLead);
 router.delete("/leads/:leadId", deleteLead);
 

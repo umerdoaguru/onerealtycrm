@@ -7,26 +7,17 @@ import { Link } from "react-router-dom";
 import { FaClipboardList, FaCheckCircle } from "react-icons/fa"; // Import icons for Visit and Closed Data
 
 const EmployeeOverview = () => {
-  // const [metrics, setMetrics] = useState([
-  //     { title: 'Total Leads', value: 0, positive: true },
-  //     { title: 'Total Invoices', value: 0, positive: false },
-  //     { title: 'Total Quotation', value: 0, positive: true },
-  //     { title: 'Total Employees', value: 0, positive: true },
-  // ]);
+ 
   const [leads, setLeads] = useState([]);
-  // const [employee, setEmployee] = useState([]);
+ 
   const [quotation, setQuotation] = useState([]);
   const [invoice, setInvoice] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("LeadData"); // Set 'LeadData' as default
+  const [visit, setVisit] = useState([]);
 
   const EmpId = useSelector((state) => state.auth.user.id);
 
-  useEffect(() => {
-    fetchLeads();
-    //   fetchEmployee();
-    fetchQuotation();
-    fetchInvoice();
-  }, []);
+
 
   const fetchLeads = async () => {
     try {
@@ -39,14 +30,6 @@ const EmployeeOverview = () => {
     }
   };
 
-  //   const fetchEmployee = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:9000/api/employee`);
-  //       setEmployee(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching employee data:", error);
-  //     }
-  //   };
 
   const fetchQuotation = async () => {
     try {
@@ -73,19 +56,38 @@ const EmployeeOverview = () => {
 
   console.log(invoice, quotation, leads);
 
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employebyid-visit/${EmpId}`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
+  useEffect(() => {
+    fetchLeads();
+  fetchVisit();
+    fetchQuotation();
+    fetchInvoice();
+  }, []);
+
+
+
   const leadCount = leads.length;
   //   const employeeCount = employee.length;
 
-  const visitCount = leads.filter(
-    (lead) => lead.visit === "Fresh Visit" || lead.visit === "Repeated Visit"
-  ).length;
 
   const closedCount = leads.filter(
     (lead) => lead.deal_status === "close"
   ).length; // Get count for Closed Data
 
-  const quotationCount = quotation.length;
-  const invoiceCount = invoice.length;
+  const visitCount = visit.length;
+
 
   return (
     <>
@@ -115,42 +117,6 @@ const EmployeeOverview = () => {
           </Link>
         </div>
 
-        {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-            <div
-              className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600"   // Change background color if active
-            //   onClick={() => setSelectedComponent('EmployeeData')}  // Set selected component
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div className=" text-3xl text-gray-700">
-                  <SiMoneygram />
-                </div>
-                <div className="mt-2">
-                  <h5 className="text-gray-800 text-xl font-semibold ">Total Employees </h5>
-                  <p className="text-gray-800 text-xl font-semibold ">{employeeCount}</p>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-        {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-          <Link to="/employees-total-quotations">
-            <div className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600">
-              <div className="p-4 flex flex-col items-center text-center">
-                <div className=" text-3xl text-gray-700">
-                  <MdOutlineNextWeek />
-                </div>
-                <div className="mt-2">
-                  <h5 className="text-gray-800 text-xl font-semibold ">
-                    Total Quotation
-                  </h5>
-                  <p className="text-gray-800 text-xl font-semibold ">
-                    {quotationCount}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div> */}
 
         {/* Card for Visit Data */}
         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
@@ -244,39 +210,10 @@ const EmployeeOverview = () => {
           </Link>
         </div>
 
-        {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-          <Link to="/employees-total-invoices">
-            <div
-              className="shadow-lg rounded-lg overflow-hidden cursor-pointer text-gray-600" // Change background color if active
-              //   onClick={() => setSelectedComponent('InvoiceData')}  // Set selected component
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div className=" text-3xl text-gray-700">
-                  <GiMoneyStack />
-                </div>
-                <div className="mt-2">
-                  <h5 className="text-gray-800 text-xl font-semibold ">
-                    {" "}
-                    Total Invoices
-                  </h5>
-                  <p className="text-gray-800 text-xl font-semibold ">
-                    {invoiceCount}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Link>
-        </div> */}
+      
       </div>
 
-      {/* Conditionally render the selected component */}
-      {/* <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
-          {selectedComponent === 'LeadData' && <LeadData />}
-          {selectedComponent === 'EmployeeData' && <Employees />}
-          {selectedComponent === 'QuotationData' && <QuotationData />}
-          {selectedComponent === 'InvoiceData' && <InvoiceData />}
-        </div> */}
-      {/* </div> */}
+     
     </>
   );
 };

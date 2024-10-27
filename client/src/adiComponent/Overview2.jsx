@@ -23,15 +23,10 @@ const Overview2 = () => {
   const [leads, setLeads] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("LeadData"); // Set 'LeadData' as default
+  const [visit , setVisit] = useState([]);
 
   const UserId = useSelector((state) => state.auth.user.id);
 
-  useEffect(() => {
-    fetchLeads();
-    fetchEmployee();
-    // fetchQuotation();
-    // fetchInvoice();
-  }, []);
 
   const fetchLeads = async () => {
     try {
@@ -48,6 +43,19 @@ const Overview2 = () => {
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
+    }
+  };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-all-visit`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
     }
   };
 
@@ -70,13 +78,20 @@ const Overview2 = () => {
   //   }
   // };
 
+  
+  useEffect(() => {
+    fetchLeads();
+    fetchEmployee();
+  fetchVisit();
+  }, []);
+
   const employeeCount = employee.length;
   const leadCount = leads.length;
   const closedCount = leads.filter(
     (lead) => lead.deal_status === "close"
-  ).length; // Get count for Closed Data
-  // const quotationCount = quotation.length;
-  // const invoiceCount = invoice.length;
+  ).length; 
+  
+  const visitCount = visit.length;
 
   return (
     <>
@@ -116,7 +131,7 @@ const Overview2 = () => {
                     Total Visit
                   </h5>
                   <p className="text-gray-800 text-xl font-semibold ">
-                    {leads.filter((item) => item.visit !== "pending").length}
+                   {visitCount}
                   </p>
                 </div>
               </div>

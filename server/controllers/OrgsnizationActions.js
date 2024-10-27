@@ -688,7 +688,7 @@ const addAdmin = async (req, res) => {
       // If the email does not exist, proceed with adding the admin
       const addAdminQuery = `
         INSERT INTO admins (name, email, password, position, phone)
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?, ?, ?,?)
       `;
 
       db.query(

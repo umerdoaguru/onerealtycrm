@@ -24,7 +24,7 @@ const VisitTable = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
+      const response = await axios.get(`http://localhost:9000/api/employebyid-visit/${EmpId}`);
       const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
 
       setLeads(nonPendingLeads);
@@ -46,12 +46,6 @@ const VisitTable = () => {
     }
   }, [startDate, endDate, leads]);
 
-  const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-    XLSX.writeFile(workbook, "LeadsData.xlsx");
-  };
 
   // Calculate page data for pagination
   const pageCount = Math.ceil(filteredLeads.length / itemsPerPage);
@@ -71,60 +65,60 @@ const VisitTable = () => {
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
           <div className="overflow-x-auto mt-4">
-            <table className="container bg-white border">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">S.no</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Lead Number</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Assigned To</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Lead Name</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Subject</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Visit Date</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">FollowUp Status</th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">Deal Status</th>
-                </tr>
+            <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+              <thead className="bg-gray-100">
+              <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      S.no
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Lead Id 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                     Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Assigned To
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Visit Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Report
+                    </th>
+                
+                  </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white divide-y divide-gray-200">
                 {displayedLeads.length > 0 ? (
-                  displayedLeads.map((lead, index) => (
-                    <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {currentPage * itemsPerPage + index}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.lead_no}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.assignedTo}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.name}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.subject}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.phone}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.leadSource}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.visit}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.visit_date}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.follow_up_status}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.deal_status}
-                      </td>
-                    </tr>
+                  displayedLeads.map((visit, index) => (
+                    <tr key={visit.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {index + 1}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.lead_id}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {visit.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.employee_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.visit_date}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                     {visit.report}
+                    </td>
+                   
+                  </tr>
                   ))
                 ) : (
                   <tr>

@@ -22,6 +22,8 @@ function SuperEmployeeLeads() {
   const [statusFilter, setStatusFilter] = useState("");
   const [visitFilter, setVisitFilter] = useState("");
   const [dealFilter, setDealFilter] = useState("");
+  const [visit, setVisit] = useState([]);
+
 
   const navigate = useNavigate();
 
@@ -30,18 +32,32 @@ function SuperEmployeeLeads() {
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
+    fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${id}`
+        `http://localhost:9000/api/leads-visits/${id}`
       );
       const data = response.data;
       console.log(data);
       setLeads(data);
     } catch (error) {
       console.error("Error fetching leads:", error);
+    }
+  };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employebyid-visit/${id}`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
     }
   };
 
@@ -52,19 +68,22 @@ function SuperEmployeeLeads() {
     setSearchTerm(value);
   }
 
+
   useEffect(() => {
-    let filtered = leads;
+    let filtered = leads; // Assuming 'leads' already contains the joined data (leads with visit info)
     console.log(filtered);
+    
+  
     // Filter by search term
     if (searchTerm) { 
       filtered = filtered.filter(
         (lead) =>
-          lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
+          (lead.lead_name && lead.lead_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (lead.lead_no && lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (lead.leadSource && lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-
+  
     // Filter by date range
     if (startDate && endDate) {
       filtered = filtered.filter((lead) => {
@@ -72,30 +91,29 @@ function SuperEmployeeLeads() {
         return leadDate >= startDate && leadDate <= endDate;
       });
     }
-
+  
     // Filter by lead source
     if (leadSourceFilter) {
       filtered = filtered.filter(
         (lead) => lead.leadSource === leadSourceFilter
       );
     }
+  
     // Filter by status
     if (statusFilter) {
       filtered = filtered.filter((lead) => lead.status === statusFilter);
     }
-
-    // Filter by visit
+  
+    // Filter by visit (if the filter is based on a visit attribute)
     if (visitFilter) {
-      filtered = filtered.filter((visit) => visit.visit === visitFilter);
+      filtered = filtered.filter((lead) => lead.visit === visitFilter);
     }
-
-    // Filter by Deak
+  
+    // Filter by deal status
     if (dealFilter) {
-      console.log(dealFilter);
-      filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
-      console.log(filtered);
+      filtered = filtered.filter((lead) => lead.deal_status === dealFilter);
     }
-
+  
     setFilteredLeads(filtered);
   }, [
     searchTerm,
@@ -107,6 +125,7 @@ function SuperEmployeeLeads() {
     visitFilter,
     dealFilter,
   ]);
+  
 
   // Use filteredLeads for pagination
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
@@ -210,7 +229,7 @@ function SuperEmployeeLeads() {
                     Pending
                   </option>
                   <option value="interested">Interested</option>
-                  <option value="non interested">Non-Interested</option>
+                  <option value="not-interested">Non-Interested</option>
                 </select>
               </div>
               <div>
@@ -221,9 +240,10 @@ function SuperEmployeeLeads() {
                   className="border rounded-2xl p-2 w-full"
                 >
                   <option value="">All visit</option>
-                  <option value="pending">Pending</option>
-                  <option value="fresh visit">Fresh Visit</option>
-                  <option value="repeated visit">Repeated Visit</option>
+                  <option value="fresh">Fresh Visit</option>
+                  <option value="repeated">Repeated Visit</option>
+                  <option value="associative">Associative Visit</option>
+                  <option value="self">Self Visit</option>
                 </select>
               </div>
               <div>
@@ -237,7 +257,7 @@ function SuperEmployeeLeads() {
                   <option value="pending">Pending</option>
                   <option value="in progress">In Progress</option>
                   <option value="close">Closed</option>
-                  <option value="not closed">Not Closed</option>
+                  <option value="cancelled">Cancelled</option>
                 </select>
               </div>
             </div>
@@ -247,7 +267,7 @@ function SuperEmployeeLeads() {
           <div className="flex gap-10 text-xl font-semibold my-3">
   <div>
     Total Lead visit:{" "}
-    {leads.reduce(
+    {visit.reduce(
       (acc, lead) =>
         acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
       0
@@ -361,10 +381,10 @@ function SuperEmployeeLeads() {
           {lead.deal_status}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit}
+          {lead.visit || 'N/A'} 
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit_date}
+          {lead.visit_date || 'N/A'}
         </td>
       </tr>
     ))
