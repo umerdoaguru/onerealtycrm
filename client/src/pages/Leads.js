@@ -41,16 +41,19 @@ function Leads() {
   const [visitFilter, setVisitFilter] = useState("");
   const [dealFilter, setDealFilter] = useState("");
   const [employeeFilter, setEmployeeFilter] = useState("");
+  const [visit, setVisit] = useState([]);
+
 
   // Fetch leads and employees from the API
   useEffect(() => {
     fetchLeads();
     fetchEmployees();
+    fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads-all-visits");
       setLeads(response.data);
       console.log(leads);
     } catch (error) {
@@ -64,6 +67,19 @@ function Leads() {
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
+    }
+  };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-all-visit`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
     }
   };
 
@@ -429,7 +445,7 @@ window.open(whatsappLink, "_blank");
                     Pending
                   </option>
                   <option value="interested">Interested</option>
-                  <option value="non interested">Non-Interested</option>
+                  <option value="not-interested">Non-Interested</option>
                 </select>
               </div>
               <div>
@@ -439,10 +455,11 @@ window.open(whatsappLink, "_blank");
                   onChange={(e) => setVisitFilter(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 >
-                  <option value="">All visit</option>
-                  <option value="pending">Pending</option>
-                  <option value="Fresh Visit">Fresh Visit</option>
-                  <option value="Repeated Visit">Repeated Visit</option>
+                    <option value="">All visit</option>
+                  <option value="fresh">Fresh Visit</option>
+                  <option value="repeated">Repeated Visit</option>
+                  <option value="associative">Associative Visit</option>
+                  <option value="self">Self Visit</option>
                 </select>
               </div>
               <div>
@@ -456,7 +473,7 @@ window.open(whatsappLink, "_blank");
                   <option value="pending">Pending</option>
                   <option value="in progress">In Progress</option>
                   <option value="close">Closed</option>
-                  <option value="not closed">Not Closed</option>
+                  <option value="cancelled">Cancelled</option>
                 </select>
               </div>
               <div>
@@ -483,8 +500,8 @@ window.open(whatsappLink, "_blank");
   {/* Filter leads based on the selected employee */}
   <div>
     Total Lead visit:{" "}
-    {leads
-      .filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter) // filter by employee
+    {visit
+      .filter((lead) => !employeeFilter || lead.employee_name === employeeFilter) // filter by employee
       .reduce(
         (acc, lead) => acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
         0
@@ -602,18 +619,18 @@ window.open(whatsappLink, "_blank");
         </td>
 
         {/* Status */}
-        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.status === "pending" ? "text-[red]" : lead.status === "in progress" ? "text-[orange]" : "text-[green]"}`}>
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.status === "pending" ? "text-[red]" : lead.status === "in progress" ? "text-[orange]" : "text-[black]"}`}>
           {lead.status}
         </td>
 
         {/* Visit Status */}
-        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.visit === "pending" ? "text-[red]" : lead.visit === "Fresh Visit" ? "text-[orange]" : "text-[green]"}`}>
-          {lead.visit}
+        <td className={`px-6 py-4 border-b border-gray-200 font-semibold`}>
+          {lead.visit || 'N/A'}
         </td>
 
         {/* Visit Date */}
-        <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-          {lead.visit_date === "pending" ? lead.visit_date : moment(lead.visit_date).format("DD-MM-YYYY")}
+        <td className="px-6 py-4 border-b border-gray-200 font-semibold ">
+        {lead.visit_date || 'N/A'}
         </td>
 
         {/* Created Time */}

@@ -23,7 +23,7 @@ const LeadVisitChart = () => {
       setLoading(true); // Start loading
 
       try {
-        const response = await axios.get(`http://localhost:9000/api/leads`);
+        const response = await axios.get(`http://localhost:9000/api/employe-all-visit`);
         const allLeads = response.data;
 
         const today = moment();
@@ -122,6 +122,7 @@ const LeadVisitChart = () => {
     </Wrapper>
   );
 };
+
 
 export default LeadVisitChart;
 

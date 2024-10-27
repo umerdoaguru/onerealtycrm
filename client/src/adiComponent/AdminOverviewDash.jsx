@@ -13,7 +13,7 @@ import { GiFiles, GiMoneyStack } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 
-const AdminOverviewDash = () => {
+const AdminOverviewDash = () =>  {
   // const [metrics, setMetrics] = useState([
   //     { title: 'Total Leads', value: 0, positive: true },
   //     { title: 'Total Invoices', value: 0, positive: false },
@@ -23,15 +23,10 @@ const AdminOverviewDash = () => {
   const [leads, setLeads] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("LeadData"); // Set 'LeadData' as default
+  const [visit , setVisit] = useState([]);
 
   const UserId = useSelector((state) => state.auth.user.id);
 
-  useEffect(() => {
-    fetchLeads();
-    fetchEmployee();
-    // fetchQuotation();
-    // fetchInvoice();
-  }, []);
 
   const fetchLeads = async () => {
     try {
@@ -48,6 +43,19 @@ const AdminOverviewDash = () => {
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
+    }
+  };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-all-visit`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
     }
   };
 
@@ -70,13 +78,21 @@ const AdminOverviewDash = () => {
   //   }
   // };
 
+  
+  useEffect(() => {
+    fetchLeads();
+    fetchEmployee();
+  fetchVisit();
+  }, []);
+
   const employeeCount = employee.length;
   const leadCount = leads.length;
-  // const quotationCount = quotation.length;
-  // const invoiceCount = invoice.length;
   const closedCount = leads.filter(
     (lead) => lead.deal_status === "close"
   ).length; 
+  
+  const visitCount = visit.length;
+
   return (
     <>
       <div className="flex flex-wrap justify-around mt-5">
@@ -115,7 +131,7 @@ const AdminOverviewDash = () => {
                     Total Visit
                   </h5>
                   <p className="text-gray-800 text-xl font-semibold ">
-                    {leads.filter((item) => item.visit !== "pending").length}
+                   {visitCount}
                   </p>
                 </div>
               </div>
@@ -145,7 +161,8 @@ const AdminOverviewDash = () => {
             </div>
           </Link>
         </div>
-        <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+         {/* Card for Closed Data */}
+         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
           <Link to="/admin-total-closed">
             <div
               className={`shadow-lg rounded-lg overflow-hidden cursor-pointer ${
@@ -189,6 +206,7 @@ const AdminOverviewDash = () => {
             </div>
           </Link>
         </div>
+        
       </div>
     </>
   );

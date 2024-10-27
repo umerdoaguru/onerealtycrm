@@ -70,34 +70,30 @@ const d_fileds = {
   },
   visit: {
     heading: [
-      "Lead No.",
-      "Assigned To",
-      "Lead Name",
-      "subject",
-      "Phone Number",
-      // "Date",
-      "Lead Source",
-      "visit date",
+      "S.no.",
+      "Lead Id.",
+      "Name",
+      "Employee Name",
+    
+    
+     
+    
       "visit",
-      // "Quotation Status",
-      // "Invoice Status",
-      "Deal Status",
-      "FollowUp Status",
+      "visit date",
+      "report"
+     
     ],
     columns: [
-      "lead_no",
-      "assignedTo",
+      "id",
+      "lead_id",
+      
       "name",
-      "subject",
-      "phone",
-      // "createdTime",
-      "leadSource",
+      "employee_name",
+     
       "visit_date",
       "visit",
-      // "quotation_status",
-      // "invoice_status",
-      "deal_status",
-      "follow_up_status",
+      "report"
+      
     ],
     visit: [],
   },
@@ -267,30 +263,27 @@ const EmployeeReport = () => {
   };
 
   const handleDownload = () => {
-    // Items per page (5 in this case, or any other number you are using)
     const itemsPerPage = 5;
-
-    // Calculate the start and end index for the current page
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-
+  
     // Get the data for the current page
-    const paginatedData = dataFields[selectedCategory][selectedCategory].slice(
-      startIndex,
-      endIndex
-    );
-
-    // Convert the paginated data to Excel
+    const paginatedData = dataFields[selectedCategory][selectedCategory]
+      .slice(startIndex, endIndex)
+      .map(({ createdTime,d_closeDate, ...rest }) => rest); // Remove createdTime and closeDate
+  
+    // Convert the filtered paginated data to Excel
     const ws = XLSX.utils.json_to_sheet(paginatedData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
+  
     // Write the Excel file
     XLSX.writeFile(
       wb,
       `${selectedCategory}-${filter}-data-page-${currentPage}.xlsx`
     );
   };
+  
 
   // const quotationAxios = axios.create({
   //   baseURL: "http://localhost:9000/api",
@@ -327,7 +320,7 @@ const EmployeeReport = () => {
         // quotationAxios.get(`/get-quotation-byEmploye/${EmpId}`),
         // invoiceAxios.get(`/get-employee-invoice/${EmpId}`),
         leadsAxios.get(`/employe-leads/${EmpId}`),
-        visitAxios.get(`/employe-leads/${EmpId}`),
+        visitAxios.get(`/employebyid-visit/${EmpId}`),
         closedAxios.get(`/employe-leads/${EmpId}`),
       ]);
 

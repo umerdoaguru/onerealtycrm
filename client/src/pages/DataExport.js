@@ -17,6 +17,8 @@ import CloseData from "../components/DataExport/CloseDateData";
 
 function DataExport() {
   const [leads, setLeads] = useState([]);
+  const [visit, setVisit] = useState([]);
+
   const [employee, setEmployee] = useState([]);
   const [quotation, setQuotation] = useState([]);
   const [invoice, setInvoice] = useState([]);
@@ -29,6 +31,7 @@ function DataExport() {
     fetchEmployee();
     fetchQuotation();
     fetchInvoice();
+    fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
@@ -70,13 +73,26 @@ function DataExport() {
       console.error("Error fetching invoices:", error);
     }
   };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-all-visit`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
 
   const leadCount = leads.length;
   const employeeCount = employee.length;
  
-  const visitCount = leads.filter(
-    (lead) => lead.visit === "Fresh Visit" || lead.visit === "Repeated Visit"
-  ).length;
+
+  const visitCount = visit.length;
+
 
   const closedCount = leads.filter(
     (lead) => lead.deal_status === "close"

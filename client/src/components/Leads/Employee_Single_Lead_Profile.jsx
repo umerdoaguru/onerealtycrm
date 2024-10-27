@@ -55,7 +55,7 @@ function Employee_Single_Lead_Profile() {
         { value: "", label: "Select Deal Status" },
         { value: "pending", label: "pending" },
         { value: "close", label: "close" },
-        { value: "not close", label: "not close" },
+        { value: "cancelled", label: "cancelled" },
         { value: "in-progress", label: "in-progress" },
       ],
     },
@@ -311,6 +311,9 @@ function Employee_Single_Lead_Profile() {
   const closePopupVisit = () => {
     setShowPopupVisit(false);
   };
+  
+  const totalVisit = visit.length;
+console.log(totalVisit);
 
   return (
     <>
@@ -443,22 +446,14 @@ function Employee_Single_Lead_Profile() {
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Visit Date
-                  </th>
+                 
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Visit
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Quotation
                   </th>
-                  {/* <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Invoice
-                  </th> */}
-                  {/* <th className="px-6 py-3 border-b-2 border-gray-300">
-                    {" "}
-                    Invoice Status
-                  </th> */}
+                
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
                     Status
@@ -501,11 +496,9 @@ function Employee_Single_Lead_Profile() {
                       {lead.assignedTo}
                     </td>
 
+                   
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
-                      {lead.visit_date}
-                    </td>
-                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
-                      {lead.visit}
+                      {totalVisit}
                     </td>
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
                       {lead.quotation}
