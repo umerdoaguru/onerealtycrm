@@ -100,6 +100,7 @@ const QuotationInputForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    
     // Check if any field is empty (all fields are required)
     for (let key in formData) {
       if (!formData[key]) {
