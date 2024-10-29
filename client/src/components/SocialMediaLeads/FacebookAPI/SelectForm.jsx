@@ -24,11 +24,8 @@ const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
     // setSelectedFormId(formId);
     // onFormSelect(formId); //pass form id to parents me kiya
     const formId = e.target.value;
-<<<<<<< HEAD
-=======
     const formName = forms.find((form) => form.form_id === formId)?.form_name; // Get the form name based on the selected form ID
 
->>>>>>> main
     setMe(formId);
     setSelectedFormId(formId);
     setSelectedFormName(formName);

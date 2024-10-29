@@ -17,7 +17,6 @@ const LeadsTable = () => {
   
   const [leadsAssigned, setLeadsAssigned] = useState([]);
 
-<<<<<<< HEAD
   // Fetch leads based on selected form ID
   // const fetchLeadsByFormId = async (formId) => {
   //   try {
@@ -28,7 +27,6 @@ const LeadsTable = () => {
   //     setError('Failed to fetch leads');
   //   }
   // };
-=======
   const [showPopup, setShowPopup] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
@@ -46,7 +44,6 @@ const LeadsTable = () => {
   const [leadsPerPage] = useState(10);
   
 
->>>>>>> main
   const fetchLeadsByFormId = async () => {
     try {
       const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${gotId}`);
@@ -200,18 +197,18 @@ window.open(whatsappLink, "_blank");
     fetchLeadassigned();
   }, [gotId])
 
-  const saveIntoDB = async () => {
-    try {
-      // Fetch leads from Meta API via backend
-      const response = await axios.post('http://localhost:9000/api/leads/fetch', {
-        formId: gotId,
-      });
-      setLoading(true);
-      fetchLeadsByFormId();
-    } catch (err) {
-      console.error('Error fetching leads:', err);
-    }
-  }
+  // const saveIntoDB = async () => {
+  //   try {
+  //     // Fetch leads from Meta API via backend
+  //     const response = await axios.post('http://localhost:9000/api/leads/fetch', {
+  //       formId: gotId,
+  //     });
+  //     setLoading(true);
+  //     fetchLeadsByFormId();
+  //   } catch (err) {
+  //     console.error('Error fetching leads:', err);
+  //   }
+  // }
 
   useEffect(() => {
     saveIntoDB();
@@ -232,12 +229,9 @@ window.open(whatsappLink, "_blank");
 
       {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
 
-<<<<<<< HEAD
       <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={handleFormSelect} />
-=======
       <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={(formId, formName) => handleFormSelect(formId, formName)} />
 
->>>>>>> main
 
       {loading && <p>Loading...</p>}
 

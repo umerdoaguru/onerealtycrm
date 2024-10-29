@@ -67,11 +67,8 @@ import VisitTable from "../components/EmployeeModule/VisitTable";
 import CloseTable from "../components/EmployeeModule/CloseTable";
 import ViewAllQuotationsByLead from "../components/Leads/ViewAllQuotationsByLead";
 import Final_quotationBy_emp from "../pages/Quotation/Final_quotationBy_emp";
-<<<<<<< HEAD
 import QuotationInputForm from "../components/EmployeeModule/QuotationByLeads/QuotationInputForm";
-=======
 import ViewAllVisit from "../components/Leads/ViewAllVisit";
->>>>>>> main
 
 function EmployeeRoutes() {
   const user = useSelector((state) => state.auth.user);

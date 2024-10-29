@@ -182,7 +182,7 @@ const updateLeadStatus = async (req, res) => {
 const getEmployeeQuotation = async (req, res) => {
   try {
     const { id } = req.params;
-    const sql = "SELECT * FROM quotations_data WHERE employeeId = ?";
+    const sql = "SELECT * FROM quotations_information WHERE employeeId = ?";
     
     const result = await new Promise((resolve, reject) => {
       db.query(sql, [id], (err, results) => {
@@ -261,8 +261,7 @@ const getAllEmployeeTotalLeads = async (req, res) => {
 const getLeadQuotation = async (req, res) => {
   try {
     const { id } = req.params;
-    const sql = "SELECT * FROM quotations_data WHERE lead_id = ?";
-
+    const sql = "SELECT * FROM quotations_information WHERE lead_id = ?";
     const result = await new Promise((resolve, reject) => {
       db.query(sql, [id], (err, results) => {
         if (err) {

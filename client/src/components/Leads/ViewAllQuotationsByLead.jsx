@@ -26,11 +26,14 @@ const EmployeeQuotationList = () => {
         `http://localhost:9000/api/get-quotation-byLead/${id}`
       );
       setQuotations(response.data);
-      console.log(response);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching quotations:", error);
     }
   };
+
+  console.log(quotations);
+  
 
   const handleDelete = async (id) => {
     const isConfirmed = window.confirm(
@@ -75,15 +78,22 @@ const EmployeeQuotationList = () => {
     setSortAsc(!sortAsc);
   };
 
-  const filteredQuotations = quotations.filter((quotation) =>
-    quotation.quotation_name.toLowerCase().includes(filterText.toLowerCase())
+  const filteredQuotations = quotations.filter(
+    (quotation) =>
+      quotation.customer_name &&
+      quotation.customer_name.toLowerCase().includes(filterText.toLowerCase())
   );
+
+  console.log('filteredQuotations', filteredQuotations);
+  
 
   const offset = currentPage * itemsPerPage;
   const currentQuotations = filteredQuotations.slice(
     offset,
     offset + itemsPerPage
   );
+  console.log('User Quotation Data :',currentQuotations);
+  
   const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
 
 
@@ -120,12 +130,12 @@ const EmployeeQuotationList = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentQuotations.map((quotation, index) => (
-                    <tr key={quotation.quotation_id}>
+                    <tr key={quotation.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {offset + index + 1}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {quotation.quotation_name}
+                        {quotation.customer_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {moment(quotation.created_date).format("DD/MM/YYYY")}
@@ -134,19 +144,19 @@ const EmployeeQuotationList = () => {
                         {quotation.status}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link to={`/final-quotationBy-emp/${id}/${quotation.quotation_id}`}>
+                        <Link to={`/final-quotationBy-emp/${id}/${quotation.id}`}>
                           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded m-1">
                             View
                           </button>
                         </Link>
                         <button
                           className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
-                          onClick={() => handleDelete(quotation.quotation_id)}
+                          onClick={() => handleDelete(quotation.id)}
                         >
                           Delete
                         </button>
                         <Link
-                          to={`/update-quotation-name/${quotation.quotation_id}`}
+                          to={`/update-quotation-name/${quotation.id}`}
                         >
                           <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1">
                             Edit

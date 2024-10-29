@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { toWords } from 'number-to-words'; // Importing only the needed function
+import axios from 'axios'
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import cogoToast from 'cogo-toast';
 
 const QuotationInputForm = () => {
+  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpName = useSelector((state) => state.auth.user.name);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
   const initialFormData = {
     customerName: '',
     contactNumber: '',
@@ -30,9 +39,10 @@ const QuotationInputForm = () => {
     p1p2Charges: '',
     remarks: ''
   };
+
   const [formData, setFormData] = useState(initialFormData);
 
-    // Function to convert number to words
+
   // Function to convert number to words
   const numberToWords = (num) => {
     return toWords(num);
@@ -40,46 +50,24 @@ const QuotationInputForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let updatedFormData = { ...formData };
 
     // Contact number validation (exactly 10 digits)
     if (name === 'contactNumber') {
       if (value.length <= 10 && /^\d*$/.test(value)) {
-        setFormData({ ...formData, contactNumber: value });
+        updatedFormData.contactNumber = value;
       }
     }
+
     // Aadhaar number validation (exactly 12 digits)
     else if (name === 'adhaarNumber') {
       if (value.length <= 12 && /^\d*$/.test(value)) {
-        setFormData({ ...formData, adhaarNumber: value });
+        updatedFormData.adhaarNumber = value;
       }
     }
-    // Other fields without validation restrictions
-    else {
-      setFormData({ ...formData, [name]: value });
-    }
 
-    
-     // Automatically convert Booking Amount to words
-     if (name === 'bookingAmount') {
-      setFormData((prevData) => ({
-        ...prevData,
-        bookingAmount: value,
-        bookingAmountWords: value && !isNaN(value) ? numberToWords(value) : '',
-      }));
-    }
-    // Automatically convert Balance Amount to words
-    else if (name === 'balanceAmount') {
-      setFormData((prevData) => ({
-        ...prevData,
-        balanceAmount: value,
-        balanceAmountWords: value && !isNaN(value) ? numberToWords(value) : '',
-      }));
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-
-
-    if (name === 'panNumber') {
+    // PAN number validation and formatting
+    else if (name === 'panNumber') {
       let formattedValue = value.toUpperCase();
 
       // Only allow first 5 characters as letters, next 4 as numbers, last as letter
@@ -91,44 +79,95 @@ const QuotationInputForm = () => {
         formattedValue = formattedValue.slice(0, 9) + formattedValue.slice(9).replace(/[^A-Z]/g, ''); // Last character as letter
       }
 
-      setFormData({ ...formData, panNumber: formattedValue });
-    } else {
-      setFormData({ ...formData, [name]: value });
+      updatedFormData.panNumber = formattedValue;
     }
+
+    // Automatically convert Booking Amount to words
+    else if (name === 'bookingAmount') {
+      updatedFormData.bookingAmount = value;
+      updatedFormData.bookingAmountWords = value && !isNaN(value) ? numberToWords(value) : '';
+    }
+
+    // Automatically convert Balance Amount to words
+    else if (name === 'balanceAmount') {
+      updatedFormData.balanceAmount = value;
+      updatedFormData.balanceAmountWords = value && !isNaN(value) ? numberToWords(value) : '';
+    }
+
+    // Default case for other fields
+    else {
+      updatedFormData[name] = value;
+    }
+
+    console.log('data on change :', updatedFormData);
+    
+
+    // Update formData state once at the end
+    setFormData(updatedFormData);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    
-    // Check if any field is empty (all fields are required)
-    for (let key in formData) {
-      if (!formData[key]) {
-        alert(`${key} is required.`);
-        return;
+
+    try {
+      // Combine formData with additional fields
+      const dataToSubmit = {
+        ...formData,
+        employeeId: EmpId,
+        lead_id: id,
+        employee_name: EmpName
+      };
+
+      console.log('Submit data check',dataToSubmit);
+      
+
+      // Send the POST request to save the quotation
+      const response = await axios.post("http://localhost:9000/api/quotation-information-form", dataToSubmit);
+      console.log("Quotation added successfully:", response.data);
+
+      // Send the PUT request to update the quotation status
+      try {
+        const updateResponse = await axios.put(
+          `http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,
+          { quotation: "created" }
+        );
+
+        if (updateResponse.status === 200) {
+          console.log("Updated successfully:", updateResponse.data);
+          cogoToast.success("Quotation Created and status updated successfully");
+        } else {
+          console.error("Error updating:", updateResponse.data);
+          cogoToast.error("Failed to update the quotation status.");
+        }
+      } catch (error) {
+        console.error("Request failed:", error);
+        cogoToast.error("Failed to update the quotation status.");
       }
+
+      navigate(`/final-quotation-by-lead/${response.data.quotation.id}`);
+    } catch (error) {
+      console.error("Error adding quotation:", error.response?.data || error.message);
     }
-
-    console.log('Form Data:', formData);
   };
+  
 
-    // Clear form fields
-    const handleClear = () => {
-      const confirmed = window.confirm('Are you sure you want to clear all data?');
-      if (confirmed) {
-        setFormData(initialFormData);
-      }
-    };
+  // Clear form fields
+  const handleClear = () => {
+    const confirmed = window.confirm('Are you sure you want to clear all data?');
+    if (confirmed) {
+      setFormData(initialFormData);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-center">Quotation Information Form</h2>
-      
+      {/* <h2 className="text-2xl font-bold mb-4 text-center">Quotation Information</h2> */}
+
       {/** Customer Information **/}
       <div className="grid grid-cols-2 gap-4">
         <input type="text" name="customerName" placeholder="Customer Name" value={formData.customerName} onChange={handleChange} className="p-2 border rounded" required />
         <input type="text" name="contactNumber" placeholder="Contact Number" value={formData.contactNumber} onChange={handleChange} className="p-2 border rounded" required />
-        <input type="text" name="alternateNumber" placeholder="Alternate Number" value={formData.alternateNumber} onChange={handleChange} className="p-2 border rounded" required />
+        <input type="text" name="alternateNumber" placeholder="Alternate Number" value={formData.alternateNumber} onChange={handleChange} className="p-2 border rounded" maxLength="10"  />
         <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="p-2 border rounded" required />
         <input type="text" name="adhaarNumber" placeholder="Adhaar Number" value={formData.adhaarNumber} onChange={handleChange} className="p-2 border rounded" required />
         <input type="text" name="panNumber" placeholder="PAN Number" value={formData.panNumber} onChange={handleChange} className="p-2 border rounded" maxLength='10' required />
@@ -162,17 +201,17 @@ const QuotationInputForm = () => {
           <label className="block text-gray-400">Payment Due Date 1</label>
           <input type="date" name="paymentDueDate1" value={formData.paymentDueDate1} onChange={handleChange} className="p-2 border rounded w-full" required />
         </div>
-        
+
         <div>
           <label className="block text-gray-400">Payment Due Date 2</label>
           <input type="date" name="paymentDueDate2" value={formData.paymentDueDate2} onChange={handleChange} className="p-2 border rounded w-full" required />
         </div>
-        
+
         <div>
           <label className="block text-gray-400">Payment Due Date 3</label>
           <input type="date" name="paymentDueDate3" value={formData.paymentDueDate3} onChange={handleChange} className="p-2 border rounded w-full" required />
         </div>
-        
+
         <div>
           <label className="block text-gray-400">Payment Due Date 4</label>
           <input type="date" name="paymentDueDate4" value={formData.paymentDueDate4} onChange={handleChange} className="p-2 border rounded w-full" required />
@@ -186,8 +225,8 @@ const QuotationInputForm = () => {
       </div>
       <textarea name="remarks" placeholder="Remarks" value={formData.remarks} onChange={handleChange} className="p-2 border rounded mt-4 w-full" required></textarea>
 
-      <button type="submit" className="mt-6 bg-blue-500 text-white p-2 rounded">Submit</button>
-      <button type="button" onClick={handleClear} className="bg-gray-400 text-white p-2 rounded">Clear</button>
+      <button type="submit" className="mt-6 bg-blue-500 text-white p-2 rounded m-1">Submit</button>
+      <button type="button" onClick={handleClear} className="bg-gray-400 text-white p-2 rounded m-1">Clear</button>
     </form>
   );
 };

@@ -29,3 +29,10 @@
 <!-- 12. and print quoation sttus ke hisaahb se quoation ho na hcahiye -->
 13. closed deal lagana hai sueradmin dash mai
 14. 
+# 27 Oct
+    <!-- **Add New Quotation Information Form  -->
+    <!-- **Update Quotation Form add to service side  -->
+    **Quotation Print page set krna he 
+    <!-- **uska form page set krna he proper krna he single page  -->
+    <!-- **Proper Data update krna he -->
+    <!-- **API update krni he sari he -->Hogai he -->
