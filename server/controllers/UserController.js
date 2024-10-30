@@ -163,6 +163,9 @@ const deleteQuotation = async (req, res) => {
       });
     });
 
+
+ 
+
     // Delete services associated with the quotation
     const sqlDeleteServices =
       "DELETE FROM services_data WHERE quotation_id = ?";
@@ -204,9 +207,21 @@ const deleteQuotation = async (req, res) => {
       });
     });
 
+        //  // Then, update the leads table to set quotation status to "not created"
+        //  const updateSql = "UPDATE leads SET quotation = 'not created' WHERE lead_id = ?";
+        //  await new Promise((resolve, reject) => {
+        //    db.query(updateSql, [id], (err, results) => {
+        //      if (err) {
+        //        reject(err);
+        //      } else {
+        //        resolve(results);
+        //      }
+        //    });
+        //  });
+
     res.status(200).json({
       success: true,
-      message: "Quotation, associated notes, and services deleted successfully",
+      message: "Quotation deleted successfully",
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });

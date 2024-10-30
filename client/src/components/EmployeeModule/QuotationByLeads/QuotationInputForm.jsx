@@ -143,7 +143,7 @@ const QuotationInputForm = () => {
         console.error("Request failed:", error);
         cogoToast.error("Failed to update the quotation status.");
       }
-
+      console.log("Id check kro kon si he ", response.data.quotation.id);
       navigate(`/final-quotation-by-lead/${response.data.quotation.id}`);
     } catch (error) {
       console.error("Error adding quotation:", error.response?.data || error.message);

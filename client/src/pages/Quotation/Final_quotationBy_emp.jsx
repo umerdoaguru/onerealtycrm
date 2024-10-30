@@ -34,22 +34,7 @@ function Final_quotationBy_emp() {
   };
 
   const handlePrintPage = () => {
-    const printContent = document.getElementById('quotationData');
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-      <html>
-        <head>
-          <title>Print Quotation</title>
-          <style>
-            /* Add any styles you need here for the print layout */
-          </style>
-        </head>
-        <body onload="window.print()">
-          ${printContent.innerHTML}
-        </body>
-      </html>
-    `);
-    newWindow.document.close();
+    window.print();
   };
   
   useEffect(() => {
@@ -59,8 +44,8 @@ function Final_quotationBy_emp() {
   return (
     <Wrapper>
       <div className="w-full px-2 flex flex-col justify-center items-center">
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 lg:col-span-4 mt-3">
+        <div className=" UserInfo grid grid-cols-12 gap-4">
+          <div className=" col-span-12 lg:col-span-4 mt-3">
             <UserLogin />
           </div>
           <div className="col-span-12 lg:col-span-4 mt-3">
@@ -78,14 +63,14 @@ function Final_quotationBy_emp() {
             </button>
             <Link
               to={`/View_quotations/${leadId}`}
-              className="text-black  bg-gray-50 hover:text-gray-50 hover:bg-green-500 rounded border border-black py-1 px-3 flex items-center justify-center gap-1 text-center"
+              className="QuotationListBTN text-black  bg-gray-50 hover:text-gray-50 hover:bg-green-500 rounded border border-black py-1 px-3 flex items-center justify-center gap-1 text-center"
             > <FaClipboardList />  Quotation List
             </Link>
           </div>
         </div>
 
-        <div className="container m-2">
-          <div className="QuotationDataPage">
+        <div  className="container m-2">
+          <div id="quotationData" className="QuotationDataPage">
             <div className="container border border-black rounded-lg h-auto m-2 p-4">
               <div className="flex flex-col justify-center items-center">
                 <div>
@@ -112,7 +97,7 @@ function Final_quotationBy_emp() {
                   <hr className="my-1" />
                 </div>
               </div>
-              <div className="flex flex-col mt-4 gap-3 ">
+              <div   className="flex flex-col mt-4 gap-3 ">
                 {quotations[0] && (
                   <>
                     <div className="w-50 mr-2"><strong>CUSTOMER NAME:</strong> {quotations[0]?.customer_name}</div>
@@ -183,7 +168,7 @@ function Final_quotationBy_emp() {
           </div>
 
           <div className="w-full px-2 mt-4">
-            <h4 className="my-2">Quotation Status: <strong className={` ${quotationStatus !== "Approved" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
+            <h4 className="QuoStatus my-2">Quotation Status: <strong className={` ${quotationStatus !== "Approved" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
             <div className="flex space-x-3 items-center">
               {/* <button
                 className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 mt-1"
@@ -192,9 +177,9 @@ function Final_quotationBy_emp() {
                 Review Quotation Data
               </button> */}
               <button
-                className={`bg-green-700 ${quotationStatus !== "Approved" ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"} text-white rounded p-2 mt-1`}
+                className={`bg-green-700 ${quotationStatus !== "Pending" ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"} text-white rounded p-2 mt-1`}
                 onClick={handlePrintPage}
-                disabled={quotationStatus !== "Approved"}
+                disabled={quotationStatus !== "Pending"}
               >
                 Print Page
               </button>
@@ -209,6 +194,37 @@ function Final_quotationBy_emp() {
 export default Final_quotationBy_emp;
 
 const Wrapper = styled.div`
+ @media print {
+    body * {
+      visibility: hidden;
+    }
+    .QuotationDataPage,
+    .QuotationDataPage * {
+      visibility: visible;
+    }
+    .QuotationDataPage {
+      position: absolute;
+      top: 0;
+      left: 50%;       /* Center horizontally */
+      transform: translateX(-50%); /* Adjust to be perfectly centered */
+      width: 90%;       /* Adjust width as needed */
+      margin: 0 auto;
+      // text-align: center;
+      padding: 0.5rem; /* Reduce padding */
+      font-size: 0.8em;
+    }
+
+    /* Additional print rules to hide specific elements */
+    button,
+    .QuoStatus,
+    .header,
+    .footer,
+    .UserInfo,
+    .QuotationListBTN {
+      display: none;
+    }
+  }
+
   th {
     font-weight: bold;
     font-size: 1.2rem;

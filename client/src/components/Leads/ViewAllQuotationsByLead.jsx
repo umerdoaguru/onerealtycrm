@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import ReactPaginate from "react-paginate";
 import MainHeader from "../MainHeader";
 import EmployeeeSider from "../EmployeeModule/EmployeeSider";
+import cogoToast from "cogo-toast";
 
 const EmployeeQuotationList = () => {
   const [quotations, setQuotations] = useState([]);
@@ -15,6 +16,8 @@ const EmployeeQuotationList = () => {
   const [sortAsc, setSortAsc] = useState(true);
   const [render, setRender] = useState(false);
   const { id } = useParams();
+
+  
 
   useEffect(() => {
     fetchQuotations();
@@ -35,25 +38,66 @@ const EmployeeQuotationList = () => {
   console.log(quotations);
   
 
+  // const handleDelete = async (id) => {
+  //   const isConfirmed = window.confirm(
+  //     "Are you sure you want to delete this quotation?"
+  //   );
+  //   if (isConfirmed) {
+  //     try {
+  //       const response = await axios.delete(
+  //         `http://localhost:9000/api/quotation/${id}`
+  //       );
+  //       if (response.status === 200) {
+  //         console.log("Quotation deleted successfully");
+  //       }
+  //       console.log(response);
+  //       setRender(!render);
+  //     } catch (error) {
+  //       console.error("Error deleting quotation:", error);
+  //     }
+  //   }
+  // };
+
   const handleDelete = async (id) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this quotation?"
     );
     if (isConfirmed) {
       try {
+        // Delete the quotation
         const response = await axios.delete(
           `http://localhost:9000/api/quotation/${id}`
         );
+        
         if (response.status === 200) {
           console.log("Quotation deleted successfully");
+  
+          // After deletion, update the leads table status
+          try {
+            const updateResponse = await axios.put(
+              `http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,
+              { quotation: "not created" }
+            );
+  
+            if (updateResponse.status === 200) {
+              console.log("Status updated successfully:", updateResponse.data);
+              cogoToast.success("Quotation deleted and status updated successfully");
+            } else {
+              console.error("Error updating status:", updateResponse.data);
+              cogoToast.error("Failed to update the quotation status.");
+            }
+          } catch (error) {
+            console.error("Request failed while updating status:", error);
+            cogoToast.error("Failed to update the quotation status.");
+          }
         }
-        console.log(response);
         setRender(!render);
       } catch (error) {
         console.error("Error deleting quotation:", error);
       }
     }
   };
+  
 
   const handleCopyQuotation = async (quotationId) => {
     try {
