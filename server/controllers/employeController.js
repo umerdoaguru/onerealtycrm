@@ -462,6 +462,38 @@ const AllgetEmployeebyvisit = async (req, res) => {
 };
 
 
+const updateOnlyVisitStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { visit } = req.body;
+    
+    console.log(visit, id);
+    
+    const sql = `UPDATE leads SET 
+    visit = ?
+    
+    WHERE lead_id = ?`;
+
+    await new Promise((resolve, reject) => {
+      db.query(sql, [visit, id], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+    
+    res.status(200).json({ message: "Visit Status updated successfully" });
+  } catch (error) {
+    console.error("Database update error:", error);
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
+};
+
+
+
+
 module.exports = {
   getEmployeeInvoice,
   getEmployeeLeads,
@@ -471,5 +503,5 @@ module.exports = {
   updateOnlyLeadStatus,
   updateOnlyQuotationStatus,
   getAllEmployeeTotalLeads,
-  getLeadQuotation,getEmployeeVisit,createVisit,deleteVisit,updateVisit,getEmployeebyidvisit,AllgetEmployeebyvisit
+  getLeadQuotation,getEmployeeVisit,createVisit,deleteVisit,updateVisit,getEmployeebyidvisit,AllgetEmployeebyvisit,updateOnlyVisitStatus
 };

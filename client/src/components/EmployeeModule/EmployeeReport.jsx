@@ -49,6 +49,7 @@ const d_fileds = {
       "subject",
       "Phone Number",
       "Date",
+      "Lead Status",
       "Lead Source",
       "Quotation Status",
       "Deal Status",
@@ -61,6 +62,7 @@ const d_fileds = {
       "subject",
       "phone",
       "createdTime",
+      "lead_status",
       "leadSource",
       "quotation_status",
       "deal_status",
@@ -341,7 +343,7 @@ const EmployeeReport = () => {
             //   invoiceData = formatData(result.value.data);
             //   break;
             case 0:
-              leadsData = formatData(result.value.data);
+              leadsData = formatData(result.value.data).filter((item) => item.lead_status !== "in progress");
               break;
             case 1:
               visitData = formatData(result.value.data).filter((item) => {

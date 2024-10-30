@@ -34,6 +34,8 @@ import SuperAdminTotalClosedDeal from "../adiComponent/Super-Admin/SuperAdminTot
 import EmployeeProfile from "../adiComponent/Super-Admin/employeProfile";
 import AdminProfile from "../adiComponent/Super-Admin/adminProfile";
 import SuperAdminProfile from "../adiComponent/Super-Admin/superAdminProfile";
+import Super_view_visit from "../adiComponent/Super-Admin/Super_view_visit";
+import Super_view_quotations from "../adiComponent/Super-Admin/Super_view_quotations";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -66,6 +68,14 @@ function SuperAdminRoutes() {
         <Route
           path="/super-admin-lead-single-data/:id"
           element={<Super_Single_Lead_Profile />}
+        />
+        <Route
+          path="/super_view_visit/:id"
+          element={<Super_view_visit />}
+        />
+        <Route
+          path="/super_view_quotations/:id"
+          element={<Super_view_quotations/>}
         />
         <Route
           path="/super-admin-employee-single/:employeeId"

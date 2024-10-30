@@ -18,6 +18,9 @@ import Registration from "./components/Registration";
 
 // Header & Landing Page
 import Landingpage from "./pages/Landingpage";
+import EmployeeResetPassword from "./components/EmployeeModule/EmployeeResetPassword";
+import AdminResetPassword from "./components/AdminResetPassword";
+import SuperAdminResetPassword from "./components/SuperAdminResetPassword";
 
 function App() {
   const user = useSelector((state) => state.auth.user);
@@ -35,6 +38,9 @@ function App() {
 
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/employee-login" element={<EmployeeLogin />} />
+          <Route path="/employee-reset-password" element={<EmployeeResetPassword />} />
+          <Route path="/admin-reset-password" element={<AdminResetPassword />} />
+          <Route path="/superadmin-reset-password" element={<SuperAdminResetPassword />} />
 
           
           {/* Conditionally render Admin or Employee routes based on user's role

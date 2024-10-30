@@ -16,6 +16,7 @@ const {
   deleteVisit,
   getEmployeebyidvisit,
   AllgetEmployeebyvisit,
+  updateOnlyVisitStatus,
 } = require("../controllers/employeController");
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.get("/employe-leads/:id", getEmployeeLeads);
 router.get("/employe-visit/:id", getEmployeeVisit);
 router.get("/employebyid-visit/:id", getEmployeebyidvisit);
 router.get("/employe-all-visit", AllgetEmployeebyvisit);
+router.put("/updateVisitStatus/:id", updateOnlyVisitStatus);
 
 router.put('/employe-visit', updateVisit);           
 router.delete('/employe-visit/:id', deleteVisit); 

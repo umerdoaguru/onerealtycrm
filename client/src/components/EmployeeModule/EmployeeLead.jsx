@@ -151,6 +151,7 @@ function EmployeeLead() {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterDate, setFilterDate] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   // Pagination state
@@ -221,8 +222,15 @@ function EmployeeLead() {
       });
     }
 
+    if (filterDate) {
+      filtered = filtered.filter((lead) => {
+        const leadDate = moment(lead.createdTime).format("YYYY-MM-DD");
+        return leadDate === filterDate;
+      });
+    }
+
     setFilteredLeads(filtered);
-  }, [searchTerm, startDate, endDate, leads]);
+  }, [searchTerm, startDate, endDate, leads,filterDate]);
 
   // Use filteredLeads for pagination
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
@@ -275,6 +283,15 @@ function EmployeeLead() {
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
+                  className="border   rounded-2xl p-2 w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="">Date</label>
+                <input
+                  type="date"
+                  value={filterDate}
+        onChange={(e) => setFilterDate(e.target.value)}
                   className="border   rounded-2xl p-2 w-full"
                 />
               </div>

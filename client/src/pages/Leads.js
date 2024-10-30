@@ -26,6 +26,8 @@ function Leads() {
     address: "",
     actual_date: "",
   });
+  const [customLeadSource, setCustomLeadSource] = useState("");
+
   const [showPopup, setShowPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [errors, setErrors] = useState({});
@@ -43,17 +45,18 @@ function Leads() {
   const [employeeFilter, setEmployeeFilter] = useState("");
   const [visit, setVisit] = useState([]);
 
-
   // Fetch leads and employees from the API
   useEffect(() => {
     fetchLeads();
     fetchEmployees();
-    fetchVisit();
+    // fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads-all-visits");
+      const response = await axios.get(
+        "http://localhost:9000/api/leads"
+      );
       setLeads(response.data);
       console.log(leads);
     } catch (error) {
@@ -69,19 +72,18 @@ function Leads() {
       console.error("Error fetching employees:", error);
     }
   };
-  const fetchVisit = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/api/employe-all-visit`
-      );
-      console.log(response.data);
-      setVisit(response.data);
-      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
-    
-    } catch (error) {
-      console.error("Error fetching quotations:", error);
-    }
-  };
+  // const fetchVisit = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:9000/api/employe-all-visit`
+  //     );
+  //     console.log(response.data);
+  //     setVisit(response.data);
+  //     // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+  //   } catch (error) {
+  //     console.error("Error fetching quotations:", error);
+  //   }
+  // };
 
   const validateForm = () => {
     let formErrors = {};
@@ -136,12 +138,11 @@ function Leads() {
     setCurrentLead((prevLead) => {
       const updatedLead = { ...prevLead, [name]: value };
 
-        // If createdTime changes, update actual_date accordingly
-    if (name === "createdTime") {
-      updatedLead.actual_date = value; // Copy createdTime to actual_date
-    }
+      // If createdTime changes, update actual_date accordingly
+      if (name === "createdTime") {
+        updatedLead.actual_date = value; // Copy createdTime to actual_date
+      }
 
-  
       // If assignedTo changes, update employeeId and employeephone accordingly
       if (name === "assignedTo") {
         const selectedEmployee = employees.find(
@@ -155,12 +156,10 @@ function Leads() {
           updatedLead.employeephone = ""; // Reset employeephone if no match
         }
       }
-  
+
       return updatedLead;
     });
   };
-  
-  
 
   const handleCreateClick = () => {
     setIsEditing(false);
@@ -186,46 +185,53 @@ function Leads() {
       ...lead,
       createdTime: moment(lead.createdTime).format("YYYY-MM-DD"), // Format the createdTime
       actual_date: moment(lead.createdTime).format("YYYY-MM-DD"), // Format the createdTime
-      
     });
     setShowPopup(true);
   };
 
+  const handleLeadSourceChange = (e) => {
+    const { value } = e.target;
+    setCurrentLead((prevLead) => ({ ...prevLead, leadSource: value }));
+
+    // Reset custom lead source if the selected value is not "Other"
+    if (value !== "Other") {
+      setCustomLeadSource("");
+    }
+  };
+
+  const handleCustomLeadSourceChange = (e) => {
+    setCustomLeadSource(e.target.value);
+  };
+
+
   const saveChanges = async () => {
     if (validateForm()) {
+      // Use custom lead source if "Other" is selected
+      const leadData = {
+        ...currentLead,
+        leadSource:
+          currentLead.leadSource === "Other"
+            ? customLeadSource
+            : currentLead.leadSource,
+      };
+
       try {
         if (isEditing) {
           await axios.put(
             `http://localhost:9000/api/leads/${currentLead.lead_id}`,
-            currentLead
+            leadData
           );
         } else {
-          await axios.post("http://localhost:9000/api/leads", currentLead);
-
-        // Format the createdTime using moment
-const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as per your requirement
-
-// Generate the WhatsApp link with the formatted date
-const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Assign%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${currentLead.lead_no}%0A3)%20Name:%20${currentLead.name}%0A4)%20Phone%20Number:%20${currentLead.phone}%0A5)%20Lead%20Source:%20Facebook%20Campaign%0A6)%20Address:%20${currentLead.address}%0A7)%20Subject:%20${currentLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
-
-// Open WhatsApp link
-window.open(whatsappLink, "_blank");
-
-
+          await axios.post("http://localhost:9000/api/leads", leadData);
         }
-  
+
         fetchLeads(); // Refresh the list
         closePopup();
-  
-        // Create WhatsApp URL
-       
-  
       } catch (error) {
         console.error("Error saving lead:", error);
       }
     }
   };
-  
 
   const handleDeleteClick = async (id) => {
     const isConfirmed = window.confirm(
@@ -241,17 +247,17 @@ window.open(whatsappLink, "_blank");
     }
   };
 
-  const handleSearch = (value) =>{
-    if(value === ' '){
+  const handleSearch = (value) => {
+    if (value === " ") {
       return;
     }
     setSearchTerm(value);
-  }
+  };
   useEffect(() => {
     let filtered = leads;
     console.log(filtered);
     // Filter by search term
-    if (searchTerm) { 
+    if (searchTerm) {
       filtered = filtered.filter(
         (lead) =>
           lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -289,9 +295,12 @@ window.open(whatsappLink, "_blank");
       filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
     }
     if (employeeFilter) {
-      filtered = filtered.filter((employee) => employee.assignedTo === employeeFilter);
+      filtered = filtered.filter(
+        (employee) => employee.assignedTo === employeeFilter
+      );
     }
 
+    console.log(filtered);
     setFilteredLeads(filtered);
     setCurrentPage(0); // Reset to first page on filter change
   }, [
@@ -342,38 +351,8 @@ window.open(whatsappLink, "_blank");
                 Add Lead
               </button>
             </div>
-            {/* <div className="grid grid-cols-3 gap-4 mb-4">
-              <div>
-                <label htmlFor="">Search</label>
-                <input
-                  type="text"
-                  placeholder="Search by Name, Lead No, Lead Source , Address"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
-                />
-              </div>
-              <div>
-                <label htmlFor="">Start Date</label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="border  rounded-2xl p-2 w-full"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="">End Date</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="border   rounded-2xl p-2 w-full"
-                />
-              </div>
-            </div> */}
-              <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
+          
+            <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
                 <input
@@ -413,6 +392,8 @@ window.open(whatsappLink, "_blank");
                   <option value="">All Lead Sources</option>
                   <option value="Facebook Campaign">Facebook Campaign</option>
                   <option value="One Realty Website">One Realty Website</option>
+                  <option value="99 Acres">99 Acres</option>
+                  <option value="Referrals">Referrals</option>
                   <option value="Trade Shows">Trade Shows</option>
                   <option value="Cold Calling">Cold Calling</option>
                   <option value="Email Campaigns">Email Campaigns</option>
@@ -437,11 +418,7 @@ window.open(whatsappLink, "_blank");
                   className="border rounded-2xl p-2 w-full"
                 >
                   <option value="">All Status</option>
-                  {/* <option value="Facebook Campaign">visited</option>
-                  <option value="One Realty Website">pending</option>
-                  <option value="Trade Shows">confirm</option>
-                  <option value="Cold Calling">Cold Calling</option> */}
-                  <option default value="pending">
+                       <option default value="pending">
                     Pending
                   </option>
                   <option value="interested">Interested</option>
@@ -455,7 +432,7 @@ window.open(whatsappLink, "_blank");
                   onChange={(e) => setVisitFilter(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 >
-                    <option value="">All visit</option>
+                  <option value="">All visit</option>
                   <option value="fresh">Fresh Visit</option>
                   <option value="repeated">Repeated Visit</option>
                   <option value="associative">Associative Visit</option>
@@ -477,56 +454,61 @@ window.open(whatsappLink, "_blank");
                 </select>
               </div>
               <div>
-  <label htmlFor="">Employee Filter</label>
-  <select
-    name="assignedTo"
-    value={employeeFilter}
-    onChange={(e) => setEmployeeFilter(e.target.value)}
-    className={`border rounded-2xl p-2 w-full`}
-  >
-    <option value="">Select Employee</option>
-    {employees.map((employee) => (
-      <option key={employee.employee_id} value={employee.name}>
-        {employee.name}
-      </option>
-    ))}
-  </select>
-</div>
+                <label htmlFor="">Employee Filter</label>
+                <select
+                  name="assignedTo"
+                  value={employeeFilter}
+                  onChange={(e) => setEmployeeFilter(e.target.value)}
+                  className={`border rounded-2xl p-2 w-full`}
+                >
+                  <option value="">Select Employee</option>
+                  {employees.map((employee) => (
+                    <option key={employee.employee_id} value={employee.name}>
+                      {employee.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
 
           <div className=" overflow-x-auto mt-4 whitespace-nowrap  lg:w-[100%]">
-          <div className="flex gap-10 text-xl font-semibold my-3">
-  {/* Filter leads based on the selected employee */}
-  <div>
-    Total Lead visit:{" "}
-    {visit
-      .filter((lead) => !employeeFilter || lead.employee_name === employeeFilter) // filter by employee
-      .reduce(
-        (acc, lead) => acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
-        0
-      )}
-  </div>
-  <div>
-    Total Lead:{" "}
-    {
-      leads.filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter)
-        .length
-    }
-  </div>
-  <div>
-    Total Closed Lead:{" "}
-    {
-      leads
-        .filter((lead) => !employeeFilter || lead.assignedTo === employeeFilter)
-        .filter((lead) => lead.deal_status === "close").length
-    }
-  </div>
-</div>
-
-
-
-
+            <div className="flex gap-10 text-xl font-semibold my-3">
+              {/* Filter leads based on the selected employee */}
+              <div>
+                Total Lead visit:{" "}
+                {leads
+                  .filter(
+                    (lead) =>
+                      !employeeFilter || lead.employee_name === employeeFilter
+                  ) // filter by employee
+                  .reduce(
+                    (acc, lead) =>
+                      acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
+                    0
+                  )}
+              </div>
+              <div>
+                Total Lead:{" "}
+                {
+                  leads.filter(
+                    (lead) =>
+                      !employeeFilter || lead.assignedTo === employeeFilter
+                  ).length
+                }
+              </div>
+              <div>
+                Total Closed Lead:{" "}
+                {
+                  leads
+                    .filter(
+                      (lead) =>
+                        !employeeFilter || lead.assignedTo === employeeFilter
+                    )
+                    .filter((lead) => lead.deal_status === "close").length
+                }
+              </div>
+            </div>
 
             <table className="min-w-full bg-white border">
               <thead>
@@ -564,9 +546,7 @@ window.open(whatsappLink, "_blank");
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Visit
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Visit Date
-                  </th>
+                 
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Date
                   </th>
@@ -576,88 +556,108 @@ window.open(whatsappLink, "_blank");
                 </tr>
               </thead>
               <tbody>
-  {currentLeads.length === 0 ? (
-    <tr>
-      <td
-        colSpan="11"
-        className="px-6 py-4 border-b border-gray-200 text-center text-gray-500"
-      >
-        No data found
-      </td>
-    </tr>
-  ) : (
-    currentLeads.map((lead, index) => (
-      <tr key={lead.lead_id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {index + 1}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-          <Link to={`/lead-single-data/${lead.lead_id}`}>{lead.lead_no}</Link>
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.name}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.phone}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.leadSource}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.assignedTo}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject}
-        </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.address}
-        </td>
+                {currentLeads.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="11"
+                      className="px-6 py-4 border-b border-gray-200 text-center text-gray-500"
+                    >
+                      No data found
+                    </td>
+                  </tr>
+                ) : (
+                  currentLeads.map((lead, index) => {
+                      console.log(lead, "fdfsdfsdfsdfds");
+                      
+                    return (
+                    <tr
+                      key={index}
+                      className={index % 2 === 0 ? "bg-gray-100" : ""}
+                    >
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {index + 1}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+                        <Link to={`/lead-single-data/${lead.lead_id}`}>
+                          {lead.lead_no}
+                        </Link>
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.name}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.phone}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.leadSource}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.assignedTo}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.subject}
+                      </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {lead.address}
+                      </td>
 
-        {/* Lead Status */}
-        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.lead_status === "pending" ? "text-[red]" : lead.lead_status === "in progress" ? "text-[orange]" : "text-[green]"}`}>
-          {lead.lead_status}
-        </td>
+                      {/* Lead Status */}
+                      <td
+                        className={`px-6 py-4 border-b border-gray-200 font-semibold ${
+                          lead.lead_status === "pending"
+                            ? "text-[red]"
+                            : lead.lead_status === "in progress"
+                            ? "text-[orange]"
+                            : "text-[green]"
+                        }`}
+                      >
+                        {lead.lead_status}
+                      </td>
 
-        {/* Status */}
-        <td className={`px-6 py-4 border-b border-gray-200 font-semibold ${lead.status === "pending" ? "text-[red]" : lead.status === "in progress" ? "text-[orange]" : "text-[black]"}`}>
-          {lead.status}
-        </td>
+                      {/* Status */}
+                      <td
+                        className={`px-6 py-4 border-b border-gray-200 font-semibold ${
+                          lead.status === "pending"
+                            ? "text-[red]"
+                            : lead.status === "in progress"
+                            ? "text-[orange]"
+                            : "text-[black]"
+                        }`}
+                      >
+                        {lead.status}
+                      </td>
 
-        {/* Visit Status */}
-        <td className={`px-6 py-4 border-b border-gray-200 font-semibold`}>
-          {lead.visit || 'N/A'}
-        </td>
+                      {/* Visit Status */}
+                      <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+                        {lead.visit}
+                      </td>
 
-        {/* Visit Date */}
-        <td className="px-6 py-4 border-b border-gray-200 font-semibold ">
-        {lead.visit_date || 'N/A'}
-        </td>
+                  
 
-        {/* Created Time */}
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("DD-MM-YYYY")}
-        </td>
+                      {/* Created Time */}
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        {moment(lead.createdTime).format("DD-MM-YYYY")}
+                      </td>
 
-        {/* Actions */}
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          <button
-            className="text-blue-500 hover:text-blue-700"
-            onClick={() => handleEditClick(lead)}
-          >
-            <BsPencilSquare size={20} />
-          </button>
-          <button
-            className="text-red-500 hover:text-red-700 mx-2"
-            onClick={() => handleDeleteClick(lead.lead_id)}
-          >
-            <BsTrash size={20} />
-          </button>
-        </td>
-      </tr>
-    ))
-  )}
-</tbody>
-
+                      {/* Actions */}
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                        <button
+                          className="text-blue-500 hover:text-blue-700"
+                          onClick={() => handleEditClick(lead)}
+                        >
+                          <BsPencilSquare size={20} />
+                        </button>
+                        <button
+                          className="text-red-500 hover:text-red-700 mx-2"
+                          onClick={() => handleDeleteClick(lead.lead_id)}
+                        >
+                          <BsTrash size={20} />
+                        </button>
+                      </td>
+                    </tr>
+                  )})
+                )}
+              </tbody>
             </table>
           </div>
 
@@ -721,11 +721,10 @@ window.open(whatsappLink, "_blank");
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
                   />
-                {errors.createdTime && (
+                  {errors.createdTime && (
                     <span className="text-red-500">{errors.createdTime}</span>
                   )}
                 </div>
-                
 
                 <div className="mb-4">
                   <label className="block text-gray-700">Name</label>
@@ -767,8 +766,7 @@ window.open(whatsappLink, "_blank");
                     className="w-full p-2 border rounded"
                   >
                     <option value="">Select Lead Source</option>
-                    <option value="Website Inquiries">Website Inquiries</option>
-                    <option value="Social Media">Social Media</option>
+
                     <option value="Referrals">Referrals</option>
                     <option value="Cold Calling">Cold Calling</option>
                     <option value="Email Campaigns">Email Campaigns</option>
@@ -777,10 +775,7 @@ window.open(whatsappLink, "_blank");
                     <option value="Content Marketing">Content Marketing</option>
                     <option value="SEO">Search Engine Optimization</option>
                     <option value="Trade Shows">Trade Shows</option>
-                    <option value="Facebook Campaign">Facebook Campaign</option>
-                    <option value="One Realty Website">
-                      One Realty Website
-                    </option>
+
                     <option value="Affiliate Marketing">
                       Affiliate Marketing
                     </option>
@@ -788,7 +783,17 @@ window.open(whatsappLink, "_blank");
                     <option value="Online Directories">
                       Online Directories
                     </option>
+                    <option value="Other">Other</option>
                   </select>
+                  {currentLead.leadSource === "Other" && (
+                    <input
+                      type="text"
+                      value={customLeadSource}
+                      onChange={handleCustomLeadSourceChange}
+                      placeholder="Enter custom lead source"
+                      className="mt-2 w-full px-3 py-2 border border-gray-300 rounded"
+                    />
+                  )}
                   {errors.leadSource && (
                     <p className="text-red-500 text-xs">{errors.leadSource}</p>
                   )}
@@ -804,7 +809,7 @@ window.open(whatsappLink, "_blank");
                       errors.subject ? "border-red-500" : "border-gray-300"
                     } rounded`}
                   />
-                {errors.subject && (
+                  {errors.subject && (
                     <span className="text-red-500">{errors.subject}</span>
                   )}
                 </div>
@@ -819,7 +824,7 @@ window.open(whatsappLink, "_blank");
                       errors.address ? "border-red-500" : "border-gray-300"
                     } rounded`}
                   />
-                    {errors.address && (
+                  {errors.address && (
                     <span className="text-red-500">{errors.address}</span>
                   )}
                 </div>
@@ -842,35 +847,41 @@ window.open(whatsappLink, "_blank");
             </div>
           )}
           <div className="mt-2 mb-2 flex justify-center">
-          <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          breakLabel={"..."}
-          pageCount={pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={handlePageClick}
-          containerClassName={"flex justify-center items-center space-x-3 mt-6"}
-          pageClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
-          previousClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          previousLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          nextClassName={"bg-white border border-gray-300 rounded-md shadow-md"}
-          nextLinkClassName={
-            "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
-          }
-          breakClassName={
-            "bg-white border border-gray-300 rounded-md shadow-md"
-          }
-          breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
-          activeClassName={
-            "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
-          }
-        />
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName={
+                "flex justify-center items-center space-x-3 mt-6"
+              }
+              pageClassName={
+                "bg-white border border-gray-300 rounded-md shadow-md"
+              }
+              pageLinkClassName={"py-1 px-4 text-sm text-white bg-blue-500"}
+              previousClassName={
+                "bg-white border border-gray-300 rounded-md shadow-md"
+              }
+              previousLinkClassName={
+                "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+              }
+              nextClassName={
+                "bg-white border border-gray-300 rounded-md shadow-md"
+              }
+              nextLinkClassName={
+                "py-1 px-4 text-sm text-gray-700 hover:bg-gray-100"
+              }
+              breakClassName={
+                "bg-white border border-gray-300 rounded-md shadow-md"
+              }
+              breakLinkClassName={" text-sm text-gray-700 hover:bg-gray-100"}
+              activeClassName={
+                "bg-blue-500 text-white border border-gray-500 rounded-md shadow-md"
+              }
+            />
           </div>
         </div>
       </>
@@ -879,5 +890,3 @@ window.open(whatsappLink, "_blank");
 }
 
 export default Leads;
-
-

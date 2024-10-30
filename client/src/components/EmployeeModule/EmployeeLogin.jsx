@@ -42,6 +42,12 @@ function EmployeeLogin() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+      <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
+          >
+            Back
+          </button>
         <h1 className="mb-6 text-2xl font-bold text-center">Employee Login</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -97,12 +103,12 @@ function EmployeeLogin() {
           >
             Submit
           </button>
-          {/* <p className="mt-4 text-sm text-center text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/admincrmdoaguru" className="text-blue-500 hover:text-green-600">Sign up</Link>
-          </p> */}
+          <p className="mt-4 text-sm text-center text-gray-600">
+       
+            <Link to="/employee-reset-password" className="text-blue-500 hover:text-green-600">Forgot Password?{' '}</Link>
+          </p>
         </form>
-      </div>
+      </div>      
     </div>
   );
 }

@@ -9,26 +9,83 @@ function Single_Lead_Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
+  const [visit, setVisit] = useState([]);
+  const [quotationCreated, setQuotationCreated] = useState(false);
+  const [visitCreated, setVisitCreated] = useState(false);
 
-  useEffect(() => {
-    const fetchQuotations = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/api/leads/${id}`
-        );
-        setLeads(response.data);
-        console.log(response);
-      } catch (error) {
-        console.error("Error fetching quotations:", error);
-      }
-    };
 
-    fetchQuotations();
-  }, [id]);
+  const fetchLeads = async () => {
+    try {
+      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      console.log(response.data);
+      setLeads(response.data);
+
+      // Debugging: Log the exact value of the quotation field
+      response.data.forEach((lead) => {
+        console.log("Lead Quotation Status (raw):", lead.quotation);
+      });
+
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+      const hasCreatedQuotation = response.data.some(
+        (lead) =>
+          lead.quotation && lead.quotation.trim().toLowerCase() === "created"
+      );
+
+      console.log(
+        "Has created quotation (normalized check)?",
+        hasCreatedQuotation
+      ); // Debugging
+      setQuotationCreated(hasCreatedQuotation);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
+
+  
+  
 
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
+  const fetchVisit = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-visit/${id}`
+      );
+      console.log(response.data);
+      setVisit(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+      const hasCreatedvisit = response.data.some(
+        (lead) =>
+          (lead.visit && lead.visit.trim().toLowerCase() === "fresh") ||
+          "repeated"
+      );
+      setVisitCreated(hasCreatedvisit);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
+  const handleViewQuotation = (lead) => {
+    console.log("Lead Object:", lead); // Log the lead object
+    const name = lead.name;
+    console.log("Lead Name:", name); // Log the name
+    navigate(`/admin_view_quotations/${lead.lead_id}`);
+
+
+    
+    // navigate("/View_quotations");
+  };
+  const handleViewVisit = () => {
+    navigate(`/admin_view_visit/${leads[0].lead_id}`);
+  };
+
+
+  useEffect(() => {
+    fetchLeads();
+
+    fetchVisit();
+  }, [id]);
+
 
   return (
     <>
@@ -109,6 +166,40 @@ function Single_Lead_Profile() {
             </div>
           ))}
         </div>
+        <div className="">
+        <div className="">
+              {/* Conditionally render the View Quotation button */}
+              <div className="flex">
+                {quotationCreated ? (
+                  <button
+                    onClick={() => handleViewQuotation(leads[0])}
+                    className="bg-blue-500 text-white px-4 py-2 mx-2 rounded"
+                  >
+                    View Quotation
+                  </button>
+                ) : (
+                  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
+                    Quotation not yet created
+                  </p>
+                )}
+
+                {/* Conditionally render the View Quotation button */}
+                {visitCreated ? (
+                  <button
+                    onClick={handleViewVisit}
+                    className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
+                  >
+                    View Visit
+                  </button>
+                ) : (
+                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                    Visit not yet created
+                  </p>
+                )}
+              </div>
+            </div>
+        </div>
+
 
         <div className="overflow-x-auto mt-5">
           <table className="min-w-full bg-white border">
@@ -124,6 +215,10 @@ function Single_Lead_Profile() {
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   {" "}
                   Quotation Status
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  {" "}
+                  Visit
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   {" "}
@@ -180,7 +275,11 @@ function Single_Lead_Profile() {
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
                       {lead.quotation_status}
                     </td>
-                  )}
+                    )}
+
+                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
+                      {lead.visit}
+                    </td>
 
                   
 
@@ -195,8 +294,8 @@ function Single_Lead_Profile() {
                       {lead.deal_status}
                     </td>
                   )}
-                  {lead.deal_status === "not close" && (
-                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[blue]">
+                  {lead.deal_status === "cancelled" && (
+                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
                       {lead.deal_status}
                     </td>
                   )}

@@ -54,6 +54,18 @@ const {
   login,
   employeelogin,
   adminLogin,
+  sendOtp,
+  verifyOtp,
+  resetPassword,
+  sendOtpEmployee,
+  verifyOtpEmployee,
+  resetPasswordEmployee,
+  sendOtpAdmin,
+  verifyOtpAdmin,
+  resetPasswordAdmin,
+  sendOtpSuperAdmin,
+  verifyOtpSuperAdmin,
+  resetPasswordSuperAdmin,
 } = require("../controllers/UserRegitrationlLogin");
 
 const {
@@ -98,6 +110,18 @@ const {
 
 router.post("/register", register);
 router.post("/login", login);
+
+router.post("/sendOtp-employee", sendOtpEmployee);
+router.post("/verifyOtp-employee", verifyOtpEmployee);
+router.put("/resetPassword-employee",resetPasswordEmployee);
+
+router.post("/sendOtp-admin", sendOtpAdmin);
+router.post("/verifyOtp-admin", verifyOtpAdmin);
+router.put("/resetPassword-admin",resetPasswordAdmin);
+
+router.post("/sendOtp-superadmin", sendOtpSuperAdmin);
+router.post("/verifyOtp-superadmin", verifyOtpSuperAdmin);
+router.put("/resetPassword-superadmin",resetPasswordSuperAdmin);
 
 router.put("/quotation/:quotationId", updateServices);
 router.post("/quotation", Quotation);

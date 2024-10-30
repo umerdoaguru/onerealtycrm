@@ -32,13 +32,14 @@ function SuperEmployeeLeads() {
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
-    fetchVisit();
+    // fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/leads-visits/${id}`
+        // `http://localhost:9000/api/leads-visits/${id}`
+           `http://localhost:9000/api/employe-leads/${id}`
       );
       const data = response.data;
       console.log(data);
@@ -47,19 +48,20 @@ function SuperEmployeeLeads() {
       console.error("Error fetching leads:", error);
     }
   };
-  const fetchVisit = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:9000/api/employebyid-visit/${id}`
-      );
-      console.log(response.data);
-      setVisit(response.data);
-      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+  // const fetchVisit = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       // `http://localhost:9000/api/employe-all-visit`
+  //         `http://localhost:9000/api/employe-all-visit`
+  //     );
+  //     console.log(response.data);
+  //     setVisit(response.data);
+  //     // Ensure proper comparison with 'Created', trim any spaces and normalize the case
     
-    } catch (error) {
-      console.error("Error fetching quotations:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error fetching quotations:", error);
+  //   }
+  // };
 
   const handleSearch = (value) =>{
     if(value === ' '){
@@ -78,7 +80,7 @@ function SuperEmployeeLeads() {
     if (searchTerm) { 
       filtered = filtered.filter(
         (lead) =>
-          (lead.lead_name && lead.lead_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          (lead.name && lead.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
           (lead.lead_no && lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase())) ||
           (lead.leadSource && lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase()))
       );
@@ -194,22 +196,30 @@ function SuperEmployeeLeads() {
                   onChange={(e) => setLeadSourceFilter(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 >
-                  <option value="">All Lead Sources</option>
-                  <option value="Facebook Campaign">Facebook Campaign</option>
-                  <option value="One Realty Website">One Realty Website</option>
-                  <option value="Trade Shows">Trade Shows</option>
-                  <option value="Cold Calling">Cold Calling</option>
-                  <option value="Email Campaigns">Email Campaigns</option>
-                  <option value="Networking Events">Networking Events</option>
-                  <option value="Paid Advertising">Paid Advertising</option>
-                  <option value="Content Marketing">Content Marketing</option>
-                  <option value="SEO">Search Engine Optimization</option>
-                  <option value="Trade Shows">Trade Shows</option>
-                  <option value="Affiliate Marketing">
-                    Affiliate Marketing
-                  </option>
-                  <option value="Direct Mail">Direct Mail</option>
-                  <option value="Online Directories">Online Directories</option>
+                   <option value="">Select Lead Source</option>
+                     <option value="Facebook Campaign">Facebook Campaign</option>
+                    <option value="One Realty Website">
+                      One Realty Website
+                    </option>
+                    <option value="99 Acres">
+                    99 Acres
+                    </option>
+                    <option value="Referrals">Referrals</option>
+                    <option value="Cold Calling">Cold Calling</option>
+                    <option value="Email Campaigns">Email Campaigns</option>
+                    <option value="Networking Events">Networking Events</option>
+                    <option value="Paid Advertising">Paid Advertising</option>
+                    <option value="Content Marketing">Content Marketing</option>
+                    <option value="SEO">Search Engine Optimization</option>
+                    <option value="Trade Shows">Trade Shows</option>
+                   
+                    <option value="Affiliate Marketing">
+                      Affiliate Marketing
+                    </option>
+                    <option value="Direct Mail">Direct Mail</option>
+                    <option value="Online Directories">
+                      Online Directories
+                    </option>
                 </select>
               </div>
 
@@ -267,7 +277,7 @@ function SuperEmployeeLeads() {
           <div className="flex gap-10 text-xl font-semibold my-3">
   <div>
     Total Lead visit:{" "}
-    {visit.reduce(
+    {leads.reduce(
       (acc, lead) =>
         acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
       0
@@ -321,16 +331,14 @@ function SuperEmployeeLeads() {
                   <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Visit
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Visit date
-                  </th>
+               
                 </tr>
               </thead>
               <tbody>
   {currentLeads.length > 0 ? (
     currentLeads.map((lead, index) => (
       <tr
-        key={lead.lead_id}
+        key={index}
         className={index % 2 === 0 ? "bg-gray-100" : ""}
       >
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
@@ -381,11 +389,9 @@ function SuperEmployeeLeads() {
           {lead.deal_status}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit || 'N/A'} 
+          {lead.visit} 
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit_date || 'N/A'}
-        </td>
+       
       </tr>
     ))
   ) : (

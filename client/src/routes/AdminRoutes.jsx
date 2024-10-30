@@ -43,6 +43,8 @@ import TotalVisit from "../components/AdminDashBoardCards/ToatalVisit";
 import QuotationlistAdmin from "../components/AdminDashBoardCards/AdminQuotationlist/QuotationlistAdmin";
 import AdminTotalClosedDeal from "../components/AdminDashBoardCards/AdminTotalClosedDeal";
 import AdminReport from "../adiComponent/AdminReport";
+import Admin_view_visit from "../components/Leads/Admin_view_visit";
+import Admin_view_quotations from "../components/Leads/Admin_view_quotations";
 
 function AdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -105,6 +107,14 @@ function AdminRoutes() {
         <Route
           path="/employee-single/:employeeId"
           element={<EmployeeSingle />}
+        />
+         <Route
+          path="/admin_view_visit/:id"
+          element={<Admin_view_visit />}
+        />
+        <Route
+          path="/admin_view_quotations/:id"
+          element={<Admin_view_quotations/>}
         />
         <Route
           path="/singleOrganization/:id"

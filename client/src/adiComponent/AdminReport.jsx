@@ -275,7 +275,7 @@ const AdminReport = () => {
         if (result.status === "fulfilled") {
           switch (index) {
             case 0:
-              employeeData = formatData(result.value.data);
+              employeeData =  formatData(result.value.data).filter((item) => item.lead_status !== "in progress");
               break;
             case 1:
               leadsData = formatData(result.value.data).filter((item) => {
@@ -526,7 +526,7 @@ const AdminReport = () => {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center ">
+          {/* <div className="flex flex-col md:flex-row items-center ">
             <div className="flex items-center md:mr-2 rounded-lg mt-2 p-1 w-full md:w-auto">
               <input
                 type="date"
@@ -555,17 +555,17 @@ const AdminReport = () => {
                 Search by Date
               </button>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex items-center justify-center mt-2 md:mt-0 gap-2 flex-wrap">
-            <div className="ml-2">
+            {/* <div className="ml-2">
               <button
                 onClick={clearDate}
                 className="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg hover:bg-gray-400 transition-colors w-max"
               >
                 Clear Date
               </button>
-            </div>
+            </div> */}
             <div className="flex-1 md:mx-2 ">
               <button
                 onClick={handleDownload}

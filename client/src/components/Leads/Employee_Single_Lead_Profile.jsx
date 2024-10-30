@@ -257,6 +257,54 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Failed to update the lead status.");
     }
   };
+  // const saveVisit = async () => {
+  //   // Validate required fields
+  //   if (!visitLead.visit) {
+  //     cogoToast.error("Please select a visit type.");
+  //     return;
+  //   }
+  //   if (!visitLead.visit_date) {
+  //     cogoToast.error("Please select a visit date.");
+  //     return;
+  //   }
+  //   if (!visitLead.report || visitLead.report.trim().length <5) {
+  //     cogoToast.error("Report is required and must be at least 5 characters.");
+  //     return;
+  //   }
+
+  //   console.log(visitLead);
+
+  //   try {
+  //     // Send updated data to the backend using Axios
+  //     const response = await axios.post(
+  //       `http://localhost:9000/api/employe-visit`,
+  //       {
+  //         lead_id: leads[0].lead_id,
+  //         name:leads[0].name,
+  //         employeeId: leads[0].employeeId,
+  //         employee_name: leads[0].assignedTo,
+  //         visit: visitLead.visit,
+  //         visit_date: visitLead.visit_date,
+  //         report: visitLead.report,
+  //       }
+  //     );
+
+  //     if (response.status === 201) {
+  //       console.log("Updated successfully:", response.data);
+  //       cogoToast.success("Visit created successfully");
+
+  //       closePopupVisit(); // Close the popup on success
+  //       fetchVisit();
+  //     } else {
+  //       console.error("Error updating:", response.data);
+  //       cogoToast.error("Failed to update the lead status.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Request failed:", error);
+  //     cogoToast.error("Failed to update the lead status.");
+  //   }
+  // };
+
   const saveVisit = async () => {
     // Validate required fields
     if (!visitLead.visit) {
@@ -267,20 +315,20 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Please select a visit date.");
       return;
     }
-    if (!visitLead.report || visitLead.report.trim().length <5) {
+    if (!visitLead.report || visitLead.report.trim().length < 5) {
       cogoToast.error("Report is required and must be at least 5 characters.");
       return;
     }
-
+  
     console.log(visitLead);
-
+  
     try {
       // Send updated data to the backend using Axios
       const response = await axios.post(
         `http://localhost:9000/api/employe-visit`,
         {
           lead_id: leads[0].lead_id,
-          name:leads[0].name,
+          name: leads[0].name,
           employeeId: leads[0].employeeId,
           employee_name: leads[0].assignedTo,
           visit: visitLead.visit,
@@ -288,22 +336,39 @@ function Employee_Single_Lead_Profile() {
           report: visitLead.report,
         }
       );
-
+  
       if (response.status === 201) {
         console.log("Updated successfully:", response.data);
         cogoToast.success("Visit created successfully");
-
+  
+        // Update the visit status after saving the visit
+        const updateResponse = await axios.put(
+          `http://localhost:9000/api/updateVisitStatus/${leads[0].lead_id}`,
+          { visit: visitLead.visit }
+        );
+  
+        if (updateResponse.status === 200) {
+          console.log("Visit status updated successfully:", updateResponse.data);
+          cogoToast.success("Visit status updated successfully");
+        } else {
+          console.error("Error updating visit status:", updateResponse.data);
+          cogoToast.error("Failed to update visit status.");
+        }
+  
         closePopupVisit(); // Close the popup on success
         fetchVisit();
+        fetchLeads();
       } else {
-        console.error("Error updating:", response.data);
-        cogoToast.error("Failed to update the lead status.");
+        console.error("Error updating visit:", response.data);
+        cogoToast.error("Failed to create visit.");
       }
     } catch (error) {
       console.error("Request failed:", error);
-      cogoToast.error("Failed to update the lead status.");
+      cogoToast.error("Failed to create visit.");
     }
   };
+  
+
 
   const closePopup = () => {
     setShowPopup(false);
@@ -460,6 +525,10 @@ console.log(totalVisit);
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
+                    Visit
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    {" "}
                     Deal Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
@@ -533,6 +602,9 @@ console.log(totalVisit);
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
                       {lead.status}
                     </td>
+                    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
+                      {lead.visit}
+                    </td>
 
                     {lead.deal_status === "pending" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
@@ -545,7 +617,7 @@ console.log(totalVisit);
                         {lead.deal_status}
                       </td>
                     )}
-                    {lead.deal_status === "not close" && (
+                    {lead.deal_status === "cancelled" && (
                       <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[blue]">
                         {lead.deal_status}
                       </td>
