@@ -1,710 +1,240 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// import { Link, useNavigate, useParams } from "react-router-dom";
-// import { useSelector } from "react-redux";
-// import styled from "styled-components";
-
-// import cogoToast from "cogo-toast";
-// import moment from "moment";
-// import UserLogin from "../../UserLogin";
-// import Logout from "../../Logout";
-// import EmployeeSider from "../EmployeeSider";
-// import MainHeader from "../../MainHeader";
-// import QuotationForm1 from "../../../pages/Quotation/QuotationForm1";
-// import CreateInvoice from "../../Invoice/CreateInvoice";
-// import EmployeeInvoiceList from "./EmployeeInvoiceList";
-// import EmployeeQuotationList from "./EmployeeQuotationList";
-
-// function MainQuotationPage() {
-//   const { id } = useParams();
-
-//   const [headerImage, setHeaderImage] = useState(null);
-//   const [footerImage, setFooterImage] = useState(null);
-//   const [logoImage, setlogoImage] = useState(null);
-//   const [companyNameBranch, setCompanyNameBranch] = useState("");
-//   const [accountName, setAccountName] = useState("");
-//   const [accountIFSC, setAccountIFSC] = useState("");
-//   const [accountNumber, setAccountNumber] = useState("");
-//   const [accountBank_Name, setAccountBank_Name] = useState("");
-//   const [companyAddress, setCompanyAddress] = useState("");
-//   const [companyMoblie_no, setCompanyMoblie_no] = useState("");
-//   const [companyGST_no, setCompanyGST_no] = useState("");
-//   const [companyPan_no, setCompanyPan_no] = useState("");
-//   const [companyEmail_id, setCompanyEmail_id] = useState("");
-
-//   const [selectedCompany, setSelectedCompany] = useState("");
-//   const [companydigitalsign, setCompanydigitalsign] = useState(null);
-//   const navigate = useNavigate();
-//   const UserId = useSelector((state) => state.auth.user.id);
-//   const [companydata, setcompanydata] = useState([]);
-//   const [selectedComponent, setSelectedComponent] = useState("LeadData"); // Set 'LeadData' as default
-
-//   useEffect(() => {
-//     const fetchinvoice = async () => {
-//       try {
-//         const response = await axios.get(
-//           `http://localhost:9000/api/company-data`
-//         );
-//         setcompanydata(response.data);
-//         console.log(response);
-//       } catch (error) {
-//         console.error("Error fetching invoice:", error);
-//       }
-//     };
-
-//     fetchinvoice();
-//   }, [UserId]);
-
-//   const handleDeleteCompanyData = async (CompanyName) => {
-//     const isConfirmed = window.confirm(
-//       "Are you sure you want to delete this Company data?"
-//     );
-//     if (isConfirmed) {
-//       try {
-//         const response = await axios.post(
-//           "http://localhost:9000/api/companydata",
-//           {
-//             company_name: CompanyName,
-//           }
-//         );
-
-//         if (response.status === 200) {
-//           console.log("Company Data deleted successfully");
-//           // Refresh CompanyDatas after deletion
-//           window.location.reload();
-//         }
-//       } catch {
-//         console.log("error in delete");
-//       }
-//     }
-
-//     // const handleUpload = async (e) => {
-//     const handleHeaderImageChange = (e) => {
-//       setHeaderImage(e.target.files[0]);
-//     };
-
-//     const handleFooterImageChange = (e) => {
-//       setFooterImage(e.target.files[0]);
-//     };
-//     const handleLogoImageChange = (e) => {
-//       setlogoImage(e.target.files[0]);
-//     };
-//     const handledigitalSignImageChange = (e) => {
-//       setCompanydigitalsign(e.target.files[0]);
-//     };
-
-//     const handleUpload = async (e) => {
-//       e.preventDefault();
-//       try {
-//         const formData = new FormData();
-
-//         formData.append("header_img", headerImage);
-//         formData.append("footer_img", footerImage);
-
-//         formData.append("user_id", UserId);
-//         formData.append("company_name", companyNameBranch);
-//         formData.append("company_name_account_name", accountName);
-//         formData.append("company_name_account_ifsc", accountIFSC);
-//         formData.append("company_name_account_number", accountNumber);
-//         formData.append("bank", accountBank_Name);
-//         formData.append("company_address", companyAddress);
-//         formData.append("moblie_no", companyMoblie_no);
-//         formData.append("gst_no", companyGST_no);
-//         formData.append("pan_no", companyPan_no);
-//         formData.append("email_id", companyEmail_id);
-//         formData.append("logo", logoImage);
-//         formData.append("digital_sign", companydigitalsign);
-
-//         const response = await axios.post(
-//           "http://localhost:9000/api/upload-company-profile",
-//           formData,
-//           {
-//             headers: {
-//               "Content-Type": "multipart/form-data",
-//             },
-//           }
-//         );
-
-//         if (response.data.success === true) {
-//           // Trigger CogoToast success message
-
-//           // Reset input values after successful upload
-//           setHeaderImage(null);
-//           setFooterImage(null);
-//           setCompanyNameBranch("");
-//           setAccountName("");
-//           setAccountIFSC("");
-//           setAccountNumber("");
-//           setCompanyAddress("");
-//           setAccountBank_Name("");
-//           setCompanyMoblie_no("");
-//           setCompanyGST_no("");
-//           setCompanyPan_no("");
-//           setCompanyEmail_id("");
-//           setlogoImage(null);
-
-//           setCompanydigitalsign(null);
-
-//           window.location.reload();
-//           cogoToast.success(`${response.data.message}`);
-//         } else {
-//           console.error(
-//             "Error uploading company data and images:",
-//             response.statusText
-//           );
-//         }
-//       } catch (error) {
-//         console.error(
-//           "Error uploading company data and images:",
-//           error.message
-//         );
-//       }
-//     };
-//     const handleEditCompany = (company) => {
-//       navigate(`/updatecompanydata`, { state: { company } });
-//     };
-
-//     const handleChangeCompany = (e) => {
-//       setSelectedCompany(e.target.value);
-//     };
-
-//     return (
-//       <>
-//         <Wrapper>
-//           <MainHeader />
-
-//           <EmployeeSider />
-//           <div className="container px-3 ">
-//             <div className="flex justify-between">
-//               <div className="mx-3 mt-3">
-//                 <UserLogin />
-//               </div>
-//               <div className="mt-1 mx-3">
-//                 <Logout />
-//               </div>
-//             </div>
-//           </div>
-
-//           <h1 className="text-2xl text-center mt-[2rem]">
-//             Quotation & Invoice Management
-//           </h1>
-//           <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-//           <div className="container flex flex-wrap justify-around mt-5">
-//             <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-//               <div
-//                 className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-//                   selectedComponent === "LeadData"
-//                     ? "bg-blue-500 text-white"
-//                     : ""
-//                 }`} // Change background color if active
-//                 onClick={() => setSelectedComponent("LeadData")} // Set selected component
-//               >
-//                 <div className="p-4 flex flex-col items-center text-center">
-//                   <div
-//                     className={`text-3xl ${
-//                       selectedComponent === "LeadData"
-//                         ? "text-white"
-//                         : "text-gray-700"
-//                     }`}
-//                   >
-//                     {/* <GiFiles /> */}
-//                   </div>
-//                   <div className="mt-2">
-//                     <h5
-//                       className={`text-xl font-semibold ${
-//                         selectedComponent === "LeadData"
-//                           ? "text-white"
-//                           : "text-gray-800"
-//                       }`}
-//                     >
-//                       Create Quotation
-//                     </h5>
-//                     {/* <p className={`${selectedComponent === 'LeadData' ? 'text-white' : 'text-gray-600'}`}>{"leadCount"}</p> */}
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-
-//             <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-//               <div
-//                 className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-//                   selectedComponent === "EmployeeData"
-//                     ? "bg-blue-500 text-white"
-//                     : ""
-//                 }`} // Change background color if active
-//                 onClick={() => setSelectedComponent("EmployeeData")} // Set selected component
-//               >
-//                 <div className="p-4 flex flex-col items-center text-center">
-//                   <div
-//                     className={`text-3xl ${
-//                       selectedComponent === "EmployeeData"
-//                         ? "text-white"
-//                         : "text-gray-700"
-//                     }`}
-//                   >
-//                     {/* <SiMoneygram /> */}
-//                   </div>
-//                   <div className="mt-2">
-//                     <h5
-//                       className={`text-xl font-semibold ${
-//                         selectedComponent === "EmployeeData"
-//                           ? "text-white"
-//                           : "text-gray-800"
-//                       }`}
-//                     >
-//                       Create Invoice
-//                     </h5>
-//                     {/* <p className={`${selectedComponent === 'EmployeeData' ? 'text-white' : 'text-gray-600'}`}>{"employeeCount"}</p> */}
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-
-//             <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-//               <div
-//                 className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-//                   selectedComponent === "QuotationData"
-//                     ? "bg-blue-500 text-white"
-//                     : ""
-//                 }`} // Change background color if active
-//                 onClick={() => setSelectedComponent("QuotationData")} // Set selected component
-//               >
-//                 <div className="p-4 flex flex-col items-center text-center">
-//                   <div
-//                     className={`text-3xl ${
-//                       selectedComponent === "QuotationData"
-//                         ? "text-white"
-//                         : "text-gray-700"
-//                     }`}
-//                   >
-//                     {/* <MdOutlineNextWeek /> */}
-//                   </div>
-//                   <div className="mt-2">
-//                     <h5
-//                       className={`text-xl font-semibold ${
-//                         selectedComponent === "QuotationData"
-//                           ? "text-white"
-//                           : "text-gray-800"
-//                       }`}
-//                     >
-//                       {" "}
-//                       Quotation List
-//                     </h5>
-//                     {/* <p className={`${selectedComponent === 'QuotationData' ? 'text-white' : 'text-gray-600'}`}>{"quotationCount"}</p> */}
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-
-//             <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-//               <div
-//                 className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-//                   selectedComponent === "InvoiceData"
-//                     ? "bg-blue-500 text-white"
-//                     : ""
-//                 }`} // Change background color if active
-//                 onClick={() => setSelectedComponent("InvoiceData")} // Set selected component
-//               >
-//                 <div className="p-4 flex flex-col items-center text-center">
-//                   <div
-//                     className={`text-3xl ${
-//                       selectedComponent === "InvoiceData"
-//                         ? "text-white"
-//                         : "text-gray-700"
-//                     }`}
-//                   >
-//                     {/* <GiMoneyStack /> */}
-//                   </div>
-//                   <div className="mt-2">
-//                     <h5
-//                       className={`text-xl font-semibold ${
-//                         selectedComponent === "InvoiceData"
-//                           ? "text-white"
-//                           : "text-gray-800"
-//                       }`}
-//                     >
-//                       {" "}
-//                       Invoice List
-//                     </h5>
-//                     {/* <p className={`${selectedComponent === 'InvoiceData' ? 'text-white' : 'text-gray-600'}`}>{"invoiceCount"}</p> */}
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//             {/* <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto"> */}
-//             <div className="w-full h-full">
-//               {selectedComponent === "LeadData" && <QuotationForm1 />}
-//               {selectedComponent === "EmployeeData" && <CreateInvoice />}
-//               {selectedComponent === "QuotationData" && (
-//                 <EmployeeQuotationList />
-//               )}
-//               {selectedComponent === "InvoiceData" && <EmployeeInvoiceList />}
-//             </div>
-//           </div>
-//           <div className="container">
-//             <h2>List of Company Profile Created Data</h2>
-//             <div className="overflow-y-auto" style={{ maxHeight: "700px" }}>
-//               <table className="w-full mb-5 table-auto border-collapse border border-gray-300">
-//                 <thead>
-//                   <tr className="bg-gray-200">
-//                     <th className="border border-gray-300 p-2">ID</th>
-//                     <th className="border border-gray-300 p-2">Company Name</th>
-//                     <th className="border border-gray-300 p-2">Created Date</th>
-//                   </tr>
-//                 </thead>
-//                 <tbody>
-//                   {companydata.map((company, index) => (
-//                     <tr key={company.id} className="hover:bg-gray-100">
-//                       <td className="border border-gray-300 p-2">
-//                         {index + 1}
-//                       </td>
-//                       <td className="border border-gray-300 p-2">
-//                         {company.company_name}
-//                       </td>
-//                       <td className="border border-gray-300 p-2">
-//                         {moment(company.created_date).format("DD/MM/YYYY")}
-//                       </td>
-//                     </tr>
-//                   ))}
-//                 </tbody>
-//               </table>
-//             </div>
-//           </div>
-//         </Wrapper>
-//       </>
-//     );
-//   };
-// }
-
-// export default MainQuotationPage;
-// const Wrapper = styled.div``;
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import cogoToast from "cogo-toast";
 import moment from "moment";
-import UserLogin from "../../UserLogin";
-import Logout from "../../Logout";
-import EmployeeSider from "../EmployeeSider";
-import MainHeader from "../../MainHeader";
-import QuotationForm1 from "../../../pages/Quotation/QuotationForm1";
-import CreateInvoice from "../../Invoice/CreateInvoice";
-import EmployeeInvoiceList from "./EmployeeInvoiceList";
-import EmployeeQuotationList from "./EmployeeQuotationList";
-import EmployeeeSider from "../EmployeeSider";
+import { useSelector } from "react-redux";
+import ReactPaginate from "react-paginate";
 
-function MainQuotationPage() {
+
+import cogoToast from "cogo-toast";
+
+import EmployeeeSider from './../EmployeeSider';
+import MainHeader from './../../MainHeader';
+
+const MainQuoatationPage = () => {
+  const [quotations, setQuotations] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage] = useState(10); // Number of items per page
+  const [filterText, setFilterText] = useState("");
+  const [sortAsc, setSortAsc] = useState(true);
+  const [render, setRender] = useState(false);
   const { id } = useParams();
 
-  const [headerImage, setHeaderImage] = useState(null);
-  const [footerImage, setFooterImage] = useState(null);
-  const [logoImage, setLogoImage] = useState(null);
-  const [companyNameBranch, setCompanyNameBranch] = useState("");
-  const [accountName, setAccountName] = useState("");
-  const [accountIFSC, setAccountIFSC] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [accountBank_Name, setAccountBank_Name] = useState("");
-  const [companyAddress, setCompanyAddress] = useState("");
-  const [companyMobileNo, setCompanyMobileNo] = useState("");
-  const [companyGSTNo, setCompanyGSTNo] = useState("");
-  const [companyPanNo, setCompanyPanNo] = useState("");
-  const [companyEmailId, setCompanyEmailId] = useState("");
-
-  const [selectedCompany, setSelectedCompany] = useState("");
-  const [companyDigitalSign, setCompanyDigitalSign] = useState(null);
-  const navigate = useNavigate();
-  const UserId = useSelector((state) => state.auth.user.id);
-  const [companyData, setCompanyData] = useState([]);
-  const [selectedComponent, setSelectedComponent] = useState("QuotationData"); // Set 'QuotationData' as default
+  
 
   useEffect(() => {
-    const fetchInvoice = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/api/company-data`
-        );
-        setCompanyData(response.data);
-      } catch (error) {
-        console.error("Error fetching invoice:", error);
-      }
-    };
+    fetchQuotations();
+  }, [id, render]);
 
-    fetchInvoice();
-  }, [UserId]);
+  const fetchQuotations = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/quotation-data`
+      );
+      setQuotations(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
 
-  const handleDeleteCompanyData = async (CompanyName) => {
+  console.log(quotations);
+  
+
+  // const handleDelete = async (id) => {
+  //   const isConfirmed = window.confirm(
+  //     "Are you sure you want to delete this quotation?"
+  //   );
+  //   if (isConfirmed) {
+  //     try {
+  //       const response = await axios.delete(
+  //         `http://localhost:9000/api/quotation/${id}`
+  //       );
+  //       if (response.status === 200) {
+  //         console.log("Quotation deleted successfully");
+  //       }
+  //       console.log(response);
+  //       setRender(!render);
+  //     } catch (error) {
+  //       console.error("Error deleting quotation:", error);
+  //     }
+  //   }
+  // };
+
+  const handleDelete = async (quotation) => {
     const isConfirmed = window.confirm(
-      "Are you sure you want to delete this Company data?"
+      "Are you sure you want to delete this quotation?"
     );
     if (isConfirmed) {
       try {
-        const response = await axios.post(
-          "http://localhost:9000/api/companydata",
-          {
-            company_name: CompanyName,
-          }
+        // Delete the quotation
+        const response = await axios.delete(
+          `http://localhost:9000/api/quotation/${quotation.id}`
         );
-
+        
         if (response.status === 200) {
-          console.log("Company Data deleted successfully");
-          window.location.reload(); // Refresh after deletion
+          console.log("Quotation deleted successfully");
+  
+          // After deletion, update the leads table status
+          try {
+            const updateResponse = await axios.put(
+              `http://localhost:9000/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
+              { quotation: "not created" }
+            );
+  
+            if (updateResponse.status === 200) {
+              console.log("Status updated successfully:", updateResponse.data);
+              cogoToast.success("Quotation deleted and status updated successfully");
+            } else {
+              console.error("Error updating status:", updateResponse.data);
+              cogoToast.error("Failed to update the quotation status.");
+            }
+          } catch (error) {
+            console.error("Request failed while updating status:", error);
+            cogoToast.error("Failed to update the quotation status.");
+          }
         }
-      } catch {
-        console.log("Error deleting company data");
+        setRender(!render);
+      } catch (error) {
+        console.error("Error deleting quotation:", error);
       }
     }
   };
+  
 
-  const handleHeaderImageChange = (e) => {
-    setHeaderImage(e.target.files[0]);
-  };
-
-  const handleFooterImageChange = (e) => {
-    setFooterImage(e.target.files[0]);
-  };
-
-  const handleLogoImageChange = (e) => {
-    setLogoImage(e.target.files[0]);
-  };
-
-  const handleDigitalSignImageChange = (e) => {
-    setCompanyDigitalSign(e.target.files[0]);
-  };
-
-  const handleUpload = async (e) => {
-    e.preventDefault();
+  const handleCopyQuotation = async (quotationId) => {
     try {
-      const formData = new FormData();
-      formData.append("header_img", headerImage);
-      formData.append("footer_img", footerImage);
-      formData.append("user_id", UserId);
-      formData.append("company_name", companyNameBranch);
-      formData.append("company_name_account_name", accountName);
-      formData.append("company_name_account_ifsc", accountIFSC);
-      formData.append("company_name_account_number", accountNumber);
-      formData.append("bank", accountBank_Name);
-      formData.append("company_address", companyAddress);
-      formData.append("moblie_no", companyMobileNo);
-      formData.append("gst_no", companyGSTNo);
-      formData.append("pan_no", companyPanNo);
-      formData.append("email_id", companyEmailId);
-      formData.append("logo", logoImage);
-      formData.append("digital_sign", companyDigitalSign);
-
       const response = await axios.post(
-        "http://localhost:9000/api/upload-company-profile",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        `http://localhost:9000/api/copy-quotation/${quotationId}`
       );
-
-      if (response.data.success) {
-        cogoToast.success(`${response.data.message}`);
-        window.location.reload();
-      } else {
-        console.error("Error uploading data:", response.statusText);
-      }
+      setRender(!render);
     } catch (error) {
-      console.error("Error uploading data:", error.message);
+      console.error("Error copying quotation:", error);
     }
   };
 
-  const handleEditCompany = (company) => {
-    navigate(`/updatecompanydata`, { state: { company } });
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
   };
+
+  const handleFilterChange = (event) => {
+    setFilterText(event.target.value);
+  };
+
+  const handleSortChange = () => {
+    setSortAsc(!sortAsc);
+  };
+
+  const filteredQuotations = quotations.filter(
+    (quotation) =>
+      quotation.customer_name &&
+      quotation.customer_name.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  console.log('filteredQuotations', filteredQuotations);
+  
+
+  const offset = currentPage * itemsPerPage;
+  const currentQuotations = filteredQuotations.slice(
+    offset,
+    offset + itemsPerPage
+  );
+  console.log('User Quotation Data :',currentQuotations);
+  
+  const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
+
 
   return (
     <>
       <MainHeader />
       <EmployeeeSider />
-      <div className="flex flex-col 2xl:ml-44 mt-14 max-w-7xl">
-        <h1 className="text-2xl text-center mt-[2rem]">Quotation Management</h1>
-        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-        <div className="container flex flex-wrap justify-around mt-5">
-          {/* Render buttons */}
-
-          {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-            <div
-              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                selectedComponent === "QuotationData"
-                  ? "bg-blue-500 text-white"
-                  : ""
-              }`} // Change background color if active
-              onClick={() => setSelectedComponent("QuotationData")} // Set selected component
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div
-                  className={`text-3xl ${
-                    selectedComponent === "QuotationData"
-                      ? "text-white"
-                      : "text-gray-700"
-                  }`}
-                > */}
-          {/* <MdOutlineNextWeek /> */}
-          {/* </div>
-                <div className="mt-2">
-                  <h5
-                    className={`text-xl font-semibold ${
-                      selectedComponent === "QuotationData"
-                        ? "text-white"
-                        : "text-gray-800"
-                    }`}
-                  >
-                    {" "}
-                    Quotation List
-                  </h5> */}
-          {/* <p className={`${selectedComponent === 'QuotationData' ? 'text-white' : 'text-gray-600'}`}>{"quotationCount"}</p> */}
-          {/* </div>
-              </div>
+      <div className="container mt-4">
+        <div className="w-full px-2 mx-auto p-4">
+          <div className="w-full px-2 mt-4">
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              All Leads Quotation
+            </h2>
+            <div className="">
+              <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Quotation Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Created By 
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Created Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Quotation Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {currentQuotations.map((quotation, index) => (
+                    <tr key={quotation.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {offset + index + 1}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {quotation.customer_name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {quotation.employee_name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {moment(quotation.created_date).format("DD/MM/YYYY")}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {quotation.status}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Link to={`/final-quotationBy-emp/${quotation.id}`}>
+                          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded m-1">
+                            View
+                          </button>
+                        </Link>
+                        <button
+                          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
+                          onClick={() => handleDelete(quotation)}
+                        >
+                          Delete
+                        </button>
+                        <Link
+                          to={`/update-quotation-name/${quotation.id}`}
+                        >
+                          <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1">
+                            Edit
+                          </button>
+                        </Link>
+                        {/* <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded m-1"
+                        onClick={() =>
+                          handleCopyQuotation(quotation.quotation_id)
+                        }
+                      >
+                        Copy
+                      </button> */}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            
             </div>
-          </div> */}
-
-          {/* <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-            <div
-              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                selectedComponent === "InvoiceData"
-                  ? "bg-blue-500 text-white"
-                  : ""
-              }`} // Change background color if active
-              onClick={() => setSelectedComponent("InvoiceData")} // Set selected component
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div
-                  className={`text-3xl ${
-                    selectedComponent === "InvoiceData"
-                      ? "text-white"
-                      : "text-gray-700"
-                  }`}
-                >
-                 
-                </div>
-                <div className="mt-2">
-                  <h5
-                    className={`text-xl font-semibold ${
-                      selectedComponent === "InvoiceData"
-                        ? "text-white"
-                        : "text-gray-800"
-                    }`}
-                  >
-                    {" "}
-                    Invoice List
-                  </h5> */}
-          {/* <p className={`${selectedComponent === 'InvoiceData' ? 'text-white' : 'text-gray-600'}`}>{"invoiceCount"}</p> */}
-          {/* </div>
-              </div>
-            </div>
-          </div> */}
-          <div className="w-full">
-            {/* <div className="w-full h-full"> */}
-
-            {selectedComponent === "QuotationData" && <EmployeeQuotationList />}
-            {/* {selectedComponent === "InvoiceData" && <EmployeeInvoiceList />} */}
           </div>
         </div>
-
-        {/* List of Company Profile Created Data */}
-        {/* <div className="container">
-          <h2>List of Company Profile Created Data</h2>
-          <div className="overflow-y-auto" style={{ maxHeight: "700px" }}>
-            <table className="w-full mb-5 table-auto border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-300 p-2">ID</th>
-                  <th className="border border-gray-300 p-2">Company Name</th>
-                  <th className="border border-gray-300 p-2">Created Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {companyData.map((company, index) => (
-                  <tr key={company.id} className="hover:bg-gray-100">
-                    <td className="border border-gray-300 p-2">{index + 1}</td>
-                    <td className="border border-gray-300 p-2">{company.company_name}</td>
-                    <td className="border border-gray-300 p-2">{moment(company.created_date).format("DD/MM/YYYY")}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div> */}
       </div>
     </>
   );
-}
+};
 
-export default MainQuotationPage;
-
-// <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3 ">
-// <div
-//   className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-//     selectedComponent === "LeadData"
-//       ? "bg-blue-500 text-white"
-//       : ""
-//   }`} // Change background color if active
-//   onClick={() => setSelectedComponent("LeadData")} // Set selected component
-// >
-//   <div className="p-4 flex flex-col items-center text-center">
-//     <div
-//       className={`text-3xl ${
-//         selectedComponent === "LeadData"
-//           ? "text-white"
-//           : "text-gray-700"
-//       }`}
-//     >
-//       {/* <GiFiles /> */}
-//     </div>
-//     <div className="mt-2">
-//       <h5
-//         className={`text-xl font-semibold ${
-//           selectedComponent === "LeadData"
-//             ? "text-white"
-//             : "text-gray-800"
-//         }`}
-//       >
-//         Create Quotation
-//       </h5>
-//       {/* <p className={`${selectedComponent === 'LeadData' ? 'text-white' : 'text-gray-600'}`}>{"leadCount"}</p> */}
-//     </div>
-//   </div>
-// </div>
-// </div>
-
-// <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-// <div
-//   className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-//     selectedComponent === "EmployeeData"
-//       ? "bg-blue-500 text-white"
-//       : ""
-//   }`} // Change background color if active
-//   onClick={() => setSelectedComponent("EmployeeData")} // Set selected component
-// >
-//   <div className="p-4 flex flex-col items-center text-center">
-//     <div
-//       className={`text-3xl ${
-//         selectedComponent === "EmployeeData"
-//           ? "text-white"
-//           : "text-gray-700"
-//       }`}
-//     >
-//       {/* <SiMoneygram /> */}
-//     </div>
-//     <div className="mt-2">
-//       <h5
-//         className={`text-xl font-semibold ${
-//           selectedComponent === "EmployeeData"
-//             ? "text-white"
-//             : "text-gray-800"
-//         }`}
-//       >
-//         Create Invoice
-//       </h5>
-//       {/* <p className={`${selectedComponent === 'EmployeeData' ? 'text-white' : 'text-gray-600'}`}>{"employeeCount"}</p> */}
-//     </div>
-//   </div>
-// </div>
-// </div>
+export default MainQuoatationPage;

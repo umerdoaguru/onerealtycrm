@@ -6,7 +6,7 @@ import UserLogin from "../../components/UserLogin";
 import { FaClipboardList } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 
-function AdminQuotationVIew() {
+function Final_Quotation_All() {
   const navigate = useNavigate();
   const { id, leadId } = useParams();
   const [quotations, setQuotations] = useState([]);
@@ -61,7 +61,7 @@ function AdminQuotationVIew() {
             >
             <IoIosArrowBack /> Back
             </button>
-         
+        
           </div>
         </div>
 
@@ -164,7 +164,7 @@ function AdminQuotationVIew() {
           </div>
 
           <div className="w-full px-2 mt-4">
-            <h4 className="QuoStatus my-2">Quotation Status: <strong className={` ${quotationStatus !== "pending" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
+            <h4 className="QuoStatus my-2">Quotation Status: <strong className={` ${quotationStatus !== "Approved" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
             <div className="flex space-x-3 items-center">
               {/* <button
                 className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 mt-1"
@@ -172,7 +172,7 @@ function AdminQuotationVIew() {
               >
                 Review Quotation Data
               </button> */}
-               <button
+              <button
                 className={`bg-green-700 ${quotationStatus !== "Approved" ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"} text-white rounded p-2 mt-1`}
                 onClick={handlePrintPage}
                 disabled={quotationStatus !== "Approved"}
@@ -187,7 +187,7 @@ function AdminQuotationVIew() {
   );
 }
 
-export default AdminQuotationVIew;
+export default Final_Quotation_All;
 
 const Wrapper = styled.div`
  @media print {

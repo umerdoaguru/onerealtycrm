@@ -110,9 +110,8 @@ const SuperQuotationList = () => {
 
         <div className="flex-grow p-4 mt-14 sm:ml-0">
           
-          <button onClick={() => navigate(-1)}  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-10 rounded mt-2">
-            <i className="bi bi-arrow-return-left mx-1"></i>Back
-          </button>
+       
+         
           <center className="text-2xl text-center  font-medium">
             Total Quotations
           </center>

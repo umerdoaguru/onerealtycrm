@@ -74,8 +74,8 @@ function AdminRoutes() {
         <Route path="/data-export" element={<DataExport />} />
 
         <Route
-          path="/admin-quotationlist"
-          element={<QuotationlistAdmin />}
+          path="/admin-view-quotation/:id"
+          element={<AdminQuotationVIew />}
         />
         {/* <Route
           path="/admin-view-quotation/:id"
