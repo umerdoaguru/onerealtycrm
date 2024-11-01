@@ -67,6 +67,7 @@ import VisitTable from "../components/EmployeeModule/VisitTable";
 import CloseTable from "../components/EmployeeModule/CloseTable";
 import ViewAllQuotationsByLead from "../components/Leads/ViewAllQuotationsByLead";
 import Final_quotationBy_emp from "../pages/Quotation/Final_quotationBy_emp";
+import QuotationInputForm from "../components/EmployeeModule/QuotationByLeads/QuotationInputForm";
 import ViewAllVisit from "../components/Leads/ViewAllVisit";
 
 function EmployeeRoutes() {
@@ -98,6 +99,8 @@ function EmployeeRoutes() {
           />
 
           <Route path="/quotation-form" element={<QuotationForm1 />} />
+          {/* Input Form details  */}
+          <Route path="/quotation-information-form" element={<QuotationInputForm />} />
 
           <Route path="/final-quotation/:id" element={<Final_quotation />} />
           <Route path="/final-quotationBy-emp/:leadId/:id" element={<Final_quotationBy_emp />} />

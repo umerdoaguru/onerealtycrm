@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2024 at 04:18 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Oct 29, 2024 at 03:44 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -328,14 +328,14 @@ CREATE TABLE `leads` (
 INSERT INTO `leads` (`lead_id`, `lead_no`, `assignedTo`, `employeeId`, `createdTime`, `actual_date`, `name`, `phone`, `leadSource`, `lead_status`, `subject`, `booking_amount`, `payment_mode`, `registry`, `address`, `quotation`, `quotation_status`, `deal_status`, `d_closeDate`, `status`, `reason`, `follow_up_status`) VALUES
 (84, '4545234', 'umer', 29, '2024-02-22', '', 'mr sufi', '7586868566', 'Direct Mail', 'pending', '2BHK  plots', 'pending', 'pending', 'pending', 'jabalpur', 'created', 'not approved', 'close', '2024-10-17', 'pending', 'pending', 'pending'),
 (85, '887748256662973', 'umer', 29, '2024-10-14', '', 'shameem.shaikhshifa.shaikh', '9770148348', 'Facebook Campaign', 'pending', 'Nirvana Homes', 'pending', 'pending', 'pending', 'Satna', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(87, '140', 'umer', 29, '2024-10-17', '', 'Nit Suryawanshi', '+91-9827060209', '99 Acres', 'pending', 'Nirvana Homes', 'pending', 'pending', 'pending', 'Jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
+(87, '140', 'umer', 29, '2024-10-17', '', 'Nit Suryawanshi', '+91-9827060209', '99 Acres', 'pending', 'Nirvana Homes', 'pending', 'pending', 'pending', 'Jabalpur', 'created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
 (89, '5498595', 'umer', 29, '2024-10-28', '', 'santhosh', '8888888888', 'Direct Mail', 'pending', '2BHK ', 'pending', 'pending', 'pending', 'jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
 (90, '1688244455291242', 'USER', 25, '2024-10-14', '', 'Dharm Das Diwan', '+918871598876', 'Facebook Campaign', 'pending', 'Nirvana Homes', 'pending', 'pending', 'pending', 'jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
 (92, '141', 'test', 24, '2024-10-18', '', 'ARJUN BARYA', '+91-8770372807', '99 Acres', 'pending', 'Nirvana Homes', 'pending', 'pending', 'pending', 'Jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
 (93, '1255893785558079', 'umer', 29, '2024-10-18', '', 'Roshan Ahire', '+917572812803', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'Dandiya bazar', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(94, '545423754905354', 'umer', 29, '2024-10-17', '', 'RiseUp Vibes', '+919329371767', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'APR COLONY', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(95, '1352608292791870', 'umer', 29, '2024-10-17', '', 'Raj Chakravarty', '+919329907763', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'Gali no.5 Trimurti Nagar damoh naka jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(96, '1081199720322136', 'umer', 29, '2024-10-17', '', 'ARUNABH_', '+919926660143', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'sanjeevninagar', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
+(94, '545423754905354', 'umer', 29, '2024-10-17', '', 'RiseUp Vibes', '+919329371767', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'APR COLONY', 'created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
+(95, '1352608292791870', 'umer', 29, '2024-10-17', '', 'Raj Chakravarty', '+919329907763', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'Gali no.5 Trimurti Nagar damoh naka jabalpur', 'created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
+(96, '1081199720322136', 'umer', 29, '2024-10-17', '', 'ARUNABH_', '+919926660143', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'sanjeevninagar', 'created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
 (97, '847193870934461', 'umer', 29, '2024-10-17', '', 'P v rao', '+919406736924', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'gorakhpur jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
 (98, '925554', 'umer', 29, '2024-10-26', '', 'umer', '6568562656', 'Trade Shows', 'pending', 'Query', 'pending', 'pending', 'pending', 'jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
 (99, '1291003835411800', 'umer', 29, '2024-10-17', '', 'Vikas Kumar', '9039412424', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'Jabalpur', 'not created', 'not approved', 'pending', 'pending', 'pending', 'pending', 'pending'),
@@ -596,6 +596,54 @@ INSERT INTO `quotations_data` (`quotation_id`, `quotation_name`, `created_date`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `quotations_information`
+--
+
+CREATE TABLE `quotations_information` (
+  `id` int(11) NOT NULL,
+  `customer_name` varchar(255) DEFAULT NULL,
+  `contact_number` varchar(15) DEFAULT NULL,
+  `alternate_number` varchar(15) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `adhaar_number` varchar(12) DEFAULT NULL,
+  `pan_number` varchar(10) DEFAULT NULL,
+  `project_name` varchar(255) DEFAULT NULL,
+  `unit_number` varchar(50) DEFAULT NULL,
+  `dimension` varchar(50) DEFAULT NULL,
+  `rate` decimal(10,2) DEFAULT NULL,
+  `variant` varchar(255) DEFAULT NULL,
+  `total_deal` decimal(10,2) DEFAULT NULL,
+  `booking_amount` decimal(10,2) DEFAULT NULL,
+  `booking_amount_words` text DEFAULT NULL,
+  `payment_mode` varchar(255) DEFAULT NULL,
+  `finance_bank` varchar(255) DEFAULT NULL,
+  `duration` varchar(50) DEFAULT NULL,
+  `balance_amount` decimal(10,2) DEFAULT NULL,
+  `balance_amount_words` text DEFAULT NULL,
+  `payment_due_date1` date DEFAULT NULL,
+  `payment_due_date2` date DEFAULT NULL,
+  `payment_due_date3` date DEFAULT NULL,
+  `payment_due_date4` date DEFAULT NULL,
+  `registry_charges` decimal(10,2) DEFAULT NULL,
+  `p1p2_charges` decimal(10,2) DEFAULT NULL,
+  `remarks` text DEFAULT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'Pending',
+  `employeeId` int(11) NOT NULL,
+  `employee_name` varchar(255) NOT NULL,
+  `lead_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `quotations_information`
+--
+
+INSERT INTO `quotations_information` (`id`, `customer_name`, `contact_number`, `alternate_number`, `address`, `adhaar_number`, `pan_number`, `project_name`, `unit_number`, `dimension`, `rate`, `variant`, `total_deal`, `booking_amount`, `booking_amount_words`, `payment_mode`, `finance_bank`, `duration`, `balance_amount`, `balance_amount_words`, `payment_due_date1`, `payment_due_date2`, `payment_due_date3`, `payment_due_date4`, `registry_charges`, `p1p2_charges`, `remarks`, `status`, `employeeId`, `employee_name`, `lead_id`, `created_at`) VALUES
+(23, 'Jay Ho Prabhu ', '3545874646', '6546545645', 'sxfsd 3654sdf65we 4r56we4 56we4r56w4e', '111111111111', 'XDSDS5455D', 'dsadsad', '5', 'ssdsd', 54545.00, 'New', 5.00, 1500.00, 'one thousand, five hundred', 'Online', '45454', '510', 85000.00, 'eighty-five thousand', '2024-12-31', '2024-12-31', '2024-12-31', '2024-12-31', 1500.00, 7800.00, 'lklawh sriuywe rweoiu rguwe lkwejrkjs hjksddkassdam,na io ', 'Pending', 29, 'umer', 94, '2024-10-29 14:41:13');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `registered_data`
 --
 
@@ -665,7 +713,22 @@ INSERT INTO `responses_99acres` (`id`, `query_id`, `project_name`, `city_name`, 
 (192, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project. Please call back.', '2024-10-26 07:18:26', 'Suman Sunny', 'pooja.bscp195@gmail.com', '+91-9006822639'),
 (193, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-25 21:41:20', 'Abhishek Singh', 'kaashvis76@gmail.com', '+91-8629978059'),
 (194, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-26 14:41:35', 'Jay Kant Tiwari', 'jtiwari.09@gmail.com', '+91-7317352441'),
-(195, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-26 16:48:23', 'Solankiji S B I Pali', 'solankimithun111@gmail.com', '+91-9826656813');
+(195, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-26 16:48:23', 'Solankiji S B I Pali', 'solankimithun111@gmail.com', '+91-9826656813'),
+(196, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-28 12:07:22', 'Varun', 'varunnayyaribm2007@gmail.com', '+91-7987458441'),
+(197, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project. Please call back.', '2024-10-27 23:59:25', 'Sanjay Kumar sen', '7sanjay.sen@gmail.com', '+91-8249136046'),
+(198, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 22:34:19', 'Deepak KUMAR', 'deepak2244.dk@gmail.com', '+91-6266632805'),
+(199, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 18:05:06', 'Not Mentioned', 'Not Mentioned', '+91-8965850379'),
+(200, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 17:34:11', 'SHREY PATHAK', 'shreypathak278@gmail.com', '+91-7987958338'),
+(201, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 16:55:24', 'Aditya Singh Sengar', 'adityasengar1133@gmail.com', '+91-9425623095'),
+(202, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 15:21:30', 'ajay Jagwani', 'ajayjagwaniii88@gmail.com', '+91-8928079734'),
+(203, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 14:13:01', 'Naveen Pankaj', 'naveenpankaj24@gmail.com', '+91-8319654126'),
+(204, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 12:30:13', 'Vijendra Giri', 'girivijendra@gmail.com', '+91-9340993435'),
+(205, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 06:30:07', 'Abhinav Rao', 'abhinav.rao66@gmail.com', '+91-8087106771'),
+(206, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-28 17:34:15', 'Mai nahi batayunga', 'ronitsingh8762@gmail.com', '+91-9479519764'),
+(207, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 11:09:21', 'AMAN KUMAR', 'amangyadav94@gmail.com', '+91-7903079471'),
+(208, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 13:22:24', 'Mayank Yadav', 'mayankrajyadav668@gmail.com', '+91-7828540030'),
+(209, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this project.', '2024-10-29 17:34:53', 'Dr Arvind Yadav', 'arvindbest@gmail.com', '+91-7354388302'),
+(210, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 15:56:30', 'Si Nirbhay Singh', 'nirbhay87@gmail.com', '+91-9179011956');
 
 -- --------------------------------------------------------
 
@@ -816,7 +879,8 @@ CREATE TABLE `visit` (
 
 INSERT INTO `visit` (`id`, `name`, `employee_name`, `lead_id`, `employeeId`, `visit`, `visit_date`, `report`) VALUES
 (26, 'mr sufi', 'umer', 84, 29, 'repeated', '2024-10-28', 'testdsf4343'),
-(27, 'mr sufi', 'umer', 84, 29, 'associative', '2024-10-30', 'testdsf4343');
+(27, 'mr sufi', 'umer', 84, 29, 'associative', '2024-10-30', 'testdsf4343'),
+(28, 'Roshan Ahire', 'umer', 93, 29, 'fresh', '2024-10-16', 'az cx gdfgdf dfgdfg dfgdf ');
 
 --
 -- Indexes for dumped tables
@@ -936,6 +1000,12 @@ ALTER TABLE `payments`
 --
 ALTER TABLE `quotations_data`
   ADD PRIMARY KEY (`quotation_id`);
+
+--
+-- Indexes for table `quotations_information`
+--
+ALTER TABLE `quotations_information`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `registered_data`
@@ -1094,6 +1164,12 @@ ALTER TABLE `quotations_data`
   MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=271;
 
 --
+-- AUTO_INCREMENT for table `quotations_information`
+--
+ALTER TABLE `quotations_information`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
 -- AUTO_INCREMENT for table `registered_data`
 --
 ALTER TABLE `registered_data`
@@ -1103,7 +1179,7 @@ ALTER TABLE `registered_data`
 -- AUTO_INCREMENT for table `responses_99acres`
 --
 ALTER TABLE `responses_99acres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=196;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=211;
 
 --
 -- AUTO_INCREMENT for table `services`
@@ -1133,7 +1209,7 @@ ALTER TABLE `user_data`
 -- AUTO_INCREMENT for table `visit`
 --
 ALTER TABLE `visit`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables

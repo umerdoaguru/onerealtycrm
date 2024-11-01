@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import ReactPaginate from "react-paginate";
 import MainHeader from "../MainHeader";
 import EmployeeeSider from "../EmployeeModule/EmployeeSider";
+import cogoToast from "cogo-toast";
 
 const EmployeeQuotationList = () => {
   const [quotations, setQuotations] = useState([]);
@@ -15,6 +16,8 @@ const EmployeeQuotationList = () => {
   const [sortAsc, setSortAsc] = useState(true);
   const [render, setRender] = useState(false);
   const { id } = useParams();
+
+  
 
   useEffect(() => {
     fetchQuotations();
@@ -26,31 +29,75 @@ const EmployeeQuotationList = () => {
         `http://localhost:9000/api/get-quotation-byLead/${id}`
       );
       setQuotations(response.data);
-      console.log(response);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching quotations:", error);
     }
   };
 
-  const handleDelete = async (id) => {
+  console.log(quotations);
+  
+
+  // const handleDelete = async (id) => {
+  //   const isConfirmed = window.confirm(
+  //     "Are you sure you want to delete this quotation?"
+  //   );
+  //   if (isConfirmed) {
+  //     try {
+  //       const response = await axios.delete(
+  //         `http://localhost:9000/api/quotation/${id}`
+  //       );
+  //       if (response.status === 200) {
+  //         console.log("Quotation deleted successfully");
+  //       }
+  //       console.log(response);
+  //       setRender(!render);
+  //     } catch (error) {
+  //       console.error("Error deleting quotation:", error);
+  //     }
+  //   }
+  // };
+
+  const handleDelete = async (quotation) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this quotation?"
     );
     if (isConfirmed) {
       try {
+        // Delete the quotation
         const response = await axios.delete(
-          `http://localhost:9000/api/quotation/${id}`
+          `http://localhost:9000/api/quotation/${quotation.id}`
         );
+        
         if (response.status === 200) {
           console.log("Quotation deleted successfully");
+  
+          // After deletion, update the leads table status
+          try {
+            const updateResponse = await axios.put(
+              `http://localhost:9000/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
+              { quotation: "not created" }
+            );
+  
+            if (updateResponse.status === 200) {
+              console.log("Status updated successfully:", updateResponse.data);
+              cogoToast.success("Quotation deleted and status updated successfully");
+            } else {
+              console.error("Error updating status:", updateResponse.data);
+              cogoToast.error("Failed to update the quotation status.");
+            }
+          } catch (error) {
+            console.error("Request failed while updating status:", error);
+            cogoToast.error("Failed to update the quotation status.");
+          }
         }
-        console.log(response);
         setRender(!render);
       } catch (error) {
         console.error("Error deleting quotation:", error);
       }
     }
   };
+  
 
   const handleCopyQuotation = async (quotationId) => {
     try {
@@ -75,15 +122,22 @@ const EmployeeQuotationList = () => {
     setSortAsc(!sortAsc);
   };
 
-  const filteredQuotations = quotations.filter((quotation) =>
-    quotation.quotation_name.toLowerCase().includes(filterText.toLowerCase())
+  const filteredQuotations = quotations.filter(
+    (quotation) =>
+      quotation.customer_name &&
+      quotation.customer_name.toLowerCase().includes(filterText.toLowerCase())
   );
+
+  console.log('filteredQuotations', filteredQuotations);
+  
 
   const offset = currentPage * itemsPerPage;
   const currentQuotations = filteredQuotations.slice(
     offset,
     offset + itemsPerPage
   );
+  console.log('User Quotation Data :',currentQuotations);
+  
   const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
 
 
@@ -120,12 +174,12 @@ const EmployeeQuotationList = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentQuotations.map((quotation, index) => (
-                    <tr key={quotation.quotation_id}>
+                    <tr key={quotation.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {offset + index + 1}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {quotation.quotation_name}
+                        {quotation.customer_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {moment(quotation.created_date).format("DD/MM/YYYY")}
@@ -134,19 +188,19 @@ const EmployeeQuotationList = () => {
                         {quotation.status}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link to={`/final-quotationBy-emp/${id}/${quotation.quotation_id}`}>
+                        <Link to={`/final-quotationBy-emp/${id}/${quotation.id}`}>
                           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded m-1">
                             View
                           </button>
                         </Link>
                         <button
                           className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
-                          onClick={() => handleDelete(quotation.quotation_id)}
+                          onClick={() => handleDelete(quotation)}
                         >
                           Delete
                         </button>
                         <Link
-                          to={`/update-quotation-name/${quotation.quotation_id}`}
+                          to={`/update-quotation-name/${quotation.id}`}
                         >
                           <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1">
                             Edit
@@ -165,33 +219,7 @@ const EmployeeQuotationList = () => {
                   ))}
                 </tbody>
               </table>
-              <ReactPaginate
-                previousLabel={"previous"}
-                nextLabel={"next"}
-                breakLabel={"..."}
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName={"flex justify-center space-x-2 mt-4"}
-                pageClassName={"bg-white border border-gray-300 rounded-md"}
-                pageLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                previousClassName={"bg-white border border-gray-300 rounded-md"}
-                previousLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                nextClassName={"bg-white border border-gray-300 rounded-md"}
-                nextLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                breakClassName={"bg-white border border-gray-300 rounded-md"}
-                breakLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                activeClassName={"bg-gray-200"}
-              />
+            
             </div>
           </div>
         </div>

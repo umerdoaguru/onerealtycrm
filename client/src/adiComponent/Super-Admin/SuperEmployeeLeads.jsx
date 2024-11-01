@@ -22,8 +22,6 @@ function SuperEmployeeLeads() {
   const [statusFilter, setStatusFilter] = useState("");
   const [visitFilter, setVisitFilter] = useState("");
   const [dealFilter, setDealFilter] = useState("");
-  const [visit, setVisit] = useState([]);
-
 
   const navigate = useNavigate();
 
@@ -70,12 +68,9 @@ function SuperEmployeeLeads() {
     setSearchTerm(value);
   }
 
-
   useEffect(() => {
-    let filtered = leads; // Assuming 'leads' already contains the joined data (leads with visit info)
+    let filtered = leads;
     console.log(filtered);
-    
-  
     // Filter by search term
     if (searchTerm) { 
       filtered = filtered.filter(
@@ -85,7 +80,7 @@ function SuperEmployeeLeads() {
           (lead.leadSource && lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-  
+
     // Filter by date range
     if (startDate && endDate) {
       filtered = filtered.filter((lead) => {
@@ -93,29 +88,30 @@ function SuperEmployeeLeads() {
         return leadDate >= startDate && leadDate <= endDate;
       });
     }
-  
+
     // Filter by lead source
     if (leadSourceFilter) {
       filtered = filtered.filter(
         (lead) => lead.leadSource === leadSourceFilter
       );
     }
-  
     // Filter by status
     if (statusFilter) {
       filtered = filtered.filter((lead) => lead.status === statusFilter);
     }
-  
-    // Filter by visit (if the filter is based on a visit attribute)
+
+    // Filter by visit
     if (visitFilter) {
-      filtered = filtered.filter((lead) => lead.visit === visitFilter);
+      filtered = filtered.filter((visit) => visit.visit === visitFilter);
     }
-  
-    // Filter by deal status
+
+    // Filter by Deak
     if (dealFilter) {
-      filtered = filtered.filter((lead) => lead.deal_status === dealFilter);
+      console.log(dealFilter);
+      filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
+      console.log(filtered);
     }
-  
+
     setFilteredLeads(filtered);
   }, [
     searchTerm,
@@ -127,7 +123,6 @@ function SuperEmployeeLeads() {
     visitFilter,
     dealFilter,
   ]);
-  
 
   // Use filteredLeads for pagination
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
@@ -146,17 +141,17 @@ function SuperEmployeeLeads() {
         <div className="container mt-16">
           <div className="main">
             <div>
-            <button
-            onClick={() => navigate(-1)}
-            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
-          >
-            Back
-          </button>
-            <h1 className="text-2xl text-center">
-              Leads Management{" "}
-            </h1>
+              <button
+                onClick={() => navigate(-1)}
+                className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
+              >
+                Back
+              </button>
+              <h1 className="text-xl sm:text-2xl text-center">
+                Leads Management{" "}
+              </h1>
             </div>
-            <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-5 mb-4"></div>
 
             {/* Button to create a new lead */}
             <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
@@ -239,7 +234,7 @@ function SuperEmployeeLeads() {
                     Pending
                   </option>
                   <option value="interested">Interested</option>
-                  <option value="not-interested">Non-Interested</option>
+                  <option value="non interested">Non-Interested</option>
                 </select>
               </div>
               <div>
@@ -250,10 +245,9 @@ function SuperEmployeeLeads() {
                   className="border rounded-2xl p-2 w-full"
                 >
                   <option value="">All visit</option>
-                  <option value="fresh">Fresh Visit</option>
-                  <option value="repeated">Repeated Visit</option>
-                  <option value="associative">Associative Visit</option>
-                  <option value="self">Self Visit</option>
+                  <option value="pending">Pending</option>
+                  <option value="fresh visit">Fresh Visit</option>
+                  <option value="repeated visit">Repeated Visit</option>
                 </select>
               </div>
               <div>
@@ -267,7 +261,7 @@ function SuperEmployeeLeads() {
                   <option value="pending">Pending</option>
                   <option value="in progress">In Progress</option>
                   <option value="close">Closed</option>
-                  <option value="cancelled">Cancelled</option>
+                  <option value="not closed">Not Closed</option>
                 </select>
               </div>
             </div>
@@ -295,40 +289,40 @@ function SuperEmployeeLeads() {
             <table className="tt min-w-full bg-white border">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     S.no
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Number
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Name
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Phone
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Source
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Subject
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Status
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Created Time
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Status
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Deal Status
                   </th>
-                  <th className="px-6 py-3 border-y-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Visit
                   </th>
                

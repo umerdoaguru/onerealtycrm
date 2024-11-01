@@ -76,26 +76,21 @@ const d_fileds = {
       "Lead Id.",
       "Name",
       "Employee Name",
-    
-    
-     
-    
+
       "visit",
       "visit date",
-      "report"
-     
+      "report",
     ],
     columns: [
       "id",
       "lead_id",
-      
+
       "name",
       "employee_name",
-     
+
       "visit_date",
       "visit",
-      "report"
-      
+      "report",
     ],
     visit: [],
   },
@@ -149,7 +144,6 @@ const EmployeeReport = () => {
   }, [selectedCategory, filter]);
 
   const filterData = () => {
-    
     const filteredData = data[selectedCategory]?.filter((item) => {
       const currentDate = new Date();
       console.log(data[selectedCategory], item);
@@ -162,7 +156,7 @@ const EmployeeReport = () => {
 
       let itemDate;
 
-      if(selectedCategory == "leads"){
+      if (selectedCategory == "leads") {
         itemDate = new Date(convertToMMDDYYYY(item.createdTime));
       } else if (selectedCategory == "visit") {
         itemDate = new Date(convertToMMDDYYYY(item.visit_date));
@@ -253,7 +247,7 @@ const EmployeeReport = () => {
       },
       closed: {
         ...dataFields.closed,
-        closed: combinedData.closed,  
+        closed: combinedData.closed,
       },
     };
     console.log(updatedDataFields, combinedData);
@@ -268,24 +262,23 @@ const EmployeeReport = () => {
     const itemsPerPage = 5;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-  
+
     // Get the data for the current page
     const paginatedData = dataFields[selectedCategory][selectedCategory]
       .slice(startIndex, endIndex)
-      .map(({ createdTime,d_closeDate, ...rest }) => rest); // Remove createdTime and closeDate
-  
+      .map(({ createdTime, d_closeDate, ...rest }) => rest); // Remove createdTime and closeDate
+
     // Convert the filtered paginated data to Excel
     const ws = XLSX.utils.json_to_sheet(paginatedData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-  
+
     // Write the Excel file
     XLSX.writeFile(
       wb,
       `${selectedCategory}-${filter}-data-page-${currentPage}.xlsx`
     );
   };
-  
 
   // const quotationAxios = axios.create({
   //   baseURL: "http://localhost:9000/api",
@@ -311,8 +304,14 @@ const EmployeeReport = () => {
     return data.map((item) => ({
       ...item,
       createdTime: moment(item.createdTime).format("DD/MM/YYYY"),
-      visit_date: (item.visit_date !== "pending") ? moment(item.visit_date).format("DD/MM/YYYY") : "pending",
-      d_closeDate: (item.d_closeDate !== "pending") ? moment(item.d_closeDate).format("DD/MM/YYYY") : "pending",
+      visit_date:
+        item.visit_date !== "pending"
+          ? moment(item.visit_date).format("DD/MM/YYYY")
+          : "pending",
+      d_closeDate:
+        item.d_closeDate !== "pending"
+          ? moment(item.d_closeDate).format("DD/MM/YYYY")
+          : "pending",
     }));
   };
 
@@ -343,16 +342,27 @@ const EmployeeReport = () => {
             //   invoiceData = formatData(result.value.data);
             //   break;
             case 0:
-              leadsData = formatData(result.value.data).filter((item) => item.lead_status !== "in progress");
+              leadsData = formatData(result.value.data).filter((item) => {
+                return (
+                  item.lead_status !== "in progress" &&
+                  item.lead_status !== "pending"
+                );
+              });
               break;
             case 1:
               visitData = formatData(result.value.data).filter((item) => {
-                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
+                return (
+                  item.d_closeDate !== "pending" &&
+                  item.visit_date !== "pending"
+                );
               });
               break;
             case 2:
               closedData = formatData(result.value.data).filter((item) => {
-                return item.d_closeDate !== "pending" && item.visit_date !== "pending";
+                return (
+                  item.d_closeDate !== "pending" &&
+                  item.visit_date !== "pending"
+                );
               });
               break;
             default:
@@ -534,7 +544,9 @@ const EmployeeReport = () => {
           </div>
           <Pagination
             currentPage={currentPage}
-            totalItems={dataFields?.[selectedCategory]?.[selectedCategory]?.length}
+            totalItems={
+              dataFields?.[selectedCategory]?.[selectedCategory]?.length
+            }
             itemsPerPage={rowPerPage}
             onPageChange={setCurrentPage}
           />

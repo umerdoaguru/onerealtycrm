@@ -23,7 +23,7 @@ const SuperQuotationList = () => {
           `http://localhost:9000/api/quotation-data`
         );
         setQuotations(response.data);
-        console.log(response);
+        console.log(quotations);
       } catch (error) {
         console.error("Error fetching quotations:", error);
       }
@@ -48,7 +48,7 @@ const SuperQuotationList = () => {
   };
 
   const filteredQuotations = quotations.filter((quotation) =>
-    quotation.quotation_name.toLowerCase().includes(filterText.toLowerCase())
+    quotation.customer_name.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const offset = currentPage * itemsPerPage;
@@ -64,7 +64,7 @@ const SuperQuotationList = () => {
   //   setQuotations([...quotations]); // Update the full list
   // };
 
-  const handleStatusChange = async (e, index, quotation_id) => {
+  const handleStatusChange = async (e, index, id) => {
     const newStatus = e.target.value;
     const updatedQuotations = [...currentQuotations];
     updatedQuotations[index].status = newStatus;
@@ -73,7 +73,7 @@ const SuperQuotationList = () => {
     try {
       // API call to update status in the backend
       await axios.post(`http://localhost:9000/api/update-quotation-status`, {
-        quotation_id, // Send the quotation ID
+        id: id, // Send the quotation ID
         status: newStatus, // Send the updated status
       });
 
@@ -168,14 +168,14 @@ const SuperQuotationList = () => {
                       {quotation.employee_name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {quotation.quotation_name}
+                      {quotation.customer_name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {moment(quotation.created_date).format("DD/MM/YYYY")}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Link
-                        to={`/super-admin-view-quotation/${quotation.quotation_id}`}
+                        to={`/super-admin-view-quotation/${quotation.id}`}
                       >
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded m-1">
                           View
@@ -190,7 +190,7 @@ const SuperQuotationList = () => {
                         )}`}
                         value={quotation.status || "Pending"}
                         onChange={(e) =>
-                          handleStatusChange(e, index, quotation.quotation_id)
+                          handleStatusChange(e, index, quotation.id)
                         } // Pass quotation_id here
                       >
                         <option value="Pending">Pending</option>

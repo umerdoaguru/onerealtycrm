@@ -1,323 +1,239 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
-import moment from "moment";
-
-
-
-import { useSelector } from "react-redux";
-import SuperAdminSider from "./SuperAdminSider";
-import MainHeader from "../../components/MainHeader";
-import EditableSeoPayment from './../../pages/Quotation/EditableSeoPayment';
-import EditablePaymentTable from './../../pages/Quotation/EditablePaymentWebTable';
-
+import UserLogin from "../../components/UserLogin";
+import { FaClipboardList } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
 
 function SuperQuotationVIew() {
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { id, leadId } = useParams();
   const [quotations, setQuotations] = useState([]);
-  const [quotationDate, setQuotationDate] = useState(""); // New state to store quotation name
   const [quotationName, setQuotationName] = useState("");
-  const [companyNames, setCompanyNames] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState("");
-  const [accountname, setAccountName] = useState("");
-  const [accountIFSC, setAccountIFSC] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [companyAddress, setCompanyAddress] = useState("");
-
-  const [isCompanySelected, setIsCompanySelected] = useState(false); // Track if a company is selected
-
-  const [notes, setNotes] = useState([]);
-  const [footerImagePath, setFooterImagePath] = useState("");
-
-  const [headerImagePath, setHeaderImagePath] = useState("");
-
-  const UserId = useSelector((state) => state.auth.user.id);
-  const [rowVisible, setRowVisible] = useState(true);
+  const [totalActualPrice, setTotalActualPrice] = useState(0);
+  const [totalOfferPrice, setTotalOfferPrice] = useState(0);
+  const [quotationStatus, setQuotationStatus] = useState("");
 
   const fetchQuotations = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/api/quotation/${id}`
-      );
-
+      const response = await axios.get(`http://localhost:9000/api/quotation/${id}`);
       if (response.status === 200) {
-        setQuotationDate(response.data[0].created_date); // Set the quotation name
-        setQuotationName(response.data[0].quotation_name);
+        setQuotationName(response.data[0].customer_name);
         setQuotations(response.data);
-        console.log(response);
+        setQuotationStatus(response.data[0].status); // Assuming the status is part of the response
+
+        const actualPriceTotal = response.data.reduce((total, q) => total + q.actual_price, 0);
+        const offerPriceTotal = response.data.reduce((total, q) => total + q.offer_price, 0);
+        setTotalActualPrice(actualPriceTotal);
+        setTotalOfferPrice(offerPriceTotal);
       }
     } catch (error) {
       console.error("Error fetching quotations:", error);
     }
   };
-  const fetchNotes = async () => {
-    try {
-      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
 
-      if (response.status === 200) {
-        setNotes(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching notes:", error);
-    }
+  const handlePrintPage = () => {
+    window.print();
   };
-
-  useEffect(() => {
-    // Fetch company names from the backend
-    const fetchCompanyNames = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:9000/api/header-footer-images/company-names/${UserId}`
-        );
-        if (response.status === 200) {
-          setCompanyNames(response.data); // Assuming response.data is an array of company names
-        } else {
-          console.error("Failed to fetch company names");
-        }
-      } catch (error) {
-        console.error("Error fetching company names:", error);
-      }
-    };
-
-    fetchCompanyNames();
-  }, []);
-
-  const renderServiceTables = (subscriptionFrequency, serviceTypeTitle) => {
-    const actualPriceTotal = quotations.reduce(
-      (total, q) =>
-        q.subscription_frequency === subscriptionFrequency &&
-        q.service_type === serviceTypeTitle
-          ? total + q.actual_price
-          : total,
-      0
-    );
-
-    const offerPriceTotal = quotations.reduce(
-      (total, q) =>
-        q.subscription_frequency === subscriptionFrequency &&
-        q.service_type === serviceTypeTitle
-          ? total + q.offer_price
-          : total,
-      0
-    );
-
-    const services = quotations.filter(
-      (q) =>
-        q.subscription_frequency === subscriptionFrequency &&
-        q.service_type === serviceTypeTitle
-    );
-
-    return (
-      actualPriceTotal > 0 && (
-        <div className="mt-4">
-          <h5 className="font-bold text-lg">{`${serviceTypeTitle} Services - ${subscriptionFrequency}`}</h5>
-          <div className="">
-            <table className="min-w-full divide-y divide-gray-300 border border-gray-300">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Sr.No
-                  </th>
-                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Service Name
-                  </th>
-                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Service Description
-                  </th>
-                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actual Price (INR)
-                  </th>
-                  <th className="px-6 py-3 border border-gray-300 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Offer Price (INR)
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {services.map((q, index) => (
-                  <tr key={q.id}>
-                    <td className="px-6 py-4 border border-gray-300 text-center text-sm font-bold">
-                      {index + 1}
-                    </td>
-                    <td className="px-6 py-4 border border-gray-300 text-sm font-bold">
-                      {q.service_name}
-                    </td>
-                    <td className="px-6 py-4 border border-gray-300 text-sm">
-                      {q.service_description.split(".").map((part, index) => (
-                        <p key={index}>
-                          {part.trim()}
-                          {index !==
-                            q.service_description.split(".").length - 1 && "."}
-                        </p>
-                      ))}
-                    </td>
-                    <td className="px-6 py-4 border border-gray-300 text-sm">
-                      {q.actual_price}
-                    </td>
-                    <td className="px-6 py-4 border border-gray-300 text-sm">
-                      {q.offer_price}
-                    </td>
-                  </tr>
-                ))}
-
-                <tr>
-                  <td
-                    colSpan="3"
-                    className="px-6 py-4 border border-gray-300 font-bold text-sm"
-                  >
-                    Total {`${serviceTypeTitle} Amount`}
-                  </td>
-                  <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                    {actualPriceTotal}
-                  </td>
-                  <td className="px-6 py-4 border border-gray-300 font-bold text-sm">
-                    {offerPriceTotal}
-                  </td>
-                </tr>
-
-                <tr className="bg-gray-50 btn-print"></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )
-    );
-  };
-
-  const renderPaidServices = () => {
-    return (
-      <>
-        {renderServiceTables("Monthly", "Paid")}
-        {renderServiceTables("Yearly", "Paid")}
-        {renderServiceTables("One Time", "Paid")}
-        {renderServiceTables("Quarterly", "Paid")}
-        {renderServiceTables("Half Yearly", "Paid")}
-        {renderServiceTables("Weekly", "Paid")}
-        {renderServiceTables("As Per Requirement", "Paid")}
-        {renderServiceTables("15 Days", "Paid")}
-        {renderServiceTables("10 Days", "Paid")}
-        {renderServiceTables("1-5 Days", "Paid")}
-        {/* Add similar calls for other subscription frequencies for Paid services */}
-      </>
-    );
-  };
-
-  const renderComplimentaryServices = () => {
-    return (
-      <>
-        {renderServiceTables("Monthly", "Complimentary")}
-        {renderServiceTables("Yearly", "Complimentary")}
-        {renderServiceTables("One Time", "Complimentary")}
-        {renderServiceTables("Quarterly", "Complimentary")}
-        {renderServiceTables("Half Yearly", "Complimentary")}
-        {renderServiceTables("Weekly", "Complimentary")}
-        {renderServiceTables("As Per Requirement", "Complimentary")}
-        {renderServiceTables("15 Days", "Complimentary")}
-        {renderServiceTables("10 Days", "Complimentary")}
-        {renderServiceTables("1-5 Days", "Complimentary")}
-        {/* Add similar calls for other subscription frequencies for Complimentary services */}
-      </>
-    );
-  };
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.post(
-          "http://localhost:9000/api/company-header-footer",
-          {
-            company_name: selectedCompany,
-          }
-        );
-        console.log(response);
-
-        if (response.status === 200) {
-          const {
-            company_name_account_name,
-            company_name_account_ifsc,
-            company_name_account_number,
-            company_address,
-          } = response.data;
-          setAccountName(company_name_account_name);
-          setAccountIFSC(company_name_account_ifsc);
-          setAccountNumber(company_name_account_number);
-          setCompanyAddress(company_address);
-        } else {
-          console.error(
-            "Error fetching header and footer images:",
-            response.statusText
-          );
-        }
-      } catch (error) {
-        console.error(
-          "Error fetching header and footer images:",
-          error.message
-        );
-      }
-    };
-
-    fetchImages();
-  });
-
+  
   useEffect(() => {
     fetchQuotations();
-    fetchNotes();
   }, []);
 
   return (
-    <>
-      <MainHeader />
-      <SuperAdminSider />
+    <Wrapper>
+      <div className="w-full px-2 flex flex-col justify-center items-center">
+        <div className=" UserInfo grid grid-cols-12 gap-4">
+          <div className=" col-span-12 lg:col-span-4 mt-3">
+            <UserLogin />
+          </div>
+          <div className="col-span-12 lg:col-span-4 mt-3">
+            <h5 className="text-center text-xl font-medium">Quotation Name: {quotationName}</h5>
+          </div>
+        </div>
 
-      <div className="flex flex-col lg:flex-row lg:space-x-4">
-        <div className="w-full lg:w-9/12 mx-auto px-4 lg:px-0">
-          <div className="container mx-auto">
-            <Link
-              to={`/quotationlist`}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded w-full sm:w-auto block sm:inline-block mb-3"
+        <div className="w-full px-2 mt-4">
+          <div className="flex justify-between">
+            <button
+              onClick={() => navigate(-1)}
+              className="text-black bg-gray-50 hover:bg-green-600 rounded py-2 px-3 w-auto border border-black flex justify-center items-center gap-1 "
             >
-              <i className="bi bi-arrow-return-left mx-1"></i> Back
-            </Link>
+            <IoIosArrowBack /> Back
+            </button>
+         
+          </div>
+        </div>
+
+        <div  className="container m-2">
+          <div id="quotationData" className="QuotationDataPage">
+            <div className="container border border-black rounded-lg h-auto m-2 p-4">
+              <div className="flex flex-col justify-center items-center">
+                <div>
+                  <img src="https://one-realty.in/static/media/company_logo.b0c6ab3fa89a853264a3.png" alt="Company logo" />
+                </div>
+                <div className="flex flex-col justify-center items-center gap-2 text-black font-bold">
+                  <h4 className="underline ">
+                    First Floor chamber number 1&2 Dutt Residency,opposite stadium
+                  </h4>
+                  <h4 className="underline ">
+                    North civil lines,Jabalpur(M.P.)Tel  +917614924920
+                  </h4>
+                  <h4 className="underline ">
+                    Email : hronerealty@gmail.com  website : www.onerealty.in
+                  </h4>
+                  <h4 className="underline ">
+                    REGISTRATION NO:- 04/14/01/0060/17    RERA ID NO:- P-JBP-23-4248
+                  </h4>
+
+                </div>
+                <div className="mt-4">
+                  <hr className="my-1" />
+                  <h2 className="text-center font-bold text-2xl">QUOTATION</h2>
+                  <hr className="my-1" />
+                </div>
+              </div>
+              <div   className="flex flex-col mt-4 gap-3 ">
+                {quotations[0] && (
+                  <>
+                    <div className="w-50 mr-2"><strong>CUSTOMER NAME:</strong> {quotations[0]?.customer_name}</div>
+                    <div className="flex w-full">
+                      <div className="w-50 mr-2">
+                        <strong>CONTACT NUMBER:</strong> {quotations[0]?.contact_number}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong>ALTERNATE NUMBER:</strong> {quotations[0]?.alternate_number}
+                      </div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>ADDRESS:</strong> {quotations[0]?.address}</div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2">
+                        <strong>ADHAAR NUMBER:</strong> {quotations[0]?.adhaar_number}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong>PAN NUMBER:</strong> {quotations[0]?.pan_number}
+                      </div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>PROJECT NAME:</strong> {quotations[0]?.project_name}</div>
+                    <div className="w-full flex">
+
+                      <div className="w-50 mr-2"><strong>UNIT NUMBER:</strong> {quotations[0]?.unit_number}</div>
+                      <div className="w-50 mr-2"><strong>DIMENSION:</strong> {quotations[0]?.dimension}</div>
+                    </div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2"><strong>RATE:</strong> {quotations[0]?.rate}</div>
+                      <div className="w-50 mr-2"><strong>VARIANT:</strong> {quotations[0]?.variant}</div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>TOTAL DEAL:</strong> {quotations[0]?.total_deal}</div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2" v><strong>BOOKING AMOUNT:</strong> {quotations[0]?.booking_amount}</div>
+                      <div className="w-50 mr-2"><strong> IN WORDS:</strong> {quotations[0]?.booking_amount_words}</div>
+                    </div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2">
+                        <strong>PAYMENT MODE:</strong> {quotations[0]?.payment_mode}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong>IF FINANCE BANK:</strong> {quotations[0]?.finance_bank}
+                      </div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>DURATION:</strong> {quotations[0]?.duration}</div>
+                    <div className="w-full">
+                      <div className="w-50 mr-2">
+                        <strong>BALANCE AMOUNT:</strong> {quotations[0]?.balance_amount}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong> IN WORDS:</strong> {quotations[0]?.balance_amount_words}
+                      </div>
+                    </div>
+                    <div className="w-full flex" >
+                      <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 1:</strong> {new Date(quotations[0]?.payment_due_date1).toLocaleDateString()}</div>
+                      <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 2:</strong> {new Date(quotations[0]?.payment_due_date2).toLocaleDateString()}</div>
+                    </div>
+                    <div className="w-full flex">
+                    <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 3:</strong> {new Date(quotations[0]?.payment_due_date3).toLocaleDateString()}</div>
+                    <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 4:</strong> {new Date(quotations[0]?.payment_due_date4).toLocaleDateString()}</div>
+                    </div>
+                    <div><strong>REGISTRY CHARGES:</strong> {quotations[0]?.registry_charges}</div>
+                    <div><strong>P1 P2 CHARGES:</strong> {quotations[0]?.p1p2_charges}</div>
+                    <div><strong>REMARKS:</strong> {quotations[0]?.remarks}</div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="w-full flex flex-wrap mt-3 space-y-4 lg:space-y-0 lg:space-x-4">
-            <div className="w-full lg:w-9/12">
-              {/* Placeholder for content */}
-            </div>
-            <div className="w-full lg:w-3/12">
-              {/* Placeholder for sidebar or additional content */}
-            </div>
-          </div>
-
-          {/* <Header companyName={selectedCompany} quotationName={quotationName} /> */}
-
-          <div className="container mt-5 max-w-full">
-            <h2 className="text-2xl font-bold">
-              Plan & Quotation for {quotationName}
-            </h2>
-            {renderPaidServices()}
-            {renderComplimentaryServices()}
-
-            <div className="mt-3 mb-5">
-              <h5 className="font-bold">Notes:</h5>
-              <ul>
-                {notes.map((note) => (
-                  <li key={note.id}>
-                    {note.note_text}
-                    <p>{note.additional_info}</p>
-                  </li>
-                ))}
-              </ul>
+          <div className="w-full px-2 mt-4">
+            <h4 className="QuoStatus my-2">Quotation Status: <strong className={` ${quotationStatus !== "Approved" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
+            <div className="flex space-x-3 items-center">
+              {/* <button
+                className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 mt-1"
+                onClick={() => navigate(`/review/${id}`)}
+              >
+                Review Quotation Data
+              </button> */}
+              <button
+                className={`bg-green-700  text-white rounded p-2 mt-1`}
+                onClick={handlePrintPage}
+              
+              >
+                Print Page
+              </button>
             </div>
           </div>
         </div>
       </div>
-
-      {/* <Lastpage/> */}
-    </>
+    </Wrapper>
   );
 }
 
 export default SuperQuotationVIew;
 
+const Wrapper = styled.div`
+ @media print {
+    body * {
+      visibility: hidden;
+    }
+    .QuotationDataPage,
+    .QuotationDataPage * {
+      visibility: visible;
+    }
+    .QuotationDataPage {
+      position: absolute;
+      top: 0;
+      left: 50%;       /* Center horizontally */
+      transform: translateX(-50%); /* Adjust to be perfectly centered */
+      width: 90%;       /* Adjust width as needed */
+      margin: 0 auto;
+      // text-align: center;
+      padding: 0.5rem; /* Reduce padding */
+      font-size: 0.8em;
+    }
+
+    /* Additional print rules to hide specific elements */
+    button,
+    .QuoStatus,
+    .header,
+    .footer,
+    .UserInfo,
+    .QuotationListBTN {
+      display: none;
+    }
+  }
+
+  th {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  .table {
+    border: black;
+  }
+  .th {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  li {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+`;

@@ -78,7 +78,8 @@ const Quotation = async (req, res) => {
 
     // Insert quotation with employeeId
     const sqlQuotation =
-      "INSERT INTO quotations_data (quotation_name, employeeId, employee_name, lead_id) VALUES (?, ?,?, ?)";
+      // "INSERT INTO quotations_data (quotation_name, employeeId, employee_name, lead_id) VALUES (?, ?,?, ?)";
+      "INSERT INTO quotations_information (employeeId, employee_name, lead_id) VALUES (?, ?, ?)";
     const resultQuotation = await new Promise((resolve, reject) => {
       db.query(
         sqlQuotation,
@@ -162,6 +163,9 @@ const deleteQuotation = async (req, res) => {
       });
     });
 
+
+ 
+
     // Delete services associated with the quotation
     const sqlDeleteServices =
       "DELETE FROM services_data WHERE quotation_id = ?";
@@ -178,7 +182,8 @@ const deleteQuotation = async (req, res) => {
 
     // Delete the quotation itself
     const sqlDeleteQuotation =
-      "DELETE FROM quotations_data WHERE quotation_id = ?";
+      // "DELETE FROM quotations_data WHERE quotation_id = ?";
+      "DELETE FROM quotations_information WHERE id = ?";
     await new Promise((resolve, reject) => {
       db.query(sqlDeleteQuotation, [id], (err, result) => {
         if (err) {
@@ -202,9 +207,21 @@ const deleteQuotation = async (req, res) => {
       });
     });
 
+        //  // Then, update the leads table to set quotation status to "not created"
+        //  const updateSql = "UPDATE leads SET quotation = 'not created' WHERE lead_id = ?";
+        //  await new Promise((resolve, reject) => {
+        //    db.query(updateSql, [id], (err, results) => {
+        //      if (err) {
+        //        reject(err);
+        //      } else {
+        //        resolve(results);
+        //      }
+        //    });
+        //  });
+
     res.status(200).json({
       success: true,
-      message: "Quotation, associated notes, and services deleted successfully",
+      message: "Quotation deleted successfully",
     });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
@@ -234,7 +251,8 @@ const deleteQuotation = async (req, res) => {
 
 const GetQuotation = async (req, res) => {
   try {
-    const sql = "SELECT * FROM quotations_data  ORDER BY quotation_id DESC";
+    // const sql = "SELECT * FROM quotations_data  ORDER BY quotation_id DESC";
+    const sql = "SELECT * FROM quotations_information ORDER BY id DESC";
 
     const quotations = await new Promise((resolve, reject) => {
       db.query(sql, (err, results) => {
@@ -254,7 +272,8 @@ const GetQuotation = async (req, res) => {
 
 const getAllQuotation = async (req, res) => {
   try {
-    const sql = "SELECT * FROM quotations_data";
+    // const sql = "SELECT * FROM quotations_data";
+    const sql = "SELECT * FROM quotations_information";
 
     const allQuotations = await new Promise((resolve, reject) => {
       db.query(sql, (err, results) => {
@@ -277,7 +296,8 @@ const getAllQuotation = async (req, res) => {
 const GetQuotationName = async (req, res) => {
   try {
     const { quotationId } = req.params; // Extracting UserId from req.params
-    const sql = "SELECT * FROM quotations_data WHERE quotation_id = ? ";
+    // const sql = "SELECT * FROM quotations_data WHERE quotation_id = ? ";
+    const sql = "SELECT * FROM quotations_information WHERE id = ? ";
 
     const quotations = await new Promise((resolve, reject) => {
       db.query(sql, [quotationId], (err, results) => {
@@ -298,15 +318,37 @@ const GetQuotationName = async (req, res) => {
 const UpdateQuotationName = async (req, res) => {
   try {
     const { quotationId } = req.params; // Extracting quotationId from req.params
-    const { newName } = req.body; // Extracting new quotation name from req.body
 
-    // Construct SQL query to update the quotation name
-    const sql =
-      "UPDATE quotations_data SET quotation_name = ? WHERE quotation_id = ?";
+    // Extracting updated data fields from req.body
+    const {
+      customer_name, contact_number, alternate_number, address, adhaar_number, pan_number,
+      project_name, unit_number, dimension, rate, variant, total_deal, booking_amount,
+      booking_amount_words, payment_mode, finance_bank, duration, balance_amount,
+      balance_amount_words, payment_due_date1, payment_due_date2, payment_due_date3,
+      payment_due_date4, registry_charges, p1p2_charges, remarks
+    } = req.body;
+
+    // Construct SQL query to update all specified fields
+    const sql = `
+      UPDATE quotations_information 
+      SET customer_name = ?, contact_number = ?, alternate_number = ?, address = ?, 
+          adhaar_number = ?, pan_number = ?, project_name = ?, unit_number = ?, 
+          dimension = ?, rate = ?, variant = ?, total_deal = ?, booking_amount = ?, 
+          booking_amount_words = ?, payment_mode = ?, finance_bank = ?, duration = ?, 
+          balance_amount = ?, balance_amount_words = ?, payment_due_date1 = ?, 
+          payment_due_date2 = ?, payment_due_date3 = ?, payment_due_date4 = ?, 
+          registry_charges = ?, p1p2_charges = ?, remarks = ? 
+      WHERE id = ?`;
 
     // Execute the update query asynchronously
     await new Promise((resolve, reject) => {
-      db.query(sql, [newName, quotationId], (err, results) => {
+      db.query(sql, [
+        customer_name, contact_number, alternate_number, address, adhaar_number, pan_number,
+        project_name, unit_number, dimension, rate, variant, total_deal, booking_amount,
+        booking_amount_words, payment_mode, finance_bank, duration, balance_amount,
+        balance_amount_words, payment_due_date1, payment_due_date2, payment_due_date3,
+        payment_due_date4, registry_charges, p1p2_charges, remarks, quotationId
+      ], (err, results) => {
         if (err) {
           reject(err);
         } else {
@@ -314,32 +356,21 @@ const UpdateQuotationName = async (req, res) => {
         }
       });
     });
-    const sql2 =
-      "UPDATE services_data SET quotation_name = ? WHERE quotation_id = ?";
 
-    // Execute the update query asynchronously
-    await new Promise((resolve, reject) => {
-      db.query(sql2, [newName, quotationId], (err, results) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(results);
-        }
-      });
-    });
-
-    res.status(200).json({ message: "Quotation name updated successfully" });
+    res.status(200).json({ message: "Quotation updated successfully" });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const CopyQuotationData = async (req, res) => {
   try {
     const { quotationId } = req.params; // Extract quotationId from req.params
 
     // Retrieve the quotation data based on the provided quotation ID
-    const sqlQuotation = "SELECT * FROM quotations_data WHERE quotation_id = ?";
+    // const sqlQuotation = "SELECT * FROM quotations_data WHERE quotation_id = ?";
+    const sqlQuotation = "SELECT * FROM quotations_information WHERE id = ?";
 
     // Execute the query asynchronously to fetch the quotation data
     const [quotation] = await new Promise((resolve, reject) => {
@@ -363,11 +394,13 @@ const CopyQuotationData = async (req, res) => {
 
     // Insert the copied quotation into the database
     const result = await db.query(
-      "INSERT INTO quotations_data (quotation_name, user_id) VALUES (?, ?)",
+      // "INSERT INTO quotations_data (quotation_name, user_id) VALUES (?, ?)",
+      "INSERT INTO quotations_information (customer_name, user_id) VALUES (?, ?)",
       [newQuotationName, quotation.user_id]
     );
 
-    const sqlgetId = "SELECT * FROM quotations_data WHERE quotation_name = ?";
+    // const sqlgetId = "SELECT * FROM quotations_data WHERE quotation_name = ?";
+    const sqlgetId = "SELECT * FROM quotations_information WHERE customer_name = ?";
     const [getId] = await new Promise((resolve, reject) => {
       db.query(sqlgetId, [newQuotationName], (err, results) => {
         if (err) {
@@ -469,11 +502,11 @@ Quotationviaid = (req, res) => {
     const quotation_id = req.params.id;
 
     const getQuery = `
-      SELECT sd.*, qd.* 
-      FROM services_data sd
-      JOIN quotations_data qd ON sd.quotation_id = qd.quotation_id 
-      WHERE sd.quotation_id = ?
-    `;
+    SELECT qd.* 
+    FROM quotations_information qd 
+    WHERE qd.id = ?
+  `;
+  
 
     db.query(getQuery, quotation_id, (error, result) => {
       if (error) {
@@ -1121,21 +1154,22 @@ const getAllUsers = async (req, res) => {
 
 const updateQuotationStatus = async (req, res) => {
   try {
-    const { quotation_id, status } = req.body; // Get the quotation_id and new status from the request body
+    const { id, status } = req.body; // Get the quotation_id and new status from the request body
 
     // Validate that both fields are provided
-    if (!quotation_id || !status) {
+    if (!id || !status) {
       return res.status(400).json({
         message: "quotation_id and status are required",
         success: false,
       });
     }
 
-    const sql = "UPDATE quotations_data SET status = ? WHERE quotation_id = ?";
+    // const sql = "UPDATE quotations_data SET status = ? WHERE quotation_id = ?";
+    const sql = "UPDATE quotations_information SET status = ? WHERE id = ?";
 
     // Use a promise to execute the SQL update query
     const updateStatus = await new Promise((resolve, reject) => {
-      db.query(sql, [status, quotation_id], (err, result) => {
+      db.query(sql, [status, id], (err, result) => {
         if (err) {
           return reject(err); // Reject the promise if there's an error
         }
@@ -1165,15 +1199,48 @@ const updateQuotationStatus = async (req, res) => {
     });
   }
 };
+
+const quotationInformationForm = async (req, res) =>{
+  const formData = req.body;
+  console.log('API DAta check:',formData);
+  
+
+  const query = `INSERT INTO quotations_information (
+    customer_name, contact_number, alternate_number, address, adhaar_number, pan_number,
+    project_name, unit_number, dimension, rate, variant, total_deal, booking_amount,
+    booking_amount_words, payment_mode, finance_bank, duration, balance_amount,
+    balance_amount_words, payment_due_date1, payment_due_date2, payment_due_date3,
+    payment_due_date4, registry_charges, p1p2_charges, remarks, employeeId, employee_name, lead_id
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  const values = [
+    formData.customerName, formData.contactNumber, formData.alternateNumber, formData.address, 
+    formData.adhaarNumber, formData.panNumber, formData.projectName, formData.unitNumber, 
+    formData.dimension, formData.rate, formData.variant, formData.totalDeal, formData.bookingAmount,
+    formData.bookingAmountWords, formData.paymentMode, formData.financeBank, formData.duration, 
+    formData.balanceAmount, formData.balanceAmountWords, formData.paymentDueDate1, formData.paymentDueDate2, 
+    formData.paymentDueDate3, formData.paymentDueDate4, formData.registryCharges, formData.p1p2Charges, 
+    formData.remarks, formData.employeeId, formData.employee_name, formData.lead_id
+  ];
+  console.log('check values: ', values);
+  
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error saving data:', err);
+      res.status(500).json({ message: 'Error saving data' });
+      return;
+    }
+    res.status(200).json({ message: 'Data saved successfully', id: result.insertId });
+  });
+
+};
+
 const getLeadsByIdVisit = (req, res) => {
   const employeeId = req.params.employeeId; // Assuming `employeeId` is passed as a route parameter
 
   const sql = `
     SELECT 
-    
-      
-     
-    
       visit.visit,
       visit.visit_date,
       visit.report,
@@ -1289,5 +1356,6 @@ module.exports = {
   getAllUsers,
   deleteProfile,
   getAllQuotation,
-  updateQuotationStatus,getLeadsByIdVisit,getLeadsVisit
+  updateQuotationStatus,getLeadsByIdVisit,getLeadsVisit,
+  quotationInformationForm
 };

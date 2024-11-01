@@ -35,6 +35,7 @@ const {
   socialmediaLead,
   getLeadsVisit,
   getLeadsByIdVisit,
+  quotationInformationForm,
 } = require("../controllers/UserController");
 const upload = require("../controllers/fileUploadController");
 const upload1 = require("../config/multerConfig"); // Import multer configuration
@@ -131,6 +132,9 @@ router.delete("/services/:serviceId", deleteService);
 router.get("/quotation/:id", Quotationviaid);
 // router.get("/quotation",GetQuotation);
 router.get("/quotation-data", GetQuotation);
+
+//Route to Quotation Information Form 
+router.post("/quotation-information-form", quotationInformationForm)
 
 // Route to update quotation status
 router.post("/update-quotation-status", updateQuotationStatus);

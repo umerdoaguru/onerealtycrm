@@ -1,47 +1,30 @@
 import React, { useState, useEffect } from "react";
-
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
-import UpdateServicesForm from "./UpdateServicesForm";
 import UserLogin from "../../components/UserLogin";
+import { FaClipboardList } from "react-icons/fa";
+import { IoIosArrowBack } from "react-icons/io";
 
 function Final_quotationBy_emp() {
   const navigate = useNavigate();
   const { id, leadId } = useParams();
   const [quotations, setQuotations] = useState([]);
   const [quotationName, setQuotationName] = useState("");
-  const [quotationServiceDescription, setQuotationServiceDescription] =
-    useState("");
   const [totalActualPrice, setTotalActualPrice] = useState(0);
   const [totalOfferPrice, setTotalOfferPrice] = useState(0);
-  const [isUpdateMode, setIsUpdateMode] = useState(false);
-  const [notes, setNotes] = useState([]);
-  const [quotationStatus, setQuotationStatus] = useState(""); // New state for status
+  const [quotationStatus, setQuotationStatus] = useState("");
 
   const fetchQuotations = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:9000/api/quotation/${id}`
-      );
-
+      const response = await axios.get(`http://localhost:9000/api/quotation/${id}`);
       if (response.status === 200) {
-        setQuotationName(response.data[0].quotation_name);
+        setQuotationName(response.data[0].customer_name);
         setQuotations(response.data);
+        setQuotationStatus(response.data[0].status); // Assuming the status is part of the response
 
-        // Set the status from the response using the correct field name
-        setQuotationStatus(response.data[0].status); // Changed to status
-        console.log("Quotation Status:", response.data);
-
-        const actualPriceTotal = response.data.reduce(
-          (total, q) => total + q.actual_price,
-          0
-        );
-        const offerPriceTotal = response.data.reduce(
-          (total, q) => total + q.offer_price,
-          0
-        );
-
+        const actualPriceTotal = response.data.reduce((total, q) => total + q.actual_price, 0);
+        const offerPriceTotal = response.data.reduce((total, q) => total + q.offer_price, 0);
         setTotalActualPrice(actualPriceTotal);
         setTotalOfferPrice(offerPriceTotal);
       }
@@ -50,409 +33,198 @@ function Final_quotationBy_emp() {
     }
   };
 
-  const fetchNotes = async () => {
-    try {
-      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
-
-      if (response.status === 200) {
-        setNotes(response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching notes:", error);
-    }
-  };
-
   const handlePrintPage = () => {
-    navigate(`/print/${id}`);
+    window.print();
   };
-
-  const handleUpdateSuccess = () => {
-    console.log("Services updated successfully");
-    setIsUpdateMode(false);
-    // window.location.reload();
-    fetchQuotations();
-  };
-
-  const handleUpdateError = () => {
-    console.error("Error updating services");
-    // Handle error, e.g., show an error message or update state
-  };
-
-  const handleAddNotes = () => {
-    navigate(`/createnotes/${id}`);
-  };
-
-  const handleDeleteNotes = () => {
-    navigate(`/deletenotes/${id}`);
-  };
-  const handleUpdateNotes = () => {
-    navigate(`/update-notes/${id}`);
-  };
-
-  const handleAddServices = () => {
-    navigate(`/addservices/${id}`);
-  };
-  const handleDeleteService = async (serviceId) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this row data?"
-    );
-
-    if (isConfirmed) {
-      try {
-        // Make an API call to delete the service
-        const response = await axios.delete(
-          `http://localhost:9000/api/services/${serviceId}`
-        );
-
-        if (response.status === 200) {
-          console.log("Service deleted successfully");
-          // You can perform additional actions after successful deletion
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error("Error deleting service:", error);
-      }
-    }
-  };
-
+  
   useEffect(() => {
     fetchQuotations();
-    fetchNotes();
-    handleUpdateSuccess();
   }, []);
 
-  const filterServicesByType = (type) => {
-    return quotations.filter((q) => q.service_type === type);
-  };
-  const handleReview = () => {
-    navigate(`/review/${id}`);
-    window.scrollTo(0, 0);
-  };
-  const handleBackClick = () => {
-    navigate(-1); // -1 navigates to the previous page in history
-  };
-  // const handleNavigation = (quotations_data) => {
-  //   // Replace `lead.lead_id` with the actual lead ID you want to navigate to
-  //   navigate(`/View_quotations/${quotations_data.lead_id}`);
-  // };
-
   return (
-    <>
-      <Wrapper>
-        <div className="w-full px-2">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 lg:col-span-4 mt-3">
-              <div className="mx-lg-4 font-medium">
-                <UserLogin />
-              </div>
-            </div>
-            <div className="col-span-12 lg:col-span-4 mt-3">
-              <h5 className="text-center text-xl font-medium">
-                Quotation Name: {quotationName}
-              </h5>
-            </div>
-            {/* <div className="col-span-12 lg:col-span-4 mt-3">
-              <div className="flex justify-end mx-lg-2">
-                <Logout />
-              </div>
-            </div> */}
+    <Wrapper>
+      <div className="w-full px-2 flex flex-col justify-center items-center">
+        <div className=" UserInfo grid grid-cols-12 gap-4">
+          <div className=" col-span-12 lg:col-span-4 mt-3">
+            <UserLogin />
           </div>
-
-          <div className="w-full px-2 mt-4">
-            <div className="flex justify-between">
-              <div className="">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-auto block text-center"
-                >
-                  <i className="bi bi-arrow-return-left mx-1"></i>Back
-                </button>
-              </div>
-              <div className="flex space-x-3">
-                <div className="">
-                  <button
-                    className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 w-full"
-                    onClick={() => setIsUpdateMode(true)}
-                  >
-                    Update Services
-                  </button>
-                </div>
-                <div className="">
-                  <button
-                    className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 w-full"
-                    onClick={handleAddServices}
-                  >
-                    Add Services
-                  </button>
-                </div>
-                <div className="">
-                  <Link
-                    to={`/View_quotations/${leadId}`}
-                    className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-full block text-center"
-                  >
-                    Quotation List
-                  </Link>
-                  {/* <button
-                    onClick={handleNavigation}
-                    className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-full block text-center"
-                  >
-                    Quotation List
-                  </button> */}
-                </div>
-              </div>
-            </div>
-
-            {isUpdateMode && (
-              <UpdateServicesForm
-                quotationId={id}
-                onUpdateSuccess={handleUpdateSuccess}
-                onUpdateError={handleUpdateError}
-              />
-            )}
+          <div className="col-span-12 lg:col-span-4 mt-3">
+            <h5 className="text-center text-xl font-medium">Quotation Name: {quotationName}</h5>
           </div>
+        </div>
 
-          <div className="w-full px-2">
-            <div className="w-full px-2 mt-3">
-              <h4>Paid Services</h4>
-              <div className="overflow-y-auto" style={{ maxHeight: "700px" }}>
-                <table className="table-auto w-full border-collapse border border-gray-300">
-                  <thead className="bg-gray-200">
-                    <tr>
-                      <th className="border border-gray-300 p-2">Sr.No</th>
-                      <th className="border border-gray-300 p-2">
-                        Service Name
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Service Description
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Actual Price(INR)
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Offer Price(INR)
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Subscription
-                      </th>
-                      <th className="border border-gray-300 p-2">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filterServicesByType("Paid").map((q, index) => (
-                      <tr key={q.id} className="hover:bg-gray-100">
-                        <td className="border border-gray-300 p-2 text-center font-bold">
-                          {index + 1}
-                        </td>
-                        <td className="border border-gray-300 p-2 font-bold">
-                          {q.service_name}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          {q.service_description
-                            .split(".")
-                            .map((part, index) => (
-                              <p key={index}>
-                                {part.trim()}
-                                {index !==
-                                  q.service_description.split(".").length - 1 &&
-                                  "."}
-                              </p>
-                            ))}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          {q.actual_price}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          {q.offer_price}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          {q.subscription_frequency}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          <button
-                            className="bg-red-500 hover:bg-red-600 text-white rounded py-1 px-2"
-                            onClick={() => handleDeleteService(q.service_id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+        <div className="w-full px-2 mt-4">
+          <div className="flex justify-between">
+            <button
+              onClick={() => navigate(-1)}
+              className="text-black bg-gray-50 hover:bg-green-600 rounded py-2 px-3 w-auto border border-black flex justify-center items-center gap-1 "
+            >
+            <IoIosArrowBack /> Back
+            </button>
+            <Link
+              to={`/View_quotations/${leadId}`}
+              className="QuotationListBTN text-black  bg-gray-50 hover:text-gray-50 hover:bg-green-500 rounded border border-black py-1 px-3 flex items-center justify-center gap-1 text-center"
+            > <FaClipboardList />  Quotation List
+            </Link>
+          </div>
+        </div>
+
+        <div  className="container m-2">
+          <div id="quotationData" className="QuotationDataPage">
+            <div className="container border border-black rounded-lg h-auto m-2 p-4">
+              <div className="flex flex-col justify-center items-center">
+                <div>
+                  <img src="https://one-realty.in/static/media/company_logo.b0c6ab3fa89a853264a3.png" alt="Company logo" />
+                </div>
+                <div className="flex flex-col justify-center items-center gap-2 text-black font-bold">
+                  <h4 className="underline ">
+                    First Floor chamber number 1&2 Dutt Residency,opposite stadium
+                  </h4>
+                  <h4 className="underline ">
+                    North civil lines,Jabalpur(M.P.)Tel  +917614924920
+                  </h4>
+                  <h4 className="underline ">
+                    Email : hronerealty@gmail.com  website : www.onerealty.in
+                  </h4>
+                  <h4 className="underline ">
+                    REGISTRATION NO:- 04/14/01/0060/17    RERA ID NO:- P-JBP-23-4248
+                  </h4>
+
+                </div>
+                <div className="mt-4">
+                  <hr className="my-1" />
+                  <h2 className="text-center font-bold text-2xl">QUOTATION</h2>
+                  <hr className="my-1" />
+                </div>
               </div>
-            </div>
+              <div   className="flex flex-col mt-4 gap-3 ">
+                {quotations[0] && (
+                  <>
+                    <div className="w-50 mr-2"><strong>CUSTOMER NAME:</strong> {quotations[0]?.customer_name}</div>
+                    <div className="flex w-full">
+                      <div className="w-50 mr-2">
+                        <strong>CONTACT NUMBER:</strong> {quotations[0]?.contact_number}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong>ALTERNATE NUMBER:</strong> {quotations[0]?.alternate_number}
+                      </div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>ADDRESS:</strong> {quotations[0]?.address}</div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2">
+                        <strong>ADHAAR NUMBER:</strong> {quotations[0]?.adhaar_number}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong>PAN NUMBER:</strong> {quotations[0]?.pan_number}
+                      </div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>PROJECT NAME:</strong> {quotations[0]?.project_name}</div>
+                    <div className="w-full flex">
 
-            {/* Complimentary Services */}
-            <div className="w-full px-2 mt-3">
-              <h4>Complimentary Services</h4>
-              <div className="overflow-y-auto" style={{ maxHeight: "700px" }}>
-                <table className="table-auto w-full border-collapse border border-gray-300">
-                  <thead className="bg-gray-200">
-                    <tr>
-                      <th className="border border-gray-300 p-2">Sr.No</th>
-                      <th className="border border-gray-300 p-2">
-                        Service Name
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Service Description
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Actual Price(INR)
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Offer Price(INR)
-                      </th>
-                      <th className="border border-gray-300 p-2">
-                        Subscription
-                      </th>
-                      <th className="border border-gray-300 p-2">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filterServicesByType("Complimentary").map((q, index) => (
-                      <tr
-                        key={q.id}
-                        className="hover:bg-gray-100 border-gray-300  "
-                      >
-                        <td className="text-center font-bold">{index + 1}</td>
-                        <td className="font-bold border p-2">
-                          {q.service_name}
-                        </td>
-                        <td className="whitespace-pre-line border p-2">
-                          {q.service_description}
-                        </td>
-                        <td className="border p-2 th">{q.actual_price}</td>
-                        <td className="border p-2 th">{q.offer_price}</td>
-                        <td className="border p-2 th">
-                          {q.subscription_frequency}
-                        </td>
-                        <td className="border border-gray-300 p-2">
-                          <button
-                            className="bg-red-500   hover:bg-red-600 text-white rounded py-1 px-2"
-                            onClick={() => handleDeleteService(q.service_id)}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                      <div className="w-50 mr-2"><strong>UNIT NUMBER:</strong> {quotations[0]?.unit_number}</div>
+                      <div className="w-50 mr-2"><strong>DIMENSION:</strong> {quotations[0]?.dimension}</div>
+                    </div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2"><strong>RATE:</strong> {quotations[0]?.rate}</div>
+                      <div className="w-50 mr-2"><strong>VARIANT:</strong> {quotations[0]?.variant}</div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>TOTAL DEAL:</strong> {quotations[0]?.total_deal}</div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2" v><strong>BOOKING AMOUNT:</strong> {quotations[0]?.booking_amount}</div>
+                      <div className="w-50 mr-2"><strong> IN WORDS:</strong> {quotations[0]?.booking_amount_words}</div>
+                    </div>
+                    <div className="w-full flex">
+                      <div className="w-50 mr-2">
+                        <strong>PAYMENT MODE:</strong> {quotations[0]?.payment_mode}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong>IF FINANCE BANK:</strong> {quotations[0]?.finance_bank}
+                      </div>
+                    </div>
+                    <div className="w-50 mr-2"><strong>DURATION:</strong> {quotations[0]?.duration}</div>
+                    <div className="w-full">
+                      <div className="w-50 mr-2">
+                        <strong>BALANCE AMOUNT:</strong> {quotations[0]?.balance_amount}
+                      </div>
+                      <div className="w-50 mr-2">
+                        <strong> IN WORDS:</strong> {quotations[0]?.balance_amount_words}
+                      </div>
+                    </div>
+                    <div className="w-full flex" >
+                      <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 1:</strong> {new Date(quotations[0]?.payment_due_date1).toLocaleDateString()}</div>
+                      <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 2:</strong> {new Date(quotations[0]?.payment_due_date2).toLocaleDateString()}</div>
+                    </div>
+                    <div className="w-full flex">
+                    <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 3:</strong> {new Date(quotations[0]?.payment_due_date3).toLocaleDateString()}</div>
+                    <div className="w-50 mr-2"><strong>PAYMENT DUE DATE 4:</strong> {new Date(quotations[0]?.payment_due_date4).toLocaleDateString()}</div>
+                    </div>
+                    <div><strong>REGISTRY CHARGES:</strong> {quotations[0]?.registry_charges}</div>
+                    <div><strong>P1 P2 CHARGES:</strong> {quotations[0]?.p1p2_charges}</div>
+                    <div><strong>REMARKS:</strong> {quotations[0]?.remarks}</div>
+                  </>
+                )}
               </div>
-            </div>
-
-            <div className="note mt-3">
-              <h5 className="font-bold">Notes:</h5>
-              <ul>
-                {notes.map((note) => (
-                  <li key={note.id}>
-                    {note.note_text}
-                    <p>{note.additional_info}</p>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
 
           <div className="w-full px-2 mt-4">
+            <h4 className="QuoStatus my-2">Quotation Status: <strong className={` ${quotationStatus !== "Approved" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
             <div className="flex space-x-3 items-center">
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white rounded py-2 px-4"
-                onClick={handleAddNotes}
-              >
-                Add Notes
-              </button>
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white rounded py-2 px-4"
-                onClick={handleDeleteNotes}
-              >
-                Delete Notes
-              </button>
-              <button
-                className="bg-teal-500 hover:bg-teal-600 text-white rounded py-2 px-4"
-                onClick={handleUpdateNotes}
-              >
-                Edit Notes
-              </button>
-              <button
+              {/* <button
                 className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 mt-1"
-                onClick={handleReview}
+                onClick={() => navigate(`/review/${id}`)}
               >
                 Review Quotation Data
-              </button>
-              {/* Print Button */}
-              {/* <div className="flex space-x-3 items-center mt-4"> */}
+              </button> */}
               <button
-                className={`bg-green-700 ${
-                  quotationStatus !== "Approved"
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-green-600"
-                } text-white rounded p-2 mt-1`}
+                className={`bg-green-700 ${quotationStatus !== "Approved" ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"} text-white rounded p-2 mt-1`}
                 onClick={handlePrintPage}
                 disabled={quotationStatus !== "Approved"}
               >
                 Print Page
               </button>
-
-              {/* </div> */}
             </div>
           </div>
         </div>
-
-        {/* <div className="w-full px-2">
-        <div className="mt-3 mb-3">
-          {isUpdateFooterMode ? (
-            <UpdateFooterImageForm
-              quotationId={id}
-              onBack={() => setIsUpdateHeaderMode(false)}
-            />
-          ) : (
-            <>
-              <div className="mt-3 mb-3">
-                <img
-                  src={footerImagePath}
-                  alt="footer not found"
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-              </div>
-              <button
-                className="btn btn-primary mx-2"
-                onClick={handleAddFooterImage}
-              >
-                Add Footer Image
-              </button>
-
-              <button
-                className="btn btn-primary mx-2"
-                onClick={() => setIsUpdateFooterMode(true)}
-              >
-                Update Footer Image
-              </button>
-              <button
-                className="btn btn-danger mx-2"
-                onClick={handleDeleteFooterImage}
-              >
-                Delete Footer Image
-              </button>
-            </>
-          )}
-        </div>
-        </div> */}
-      </Wrapper>
-
-      {/* <button className="btn btn-success mt-2  mb-3" onClick={handleChangeHeaderFooter}>
-
-           
-             Change Footer
-         
-          </button> */}
-    </>
+      </div>
+    </Wrapper>
   );
 }
 
 export default Final_quotationBy_emp;
 
 const Wrapper = styled.div`
+ @media print {
+    body * {
+      visibility: hidden;
+    }
+    .QuotationDataPage,
+    .QuotationDataPage * {
+      visibility: visible;
+    }
+    .QuotationDataPage {
+      position: absolute;
+      top: 0;
+      left: 50%;       /* Center horizontally */
+      transform: translateX(-50%); /* Adjust to be perfectly centered */
+      width: 90%;       /* Adjust width as needed */
+      margin: 0 auto;
+      // text-align: center;
+      padding: 0.5rem; /* Reduce padding */
+      font-size: 0.8em;
+    }
+
+    /* Additional print rules to hide specific elements */
+    button,
+    .QuoStatus,
+    .header,
+    .footer,
+    .UserInfo,
+    .QuotationListBTN {
+      display: none;
+    }
+  }
+
   th {
     font-weight: bold;
     font-size: 1.2rem;
