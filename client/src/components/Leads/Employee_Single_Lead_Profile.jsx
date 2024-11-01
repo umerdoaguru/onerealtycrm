@@ -92,6 +92,49 @@ function Employee_Single_Lead_Profile() {
         { value: "not-interested", label: "Not-Interested" },
       ],
     },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "", label: "Status" },
+        { value: "pending", label: "Pending" },
+        { value: "interested", label: "Interested" },
+        { value: "not-interested", label: "Not-Interested" },
+      ],
+    },
+    
+
+      {
+        name: "booking_amount",
+        label: "Booking Amount",
+        type: "number",
+      },
+      {
+        name: "payment_mode",
+        label: "Payment Mode",
+        type: "select",
+        options: [
+          { value: "", label: "Select Payment Mode" },
+          { value: "credit-card", label: "Credit Card" },
+          { value: "debit-card", label: "Debit Card" },
+          { value: "net-banking", label: "Net Banking" },
+          { value: "upi", label: "UPI" },
+          { value: "cash", label: "Cash" },
+        ],
+      },
+   
+      {
+        name: "registry",
+        label: "Registry",
+        type: "select",
+        options: [
+          { value: "", label: "Select Payment Mode" },
+          { value: "in progress", label: "In Progress" },
+          { value: "done", label: "Done" },
+         
+        ],
+      },
   ];
 
   const [currentLead, setCurrentLead] = useState({
@@ -504,7 +547,7 @@ console.log(totalVisit);
           </div>
 
           <div className="overflow-x-auto mt-5">
-            <table className="min-w-full bg-white border">
+            <table className="min-w-full whitespace-nowrap bg-white border">
               <thead>
                 <tr>
                   <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
@@ -534,6 +577,18 @@ console.log(totalVisit);
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
                     Deal Close Date
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    {" "}
+                    Booking Amount
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    {" "}
+                   Payment Mode 
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300">
+                    {" "}
+                   Registry
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     {" "}
@@ -573,31 +628,7 @@ console.log(totalVisit);
                       {lead.quotation}
                     </td>
 
-                    {/* <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
-                      {lead.invoice}
-                    </td> */}
-
-                    {/* {lead.invoice_status === "pending" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-                        {lead.invoice_status}
-                      </td>
-                    )}
-
-                    {lead.invoice_status === "in progress" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
-                        {lead.invoice_status}
-                      </td>
-                    )}
-                    {lead.invoice_status === "approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-                        {lead.invoice_status}
-                      </td>
-                    )}
-                    {lead.invoice_status === "not approved" && (
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
-                        {lead.invoice_status}
-                      </td>
-                    )} */}
+                  
 
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[black]">
                       {lead.status}
@@ -630,6 +661,15 @@ console.log(totalVisit);
 
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
                       {lead.d_closeDate}
+                    </td>
+                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
+                      {lead.booking_amount}
+                    </td>
+                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
+                      {lead.payment_mode}
+                    </td>
+                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
+                      {lead.registry}
                     </td>
 
                     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-gray-800">
@@ -700,7 +740,7 @@ console.log(totalVisit);
 
           {showPopup && (
             <div className=" fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-              <div className="w-75 bg-white p-6 rounded-lg shadow-lg max-h-[100vh] overflow-auto mx-4 my-5">
+              <div className="w-75 bg-white p-6 rounded-lg shadow-lg max-h-[80vh] overflow-auto mx-4 my-5">
                 <h2 className="text-xl font-semibold mb-4">
                   {isEditing ? "Update Status" : ""}
                 </h2>
