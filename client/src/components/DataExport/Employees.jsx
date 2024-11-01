@@ -3,7 +3,7 @@ import axios from "axios";
 import moment from "moment";
 import * as XLSX from "xlsx";
 import ReactPaginate from "react-paginate"; // Import ReactPaginate
-import Sider from "../Sider";
+// import Sider from "../Sider";
 import Header from "../../pages/Quotation/Header";
 import styled from "styled-components";
 
@@ -60,7 +60,7 @@ function Employees() {
   return (
     <Wrapper>
       <Header />
-      <Sider />
+      {/* <Sider /> */}
       <div className="container">
         <h1 className="text-2xl text-center mt-[2rem] font-medium">
           Employee Data

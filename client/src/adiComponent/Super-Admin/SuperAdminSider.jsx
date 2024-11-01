@@ -95,10 +95,9 @@ const SuperAdminSider = () => {
             </li>
 
             <hr className="w-full border-gray-400" />
-            {/* 
-            <li className={`w-full ${getSidebarClass("/data-export")}`}>
+            <li className={`w-full ${getSidebarClass("/super-admin-data-export")}`}>
               <Link
-                to="/data-export"
+                to="/super-admin-data-export"
                 className="flex flex-col items-center py-3"
               >
                 <BsFileEarmarkPerson className="text-white text-2xl md:text-3xl" />
@@ -108,7 +107,7 @@ const SuperAdminSider = () => {
               </Link>
             </li>
 
-            <hr className="w-full border-gray-400" /> */}
+            <hr className="w-full border-gray-400" /> 
 
             <li className={`w-full ${getSidebarClass("/super-admin-quotation-list")}`}>
               <Link

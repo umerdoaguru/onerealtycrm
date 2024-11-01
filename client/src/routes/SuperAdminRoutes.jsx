@@ -36,6 +36,7 @@ import AdminProfile from "../adiComponent/Super-Admin/adminProfile";
 import SuperAdminProfile from "../adiComponent/Super-Admin/superAdminProfile";
 import Super_view_visit from "../adiComponent/Super-Admin/Super_view_visit";
 import Super_view_quotations from "../adiComponent/Super-Admin/Super_view_quotations";
+import SuperDataExport from "../adiComponent/Super-Admin/SuperDataExport";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -85,58 +86,16 @@ function SuperAdminRoutes() {
           path="/super-admin-admin-employe/:adminId"
           element={<AdminProfile />}
         />
+
         <Route
           path="/super-admin-profile"
           element={<SuperAdminProfile />}
         />
-
-        {/* <Route path="/" element={user? <Dashboard/> :<Landingpage/>} /> */}
-        {/* <Route path="/admin-login" element={<AdminLogin/>} /> */}
-
-        {/* <Route path="/total-leads" element={<TotalLead />} />
-        <Route path="/total-employees" element={<TotalEmployee />} />
-        <Route path="/total-quotations" element={<TotalQuotation />} />
-        <Route path="/total-invoices" element={<TotalInvoice />} />
-
-        <Route path="/social-media-leads" element={<MainSocialLeads />} />
-        <Route path="/quotation-form" element={<QuotationForm1 />} />
-        <Route path="/quotation-section" element={<CreateCompanyProfile />} />
-        <Route path="/data-export" element={<DataExport />} /> */}
-
-        {/* <Route
-          path="/admin-view-quotation/:id"
-          element={<AdminQuotationVIew />}
-        />
-        <Route path="/admin-view-invoice/:id" element={<AdminInvoiceView />} />
-
-        <Route path="/updatecompanydata" element={<UpdateCompanyData />} />
-        <Route path="/deletecompanydata" element={<DeleteCompanydata />} />
-
-        <Route path="/servicenamelist" element={<ServicenameList />} />
-        <Route path="/create-servicelist" element={<CreateServicelist />} />
-        <Route path="/delete-servicename" element={<DeleteServiceName />} />
-        <Route path="/update-servicename" element={<UpdateServiceList />} />
-
-        <Route path="/invoicelist" element={<Invoicelist />} />
-        <Route path="/quotationlist" element={<QuotationList />} />
-
-        <Route path="/lead-data" element={<LeadData />} />
-        <Route path="/lead-single-data/:id" element={<Single_Lead_Profile />} />
-        <Route path="/quotation-data" element={<QuotationData />} />
-        <Route path="/invoice-data" element={<InvoiceData />} /> */}
-
-        {/* aditya routes */}
-
-        {/* <Route path="/overview" element={<Overview />} />
-
-        <Route path="/edit-profile" element={<UserProfile />} />
-
-        
         <Route
-          path="/singleOrganization/:id"
-          element={<SingleOrganization />}
+          path="/super-admin-data-export"
+          element={<SuperDataExport />}
         />
-        <Route path="/reporting" element={<Reporting />} /> */}
+ 
       </Routes>
     </>
   );
