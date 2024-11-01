@@ -974,24 +974,30 @@ const deleteLead = (req, res) => {
     return res.status(400).json({ error: "Lead ID is required" });
   }
 
-  // SQL query to delete the lead
-  const sql = `DELETE FROM leads WHERE lead_id = ?`;
-
-  // Execute the delete query
-  db.query(sql, [leadId], (err, results) => {
+  // First, delete from the visit table
+  const sqlVisit = `DELETE FROM visit WHERE lead_id = ?`;
+  db.query(sqlVisit, [leadId], (err, visitResults) => {
     if (err) {
-      return res.status(500).json({ error: "Error deleting data" });
+      return res.status(500).json({ error: "Error deleting from visit table" });
     }
 
-    if (results.affectedRows === 0) {
-      return res.status(404).json({ error: "Lead not found" });
-    }
+    // Then, delete from the leads table
+    const sqlLeads = `DELETE FROM leads WHERE lead_id = ?`;
+    db.query(sqlLeads, [leadId], (err, leadResults) => {
+      if (err) {
+        return res.status(500).json({ error: "Error deleting from leads table" });
+      }
 
-    res
-      .status(200)
-      .json({ success: true, message: "Lead data successfully deleted" });
+      // Check if any rows were deleted from the leads table
+      if (leadResults.affectedRows === 0) {
+        return res.status(404).json({ error: "Lead not found" });
+      }
+
+      res.status(200).json({ success: true, message: "Lead data successfully deleted from both tables" });
+    });
   });
 };
+
 
 const employeeData = (req, res) => {
   const sql = `SELECT * FROM employee`;

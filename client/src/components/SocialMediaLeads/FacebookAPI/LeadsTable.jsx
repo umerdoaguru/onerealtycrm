@@ -127,6 +127,22 @@ const LeadsTable = () => {
       });
       fetchLeadsByFormId(); // Refresh the list
       fetchLeadassigned();
+        // Reset form data
+    setCurrentLead({
+      assignedTo: '',
+      employeeId: '',
+      createdTime: '',
+   
+      // Add other fields here if needed
+    });
+    setSelectedLead({
+      leadId: '',
+      date: '',
+      fullName: '',
+      phoneNumber: '',
+      address: '',
+      // Add other fields here if needed
+    });
       closePopup();
 // Format the createdTime using moment
 const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as 'DD-MM-YYYY'
@@ -229,7 +245,7 @@ window.open(whatsappLink, "_blank");
 
       {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
 
-      <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={handleFormSelect} />
+      {/* <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={handleFormSelect} /> */}
       <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={(formId, formName) => handleFormSelect(formId, formName)} />
 
 

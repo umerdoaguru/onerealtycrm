@@ -36,17 +36,31 @@ const ViewAllVisit = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+
+  const handleDelete = async (visit) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this visit?"
     );
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:9000/api/employe-visit/${id}`
+          `http://localhost:9000/api/employe-visit/${visit.id}`
         );
         if (response.status === 200) {
           console.log("visit deleted successfully");
+
+        }
+        const updateResponse = await axios.put(
+          `http://localhost:9000/api/updateVisitStatus/${visit.lead_id}`,
+          { visit: 'pending' }
+        );
+  
+        if (updateResponse.status === 200) {
+          console.log("Visit status updated successfully:", updateResponse.data);
+          cogoToast.success("Visit status updated successfully");
+        } else {
+          console.error("Error updating visit status:", updateResponse.data);
+          cogoToast.error("Failed to update visit status.");
         }
         console.log(response);
         setRender(!render);
@@ -190,7 +204,7 @@ const ViewAllVisit = () => {
                     
                         <button
                           className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
-                          onClick={() => handleDelete(visit.id)}
+                          onClick={() => handleDelete(visit)}
                         >
                           Delete
                         </button>

@@ -153,9 +153,7 @@ const Super_view_visit = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Report
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Action
-                    </th>
+                  
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -182,30 +180,7 @@ const Super_view_visit = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                        {visit.report}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
                      
-                          <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1"
-                          onClick={() => openModal(visit)}
-                          >
-                            Edit
-                          </button>
-                    
-                        <button
-                          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
-                          onClick={() => handleDelete(visit.id)}
-                        >
-                          Delete
-                        </button>
-                       
-                        {/* <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded m-1"
-                        onClick={() =>
-                          handleCopyvisit(visit.visit_id)
-                        }
-                      >
-                        Copy
-                      </button> */}
-                      </td>
                     </tr>
                   ))}
                 </tbody>

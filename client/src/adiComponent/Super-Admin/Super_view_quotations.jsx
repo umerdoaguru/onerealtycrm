@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 import ReactPaginate from "react-paginate";
 
 import MainHeader from './../../components/MainHeader';
-import Sider from './../../components/Sider';
+
+import SuperAdminSider from './SuperAdminSider';
 
 const Super_view_quotations = () => {
   const [quotations, setQuotations] = useState([]);
@@ -76,8 +77,10 @@ const Super_view_quotations = () => {
     setSortAsc(!sortAsc);
   };
 
-  const filteredQuotations = quotations.filter((quotation) =>
-    quotation.quotation_name.toLowerCase().includes(filterText.toLowerCase())
+  const filteredQuotations = quotations.filter(
+    (quotation) =>
+      quotation.customer_name &&
+      quotation.customer_name.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const offset = currentPage * itemsPerPage;
@@ -91,7 +94,7 @@ const Super_view_quotations = () => {
   return (
     <>
       <MainHeader />
-      <Sider />
+      <SuperAdminSider />
       <div className="container mt-4">
         <div className="w-full px-2 mx-auto p-4">
           <div className="w-full px-2 mt-4">
@@ -107,6 +110,9 @@ const Super_view_quotations = () => {
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Quotation Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Created By
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Created Date
@@ -126,7 +132,10 @@ const Super_view_quotations = () => {
                         {offset + index + 1}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {quotation.quotation_name}
+                      {quotation.customer_name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {quotation.employee_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {moment(quotation.created_date).format("DD/MM/YYYY")}
@@ -135,24 +144,13 @@ const Super_view_quotations = () => {
                         {quotation.status}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Link to={`/final-quotationBy-emp/${id}`}>
+                        <Link to={`/super-admin-view-quotation/${quotation.id}`}>
                           <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded m-1">
                             View
                           </button>
                         </Link>
-                        <button
-                          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
-                          onClick={() => handleDelete(quotation.quotation_id)}
-                        >
-                          Delete
-                        </button>
-                        <Link
-                          to={`/update-quotation-name/${quotation.quotation_id}`}
-                        >
-                          <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1">
-                            Edit
-                          </button>
-                        </Link>
+                       
+                       
                         {/* <button
                         className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded m-1"
                         onClick={() =>

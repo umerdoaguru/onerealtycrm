@@ -87,6 +87,10 @@ function WebsiteLeads() {
       alert("Please assign the lead to an employee."); // Show an alert message
       return; // Stop further execution if the field is empty
     }
+    if (!currentLead.createdTime) {
+      alert("Please Select Assign Date."); // Show an alert message
+      return; // Stop further execution if the field is empty
+    }
   
     try {
       await axios.post("http://localhost:9000/api/leads", {
@@ -103,6 +107,22 @@ function WebsiteLeads() {
       });
       fetchLeads();
       fetchLeadassigned();
+        // Reset form data
+    setCurrentLead({
+      assignedTo: '',
+      employeeId: '',
+      createdTime: '',
+     
+      // Add other fields here if needed
+    });
+    setSelectedLead({
+      leadId: '',
+      date: '',
+      fullName: '',
+      phoneNumber: '',
+      address: '',
+      // Add other fields here if needed
+    });
       closePopup();
 
       // Format the createdTime using moment

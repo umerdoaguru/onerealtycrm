@@ -100,9 +100,8 @@ const CloseTable = () => {
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Visit
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Visit Date
-                  </th>
+                  
+                  
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     FollowUp Status
                   </th>

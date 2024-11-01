@@ -45,6 +45,7 @@ import AdminTotalClosedDeal from "../components/AdminDashBoardCards/AdminTotalCl
 import AdminReport from "../adiComponent/AdminReport";
 import Admin_view_visit from "../components/Leads/Admin_view_visit";
 import Admin_view_quotations from "../components/Leads/Admin_view_quotations";
+import Admin_QuotationView from "../components/Leads/Admin_QuotationView";
 
 function AdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -76,9 +77,13 @@ function AdminRoutes() {
           path="/admin-quotationlist"
           element={<QuotationlistAdmin />}
         />
-        <Route
+        {/* <Route
           path="/admin-view-quotation/:id"
           element={<AdminQuotationVIew />}
+        /> */}
+        <Route
+          path="/admin_quotationview/:id"
+          element={<Admin_QuotationView />}
         />
         <Route path="/admin-view-invoice/:id" element={<AdminInvoiceView />} />
 

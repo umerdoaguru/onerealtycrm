@@ -476,18 +476,19 @@ function Leads() {
             <div className="flex gap-10 text-xl font-semibold my-3">
               {/* Filter leads based on the selected employee */}
               <div>
-                Total Lead visit:{" "}
-                {leads
-                  .filter(
-                    (lead) =>
-                      !employeeFilter || lead.employee_name === employeeFilter
-                  ) // filter by employee
-                  .reduce(
-                    (acc, lead) =>
-                      acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
-                    0
-                  )}
-              </div>
+  Total Lead visit:{" "}
+  {
+    leads
+      .filter(
+        (lead) =>
+          !employeeFilter || lead.assignedTo === employeeFilter
+      )
+      .filter(
+        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+      ).length
+  }
+</div>
+
               <div>
                 Total Lead:{" "}
                 {

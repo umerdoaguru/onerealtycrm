@@ -102,7 +102,7 @@ function SuperEmployeeLeads() {
 
     // Filter by visit
     if (visitFilter) {
-      filtered = filtered.filter((visit) => visit.visit === visitFilter);
+      filtered = filtered.filter((lead) => lead.visit === visitFilter);
     }
 
     // Filter by Deak
@@ -245,9 +245,10 @@ function SuperEmployeeLeads() {
                   className="border rounded-2xl p-2 w-full"
                 >
                   <option value="">All visit</option>
-                  <option value="pending">Pending</option>
-                  <option value="fresh visit">Fresh Visit</option>
-                  <option value="repeated visit">Repeated Visit</option>
+                  <option value="fresh">Fresh Visit</option>
+                  <option value="repeated">Repeated Visit</option>
+                  <option value="associative">Associative Visit</option>
+                  <option value="self">Self Visit</option>
                 </select>
               </div>
               <div>
@@ -271,11 +272,9 @@ function SuperEmployeeLeads() {
           <div className="flex gap-10 text-xl font-semibold my-3">
   <div>
     Total Lead visit:{" "}
-    {leads.reduce(
-      (acc, lead) =>
-        acc + (lead.visit && lead.visit !== "pending" ? 1 : 0),
-      0
-    )}
+    {leads.filter(
+        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+      ).length}
   </div>
   <div>Total Lead: {leads.length}</div>
   <div>

@@ -99,9 +99,7 @@ const AdminTotalClosedDeal = () => {
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Visit
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Visit Date
-                  </th>
+                 
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     FollowUp Status
                   </th>
@@ -146,9 +144,7 @@ const AdminTotalClosedDeal = () => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.visit}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.visit_date}
-                      </td>
+                   
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.follow_up_status}
                       </td>

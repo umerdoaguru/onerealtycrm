@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import cogoToast from 'cogo-toast';
 
-const QuotationInputForm = () => {
+const QuotationInputForm = ({name}) => {
   const EmpId = useSelector((state) => state.auth.user.id);
   const EmpName = useSelector((state) => state.auth.user.name);
   const { id } = useParams();
   const navigate = useNavigate();
   
   const initialFormData = {
-    customerName: '',
+    customerName: name,
     contactNumber: '',
     alternateNumber: '',
     address: '',
@@ -135,6 +135,7 @@ const QuotationInputForm = () => {
         if (updateResponse.status === 200) {
           console.log("Updated successfully:", updateResponse.data);
           cogoToast.success("Quotation Created and status updated successfully");
+          navigate(`/employee-lead-single-data/${id}`);
         } else {
           console.error("Error updating:", updateResponse.data);
           cogoToast.error("Failed to update the quotation status.");
@@ -144,7 +145,7 @@ const QuotationInputForm = () => {
         cogoToast.error("Failed to update the quotation status.");
       }
       console.log("Id check kro kon si he ", response.data.quotation.id);
-      navigate(`/final-quotation-by-lead/${id}`);
+      
     } catch (error) {
       console.error("Error adding quotation:", error.response?.data || error.message);
     }
@@ -165,7 +166,7 @@ const QuotationInputForm = () => {
 
       {/** Customer Information **/}
       <div className="grid grid-cols-2 gap-4">
-        <input type="text" name="customerName" placeholder="Customer Name" value={formData.customerName} onChange={handleChange} className="p-2 border rounded" required />
+        <input type="text" name="customerName" placeholder="Customer Name" value={name} onChange={handleChange} className="p-2 border rounded" required />
         <input type="text" name="contactNumber" placeholder="Contact Number" value={formData.contactNumber} onChange={handleChange} className="p-2 border rounded" required />
         <input type="text" name="alternateNumber" placeholder="Alternate Number" value={formData.alternateNumber} onChange={handleChange} className="p-2 border rounded" maxLength="10"  />
         <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} className="p-2 border rounded" required />

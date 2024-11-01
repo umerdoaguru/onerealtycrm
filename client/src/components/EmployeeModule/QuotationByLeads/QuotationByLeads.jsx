@@ -92,7 +92,8 @@ const QuotationByLeads = () => {
                         <h6>Leads Name: <span className="font-bold">{name}</span></h6>
                         {/* Quotation Information Form here */}
                       <div>
-                        <QuotationInputForm />
+                      <QuotationInputForm name={name} />
+
                       </div>
                     </div>
                   </div>
