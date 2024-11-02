@@ -37,6 +37,19 @@ const UpdateLeadField = ({ field, value, onChange }) => {
       </div>
     );
   }
+  if (type === "text") {
+    return (
+      <div className="mb-4">
+        <label className="block text-gray-700">{label}</label>
+        <input
+          name={name}
+          value={value}
+          onChange={onChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+    );
+  }
 
   // Render a date input
   if (type === "date") {

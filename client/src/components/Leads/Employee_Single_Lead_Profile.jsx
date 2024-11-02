@@ -69,6 +69,7 @@ function Employee_Single_Lead_Profile() {
       label: "Reason",
       type: "textarea",
     },
+   
 
     {
       name: "follow_up_status",
@@ -93,23 +94,12 @@ function Employee_Single_Lead_Profile() {
       ],
     },
     {
-      name: "status",
-      label: "Status",
-      type: "select",
-      options: [
-        { value: "", label: "Status" },
-        { value: "pending", label: "Pending" },
-        { value: "interested", label: "Interested" },
-        { value: "not-interested", label: "Not-Interested" },
-      ],
+      name: "booking_amount",
+      label: "Booking Amount",
+      type: "text", 
     },
-    
-
-      {
-        name: "booking_amount",
-        label: "Booking Amount",
-        type: "number",
-      },
+  
+   
       {
         name: "payment_mode",
         label: "Payment Mode",
@@ -139,11 +129,14 @@ function Employee_Single_Lead_Profile() {
 
   const [currentLead, setCurrentLead] = useState({
     lead_status: "",
-    visit_date: " ",
+    visit_date: "",
     visit: "",
     quotation_status: "",
     // invoice_status: "",
     deal_status: "",
+    booking_amount:"",
+      payment_mode:"",
+      registry:"",
     reason: "",
     status: "",
 
