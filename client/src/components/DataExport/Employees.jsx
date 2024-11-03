@@ -21,7 +21,7 @@ function Employees() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployee(response.data);
       setFilteredEmployee(response.data);
     } catch (error) {
@@ -58,33 +58,33 @@ function Employees() {
   const pageCount = Math.ceil(filteredEmployee.length / itemsPerPage);
 
   return (
-    <Wrapper>
+    <>
       <Header />
       {/* <Sider /> */}
-      <div className="container">
+      <div className="container 2xl:w-[95%]">
         <h1 className="text-2xl text-center mt-[2rem] font-medium">
           Employee Data
         </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
         {/* Date Filter */}
-        <div className="flex space-x-1 mb-4 sm:flex-row flex-col">
+        <div className="flex  mb-4 sm:flex-row flex-col gap-2">
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border p-2"
+            className="border p-1"
           />
-          <div className="p-2">
+          <div className="p-1">
             <p>to</p>
           </div>
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border p-2"
+            className="border p-1"
           />
-          <div className="respo mx-2 ">
+          <div className="respo  ">
             <button
               onClick={downloadExcel}
               className="bg-blue-500 text-white font-medium px-4 py-2 rounded hover:bg-blue-700"
@@ -147,110 +147,10 @@ function Employees() {
           />
         </div>
       </div>
-    </Wrapper>
+    </>
   );
 }
 
 export default Employees;
 
-const Wrapper = styled.div`
-  .respo {
-    @media screen and (max-width: 768px) {
-      margin-top: 1rem;
-    }
-  }
-  .active {
-  background-color: #1e50ff;
-}
- /* Container class */
- .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
 
-  /* Page item */
-  .pagination-page {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Page link */
-  .pagination-link {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #3b82f6;
-    text-decoration: none;
-    &:hover {
-      color: #2563eb;
-    }
-  }
-
-  /* Previous button */
-  .pagination-previous {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  } 
-
-  .pagination-link-previous {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Next button */
-  .pagination-next {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-link-next {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Break item */
-  .pagination-break {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-break-link {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Active page */
-  .pagination-active {
-    background-color: #1e50ff;
-    color: white;
-    border: 1px solid #374151;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-active a {
-    color: white !important;
-  }
-`;

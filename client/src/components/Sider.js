@@ -22,8 +22,7 @@ const Sider = () => {
     <>
       {/* Hamburger Button - Hidden on large screens */}
       <button
-        className="fixed top-14 md:top-20 left-4 z-50 text-black 
-             sm:hidden md:block lg:hidden xl:block 2xl:hidden"
+        className="fixed top-16 md:top-20 left-4 z-50 text-black "
         onClick={toggleSidebar}
       >
         <AiOutlineMenu size={25} />
@@ -31,22 +30,22 @@ const Sider = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed mt-[40px] md:mt-[70px] lg:mt-[60px] inset-y-0 left-0 bg-[#01060c] overflow-hidden xl:translate-x-0 transform ${
+        className={`fixed mt-16 md:mt-[70px] lg:mt-[60px] inset-y-0 bg-[#01060c] overflow-hidden 2xl:translate-x-0 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out w-20 md:w-[150px] z-50`}
       >
         {/* Close (Cross) Button - Hidden on large screens */}
         <button
-          className="absolute top-3 right-3 text-white xl:hidden" // Hidden on large screens (lg)
+          className="aabsolute left-14 md:left-32 lg-left-32 text-gray-400 2xl:hidden" // Hidden on large screens (lg)
           onClick={toggleSidebar}
         >
           <AiOutlineClose size={25} />
         </button>
 
-        <div className="flex flex-col items-center pt-10 max-h-screen overflow-auto	">
+        <div className="flex flex-col items-center max-h-screen overflow-auto	p-4 xl:w-[10rem]	">
           <ul className="flex flex-col items-center space-y-4 w-full pb-16">
             <li
-              className={`w-full ${getSidebarClass("/admin-dashboard")}`}
+              className={`xl:w-full ${getSidebarClass("/admin-dashboard")}`}
             >
               <Link
                 to="/admin-dashboard"
@@ -61,7 +60,7 @@ const Sider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/leads")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/leads")}`}>
               <Link to="/leads" className="flex flex-col items-center py-3">
                 <FaHistory className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs max-md:pt-3 lg:inline text-white md:text-base">
@@ -71,7 +70,7 @@ const Sider = () => {
             </li>
 
             <hr className="w-full border-gray-400" />
-              <li className={`w-full ${getSidebarClass("/social-media-leads")}`}>
+              <li className={`xl:w-full ${getSidebarClass("/social-media-leads")}`}>
                 <Link
                   to="/social-media-leads"
                   className="flex flex-col items-center py-3"
@@ -85,7 +84,7 @@ const Sider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/admin-report")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/admin-report")}`}>
               <Link to="/admin-report" className="flex flex-col items-center py-3">
                 <RiSecurePaymentLine className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs max-md:pt-3 lg:inline text-white md:text-base">
@@ -96,7 +95,7 @@ const Sider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/data-export")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/data-export")}`}>
               <Link
                 to="/data-export"
                 className="flex flex-col items-center py-3"
@@ -110,7 +109,7 @@ const Sider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/quotation-invoice")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/quotation-invoice")}`}>
               <Link
                 to="/quotation-section"
                 className="flex flex-col items-center py-1"
@@ -124,7 +123,7 @@ const Sider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/employee-management")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/employee-management")}`}>
               <Link
                 to="/employee-management"
                 className="flex flex-col items-center py-3"

@@ -11,7 +11,7 @@ const LeadsReport = () => {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const response = await fetch("http://localhost:9000/api/leads");
+        const response = await fetch("https://crm.one-realty.in/api/leads");
         const data = await response.json();
         console.log("Fetched leads data:", data); // Debugging line
 
@@ -39,7 +39,8 @@ const LeadsReport = () => {
   const displayedLeads = leads.slice(currentPage * leadsPerPage, (currentPage + 1) * leadsPerPage);
 
   return (
-    <Wrapper>
+    <>
+    
     <div className="p-4 mt-6 bg-white rounded-lg shadow-lg">
       <h3 className="mb-4 text-lg font-semibold">Today's Assigned Leads</h3>
       <div className="overflow-x-auto mt-4">
@@ -105,106 +106,10 @@ const LeadsReport = () => {
         />
       </div>
     </div>
-    </Wrapper>
+    </>
   );
 };
 
 export default LeadsReport;
 
-const Wrapper = styled.div`
-  
-  .active {
-  background-color: #1e50ff;
-}
- /* Container class */
- .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
 
-  /* Page item */
-  .pagination-page {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Page link */
-  .pagination-link {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #3b82f6;
-    text-decoration: none;
-    &:hover {
-      color: #2563eb;
-    }
-  }
-
-  /* Previous button */
-  .pagination-previous {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  } 
-
-  .pagination-link-previous {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Next button */
-  .pagination-next {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-link-next {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Break item */
-  .pagination-break {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-break-link {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Active page */
-  .pagination-active {
-    background-color: #1e50ff;
-    color: white;
-    border: 1px solid #374151;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-active a {
-    color: white !important;
-  }
-`;

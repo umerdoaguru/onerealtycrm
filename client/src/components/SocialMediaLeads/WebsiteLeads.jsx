@@ -35,7 +35,7 @@ function WebsiteLeads() {
   // Fetch employees
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -45,7 +45,7 @@ function WebsiteLeads() {
   // Fetch lead assignments
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads");
       setwebsiteLeadsAssigned(response.data);
     } catch (error) {
       console.error("Error fetching assigned leads:", error);
@@ -93,7 +93,7 @@ function WebsiteLeads() {
     }
   
     try {
-      await axios.post("http://localhost:9000/api/leads", {
+      await axios.post("https://crm.one-realty.in/api/leads", {
         lead_no: selectedLead.leadId,
         assignedTo: currentLead.assignedTo,
         employeeId: currentLead.employeeId,
@@ -170,8 +170,8 @@ console.log("Assigned Leads:", websiteleadsAssigned);
 
   return (
     <>
-      <div className="container">
-        <h1 className="text-2xl text-center mt-[5rem]">Website Leads Data</h1>
+      <div className="container 2xl:w-[95%]">
+        <h1 className="text-2xl text-center mt-[2rem]">Website Leads Data</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
         <div className="overflow-x-auto mt-4">
@@ -262,7 +262,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
         {/* Popup */}
         {showPopup && selectedLead && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+          <div className="w-full max-w-md p-6 mx-2 bg-white rounded-lg shadow-lg h-[95%] overflow-y-auto">
             <h2 className="text-xl mb-4">{"Add Lead"}</h2>
             <div className="mb-4">
               <label className="block text-gray-700">Lead Number</label>

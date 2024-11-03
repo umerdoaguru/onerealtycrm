@@ -20,7 +20,7 @@ const LeadsTable = () => {
   // Fetch leads based on selected form ID
   // const fetchLeadsByFormId = async (formId) => {
   //   try {
-  //     const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${formId}`);
+  //     const response = await axios.get(`https://crm.one-realty.in/api/Leads-data-fetch/${formId}`);
   //     setLeads(response.data);
   //   } catch (err) {
   //     console.error('Error fetching leads:', err);
@@ -46,7 +46,7 @@ const LeadsTable = () => {
 
   const fetchLeadsByFormId = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/Leads-data-fetch/${gotId}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/Leads-data-fetch/${gotId}`);
       setLeads(response.data);
       setLoading(false);
     } catch (err) {
@@ -56,7 +56,7 @@ const LeadsTable = () => {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -64,7 +64,7 @@ const LeadsTable = () => {
   };
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads");
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
     } catch (error) {
@@ -113,7 +113,7 @@ const LeadsTable = () => {
       return; // Stop further execution if the field is empty
     }
     try {
-      await axios.post("http://localhost:9000/api/leads", {
+      await axios.post("https://crm.one-realty.in/api/leads", {
         lead_no:  selectedLead.leadId,    
         assignedTo:currentLead.assignedTo,
         employeeId:currentLead.employeeId,
@@ -178,7 +178,7 @@ window.open(whatsappLink, "_blank");
   const saveIntoDB = async () => {
     try {
       // Fetch leads from Meta API via backend
-      const response = await axios.post('http://localhost:9000/api/leads/fetch', {
+      const response = await axios.post('https://crm.one-realty.in/api/leads/fetch', {
         formId: gotId,
       });
       setLoading(true);
@@ -216,7 +216,7 @@ window.open(whatsappLink, "_blank");
   // const saveIntoDB = async () => {
   //   try {
   //     // Fetch leads from Meta API via backend
-  //     const response = await axios.post('http://localhost:9000/api/leads/fetch', {
+  //     const response = await axios.post('https://crm.one-realty.in/api/leads/fetch', {
   //       formId: gotId,
   //     });
   //     setLoading(true);
@@ -231,7 +231,7 @@ window.open(whatsappLink, "_blank");
   }, [gotId])
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container 2xl:w-[95%]">
       <button
         className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
         onClick={() => setShowForm(!showForm)}  // toggle form visibility
@@ -330,7 +330,7 @@ window.open(whatsappLink, "_blank");
 }
 {showPopup && selectedLead && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+          <div className="w-full max-w-md p-6 mx-2 bg-white rounded-lg shadow-lg h-[95%] overflow-y-auto">
             <h2 className="text-xl mb-4">{"Add Lead"}</h2>
             <div className="mb-4">
               <label className="block text-gray-700">Lead Number</label>

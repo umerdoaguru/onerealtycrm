@@ -20,7 +20,7 @@ const SuperQuotationList = () => {
     const fetchQuotations = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/quotation-data`
+          `https://crm.one-realty.in/api/quotation-data`
         );
         setQuotations(response.data);
         console.log(quotations);
@@ -72,7 +72,7 @@ const SuperQuotationList = () => {
 
     try {
       // API call to update status in the backend
-      await axios.post(`http://localhost:9000/api/update-quotation-status`, {
+      await axios.post(`https://crm.one-realty.in/api/update-quotation-status`, {
         id: id, // Send the quotation ID
         status: newStatus, // Send the updated status
       });
@@ -103,7 +103,7 @@ const SuperQuotationList = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container 2xl:max-w-[1280px]">
+      <div className="container 2xl:w-[93%] 2xl:ml-32">
       <div className="flex flex-col lg:flex-row">
         
         

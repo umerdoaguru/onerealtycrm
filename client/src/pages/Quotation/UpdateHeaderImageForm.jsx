@@ -22,7 +22,7 @@ const UpdateHeaderImageForm = ({ quotationId }) => {
       formData.append("file", selectedFile);
 
       const response = await axios.put(
-        `http://localhost:9000/api/header/${quotationId}`,
+        `https://crm.one-realty.in/api/header/${quotationId}`,
         formData,
         {
           headers: {

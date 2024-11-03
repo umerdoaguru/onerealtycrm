@@ -60,7 +60,7 @@ const EmployeeCloseGraph = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/leads`
+        `https://crm.one-realty.in/api/leads`
       );
       const data = response.data;
 
@@ -78,7 +78,8 @@ const EmployeeCloseGraph = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <>
+    <div className="mx-2">
       <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-2">Closed Deal Overview</h2>
         <p className="text-sm text-gray-500 mb-4">
@@ -103,24 +104,10 @@ const EmployeeCloseGraph = () => {
             />
           </LineChart>
         </ResponsiveContainer>
-      </div>
-    </Wrapper>
+      </div></div>
+    </>
   );
 };
 
 export default EmployeeCloseGraph;
 
-const Wrapper = styled.div`
-  #main {
-    width: 100%;
-    border-radius: 5px;
-    padding: 2rem;
-    box-shadow: 0px 2px 18px #bdbaba;
-    display: flex;
-    justify-content: center;
-  }
-  // @media screen and (max-width: 768px) {
-  //   padding: 20px;
-  //   font-size: small;
-  // }
-`;

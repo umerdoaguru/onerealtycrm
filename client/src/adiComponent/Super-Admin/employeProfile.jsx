@@ -33,7 +33,7 @@ const navigate = useNavigate();
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${employeeId}`
+        `https://crm.one-realty.in/api/employe-leads/${employeeId}`
       );
       const data = response.data;
       setLeads(data);
@@ -55,7 +55,7 @@ const navigate = useNavigate();
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employeeProfile/${employeeId}`
+          `https://crm.one-realty.in/api/employeeProfile/${employeeId}`
         ); // Fetch employee data
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data
@@ -74,7 +74,7 @@ const navigate = useNavigate();
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container px-5 twoXl-1740">
+      <div className="container px-5 ">
         <div className="mt-[5rem]">
           <button
             onClick={() => navigate(-1)}
@@ -137,7 +137,8 @@ const navigate = useNavigate();
                   </div>
                 </div>
               </div>
-              <table className="min-w-full bg-white border mt-4">
+<div className="overflow-auto">
+              <table className="min-w-full   bg-white border mt-4">
                 <thead>
                   <tr>
                     <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
@@ -198,6 +199,7 @@ const navigate = useNavigate();
                   ))}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         </div>

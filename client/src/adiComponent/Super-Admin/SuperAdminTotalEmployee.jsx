@@ -18,7 +18,7 @@ function SuperAdminTotalEmployee() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:9000/api/getAllEmployees');
+      const response = await axios.get('https://crm.one-realty.in/api/getAllEmployees');
       const { employees } = response.data;
       setEmployees(employees || []); // Ensure employees is always an array
     } catch (error) {
@@ -43,12 +43,12 @@ function SuperAdminTotalEmployee() {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container mt-[5rem] twoXl-1740">
+      <div className="container mt-[5rem]">
         <h1 className="text-2xl text-center ">Total Employees</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg shadow-md twoXl-1740">
+      <div className="overflow-x-auto rounded-lg shadow-md xl:ml-48 mx-12">
         <table className="container bg-white">
           <thead>
             <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">

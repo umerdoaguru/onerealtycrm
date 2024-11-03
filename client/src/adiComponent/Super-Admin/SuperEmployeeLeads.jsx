@@ -36,8 +36,8 @@ function SuperEmployeeLeads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        // `http://localhost:9000/api/leads-visits/${id}`
-           `http://localhost:9000/api/employe-leads/${id}`
+        // `https://crm.one-realty.in/api/leads-visits/${id}`
+           `https://crm.one-realty.in/api/employe-leads/${id}`
       );
       const data = response.data;
       console.log(data);
@@ -49,8 +49,8 @@ function SuperEmployeeLeads() {
   // const fetchVisit = async () => {
   //   try {
   //     const response = await axios.get(
-  //       // `http://localhost:9000/api/employe-all-visit`
-  //         `http://localhost:9000/api/employe-all-visit`
+  //       // `https://crm.one-realty.in/api/employe-all-visit`
+  //         `https://crm.one-realty.in/api/employe-all-visit`
   //     );
   //     console.log(response.data);
   //     setVisit(response.data);
@@ -138,8 +138,8 @@ function SuperEmployeeLeads() {
       <MainHeader />
       <SuperAdminSider />
       <Wrapper>
-        <div className="container mt-16">
-          <div className="main">
+        <div className="container mt-16 2xl:ml-40">
+          <div className="main 2xl:w-[89%] ">
             <div>
               <button
                 onClick={() => navigate(-1)}
@@ -267,9 +267,7 @@ function SuperEmployeeLeads() {
               </div>
             </div>
           </div>
-
-          <div className="overflow-x-auto mt-4">
-          <div className="flex gap-10 text-xl font-semibold my-3">
+          <div className="flex gap-10 text-xl font-semibold mt-5">
   <div>
     Total Lead visit:{" "}
     {leads.filter(
@@ -284,8 +282,10 @@ function SuperEmployeeLeads() {
     }
   </div>
 </div>
+          <div className="overflow-x-auto mt-4 2xl:w-[89%]">
+        
 
-            <table className="tt min-w-full bg-white border">
+            <table className="tt min-w-full bg-white border whitespace-nowrap">
               <thead>
                 <tr>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
@@ -428,17 +428,5 @@ function SuperEmployeeLeads() {
 export default SuperEmployeeLeads;
 
 const Wrapper = styled.div`
-  .tt {
-    white-space: nowrap;
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      width: 89%;
-      margin-left: 10rem;
-      white-space: nowrap;
-    }
-  }
-  .main {
-    @media screen and (min-width: 1500px) and (max-width: 1700px) {
-      margin-left: 10rem;
-    }
-  }
+
 `;

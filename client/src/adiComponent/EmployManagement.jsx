@@ -28,7 +28,7 @@ const EmployeeManagement = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/getAllEmployees"
+        "https://crm.one-realty.in/api/getAllEmployees"
       );
       const { employees } = response.data;
       setEmployees(employees || []); // Ensure employees is always an array
@@ -90,7 +90,7 @@ const EmployeeManagement = () => {
 
   const isEmailTaken = async (email) => {
     try {
-      const response = await axios.get("http://localhost:9000/api/checkEmail", {
+      const response = await axios.get("https://crm.one-realty.in/api/checkEmail", {
         params: { email },
       });
       return response.data.exists;
@@ -108,12 +108,12 @@ const EmployeeManagement = () => {
         // Update existing employee
         const employeeToUpdate = employees[editingIndex];
         await axios.put(
-          `http://localhost:9000/api/updateEmployee/${employeeToUpdate.employeeId}`,
+          `https://crm.one-realty.in/api/updateEmployee/${employeeToUpdate.employeeId}`,
           newEmployee
         );
       } else {
         // Add new employee
-        await axios.post("http://localhost:9000/api/addEmployee", newEmployee);
+        await axios.post("https://crm.one-realty.in/api/addEmployee", newEmployee);
       }
       setNewEmployee({
         name: "",
@@ -152,7 +152,7 @@ const EmployeeManagement = () => {
     if (isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:9000/api/deleteEmployee/${employeeId}`
+          `https://crm.one-realty.in/api/deleteEmployee/${employeeId}`
         );
         fetchEmployees(); // Fetch employees to update the list
       } catch (error) {

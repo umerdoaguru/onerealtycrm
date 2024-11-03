@@ -30,7 +30,7 @@ const SuperAdEmployeemanagement = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/getAllEmployees"
+        "https://crm.one-realty.in/api/getAllEmployees"
       );
       const { employees } = response.data;
       console.log(employees);
@@ -92,7 +92,7 @@ const SuperAdEmployeemanagement = () => {
 
   const isEmailTaken = async (email) => {
     try {
-      const response = await axios.get("http://localhost:9000/api/checkEmail", {
+      const response = await axios.get("https://crm.one-realty.in/api/checkEmail", {
         params: { email },
       });
       return response.data.exists;
@@ -111,13 +111,13 @@ const SuperAdEmployeemanagement = () => {
         // Update existing employee
         const employeeToUpdate = employees[editingIndex];
         response = await axios.put(
-          `http://localhost:9000/api/updateEmployee/${employeeToUpdate.employeeId}`,
+          `https://crm.one-realty.in/api/updateEmployee/${employeeToUpdate.employeeId}`,
           newEmployee
         );
       } else {
         // Add new employee
         response = await axios.post(
-          "http://localhost:9000/api/addEmployee",
+          "https://crm.one-realty.in/api/addEmployee",
           newEmployee
         );
       }
@@ -164,7 +164,7 @@ const SuperAdEmployeemanagement = () => {
     if (isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:9000/api/deleteEmployee/${employeeId}`
+          `https://crm.one-realty.in/api/deleteEmployee/${employeeId}`
         );
         fetchEmployees(); // Fetch employees to update the list
       } catch (error) {
@@ -193,14 +193,14 @@ const SuperAdEmployeemanagement = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className=" container px-3 pt-5">
+      <div className=" container px-3 pt-5 ">
         <h1 className="text-2xl text-center mt-[2rem] font-medium">
           Employee Management
         </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
 
-      <div className=" container  mt-12 flex flex-col min-h-screen lg:flex-row">
+      <div className=" container  mt-12 flex flex-col min-h-screen lg:flex-row 2xl:w-[93%] 2xl:ml-32">
         <main className="flex-1 p-4 lg:p-8">
           <div className="flex flex-col-reverse items-start justify-between mb-8 lg:flex-row lg:items-center">
             <button

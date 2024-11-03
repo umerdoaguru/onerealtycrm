@@ -23,7 +23,7 @@ const SuperDash = () => {
   };
   const getInvoiceData = () => {
     try {
-      const response = axios.get("http://localhost:9000/api/invoiceData");
+      const response = axios.get("https://crm.one-realty.in/api/invoiceData");
     } catch (err) {}
   };
 
@@ -33,37 +33,26 @@ const SuperDash = () => {
       <SuperAdminSider />
       {/* <SuperHeader /> */}
 
-<div className="container twoXl-1740">
-  
-      <h1 className="text-2xl text-center mt-[5rem] font-medium">
-        Super Admin Dashboard
-      </h1>
-      <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-      <div className="flex min-h-screen overflow-hidden ">
-        {/* Main Content */}
-        {/* <div className="flex-1 max-w-full lg:ml-64 xl:ml-52 mr-3 "> */}
-        <div className="flex-1 max-w-full mr-3 ">
-          {/* Hamburger Menu Button for Mobile */}
-          {/* <div className="p-4 lg:hidden">
-                    <button onClick={toggleSidebar} className="text-2xl">
-                        <FaBars />
-                    </button>
-                </div> */}
+      <div className="md:w-[85%] xxl:w-screen lg:ml-[10rem]">
+        <h1 className="text-2xl text-center mt-[5rem] font-medium">
+          Super Admin Dashboard
+        </h1>
+        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+        <div className="flex min-h-screen overflow-hidden ">
+          <div className="flex-1 max-w-full xxl:w-screen mr-3 ">
+            <div>
+              <Overview />
+            </div>
+            <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
+              <Invoice />
+              <LeadsGraph />
+              <DealGraph />
+            </div>
 
-          {/* Adjust grid layout for different screen sizes */}
-          <div>
-            <Overview />
+            <LeadsReport />
+            {/* <ToDoList /> */}
           </div>
-          <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
-            <Invoice />
-            <LeadsGraph />
-            <DealGraph />
-          </div>
-
-          <LeadsReport />
-          {/* <ToDoList /> */}
         </div>
-      </div>
       </div>
     </>
   );

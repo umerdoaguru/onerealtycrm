@@ -31,7 +31,7 @@ const VisitData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-all-visit`
+        `https://crm.one-realty.in/api/employe-all-visit`
       );
       // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(
@@ -46,7 +46,7 @@ const VisitData = () => {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -95,33 +95,34 @@ const VisitData = () => {
 
   return (
     <Wrapper>
-      <div className="flex-grow md:p-4 mt-14 lg:mt-0 sm:ml-0">
+      <div className="container 2xl:w-[95%]">
+      <div className="flex-grow  mt-14 lg:mt-0 sm:ml-0">
         <center className="text-2xl text-center mt-8 font-medium">
           Total Visits
         </center>
         <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
         {/* Date Filter */}
-        <div className="flex space-x-1 mb-4 sm:flex-row flex-col ">
+        <div className="flex  mb-4 sm:flex-row flex-col gap-2">
           <input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
-            className="border p-2"
+            className="border p-1"
           />
-          <div className="p-2">
+          <div className="p-1">
             <p>to</p>
           </div>
           <input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="border p-2"
+            className="border p-1"
           />
             <div className="">
             <select
               value={selectedEmployee}
               onChange={(e) => setSelectedEmployee(e.target.value)}
-              className="border p-2"
+              className="border p-1"
             >
               <option value="">Select Employee</option>
               {employees.map((employee) => (
@@ -131,7 +132,7 @@ const VisitData = () => {
               ))}
             </select>
           </div>
-          <div className="respo mx-2">
+          <div className="respo ">
             <button
               onClick={downloadExcel}
               className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
@@ -235,7 +236,7 @@ const VisitData = () => {
           activeClassName="pagination-active"
         />
         </div>
-      </div>
+      </div></div>
     </Wrapper>
   );
 };
@@ -244,6 +245,11 @@ export default VisitData;
 
 const Wrapper = styled.div`
   /* Container class */
+  .respo {
+    @media screen and (max-width: 768px) {
+      margin-top: 1rem;
+    }
+  }
   .active {
   background-color: #1e50ff;
 }

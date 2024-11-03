@@ -41,7 +41,7 @@ function SuperDataExport() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads");
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -50,7 +50,7 @@ function SuperDataExport() {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employee`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employee`);
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -60,7 +60,7 @@ function SuperDataExport() {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/quotation-data`
+        `https://crm.one-realty.in/api/quotation-data`
       );
       setQuotation(response.data);
     } catch (error) {
@@ -71,7 +71,7 @@ function SuperDataExport() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/invoice-data`
+        `https://crm.one-realty.in/api/invoice-data`
       );
       setInvoice(response.data);
     } catch (error) {
@@ -81,7 +81,7 @@ function SuperDataExport() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-all-visit`
+        `https://crm.one-realty.in/api/employe-all-visit`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -107,7 +107,7 @@ function SuperDataExport() {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container  ">
+      <div className="container 2xl:w-[93%] 2xl:ml-32">
         <h1 className="text-2xl text-center mt-[5rem] font-medium">
           Data Export
         </h1>
@@ -289,7 +289,7 @@ function SuperDataExport() {
         </div>
 
         {/* Conditionally render the selected component */}
-        <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
+        <div className=" h-[calc(100vh-10rem)]  overflow-y-auto ">
           {selectedComponent === "LeadData" && <LeadData />}
           {selectedComponent === "EmployeeData" && <Employees />}
           {selectedComponent === "VisitData" && <VisitData />}

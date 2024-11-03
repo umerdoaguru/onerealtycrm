@@ -18,7 +18,7 @@ const LeadsGraph = () => {
   useEffect(() => {
     const fetchLeadsData = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/api/leads");
+        const response = await axios.get("https://crm.one-realty.in/api/leads");
         const allLeads = response.data;
 
         const today = moment();
@@ -67,7 +67,9 @@ const LeadsGraph = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
+    <>
+    <div className="mx-2">
+        <div className="w-full max-w-4xl  p-4 border rounded-lg shadow-md bg-white ">
       <h2 className="text-xl font-bold mb-2">Daily Leads Overview</h2>
       {error ? (
         <p className="text-red-500">{error}</p>
@@ -98,6 +100,10 @@ const LeadsGraph = () => {
         </>
       )}
     </div>
+    </div>
+    
+    </>
+
   );
 };
 

@@ -24,7 +24,7 @@ function Accrs() {
 
   const fetchResponses = async () => {
     try {
-      const response = await axios.get('http://localhost:9000/api/get-responses');
+      const response = await axios.get('https://crm.one-realty.in/api/get-responses');
       console.log('Response received from API:', response.data);
       setResponses(response.data);
     } catch (error) {
@@ -33,7 +33,7 @@ function Accrs() {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -41,7 +41,7 @@ function Accrs() {
   };
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads");
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
     } catch (error) {
@@ -88,7 +88,7 @@ function Accrs() {
       return; // Stop further execution if the field is empty
     }
     try {
-      await axios.post("http://localhost:9000/api/leads", {
+      await axios.post("https://crm.one-realty.in/api/leads", {
         lead_no:  selectedLead.leadId,    
         assignedTo:currentLead.assignedTo,
         employeeId:currentLead.employeeId,
@@ -166,7 +166,7 @@ window.open(whatsappLink, "_blank");
 
   return (
     <>
-        <div className="container mx-auto p-4">
+        <div className="container 2xl:w-[95%]">
       <h1 className="text-2xl font-bold text-gray-800 mb-4">99Acres Responses</h1>
       {responses.length > 0 ? (
        <div className="overflow-x-auto">
@@ -245,7 +245,7 @@ window.open(whatsappLink, "_blank");
         {/* Popup */}
         {showPopup && selectedLead && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+          <div className="w-full max-w-md p-6 mx-2 bg-white rounded-lg shadow-lg h-[95%] overflow-y-auto">
             <h2 className="text-xl mb-4">{"Add Lead"}</h2>
             <div className="mb-4">
               <label className="block text-gray-700">Lead Number</label>

@@ -23,7 +23,7 @@ const SuperAdminSider = () => {
     <>
       {/* Hamburger Button - Hidden on large screens */}
       <button
-        className="fixed top-16 md:top-20 left-4 z-50 text-black hidden max-2xl:block"
+        className="fixed top-16 md:top-20 left-4 z-50 text-black "
         onClick={toggleSidebar}
       >
         <AiOutlineMenu size={25} />
@@ -43,10 +43,10 @@ const SuperAdminSider = () => {
           <AiOutlineClose size={25} />
         </button>
 
-        <div className="flex flex-col items-center max-h-screen overflow-auto	">
+        <div className="flex flex-col items-center max-h-screen overflow-auto	p-4 xl:w-[10rem]">
           <ul className="flex flex-col items-center space-y-4 w-full pb-16">
             <li
-              className={`w-full ${getSidebarClass("/super-admin-dashboard")}`}
+              className={`xl:w-full ${getSidebarClass("/super-admin-dashboard")}`}
             >
               <Link
                 to="/super-admin-dashboard"
@@ -61,7 +61,7 @@ const SuperAdminSider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/super-admin-employee-list")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-employee-list")}`}>
               <Link to="/super-admin-employee-list" className="flex flex-col items-center py-3">
                 <FaHistory className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs max-md:pt-3 lg:inline text-white md:text-base">
@@ -85,7 +85,7 @@ const SuperAdminSider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/super-admin-reporting")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-reporting")}`}>
               <Link to="/super-admin-reporting" className="flex flex-col items-center py-3">
                 <RiSecurePaymentLine className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs max-md:pt-3 lg:inline text-white md:text-base">
@@ -95,7 +95,7 @@ const SuperAdminSider = () => {
             </li>
 
             <hr className="w-full border-gray-400" />
-            <li className={`w-full ${getSidebarClass("/super-admin-data-export")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-data-export")}`}>
               <Link
                 to="/super-admin-data-export"
                 className="flex flex-col items-center py-3"
@@ -109,10 +109,10 @@ const SuperAdminSider = () => {
 
             <hr className="w-full border-gray-400" /> 
 
-            <li className={`w-full ${getSidebarClass("/super-admin-quotation-list")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-quotationlist")}`}>
               <Link
                 to="/super-admin-quotationlist"
-                className="flex flex-col items-center py-1"
+                className="flex flex-col items-center py-3"
               >
                 <BsFileEarmarkPerson className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
@@ -123,7 +123,7 @@ const SuperAdminSider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`w-full ${getSidebarClass("/super-admin-employee-management")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-employee-management")}`}>
               <Link
                 to="/super-admin-employee-management"
                 className="flex flex-col items-center py-3"
@@ -136,7 +136,7 @@ const SuperAdminSider = () => {
             </li>
 
             <hr className="w-full border-gray-400" />
-            <li className={`w-full ${getSidebarClass("/super-admin-AdminManagement")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-AdminManagement")}`}>
               <Link
                 to="/super-admin-AdminManagement"
                 className="flex flex-col items-center py-3"
@@ -148,7 +148,7 @@ const SuperAdminSider = () => {
               </Link>
             </li>
             <hr className="w-full border-gray-400" />
-            <li className={`w-full ${getSidebarClass("/super-admin-profile")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-profile")}`}>
               <Link
                 to="/super-admin-profile"
                 className="flex flex-col items-center py-3"

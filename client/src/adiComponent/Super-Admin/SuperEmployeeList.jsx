@@ -19,7 +19,7 @@ const SuperEmployeeList = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:9000/api/getAllEmployee-Toal-lead');
+      const response = await axios.get('https://crm.one-realty.in/api/getAllEmployee-Toal-lead');
       const { employees } = response.data;
       setEmployees(employees || []); // Ensure employees is always an array
       console.log(employees);
@@ -44,7 +44,7 @@ const SuperEmployeeList = () => {
 
       <div className="container mt-12 flex flex-col min-h-screen lg:flex-row">
         <main className="flex-1 p-4 lg:p-8">
-          <div className="overflow-x-auto rounded-lg shadow-md">
+          <div className="overflow-x-auto rounded-lg shadow-md xl:ml-32">
             <table className="min-w-full bg-white">
               <thead>
                 <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">

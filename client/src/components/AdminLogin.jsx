@@ -28,7 +28,7 @@
 //     console.log(formData);
 //     e.preventDefault();
 //     try{
-//       const res  = await axios.post("http://localhost:9000/api/login", formData)
+//       const res  = await axios.post("https://crm.one-realty.in/api/login", formData)
 //       console.log(res)
 //       if(res.data.success === true){
 //         dispatch(loginUser(res.data.user));
@@ -191,7 +191,7 @@ function AdminLogin() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:9000/api/admin-login",
+        "https://crm.one-realty.in/api/admin-login",
         formData
       );
       if (res.data.success) {
@@ -212,10 +212,10 @@ function AdminLogin() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+      <div className="w-full max-w-md p-8 mx-3 bg-white rounded-lg shadow-lg">
       <button
             onClick={() => navigate(-1)}
-            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors max-2xl:ml-[4rem]"
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors "
           >
             Back
           </button>

@@ -18,7 +18,7 @@ const AdminTotalLead = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads`);
       console.log(response);
       setLeads(response.data);
     } catch (error) {
@@ -43,7 +43,7 @@ const AdminTotalLead = () => {
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
 
-      <div className="overflow-x-auto mt-4">
+      <div className="overflow-x-auto mt-4 px-12 lg:ml-12 xl:ml-32">
         <table className="container bg-white border">
           <thead>
             <tr>

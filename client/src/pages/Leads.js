@@ -55,7 +55,7 @@ function Leads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/leads"
+        "https://crm.one-realty.in/api/leads"
       );
       setLeads(response.data);
       console.log(leads);
@@ -66,7 +66,7 @@ function Leads() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -75,7 +75,7 @@ function Leads() {
   // const fetchVisit = async () => {
   //   try {
   //     const response = await axios.get(
-  //       `http://localhost:9000/api/employe-all-visit`
+  //       `https://crm.one-realty.in/api/employe-all-visit`
   //     );
   //     console.log(response.data);
   //     setVisit(response.data);
@@ -218,11 +218,11 @@ function Leads() {
       try {
         if (isEditing) {
           await axios.put(
-            `http://localhost:9000/api/leads/${currentLead.lead_id}`,
+            `https://crm.one-realty.in/api/leads/${currentLead.lead_id}`,
             leadData
           );
         } else {
-          await axios.post("http://localhost:9000/api/leads", leadData);
+          await axios.post("https://crm.one-realty.in/api/leads", leadData);
         }
 
         fetchLeads(); // Refresh the list
@@ -239,7 +239,7 @@ function Leads() {
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`http://localhost:9000/api/leads/${id}`);
+        await axios.delete(`https://crm.one-realty.in/api/leads/${id}`);
         fetchLeads(); // Refresh the list after deletion
       } catch (error) {
         console.error("Error deleting lead:", error);
@@ -335,8 +335,8 @@ function Leads() {
       <Header />
       <Sider />
       <>
-        <div className="container">
-          <div className="main">
+        <div className="container  2xl:ml-40">
+          <div className="main 2xl:w-[89%]">
             <h1 className="text-2xl text-center mt-[5rem] font-medium">
               Leads Management
             </h1>
@@ -471,9 +471,7 @@ function Leads() {
               </div>
             </div>
           </div>
-
-          <div className=" overflow-x-auto mt-4 whitespace-nowrap  lg:w-[100%]">
-            <div className="flex gap-10 text-xl font-semibold my-3">
+          <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
               {/* Filter leads based on the selected employee */}
               <div>
   Total Lead visit:{" "}
@@ -510,6 +508,8 @@ function Leads() {
                 }
               </div>
             </div>
+          <div className=" overflow-x-auto mt-4 whitespace-nowrap  2xl:w-[89%]">
+         
 
             <table className="min-w-full bg-white border">
               <thead>
@@ -663,8 +663,8 @@ function Leads() {
           </div>
 
           {showPopup && (
-            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-              <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full max-w-md p-6 mx-2 bg-white rounded-lg shadow-lg h-[95%] overflow-y-auto">
                 <h2 className="text-xl mb-4">
                   {isEditing ? "Edit Lead" : "Add Lead"}
                 </h2>

@@ -25,7 +25,7 @@ const EmployeeVisitGraph = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employebyid-visit/${EmpId}`
+          `https://crm.one-realty.in/api/employebyid-visit/${EmpId}`
         );
         const leadList = response.data;
         console.log(leadList);
@@ -75,7 +75,8 @@ const EmployeeVisitGraph = () => {
   }, [EmpId]);
 
   return (
-    <Wrapper>
+    <>
+    <div className="mx-2">
       <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-2">Daily Visit Overview</h2>
         <p className="text-sm text-gray-500 mb-4">
@@ -109,24 +110,10 @@ const EmployeeVisitGraph = () => {
             <Bar dataKey="visits" fill="#82ca9d" name="Visits" barSize={15} />
           </BarChart>
         </ResponsiveContainer>
-      </div>
-    </Wrapper>
+      </div></div>
+    </>
   );
 };
 
 export default EmployeeVisitGraph;
 
-const Wrapper = styled.div`
-  #main {
-    width: 100%;
-    border-radius: 5px;
-    padding: 2rem;
-    box-shadow: 0px 2px 18px #bdbaba;
-    display: flex;
-    justify-content: center;
-  }
-  // @media screen and (max-width: 768px) {
-  //   padding: 20px;
-  //   font-size: small;
-  // }
-`;
