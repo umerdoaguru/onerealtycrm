@@ -29,9 +29,7 @@ const Dashboard = () => {
     <>
       <MainHeader />
       <Sider />
-      <h1 className="md:w-[85%] xxl:w-screen lg:ml-[10rem]">
-        Admin Dashboard
-      </h1>
+      <h1 className="text-2xl text-center mt-[5rem]">Admin Dashboard</h1>
       <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       <div className="flex min-h-screen overflow-hidden ">
         {/* Main Content */}
