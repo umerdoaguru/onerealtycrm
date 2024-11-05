@@ -7,11 +7,11 @@ import ReactPaginate from "react-paginate";
 
 
 import cogoToast from "cogo-toast";
-import Sider from '../Sider';
-import MainHeader from '../MainHeader';
+import Sider from './../Sider';
+import MainHeader from './../MainHeader';
 
-const Admin_view_visit = () => {
-  const [visit, setVisit] = useState([]);
+const Admin_FollowUpView = () => {
+  const [follow_up, setFollow_Up] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage] = useState(10); // Number of items per page
   const [filterText, setFilterText] = useState("");
@@ -23,33 +23,36 @@ const Admin_view_visit = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchvisit();
+    fetchFollowUp();
   }, [id, render]);
 
-  const fetchvisit = async () => {
+  const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-visit/${id}`
+        `http://localhost:9000/api/employe-follow-up/${id}`
       );
-      setVisit(response.data);
+      setFollow_Up(response.data);
       console.log(response);
     } catch (error) {
       console.error("Error fetching visit:", error);
     }
   };
 
-  const handleDelete = async (id) => {
+
+  const handleDelete = async (followup) => {
     const isConfirmed = window.confirm(
-      "Are you sure you want to delete this visit?"
+      "Are you sure you want to delete this follow up?"
     );
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:9000/api/employe-visit/${id}`
+          `http://localhost:9000/api/employe-follow-up/${followup.id}`
         );
         if (response.status === 200) {
-          console.log("visit deleted successfully");
+          console.log("follow up deleted successfully");
+
         }
+    
         console.log(response);
         setRender(!render);
       } catch (error) {
@@ -79,9 +82,9 @@ const Admin_view_visit = () => {
   // Function to send the PUT request to update the visit data
   const updateVisit = async () => {
     try {
-      const response = await axios.put(`http://localhost:9000/api/employe-visit`, modalData);
+      const response = await axios.put(`http://localhost:9000/api/employe-follow-up`, modalData);
       if (response.status === 200) {
-        cogoToast.success("Visit updated successfully!");
+        cogoToast.success("Follow Up updated successfully!");
         setRender(!render); // Refresh the list after updating
         closeModal(); // Close the modal
       }
@@ -97,16 +100,16 @@ const Admin_view_visit = () => {
 
 
 
-  const filteredvisit = visit.filter((visit) =>
-    visit.name.toLowerCase().includes(filterText.toLowerCase())
+  const filteredfollowup = follow_up.filter((follow) =>
+    follow.name.toLowerCase().includes(filterText.toLowerCase())
   );
 
   const offset = currentPage * itemsPerPage;
-  const currentvisit = filteredvisit.slice(
+  const currentfollow = filteredfollowup.slice(
     offset,
     offset + itemsPerPage
   );
-  const pageCount = Math.ceil(filteredvisit.length / itemsPerPage);
+  const pageCount = Math.ceil(filteredfollowup.length / itemsPerPage);
 
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
@@ -126,7 +129,7 @@ const Admin_view_visit = () => {
         <div className="w-full px-2 mx-auto p-4">
           <div className="w-full px-2 mt-4">
             <h2 className="text-2xl font-bold mb-4 text-center">
-              All Leads visit
+              All Follow Up
             </h2>
             <div className="">
               <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
@@ -145,42 +148,67 @@ const Admin_view_visit = () => {
                       Assigned To
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Visit 
+                    Follow Up Type
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Visit Date
+                    Follow Up Date
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Report
                     </th>
-           
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {currentvisit.map((visit, index) => (
-                    <tr key={visit.id}>
+                  {currentfollow.map((followup, index) => (
+                    <tr key={followup.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {offset + index + 1}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {visit.lead_id}
+                        {followup.lead_id}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {visit.name}
+                        {followup.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                       {visit.employee_name}
+                       {followup.employee_name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                       {visit.visit}
+                       {followup.follow_up_type}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                       {visit.visit_date}
+                       {followup.follow_up_date}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                       {visit.report}
+                       {followup.report}
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                      
+                          <button className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1"
+                          onClick={() => openModal(followup)}
+                          >
+                            Edit
+                          </button>
+                    
+                        <button
+                          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded m-1"
+                          onClick={() => handleDelete(followup)}
+                        >
+                          Delete
+                        </button>
+                       
+                        {/* <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded m-1"
+                        onClick={() =>
+                          handleCopyvisit(visit.visit_id)
+                        }
+                      >
+                        Copy
+                      </button> */}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -218,11 +246,11 @@ const Admin_view_visit = () => {
               />
 
 
-                    {/* Modal for Editing Visit Data */}
+                    {/* Modal for Editing Follow Up Data */}
                     {isModalOpen && (
   <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
     <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
-      <h2 className="text-xl mb-4 font-bold">Edit Visit</h2>
+      <h2 className="text-xl mb-4 font-bold">Edit Follow Up</h2>
       <form>
         <div className="mb-4">
           <label className="block text-gray-700">Lead ID:</label>
@@ -247,22 +275,22 @@ const Admin_view_visit = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">Visit:</label>
+          <label className="block text-gray-700">Follow Up Type:</label>
           <input
             type="text"
-            name="visit"
-            value={modalData.visit || ""}
+            name="follow_up_type"
+            value={modalData.follow_up_type || ""}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">Visit Date:</label>
+          <label className="block text-gray-700">Follow Up Date:</label>
           <input
             type="date"
-            name="visit_date"
-            value={modalData.visit_date || ""}
+            name="follow_up_date"
+            value={modalData.follow_up_date || ""}
             onChange={handleInputChange}
             className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100"
           />
@@ -307,4 +335,4 @@ const Admin_view_visit = () => {
   );
 };
 
-export default Admin_view_visit;
+export default Admin_FollowUpView;

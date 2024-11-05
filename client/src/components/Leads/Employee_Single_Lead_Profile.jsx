@@ -225,7 +225,7 @@ function Employee_Single_Lead_Profile() {
       console.log(response.data);
       setFollow_Up(response.data);
       // Ensure proper comparison with 'Created', trim any spaces and normalize the case
-      setFollowCreated(response.data);
+      setFollowCreated(response.data[0]);
     } catch (error) {
       console.error("Error fetching quotations:", error);
     }
@@ -597,18 +597,19 @@ console.log(totalVisit);
                   </p>
                 )}
 
-                {followCreated ? (
-                  <button
-                    onClick={handleViewFollowUp}
-                    className="bg-yellow-500 text-white px-4 py-2 mx-3 rounded"
-                  >
-                    View Follow Up
-                  </button>
-                ) : (
-                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
-                    Follow Up not yet created
-                  </p>
-                )}
+{followCreated ? (
+  <button
+    onClick={handleViewFollowUp}
+    className="bg-yellow-500 text-white px-4 py-2 mx-3 rounded"
+  >
+    View Follow Up
+  </button>
+) : (
+  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+    Follow Up not yet created
+  </p>
+)}
+
               </div>
             </div>
           </div>

@@ -46,6 +46,7 @@ import AdminReport from "../adiComponent/AdminReport";
 import Admin_view_visit from "../components/Leads/Admin_view_visit";
 import Admin_view_quotations from "../components/Leads/Admin_view_quotations";
 import Admin_QuotationView from "../components/Leads/Admin_QuotationView";
+import Admin_FollowUpView from "../components/Leads/Admin_FollowUpView";
 
 function AdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -116,6 +117,10 @@ function AdminRoutes() {
          <Route
           path="/admin_view_visit/:id"
           element={<Admin_view_visit />}
+        />
+         <Route
+          path="/admin_view_follow_up/:id"
+          element={<Admin_FollowUpView />}
         />
         <Route
           path="/admin_view_quotations/:id"

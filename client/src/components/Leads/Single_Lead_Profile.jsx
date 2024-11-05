@@ -12,6 +12,8 @@ function Single_Lead_Profile() {
   const [visit, setVisit] = useState([]);
   const [quotationCreated, setQuotationCreated] = useState(false);
   const [visitCreated, setVisitCreated] = useState(false);
+  const [followCreated, setFollowCreated] = useState(false);
+
 
 
   const fetchLeads = async () => {
@@ -41,6 +43,19 @@ function Single_Lead_Profile() {
     }
   };
 
+  const fetchFollowUp = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/api/employe-follow-up/${id}`
+      );
+      console.log(response.data);
+    
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+      setFollowCreated(response.data[0]);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
   
   
 
@@ -65,6 +80,9 @@ function Single_Lead_Profile() {
       console.error("Error fetching quotations:", error);
     }
   };
+
+
+
   const handleViewQuotation = (lead) => {
     console.log("Lead Object:", lead); // Log the lead object
     const name = lead.name;
@@ -78,11 +96,13 @@ function Single_Lead_Profile() {
   const handleViewVisit = () => {
     navigate(`/admin_view_visit/${leads[0].lead_id}`);
   };
-
+  const handleViewFollowUp = () => {
+    navigate(`/admin_view_follow_up/${leads[0].lead_id}`);
+  };
 
   useEffect(() => {
     fetchLeads();
-
+    fetchFollowUp();
     fetchVisit();
   }, [id]);
 
@@ -91,16 +111,11 @@ function Single_Lead_Profile() {
     <>
       <MainHeader />
       <Sider />
-      <div className="container mt-5 px-2 mx-auto p-4">
-        <button
-          onClick={handleBackClick}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Go Back
-        </button>
+      <div className="container mt-5 px-2 mx-auto p-4  ">
+       
         <h1 className="text-2xl text-center mt-[2rem]">Leads Profile</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-        <div className="flex flex-wrap mb-4">
+        <div className="flex flex-wrap mb-4 2xl:ml-44 mt-2">
           <div className="w-full lg:w-1/3">
             <img src={img} alt="doctor-profile" className=" rounded-lg" />
           </div>
@@ -166,7 +181,7 @@ function Single_Lead_Profile() {
             </div>
           ))}
         </div>
-        <div className="">
+        <div className="2xl:ml-44 mt-2">
         <div className="">
               {/* Conditionally render the View Quotation button */}
               <div className="flex">
@@ -196,12 +211,25 @@ function Single_Lead_Profile() {
                     Visit not yet created
                   </p>
                 )}
+
+{followCreated ? (
+  <button
+    onClick={handleViewFollowUp}
+    className="bg-yellow-500 text-white px-4 py-2 mx-3 rounded"
+  >
+    View Follow Up
+  </button>
+) : (
+  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+    Follow Up not yet created
+  </p>
+)}
               </div>
             </div>
         </div>
 
 
-        <div className="overflow-x-auto mt-5">
+        <div className="overflow-x-auto mt-5 2xl:ml-44">
             <table className="min-w-full whitespace-nowrap bg-white border">
               <thead>
                 <tr>
