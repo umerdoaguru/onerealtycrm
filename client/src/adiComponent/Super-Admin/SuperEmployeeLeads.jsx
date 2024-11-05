@@ -10,8 +10,39 @@ import MainHeader from "./../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
 
 function SuperEmployeeLeads() {
+  const dummyData = [
+    {
+      sNo: 1,
+      leadNumber: 'LN001',
+      name: 'John Doe',
+      phone: '1234567890',
+      leadSource: 'Website',
+      assignedTo: 'Priya Sharma',
+      subject: 'Product Inquiry',
+      leadStatus: 'Open',
+      createdTime: '2024-11-05 10:00 AM',
+      status: 'Active',
+      dealStatus: 'Pending',
+      visit: 'Yes'
+    },
+    {
+      sNo: 2,
+      leadNumber: 'LN002',
+      name: 'Jane Smith',
+      phone: '0987654321',
+      leadSource: 'Referral',
+      assignedTo: 'Ravi Kumar',
+      subject: 'Service Inquiry',
+      leadStatus: 'Closed',
+      createdTime: '2024-11-05 11:00 AM',
+      status: 'Inactive',
+      dealStatus: 'Won',
+      visit: 'No'
+    },
+   
+  ];
   const [leads, setLeads] = useState([]);
-  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [filteredLeads, setFilteredLeads] = useState(dummyData);
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -46,20 +77,6 @@ function SuperEmployeeLeads() {
       console.error("Error fetching leads:", error);
     }
   };
-  // const fetchVisit = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       // `http://localhost:9000/api/employe-all-visit`
-  //         `http://localhost:9000/api/employe-all-visit`
-  //     );
-  //     console.log(response.data);
-  //     setVisit(response.data);
-  //     // Ensure proper comparison with 'Created', trim any spaces and normalize the case
-    
-  //   } catch (error) {
-  //     console.error("Error fetching quotations:", error);
-  //   }
-  // };
 
   const handleSearch = (value) =>{
     if(value === ' '){
@@ -107,9 +124,7 @@ function SuperEmployeeLeads() {
 
     // Filter by Deak
     if (dealFilter) {
-      console.log(dealFilter);
-      filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
-      console.log(filtered);
+      filtered = filtered.filter((lead) => lead.dealStatus === dealFilter);
     }
 
     setFilteredLeads(filtered);
@@ -339,27 +354,27 @@ function SuperEmployeeLeads() {
         </td>
         <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
           <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-            {lead.lead_no}
+            {lead.lead_no || "L001"}
           </td>
         </Link>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.name}
+          {lead.name || "Name"}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.phone}
+          {lead.phone || "9630412500"}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.leadSource}
+          {lead.leadSource || "Ofline"}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.assignedTo}
+          {lead.assignedTo || "NA"}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject}
+          {lead.subject || "NA"}
         </td>
         {lead.lead_status === "pending" && (
           <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-            {lead.lead_status}
+            {lead.lead_status || "Pending"}
           </td>
         )}
         {lead.lead_status === "in progress" && (
@@ -376,13 +391,13 @@ function SuperEmployeeLeads() {
           {moment(lead.createdTime).format("YYYY-MM-DD")}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.status}
+          {lead.status || "Pending"}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.deal_status}
+          {lead.deal_status || "NA"}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit} 
+          {lead.visit || "NA"} 
         </td>
        
       </tr>
