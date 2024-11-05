@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2024 at 08:07 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Nov 05, 2024 at 09:42 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `crm`
+-- Database: `dumycrm`
 --
 
 -- --------------------------------------------------------
@@ -34,6 +34,7 @@ CREATE TABLE `admins` (
   `password` varchar(255) NOT NULL,
   `position` varchar(255) NOT NULL,
   `phone` varchar(20) NOT NULL,
+  `salary` decimal(10,2) NOT NULL,
   `roles` varchar(255) NOT NULL DEFAULT 'Admin',
   `createdTime` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -42,12 +43,8 @@ CREATE TABLE `admins` (
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`admin_id`, `name`, `email`, `password`, `position`, `phone`, `roles`, `createdTime`) VALUES
-(29, 'Doaguru Organization', 'doaguruinfosystems@gmail.com', 'Doaguru@2024', 'Admin', '8888888888', 'Admin', '2024-10-16 05:47:03'),
-(31, 'vinay dhariya', 'vinaydhariya21@gmail.com', 'DhariyaG', 'full stack developer', '8318864691', 'Admin', '2024-10-19 12:20:01'),
-(32, 'Madan Mahal', 'Vinay211998@gmail.com', 'vinay', 'full stack developer', '9198900449', 'Admin', '2024-10-21 10:37:11'),
-(33, 'test', 'test@gmail.com', 'test@123', 'Admin', '6260550661', 'Admin', '2024-10-27 14:36:35'),
-(34, 'umer', 'umerqureshi786786@gmail.com', 'umer@321', 'Admin', '6260550661', 'Admin', '2024-10-28 11:07:24');
+INSERT INTO `admins` (`admin_id`, `name`, `email`, `password`, `position`, `phone`, `salary`, `roles`, `createdTime`) VALUES
+(29, 'Doaguru Organization', 'doaguruinfosystems@gmail.com', 'Doaguru@2024', 'Admin', '8888888888', 150005.00, 'Admin', '2024-10-16 05:47:03');
 
 -- --------------------------------------------------------
 
@@ -176,9 +173,8 @@ CREATE TABLE `employee` (
 
 INSERT INTO `employee` (`employeeId`, `name`, `email`, `password`, `position`, `phone`, `salary`, `designation`, `signature`, `photo`, `roles`, `createdTime`) VALUES
 (24, 'test', 'test@gmail.com', 'test', 'sale', '9858582253', 150007.00, NULL, '/Assets/1726383330972-208977126-imgnew1.png', '/Assets/1726383330997-469333504-lead_profile.png', 'Employee', '2024-09-15 06:55:31'),
-(25, 'vinay', 'vinay@gmail.com', 'vinay', 'sale', '6260550661', 150007.00, NULL, NULL, NULL, 'Employee', '2024-10-27 10:44:34'),
-(29, 'umer', 'umerqureshidoaguru@gmail.com', 'umer', 'saless', '6260550661', 150007.00, NULL, NULL, NULL, 'Employee', '2024-10-28 11:02:12'),
-(31, 'sofia', 'sofia@gmail.com', 'sofia@123', 'employee', '8585858582', NULL, NULL, NULL, NULL, 'Employee', '2024-10-27 14:26:19');
+(25, 'vinay', 'vinay@gmail.com', '', 'sale', '6260550661', 150007.00, NULL, NULL, NULL, 'Employee', '2024-10-18 11:55:43'),
+(29, 'umer', 'umer@gmail.com', 'umer', 'saless', '6260550661', 150007.00, NULL, NULL, NULL, 'Employee', '2024-09-14 16:09:03');
 
 -- --------------------------------------------------------
 
@@ -197,8 +193,8 @@ CREATE TABLE `formtable` (
 --
 
 INSERT INTO `formtable` (`id`, `form_id`, `form_name`) VALUES
-(12, '1935750583597667', 'nirvana home leads 14/10'),
-(13, '1564826437399879', 'Old Nirvana House Form');
+(12, '1935750583597667', 'META Ad One'),
+(13, '1564826437399879', 'META Ad Two');
 
 -- --------------------------------------------------------
 
@@ -318,7 +314,6 @@ CREATE TABLE `leads` (
   `address` varchar(255) NOT NULL,
   `quotation` varchar(255) NOT NULL DEFAULT 'not created',
   `quotation_status` varchar(255) NOT NULL DEFAULT 'not approved',
-  `visit` varchar(255) NOT NULL DEFAULT 'pending ',
   `deal_status` varchar(255) NOT NULL DEFAULT 'pending',
   `d_closeDate` varchar(255) NOT NULL DEFAULT 'pending',
   `status` varchar(255) NOT NULL DEFAULT 'pending',
@@ -330,13 +325,17 @@ CREATE TABLE `leads` (
 -- Dumping data for table `leads`
 --
 
-INSERT INTO `leads` (`lead_id`, `lead_no`, `assignedTo`, `employeeId`, `createdTime`, `actual_date`, `name`, `phone`, `leadSource`, `lead_status`, `subject`, `booking_amount`, `payment_mode`, `registry`, `address`, `quotation`, `quotation_status`, `visit`, `deal_status`, `d_closeDate`, `status`, `reason`, `follow_up_status`) VALUES
-(124, '211', 'umer', 29, '2024-10-31', '2024-10-29', 'Satyam Mishra', '+91-8770422546', '99 Acres', 'completed', 'Nirvana Homes', '1000', 'cash', 'done', 'Jabalpur', 'created', 'not approved', 'fresh', 'close', '2024-11-01', 'pending', 'pending', 'pending'),
-(129, '1218599669443593', 'vinay', 25, '2024-11-22', '2024-10-31', 'Binod kumar Swarnkar', '+919993454635', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', 'Plot A-67,  jasuja city phase 3', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(130, '1601177500780293', 'sofia', 31, '2024-11-10', '2024-10-31', 'M.P. Singh', '9425015136', 'Facebook Campaign', 'pending', 'nirvana home leads 14/10', 'pending', 'pending', 'pending', '????????', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(131, '215', 'vinay', 25, '2024-11-30', '2024-10-31', 'Dr Umesh Kumar Kori', '+91-7000275146', '99 Acres', 'pending', 'Nirvana Homes', 'pending', 'pending', 'pending', 'Jabalpur', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(132, '24', 'umer', 29, '2024-11-17', '2024-10-23', 'Test Email Integration  ', '9696969696', 'One Realty Website', 'pending', 'Nirvana Homes', 'pending', 'pending', 'pending', 'indore', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending'),
-(133, '220', 'umer', 29, '2024-11-02', '2024-11-02', 'Mohit Verma', '+91-8269973198', '99 Acres', 'in progress', 'Nirvana Homes', 'pending', 'pending', 'pending', 'Jabalpur', 'not created', 'not approved', 'fresh', 'pending', 'pending', 'pending', 'pending', 'in progress');
+INSERT INTO `leads` (`lead_id`, `lead_no`, `assignedTo`, `employeeId`, `createdTime`, `actual_date`, `name`, `phone`, `leadSource`, `lead_status`, `subject`, `booking_amount`, `payment_mode`, `registry`, `address`, `quotation`, `quotation_status`, `deal_status`, `d_closeDate`, `status`, `reason`, `follow_up_status`) VALUES
+(84, '4545234', 'umer', 29, '2024-02-22', '2024-02-22', 'Mr. Sufi', '7586868566', 'Direct Mail', 'pending', '2BHK plots', '', '', 'pending', 'Jabalpur', 'created', 'not approved', 'close', '2024-10-17', 'pending', '', 'pending'),
+(85, '4545235', 'ali', 30, '2024-02-23', '2024-02-23', 'Mr. Khan', '7586868567', 'Social Media', 'pending', '3BHK plots', '', '', 'pending', 'Mumbai', 'not created', 'approved', 'open', '2024-10-18', 'in progress', '', 'completed'),
+(86, '4545236', 'ahmed', 31, '2024-02-24', '2024-02-24', 'Ms. Priya', '7586868568', 'Referral', 'pending', '1BHK plots', '', '', 'pending', 'Delhi', 'created', 'not approved', 'close', '2024-10-19', 'closed', 'Client unavailable', 'pending'),
+(87, '4545237', 'umar', 32, '2024-02-25', '2024-02-25', 'Mr. Patel', '7586868569', 'Website', 'follow-up', 'Villa', '50000', 'Online', 'pending', 'Bangalore', 'not created', 'approved', 'open', '2024-10-20', 'closed', '', 'completed'),
+(88, '4545238', 'nashit', 33, '2024-02-26', '2024-02-26', 'Ms. Meera', '7586868570', 'Event', 'pending', 'Studio', '30000', 'Cash', 'pending', 'Kolkata', 'created', 'not approved', 'open', '2024-10-21', 'in progress', '', 'pending'),
+(89, '4545239', 'sahil', 34, '2024-02-27', '2024-02-27', 'Mr. Anil', '7586868571', 'Cold Call', 'in progress', '2BHK plots', '40000', 'Credit Card', 'pending', 'Pune', 'not created', 'approved', 'open', '2024-10-22', 'pending', '', 'completed'),
+(90, '4545240', 'vikram', 35, '2024-02-28', '2024-02-28', 'Ms. Rani', '7586868572', 'Email', 'pending', '3BHK plots', '25000', 'Bank Transfer', 'pending', 'Hyderabad', 'created', 'not approved', 'open', '2024-10-23', 'closed', 'Budget issues', 'pending'),
+(91, '4545241', 'aman', 36, '2024-02-29', '2024-02-29', 'Mr. Ravi', '7586868573', 'Direct Mail', 'pending', '1BHK plots', '', '', 'pending', 'Chennai', 'not created', 'approved', 'open', '2024-10-24', 'in progress', '', 'completed'),
+(92, '4545242', 'rahul', 37, '2024-03-01', '2024-03-01', 'Ms. Geeta', '7586868574', 'Social Media', 'follow-up', 'Villa', '45000', 'Cash', 'pending', 'Ahmedabad', 'created', 'not approved', 'close', '2024-10-25', 'pending', '', 'pending'),
+(93, '4545243', 'ankit', 38, '2024-03-02', '2024-03-02', 'Mr. Suresh', '7586868575', 'Website', 'pending', 'Studio', '35000', 'Online', 'pending', 'Jaipur', 'not created', 'approved', 'open', '2024-10-26', 'closed', 'Property unavailable', 'completed');
 
 -- --------------------------------------------------------
 
@@ -360,159 +359,15 @@ CREATE TABLE `leadstable` (
 
 INSERT INTO `leadstable` (`id`, `lead_id`, `full_name`, `phone_number`, `street_address`, `created_time`, `form_id`) VALUES
 (786, '1238283060819453', 'Satyendra Tiwari', '+917999996963', 'House nu 49 Ashok Vihar colony Jabalpur', '2024-10-19 22:47:46', '1935750583597667'),
-(787, '553417287073481', 'satyam goswami', '9770420232', 'Nanda nagar Indore', '2024-10-19 22:29:41', '1935750583597667'),
-(788, '1564934307444908', 'Anand Lal', '+917909366921', 'civil lines', '2024-10-19 21:27:47', '1935750583597667'),
-(789, '559349473302390', 'Rajnish Singhai', '+919425325230', 'M6 sharda colony shakti nagar jabalpur', '2024-10-19 19:15:20', '1935750583597667'),
-(790, '1739823366866689', 'Gaurav Sablok', '+919425493939', 'Shahdol', '2024-10-18 23:32:43', '1935750583597667'),
-(791, '2033542400422718', 'Ajay Kushwaha', '+919098736162', 'ok', '2024-10-18 21:56:59', '1935750583597667'),
-(792, '863760329198738', 'Aseem Gulati', '+917694997330', 'Ganganagar', '2024-10-18 21:25:48', '1935750583597667'),
-(793, '1255893785558079', 'Roshan Ahire', '+917572812803', 'Dandiya bazar', '2024-10-18 02:10:46', '1935750583597667'),
-(794, '545423754905354', 'RiseUp Vibes', '+919329371767', 'APR COLONY', '2024-10-17 22:27:19', '1935750583597667'),
-(795, '1352608292791870', 'Raj Chakravarty', '+919329907763', 'Gali no.5 Trimurti Nagar damoh naka jabalpur', '2024-10-17 20:53:26', '1935750583597667'),
-(796, '1081199720322136', 'ARUNABH_', '+919926660143', 'sanjeevninagar', '2024-10-17 19:57:19', '1935750583597667'),
-(797, '847193870934461', 'P v rao', '+919406736924', 'gorakhpur jabalpur', '2024-10-17 13:26:26', '1935750583597667'),
-(798, '1291003835411800', 'Vikas Kumar', '9039412424', 'Jabalpur', '2024-10-17 02:17:50', '1935750583597667'),
-(799, '1278470356515806', 'Sanjay Shrivastava', '+919752419752', 'yes', '2024-10-17 00:21:06', '1935750583597667'),
-(800, '1027312075842885', 'P R A T I G Y A  S O N I', '8871930996', 'sarafa ward house no. 292 Jabalpur MP', '2024-10-17 00:08:23', '1935750583597667'),
-(801, '561207359744922', 'HARISH KAURAW', '+919425829529', 'price of the farm house and location.', '2024-10-16 22:58:03', '1935750583597667'),
-(802, '2017921185327281', '....Prem.....', '+918770217707', '??????', '2024-10-16 21:34:44', '1935750583597667'),
-(803, '1187579785666053', 'Swapnil Thakur', '+918349853000', 'yes', '2024-10-16 18:20:27', '1935750583597667'),
-(804, '840749131472781', 'Khushboo Abhijit Gupta', '+917974742955', 'Saraswati colony', '2024-10-16 18:19:48', '1935750583597667'),
-(805, '1235062597777183', 'Abhilash Tiwari', '+919479584625', 'Gwarighat', '2024-10-16 17:19:14', '1935750583597667'),
-(806, '1116189636888610', 'सिद्धांत', '+919576565636', 'Plot no 8 sanjeevani nagar', '2024-10-16 15:44:38', '1935750583597667'),
-(807, '1703271853847579', 'Chanchal Singh', '+919988303242', 'n e s college jbp Gorakhpur', '2024-10-16 14:47:53', '1935750583597667'),
-(808, '1859096001290158', 'vickydatt', '+917489799945', 'H.no. 206 Phase 1 maa narmada nagar bilheri Jabalpur', '2024-10-16 14:38:10', '1935750583597667'),
-(809, '554801117023562', 'Phalak Chouhan', '+917415293338', 'Hathital colony jabalpur', '2024-10-16 13:46:18', '1935750583597667'),
-(810, '2105644503163640', 'Sourabh (sid)', '+919009091485', 'Sanjeevni nagar jabalpur', '2024-10-16 13:45:54', '1935750583597667'),
-(811, '1688244455291242', 'Dharm Das Diwan', '+918871598876', 'jabalpur', '2024-10-14 01:42:04', '1564826437399879'),
-(812, '887748256662973', 'shameem.shaikhshifa.shaikh', '9770148348', 'Satna', '2024-10-14 00:36:26', '1564826437399879'),
-(813, '1019402479981029', 'Ujjwal Sharma', '9770802963', 'Mandla Madhya Pradesh', '2024-10-13 21:31:25', '1564826437399879'),
-(814, '825529499485315', 'Krishan Patel', '+919981204950', 'Jabalpur', '2024-10-13 19:58:51', '1564826437399879'),
-(815, '1107778027434890', 'Chandra Pillai', '+919340676562', 'GOPAL SADAN, DAMOH NAKA, JBP.', '2024-10-13 19:37:01', '1564826437399879'),
-(816, '2040224759729637', 'Anup Kumar', '+918085756295', 'Bhopal', '2024-10-13 16:41:48', '1564826437399879'),
-(817, '556861853409851', 'Kaushlendra', '+919990872822', 'New Resham Mill', '2024-10-13 15:53:04', '1564826437399879'),
-(818, '1214895979787159', 'Mukesh Dangode', '+917999671043', 'K', '2024-10-13 14:56:52', '1564826437399879'),
-(819, '889715196431622', 'baby_ doll_Garima', '+918818927611', 'Gwarighat jbp', '2024-10-11 23:18:26', '1564826437399879'),
-(820, '8868239409855705', 'Manish Patel', '9200872758', 'Railway station road Indraatket', '2024-10-11 00:30:01', '1564826437399879'),
-(821, '1325597994971442', 'Meenu Chadha', '+919340294171', 'Dubey colony', '2024-10-10 21:43:08', '1564826437399879'),
-(822, '1230525171431353', 'Jivika Piyush Matani', '+918103642337', 'Ukhri road', '2024-10-10 17:49:56', '1564826437399879'),
-(823, '1227341538515982', 'Shalini Khare', '+919981897440', 'Jabalpur', '2024-10-10 17:01:16', '1564826437399879'),
-(824, '1258174752031271', 'Sonu Lalwani', '9131041167', 'Katni', '2024-10-10 15:36:42', '1564826437399879'),
-(825, '1963724854127076', 'Ravi Tripathi', '+919425808444', 'Jabalpur', '2024-10-10 13:20:02', '1564826437399879'),
-(826, '867046335495332', 'Dr. Afsana Ansari physiotherapist.', '7974211441', 'Hanuman tal jabalpur', '2024-10-10 10:05:59', '1564826437399879'),
-(827, '2531840980342502', 'rk singh', '6267535802', 'Adhartal', '2024-10-10 07:03:57', '1564826437399879'),
-(828, '1224049392147166', 'Deepak Yadav', '+919806145987', 'BILHARI', '2024-10-09 22:50:07', '1564826437399879'),
-(829, '881954960547212', 'Deepak Sawlani', '+918109995629', 'NAPIER TOWN', '2024-10-09 22:49:57', '1564826437399879'),
-(830, '547053201198099', 'Awdhesh Dehariya', '+919644637424', 'seoni', '2024-10-09 22:14:35', '1564826437399879'),
-(831, '383412418171910', 'Munendra Dar', '+919669771234', 'Dewas , Madhya Pradesh', '2024-10-09 22:14:23', '1564826437399879'),
-(832, '510512291879170', 'juned mansuri', '+918109752513', 'Khajrana', '2024-10-09 22:10:38', '1564826437399879'),
-(833, '1186765509076545', 'Nitin Raja Jain', '+919827674791', 'jabalpur', '2024-10-09 21:56:51', '1564826437399879'),
-(834, '1099752775049886', 'Naveen Pandey', '+919399183862', 'xyz', '2024-10-09 21:50:03', '1564826437399879'),
-(835, '570915772030996', 'preeti Kumari singh', '+919691528205', 'hajipur', '2024-10-09 12:35:10', '1564826437399879'),
-(836, '471217678596437', 'Bhumi__', '+916265106902', 'Rampur jabalpur', '2024-10-20 23:26:03', '1935750583597667'),
-(837, '553857377055100', 'Vivek Gupta', '+919329166360', 'h.n. 1064 behind trivedi school hathitaal colony', '2024-10-20 22:58:54', '1935750583597667'),
-(838, '483886047986291', 'Aayushi Chauhan', '+919098454818', 'Jabalpur', '2024-10-20 22:34:53', '1935750583597667'),
-(839, '1479831755915370', 'Sudhirkumar Yadav', '+919049096269', 'jabalpur', '2024-10-20 22:09:22', '1935750583597667'),
-(840, '3397148897256815', 'Vîshäl Siñgh Bhârdwaj', '+919039834325', 'Ranjhi', '2024-10-20 21:43:40', '1935750583597667'),
-(841, '1061728948505663', 'SamBhav JaI-n', '+918989428240', '2bhk', '2024-10-23 00:09:04', '1935750583597667'),
-(842, '8517518774984471', 'SANTOSH KUMAR JAISWAL', '+919131055875', 'hig 153 dhanwantri Nagar Jabalpur', '2024-10-22 21:15:40', '1935750583597667'),
-(843, '528510469974389', 'Vishal Jaiswal', '+919329391680', 'madan mahal', '2024-10-22 16:43:00', '1935750583597667'),
-(844, '572010168815067', 'Shrayansh Yadav', '+918180016586', 'Kanchanpur', '2024-10-22 13:44:25', '1935750583597667'),
-(845, '7981416211958452', 'Raghwendra Singh Chouhan Singh', '+917489624618', 'yes', '2024-10-22 09:38:10', '1935750583597667'),
-(846, '2325456361125941', 'Avdhesh silawat', '+918839996836', 'Yadav calony', '2024-10-22 08:29:22', '1935750583597667'),
-(847, '554218447189470', 'rachna pathak', '+919977188873', '45,1sanmati nagar jabalpur', '2024-10-22 06:04:34', '1935750583597667'),
-(848, '1646707069280005', 'Pramod Singh', '+918770751347', 'Vijay nagar jbp', '2024-10-22 01:13:58', '1935750583597667'),
-(849, '844823987536665', 'Abhi Khare', '+917000883269', 'Damoh mp', '2024-10-28 16:33:20', '1935750583597667'),
-(850, '1276320269932910', 'Ayushi Saraogi', '+918518900540', 'Na', '2024-10-28 14:35:04', '1935750583597667'),
-(851, '8766998223357600', 'Rajkumar SRL LAB Chourasiya', '+919131038259', '305 samdariya adarsh coloney cheritaal', '2024-10-28 14:29:39', '1935750583597667'),
-(852, '27294442850203417', 'Sapan Yadav', '+919179700860', 'Ganjipura', '2024-10-28 13:50:37', '1935750583597667'),
-(853, '1290808722052694', 'Ankit Patel', '+919993627849', 'Jabalpur', '2024-10-26 22:11:52', '1935750583597667'),
-(854, '1223742938744184', 'Pintu Gupta', '+918770046944', 'Trimurti Nagar', '2024-10-26 22:11:33', '1935750583597667'),
-(855, '1082210666944295', 'Reetesh Sen', '+919303269616', 'ganga nagar garha Jabalpur', '2024-10-26 22:03:37', '1935750583597667'),
-(856, '1057181199232502', 'Ashutosh Sharma (Ashu)', '+918602279844', 'Adhartal jbp', '2024-10-26 21:49:20', '1935750583597667'),
-(857, '863227522585358', 'Sonu Singh', '+918109211032', 'Gorakhpur Jaunpur mp', '2024-10-26 21:15:54', '1935750583597667'),
-(858, '2969923843155118', 'Saurabh Kumar', '+919755454860', 'industrialarea', '2024-10-26 20:58:53', '1935750583597667'),
-(859, '563548516263291', 'Prashant Singh', '+916352684142', 'Jabalpur', '2024-10-26 20:56:26', '1935750583597667'),
-(860, '1622901671965166', 'UJWAL', '+917000927179', 'Jabalpur', '2024-10-26 20:40:27', '1935750583597667'),
-(861, '1636529433963455', 'Pooran Khampariya', '7440667788', '2773 new kanchanpur adhartal jabalpur', '2024-10-26 20:35:58', '1935750583597667'),
-(862, '4252664868301623', 'Ruchi Chauda', '+918602436635', 'jabalpur', '2024-10-25 19:54:06', '1935750583597667'),
-(863, '1105135937629272', 'Sardesh Sharma', '+919907450855', 'Vijay nagar', '2024-10-25 19:13:11', '1935750583597667'),
-(864, '1006756081495598', 'Deepak Mishra', '+917698178942', 'jabalpur', '2024-10-25 18:20:50', '1935750583597667'),
-(865, '1072285587685316', 'Ritesh Sonker', '+917024143721', 'b2 sai sadan pachmarhi road piparia', '2024-10-25 18:19:39', '1935750583597667'),
-(866, '511173491906139', 'Priyanshu khare', '8888888888', 'Akshs', '2024-10-25 17:25:12', '1935750583597667'),
-(867, '1099088958606782', 'Ajay Singh', '+19406964071', 'jhingurda', '2024-10-25 15:03:42', '1935750583597667'),
-(868, '1055686412946357', 'Rudra Pratap Bajpai', '+919826009190', '151 Jabalpur', '2024-10-25 14:50:41', '1935750583597667'),
-(869, '571958478826567', 'Radha Kori', '+919131636623', 'Aashiyana colony mandla', '2024-10-25 13:40:44', '1935750583597667'),
-(870, '533829179480681', 'Jyotindra Pathak', '+919826263489', 'm45 polipathar colony jabalpur', '2024-10-25 13:02:32', '1935750583597667'),
-(871, '434393223017581', 'Rajesh Watwani', '+919300650550', 'Chetakpuri', '2024-10-25 09:39:21', '1935750583597667'),
-(872, '1588108528409286', 'Prerna Jagwani | Makeup Artist', '+917804033920', 'Jabalpur MP', '2024-10-25 01:13:02', '1935750583597667'),
-(873, '840385671310531', 'Himanshu Tiwari', '+918120291098', 'madan mahal jabalpur mp', '2024-10-25 00:54:36', '1935750583597667'),
-(874, '3734345806805064', 'deepak', '+919630208281', 'tata', '2024-10-29 21:43:25', '1935750583597667'),
-(875, '893583036081676', 'Raju Khare Lala Ji', '+919301030666', 'H.no 1343ganga nagar garha jabalpur', '2024-10-29 21:08:06', '1935750583597667'),
-(876, '2001513276953660', 'Rathore dental clinic', '+919993794474', 'Kachhiyana Chowk near Golbazar', '2024-10-29 20:38:41', '1935750583597667'),
-(877, '2999960123513545', 'Aakash Tiwari', '+919981216910', 'Bb', '2024-10-29 20:31:53', '1935750583597667'),
-(878, '911984030890270', 'Sumit Kumar banwasi', '+919209639156', 'Sumi', '2024-10-29 19:58:35', '1935750583597667'),
-(879, '563483726133427', 'Jiya rajpoot', '8103390956', 'Deendayal mp', '2024-10-29 19:47:11', '1935750583597667'),
-(880, '547070148059554', 'abhishek sahu', '+919300517126', 'sai colony deendayal chowk', '2024-10-28 20:56:44', '1935750583597667'),
-(881, '1302770077385734', 'Tr Atul Ramakant Awasthi', '+919179546122', 'Raipu', '2024-10-28 20:13:27', '1935750583597667'),
-(882, '2038756043246936', 'Raj sahu', '+918307681105', 'jhansi', '2024-10-28 18:39:51', '1935750583597667'),
-(883, '1218599669443593', 'Binod kumar Swarnkar', '+919993454635', 'Plot A-67,  jasuja city phase 3', '2024-10-31 18:10:54', '1935750583597667'),
-(884, '1601177500780293', 'M.P. Singh', '9425015136', '????????', '2024-10-31 17:00:29', '1935750583597667'),
-(885, '885425920348027', 'Nimrod Nikky Masih', '+919301838684', 'H.n.56 m m chouby ward Katni', '2024-10-31 15:08:32', '1935750583597667'),
-(886, '866522322270999', 'Vikendra Pandey', '+18319704883', 'yas', '2024-10-31 13:43:29', '1935750583597667'),
-(887, '1786109631924775', 'Drx Akansha Dubey', '+916264680045', 'Green city madhotal', '2024-10-30 20:28:36', '1935750583597667'),
-(888, '520500434288735', 'official', '+919301798180', 'Civil lines', '2024-10-30 19:32:47', '1935750583597667'),
-(889, '531952556308898', 'Shweta Tiwari', '7303443245', 'S2 mathura vihar Vijay nagar jabalpur', '2024-10-30 18:59:57', '1935750583597667'),
-(890, '1217902702624879', 'Rk_rishi_Kesharwani', '+917000360184', 'Damoh', '2024-10-30 18:52:45', '1935750583597667'),
-(891, '475591704838735', 'Azad Khan', '+917000901603', 'M. P', '2024-10-30 18:43:04', '1935750583597667'),
-(892, '425977443869560', 'Sunil Lalwani', '+919518998297', 'ward No 12', '2024-10-30 18:34:05', '1935750583597667'),
-(893, '561040663244041', 'Adv Manoj Sunpal', '8349985552', 'Indrapuri colony gwarighat road jabalpur', '2024-10-30 16:21:14', '1935750583597667'),
-(894, '520500434288735', 'official', '+919301798180', 'Civil lines', '2024-10-30 19:32:47', '1935750583597667'),
-(895, '531952556308898', 'Shweta Tiwari', '7303443245', 'S2 mathura vihar Vijay nagar jabalpur', '2024-10-30 18:59:57', '1935750583597667'),
-(896, '1217902702624879', 'Rk_rishi_Kesharwani', '+917000360184', 'Damoh', '2024-10-30 18:52:45', '1935750583597667'),
-(897, '475591704838735', 'Azad Khan', '+917000901603', 'M. P', '2024-10-30 18:43:04', '1935750583597667'),
-(898, '425977443869560', 'Sunil Lalwani', '+919518998297', 'ward No 12', '2024-10-30 18:34:05', '1935750583597667'),
-(899, '561040663244041', 'Adv Manoj Sunpal', '8349985552', 'Indrapuri colony gwarighat road jabalpur', '2024-10-30 16:21:14', '1935750583597667'),
-(900, '901808688556391', 'Gourav Vishwakarma', '+918823020013', 'Adhartal', '2024-11-02 00:01:03', '1935750583597667'),
-(901, '546559231644824', 'Rahul', '+918770238367', 'Jabalpur', '2024-11-01 23:41:56', '1935750583597667'),
-(902, '559711300039289', 'Sourav vishwakarma', '+917987437631', 'Jabalpur adhartal', '2024-11-01 23:33:42', '1935750583597667'),
-(903, '7894186500681258', 'Pratibha Singh', '9131142378', 'Bagsewania', '2024-11-01 23:24:13', '1935750583597667'),
-(904, '1122655839429039', 'Priyanka bhurrak', '+919165653600', 'Madan Mahal', '2024-11-01 23:17:40', '1935750583597667'),
-(905, '529679663293493', 'Khemraj Malviya', '+917354608495', 'jabalpur', '2024-11-01 23:10:50', '1935750583597667'),
-(906, '1281105626670176', 'SAURABH WAGHMARE', '+917387223338', 'Adhartal', '2024-11-01 22:42:17', '1935750583597667'),
-(907, '1941177989690008', 'Vinay vishwakarma', '+917428691180', 'thahari', '2024-11-01 22:37:53', '1935750583597667'),
-(908, '8418834238235769', 'Sumit Jha', '+919754397058', 'adhartal', '2024-11-01 22:26:57', '1935750583597667'),
-(909, '1232248264770837', 'Prem Chouksey', '6263269242', 'Jabalpur', '2024-11-01 22:20:14', '1935750583597667'),
-(910, '1944891315980199', 'Bebu Katariya', '+919425386660', 'yes', '2024-11-01 22:19:56', '1935750583597667'),
-(911, '8348756341916362', 'Swapnil Suhane', '+919929303727', 'Damoh naka', '2024-11-01 22:17:19', '1935750583597667'),
-(912, '578780444613298', 'Gurvinder Gujral', '+917389915004', '305 rajul flats panchsheel nagar gwarighat road jabalpur', '2024-11-01 22:15:57', '1935750583597667'),
-(913, '2359265874408884', 'Aparna Das Tinka', '+16265140231', 'jabalpur', '2024-11-01 22:04:43', '1935750583597667'),
-(914, '533982606082484', 'Deepansh Shroti', '+919399296161', 'Garha', '2024-11-01 21:38:18', '1935750583597667'),
-(915, '1318302412836714', 'Pratik Jain', '+918839193249', 'Sarafa', '2024-11-01 21:33:52', '1935750583597667'),
-(916, '572908735125648', 'Aniee Gupta', '+919098277738', 'Premnagar, Jabalpur', '2024-11-01 21:19:42', '1935750583597667'),
-(917, '2845571525611381', 'Bravecci', '+919303546278', 'Iqbal colony Ashoka garden bhopal', '2024-11-01 20:54:25', '1935750583597667'),
-(918, '1954631321675126', 'anil', '+917982183644', 'Ghaziabad', '2024-11-01 20:51:58', '1935750583597667'),
-(919, '1087586646181183', 'Anil Kumar Vishwaskarma', '+917047630239', '439/7 bajran colony jabalpur', '2024-11-01 20:02:11', '1935750583597667'),
-(920, '901808688556391', 'Gourav Vishwakarma', '+918823020013', 'Adhartal', '2024-11-02 00:01:03', '1935750583597667'),
-(921, '546559231644824', 'Rahul', '+918770238367', 'Jabalpur', '2024-11-01 23:41:56', '1935750583597667'),
-(922, '559711300039289', 'Sourav vishwakarma', '+917987437631', 'Jabalpur adhartal', '2024-11-01 23:33:42', '1935750583597667'),
-(923, '7894186500681258', 'Pratibha Singh', '9131142378', 'Bagsewania', '2024-11-01 23:24:13', '1935750583597667'),
-(924, '1122655839429039', 'Priyanka bhurrak', '+919165653600', 'Madan Mahal', '2024-11-01 23:17:40', '1935750583597667'),
-(925, '529679663293493', 'Khemraj Malviya', '+917354608495', 'jabalpur', '2024-11-01 23:10:50', '1935750583597667'),
-(926, '1281105626670176', 'SAURABH WAGHMARE', '+917387223338', 'Adhartal', '2024-11-01 22:42:17', '1935750583597667'),
-(927, '1941177989690008', 'Vinay vishwakarma', '+917428691180', 'thahari', '2024-11-01 22:37:53', '1935750583597667'),
-(928, '8418834238235769', 'Sumit Jha', '+919754397058', 'adhartal', '2024-11-01 22:26:57', '1935750583597667'),
-(929, '1232248264770837', 'Prem Chouksey', '6263269242', 'Jabalpur', '2024-11-01 22:20:14', '1935750583597667'),
-(930, '1944891315980199', 'Bebu Katariya', '+919425386660', 'yes', '2024-11-01 22:19:56', '1935750583597667'),
-(931, '8348756341916362', 'Swapnil Suhane', '+919929303727', 'Damoh naka', '2024-11-01 22:17:19', '1935750583597667'),
-(932, '578780444613298', 'Gurvinder Gujral', '+917389915004', '305 rajul flats panchsheel nagar gwarighat road jabalpur', '2024-11-01 22:15:57', '1935750583597667'),
-(933, '2359265874408884', 'Aparna Das Tinka', '+16265140231', 'jabalpur', '2024-11-01 22:04:43', '1935750583597667'),
-(934, '533982606082484', 'Deepansh Shroti', '+919399296161', 'Garha', '2024-11-01 21:38:18', '1935750583597667'),
-(935, '1318302412836714', 'Pratik Jain', '+918839193249', 'Sarafa', '2024-11-01 21:33:52', '1935750583597667'),
-(936, '572908735125648', 'Aniee Gupta', '+919098277738', 'Premnagar, Jabalpur', '2024-11-01 21:19:42', '1935750583597667'),
-(937, '2845571525611381', 'Bravecci', '+919303546278', 'Iqbal colony Ashoka garden bhopal', '2024-11-01 20:54:25', '1935750583597667'),
-(938, '1954631321675126', 'anil', '+917982183644', 'Ghaziabad', '2024-11-01 20:51:58', '1935750583597667'),
-(939, '1087586646181183', 'Anil Kumar Vishwaskarma', '+917047630239', '439/7 bajran colony jabalpur', '2024-11-01 20:02:11', '1935750583597667');
+(787, '1238283060819454', 'Ravi Shukla', '+917888886964', 'Plot no 12 Shanti Nagar Bhopal', '2024-10-20 18:35:21', '1935750583597667'),
+(788, '1238283060819455', 'Anjali Verma', '+917777776965', 'Flat no 8 Sunrise Apartments Indore', '2024-10-21 10:15:34', '1935750583597667'),
+(789, '1238283060819456', 'Amit Kumar', '+917666666966', 'Building 5, MG Road Gwalior', '2024-10-22 14:55:07', '1935750583597667'),
+(790, '1238283060819457', 'Neha Singh', '+917555556967', 'House no 25, Nehru Nagar Jabalpur', '2024-10-23 09:47:52', '1935750583597667'),
+(791, '1238283060819458', 'Vikram Chauhan', '+917444446968', 'Plot 3, Industrial Area, Satna', '2024-10-24 17:03:44', '1935750583597667'),
+(792, '1238283060819459', 'Sunita Patil', '+917333336969', 'House no 65, Sector B, Ujjain', '2024-10-25 13:22:11', '1935750583597667'),
+(793, '1238283060819460', 'Rajesh Thakur', '+917222226970', 'Flat 10, Green Valley, Dewas', '2024-10-26 20:18:37', '1935750583597667'),
+(794, '1238283060819461', 'Manoj Joshi', '+917111116971', 'House no 45, Patel Nagar, Rewa', '2024-10-27 15:40:29', '1935750583597667'),
+(795, '1238283060819462', 'Priya Saxena', '+917000006972', 'Plot no 29, Shree Nagar, Sagar', '2024-10-28 11:55:18', '1935750583597667');
 
 -- --------------------------------------------------------
 
@@ -617,39 +472,6 @@ INSERT INTO `organization` (`companyId`, `name`, `bankDetails`, `signature`, `lo
 -- --------------------------------------------------------
 
 --
--- Table structure for table `otpcollections`
---
-
-CREATE TABLE `otpcollections` (
-  `otp_id` int(100) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `code` int(10) DEFAULT NULL,
-  `expiresIn` int(20) DEFAULT NULL,
-  `createdAt` timestamp(6) NOT NULL DEFAULT current_timestamp(6)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `otpcollections`
---
-
-INSERT INTO `otpcollections` (`otp_id`, `email`, `code`, `expiresIn`, `createdAt`) VALUES
-(1, 'kuldeepdoauruinfosystems@gmail.com', 224603, NULL, '2024-08-13 06:59:36.777227'),
-(2, 'mohitsahu1993@gmail.com', 254910, NULL, '2024-08-22 07:31:13.481316'),
-(3, 'shadab@gmail.com', 617412, NULL, '2024-09-02 07:06:14.109336'),
-(4, 'kuldeepdoauruinfosystems@gmail.com', 694511, NULL, '2024-10-28 06:46:34.286922'),
-(5, 'umer@gmail.com', 141174, NULL, '2024-10-28 09:38:09.772837'),
-(6, 'umerqureshidoaguru@gmail.com', 284783, NULL, '2024-10-28 09:40:56.211954'),
-(7, 'umerqureshi786786@gmail.com', 438900, NULL, '2024-10-28 10:06:47.009743'),
-(8, 'umerqureshi786786@gmail.com', 766856, NULL, '2024-10-28 10:36:44.825756'),
-(9, 'umerqureshi786786@gmail.com', 91347, NULL, '2024-10-28 10:42:44.327534'),
-(10, 'umerqureshidoaguru@gmail.com', 965997, NULL, '2024-10-28 11:01:44.891003'),
-(11, 'umerqureshi786786@gmail.com', 214866, NULL, '2024-10-28 11:06:44.496840'),
-(12, 'umerqureshidoaguru@gmail.com', 595652, NULL, '2024-10-28 11:10:16.926784'),
-(13, 'umerqureshi786786@gmail.com', 916447, NULL, '2024-10-28 11:48:37.518558');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `payments`
 --
 
@@ -696,9 +518,7 @@ CREATE TABLE `quotations_data` (
 
 INSERT INTO `quotations_data` (`quotation_id`, `quotation_name`, `created_date`, `employeeId`, `lead_id`, `employee_name`, `status`) VALUES
 (269, 'Dharm Das Diwan', '2024-10-16 11:53:26', 29, 0, 'umer', 'Pending'),
-(270, 'mr sufi', '2024-10-18 06:28:15', 29, 84, 'umer', 'Pending'),
-(271, 'shameem.shaikhshifa.shaikh', '2024-10-28 13:33:07', 29, 85, 'umer', 'Pending'),
-(272, 'Nit Suryawanshi', '2024-10-30 07:08:01', 29, 87, 'umer', 'Pending');
+(270, 'mr sufi', '2024-10-18 06:28:15', 29, 84, 'umer', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -741,15 +561,6 @@ CREATE TABLE `quotations_information` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `quotations_information`
---
-
-INSERT INTO `quotations_information` (`id`, `customer_name`, `contact_number`, `alternate_number`, `address`, `adhaar_number`, `pan_number`, `project_name`, `unit_number`, `dimension`, `rate`, `variant`, `total_deal`, `booking_amount`, `booking_amount_words`, `payment_mode`, `finance_bank`, `duration`, `balance_amount`, `balance_amount_words`, `payment_due_date1`, `payment_due_date2`, `payment_due_date3`, `payment_due_date4`, `registry_charges`, `p1p2_charges`, `remarks`, `status`, `employeeId`, `employee_name`, `lead_id`, `created_at`) VALUES
-(23, 'Jay Ho Prabhu ', '3545874646', '6546545645', 'sxfsd 3654sdf65we 4r56we4 56we4r56w4e', '111111111111', 'XDSDS5455D', 'dsadsad', '5', 'ssdsd', 54545.00, 'New', 5.00, 1500.00, 'one thousand, five hundred', 'Online', '45454', '510', 85000.00, 'eighty-five thousand', '2024-12-31', '2024-12-31', '2024-12-31', '2024-12-31', 1500.00, 7800.00, 'lklawh sriuywe rweoiu rguwe lkwejrkjs hjksddkassdam,na io ', 'Pending', 29, 'umer', 94, '2024-10-29 14:41:13'),
-(29, 'ZSF', '5443455454', '5555555555', 'jabalpur', '343434343453', 'QFGGF5445G', 'qetrrt', '34', 'ew', 34.00, '34', 34.00, 500.00, 'five hundred', '34', 'dsl;fk', '34', 1.00, 'one', '2023-06-22', '2024-11-29', '2023-12-31', '2024-12-31', 0.00, 0.00, 'pio', 'Approved', 29, 'umer', 122, '2024-10-30 13:55:54'),
-(37, 'Satyam Mishra', '5445445454', '4gfgfg5t44', '4564564545', '45454', 'RGFDG5454', '454', '545', '4545', 45.00, '454', 2.00, 5000.00, 'five thousand', '45454', '45', '545', 5000.00, 'five thousand', '2024-10-26', '2024-02-24', '2024-02-20', '2024-02-20', 0.00, 0.00, 'drtgd', 'Approved', 29, 'umer', 124, '2024-11-01 13:15:22');
-
 -- --------------------------------------------------------
 
 --
@@ -773,8 +584,7 @@ INSERT INTO `registered_data` (`user_id`, `user_name`, `email`, `password`, `rol
 (29, 'Google', 'google@gmail.com', '$2b$10$MhWoNhCxpc9cUxNS9jXEJ.AUSy3Cr4JGZYoo6NWKl84WyT4XjArXO', 'Admin', '2024-08-27 10:51:26'),
 (38, 'pathology', 'kuldeepdoauruinfosystems@gmail.com', '$2b$10$zIjaE78SedNQE4.QKpYCmeHMsZB/1AepaO.0MC4lRwlLE.LLip972', 'Admin', '2024-10-07 10:31:25'),
 (39, 'Madan Mahal', 'shadab@gmail.com', '$2b$10$IjFSjAKDMGjAW1K93iqY.Ob3mEUMNXlsf.Ojh7Fv8Q2nKghNphTNC', 'Admin', '2024-10-07 10:33:39'),
-(41, 'vinay dhariya', 'vinaydhariya21@gmail.com', '$2b$10$qtxHdyOQGDSToGsH6QWu0OXBuxzwDHOt8R97bHPb7BSH/hQnEbU5u', 'Super-Admin', '2024-10-11 12:56:40'),
-(42, 'umer', 'umerqureshi786786@gmail.com', '$2b$10$5oOcNmmD92.qoid3G.sO2.wsBOTPLdTVezjb7zUgtdM/jXuBq9cNa', 'Super-Admin', '2024-10-28 11:49:21');
+(41, 'vinay dhariya', 'vinaydhariya21@gmail.com', '$2b$10$qtxHdyOQGDSToGsH6QWu0OXBuxzwDHOt8R97bHPb7BSH/hQnEbU5u', 'Super-Admin', '2024-10-11 12:56:40');
 
 -- --------------------------------------------------------
 
@@ -824,33 +634,25 @@ INSERT INTO `responses_99acres` (`id`, `query_id`, `project_name`, `city_name`, 
 (193, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-25 21:41:20', 'Abhishek Singh', 'kaashvis76@gmail.com', '+91-8629978059'),
 (194, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-26 14:41:35', 'Jay Kant Tiwari', 'jtiwari.09@gmail.com', '+91-7317352441'),
 (195, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-26 16:48:23', 'Solankiji S B I Pali', 'solankimithun111@gmail.com', '+91-9826656813'),
-(196, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 06:30:07', 'Abhinav Rao', 'abhinav.rao66@gmail.com', '+91-8087106771'),
-(197, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 15:21:30', 'ajay Jagwani', 'ajayjagwaniii88@gmail.com', '+91-8928079734'),
-(198, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 14:13:01', 'Naveen Pankaj', 'naveenpankaj24@gmail.com', '+91-8319654126'),
-(199, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 12:30:13', 'Vijendra Giri', 'girivijendra@gmail.com', '+91-9340993435'),
+(196, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-28 12:07:22', 'Varun', 'varunnayyaribm2007@gmail.com', '+91-7987458441'),
+(197, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project. Please call back.', '2024-10-27 23:59:25', 'Sanjay Kumar sen', '7sanjay.sen@gmail.com', '+91-8249136046'),
+(198, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 22:34:19', 'Deepak KUMAR', 'deepak2244.dk@gmail.com', '+91-6266632805'),
+(199, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 18:05:06', 'Not Mentioned', 'Not Mentioned', '+91-8965850379'),
 (200, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 17:34:11', 'SHREY PATHAK', 'shreypathak278@gmail.com', '+91-7987958338'),
 (201, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 16:55:24', 'Aditya Singh Sengar', 'adityasengar1133@gmail.com', '+91-9425623095'),
-(202, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 18:05:06', 'Not Mentioned', 'Not Mentioned', '+91-8965850379'),
-(203, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project. Please call back.', '2024-10-27 23:59:25', 'Sanjay Kumar sen', '7sanjay.sen@gmail.com', '+91-8249136046'),
-(204, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 22:34:19', 'Deepak KUMAR', 'deepak2244.dk@gmail.com', '+91-6266632805'),
-(205, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-28 12:07:22', 'Varun', 'varunnayyaribm2007@gmail.com', '+91-7987458441'),
-(206, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 11:09:21', 'AMAN KUMAR', 'amangyadav94@gmail.com', '+91-7903079471'),
-(207, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-28 17:34:15', 'Mai nahi batayunga', 'ronitsingh8762@gmail.com', '+91-9479519764'),
-(208, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 15:56:30', 'Si Nirbhay Singh', 'nirbhay87@gmail.com', '+91-9179011956'),
-(209, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 13:22:24', 'Mayank Yadav', 'mayankrajyadav668@gmail.com', '+91-7828540030'),
-(210, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this project.', '2024-10-29 17:34:53', 'Dr Arvind Yadav', 'arvindbest@gmail.com', '+91-7354388302'),
+(202, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 15:21:30', 'ajay Jagwani', 'ajayjagwaniii88@gmail.com', '+91-8928079734'),
+(203, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 14:13:01', 'Naveen Pankaj', 'naveenpankaj24@gmail.com', '+91-8319654126'),
+(204, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 12:30:13', 'Vijendra Giri', 'girivijendra@gmail.com', '+91-9340993435'),
+(205, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-27 06:30:07', 'Abhinav Rao', 'abhinav.rao66@gmail.com', '+91-8087106771'),
+(206, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-28 17:34:15', 'Mai nahi batayunga', 'ronitsingh8762@gmail.com', '+91-9479519764'),
+(207, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 11:09:21', 'AMAN KUMAR', 'amangyadav94@gmail.com', '+91-7903079471'),
+(208, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 13:22:24', 'Mayank Yadav', 'mayankrajyadav668@gmail.com', '+91-7828540030'),
+(209, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this project.', '2024-10-29 17:34:53', 'Dr Arvind Yadav', 'arvindbest@gmail.com', '+91-7354388302'),
+(210, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-29 15:56:30', 'Si Nirbhay Singh', 'nirbhay87@gmail.com', '+91-9179011956'),
 (211, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project. Please call back.', '2024-10-29 19:50:18', 'Satyam Mishra', 'msatyam705@gmail.com', '+91-8770422546'),
 (212, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this property. Please call back.', '2024-10-29 19:42:07', 'Ramganesh yadav', 'Ramganeshy20@gmail.comR', '+91-9399799741'),
-(213, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-30 17:24:16', 'shiva', 'Not Mentioned', '+91-6266749896'),
-(214, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project.', '2024-10-30 14:43:56', 'deep gupta', 'cs.deepgupta@gmail.com', '+91-9131635996'),
-(215, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-31 07:49:12', 'Dr Umesh Kumar Kori', 'drumeshvet01@gmail.com', '+91-7000275146'),
-(216, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-31 04:07:33', 'Abhishek Khare', 'abhishekkhare1001@gmail.com', '+91-7000883269'),
-(217, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-30 23:09:41', 'ANKIT JAISWAL', 'jaiswalankit789@gmail.com', '+91-8982521981'),
-(218, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project.', '2024-11-01 20:26:03', 'USER', 'mohitjss2006@gmail.com', '+91-9425804640'),
-(219, '', 'Nirvana Homes', 'Jabalpur', '', '2024-11-01 15:11:58', 'Roopnath Banerjee', 'roopnathb1@rediffmail.com', '+91-9902096450'),
-(220, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project. Please call back.', '2024-11-02 08:38:03', 'Mohit Verma', 'vermamohit752@gmail.com', '+91-8269973198'),
-(221, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project.', '2024-11-02 02:54:05', 'Kavita Kewat', 'kewatkavita7@gmail.com', '+91-9584938566'),
-(222, '', 'Nirvana Homes', 'Jabalpur', '', '2024-11-01 23:14:20', 'Jaya Goutam', 'goutamjaya3@gmail.com', '+91-9827722159');
+(213, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project.', '2024-10-30 14:43:56', 'deep gupta', 'cs.deepgupta@gmail.com', '+91-9131635996'),
+(214, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-30 14:06:37', 'shiva', 'Not Mentioned', '+91-6266749896');
 
 -- --------------------------------------------------------
 
@@ -927,9 +729,7 @@ INSERT INTO `services_data` (`service_id`, `quotation_id`, `quotation_name`, `se
 (467, 260, 'Shekhar Kumar Birha', 'Paid', 'Leads Generation', 'test', 500.00, 400.00, '2024-10-05 06:42:25', 'Yearly'),
 (468, 261, 'Shekhar Kumar Birha', 'Paid', 'Facebook Paid Ads', 'terst', 500.00, 500.00, '2024-10-05 06:45:06', 'Yearly'),
 (469, 269, 'Dharm Das Diwan', 'Complimentary', 'Content Writing', 'testt', 5000.00, 0.00, '2024-10-16 11:53:26', 'Yearly'),
-(470, 270, 'mr sufi', 'Complimentary', 'Data Science & Engineering', 'twst', 60.00, 0.00, '2024-10-19 12:47:43', 'Half Yearly'),
-(471, 271, 'shameem.shaikhshifa.shaikh', 'Paid', 'Leads Generation', 'jiopjoljk', 4565464.00, 645645.00, '2024-10-28 13:33:07', 'Monthly'),
-(472, 272, 'Nit Suryawanshi', 'Complimentary', 'Data Science & Engineering', 'atdg', 4.00, 0.00, '2024-10-30 07:08:01', 'Half Yearly');
+(470, 270, 'mr sufi', 'Complimentary', 'Data Science & Engineering', 'twst', 60.00, 0.00, '2024-10-19 12:47:43', 'Half Yearly');
 
 -- --------------------------------------------------------
 
@@ -1002,8 +802,9 @@ CREATE TABLE `visit` (
 --
 
 INSERT INTO `visit` (`id`, `name`, `employee_name`, `lead_id`, `employeeId`, `visit`, `visit_date`, `report`) VALUES
-(45, 'Satyam Mishra', 'umer', 124, 29, 'fresh', '2024-11-02', 'this is report of that'),
-(46, 'Mohit Verma', 'umer', 133, 29, 'fresh', '2024-11-02', 'this is report of that');
+(26, 'mr sufi', 'umer', 84, 29, 'repeated', '2024-10-28', 'testdsf4343'),
+(27, 'mr sufi', 'umer', 84, 29, 'associative', '2024-10-30', 'testdsf4343'),
+(28, 'Roshan Ahire', 'umer', 93, 29, 'fresh', '2024-10-16', 'az cx gdfgdf dfgdfg dfgdf ');
 
 --
 -- Indexes for dumped tables
@@ -1113,12 +914,6 @@ ALTER TABLE `organization`
   ADD PRIMARY KEY (`companyId`);
 
 --
--- Indexes for table `otpcollections`
---
-ALTER TABLE `otpcollections`
-  ADD PRIMARY KEY (`otp_id`);
-
---
 -- Indexes for table `payments`
 --
 ALTER TABLE `payments`
@@ -1188,7 +983,7 @@ ALTER TABLE `visit`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `clients`
@@ -1218,7 +1013,7 @@ ALTER TABLE `device_usage`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `employeeId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `employeeId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `formtable`
@@ -1254,13 +1049,13 @@ ALTER TABLE `invoice_services_data`
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
-  MODIFY `lead_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `lead_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- AUTO_INCREMENT for table `leadstable`
 --
 ALTER TABLE `leadstable`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=940;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=849;
 
 --
 -- AUTO_INCREMENT for table `notes`
@@ -1281,12 +1076,6 @@ ALTER TABLE `organization`
   MODIFY `companyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT for table `otpcollections`
---
-ALTER TABLE `otpcollections`
-  MODIFY `otp_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
@@ -1296,25 +1085,25 @@ ALTER TABLE `payments`
 -- AUTO_INCREMENT for table `quotations_data`
 --
 ALTER TABLE `quotations_data`
-  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=273;
+  MODIFY `quotation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=271;
 
 --
 -- AUTO_INCREMENT for table `quotations_information`
 --
 ALTER TABLE `quotations_information`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `registered_data`
 --
 ALTER TABLE `registered_data`
-  MODIFY `user_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `user_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `responses_99acres`
 --
 ALTER TABLE `responses_99acres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=223;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=215;
 
 --
 -- AUTO_INCREMENT for table `services`
@@ -1326,7 +1115,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT for table `services_data`
 --
 ALTER TABLE `services_data`
-  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=473;
+  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=471;
 
 --
 -- AUTO_INCREMENT for table `todo_items`
@@ -1344,7 +1133,7 @@ ALTER TABLE `user_data`
 -- AUTO_INCREMENT for table `visit`
 --
 ALTER TABLE `visit`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables
