@@ -103,7 +103,7 @@ const convertXMLToJSON = (xml) => {
       Phone: getValueBetweenTags(respXML, "Phone"),
     };
 
-    // Combine into one response object
+    // Combine into sponse object
     responses.push({
       QueryDetails: qryDtl,
       ContactDetails: cntctDtl,
@@ -188,7 +188,7 @@ const fetchDataAndSave = async () => {
   try {
     const url =
       "https://www.99acres.com/99api/v1/getmy99Response/OeAuXClO43hwseaXEQ/uid/";
-    const xmlRequest = `<?xml version='1.0'?><query><user_name>onenirvana</user_name><pswd>onerealty@123</pswd><start_date>${formattedStartDate}</start_date><end_date>${formattedEndDate}</end_date></query>`;
+    const xmlRequest = `<?xml version='1.0'?><query><user_name>USERNAME</user_name><pswd>PASSWORD</pswd><start_date>${formattedStartDate}</start_date><end_date>${formattedEndDate}</end_date></query>`;
 
     // Make the API request
     const response = await axios.post(url, { xml: xmlRequest }, {

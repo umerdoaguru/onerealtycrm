@@ -36,8 +36,8 @@ function SuperEmployeeLeads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        // `https://crm.one-realty.in/api/leads-visits/${id}`
-           `https://crm.one-realty.in/api/employe-leads/${id}`
+        // `http://localhost:9000/api/leads-visits/${id}`
+           `http://localhost:9000/api/employe-leads/${id}`
       );
       const data = response.data;
       console.log(data);
@@ -49,8 +49,8 @@ function SuperEmployeeLeads() {
   // const fetchVisit = async () => {
   //   try {
   //     const response = await axios.get(
-  //       // `https://crm.one-realty.in/api/employe-all-visit`
-  //         `https://crm.one-realty.in/api/employe-all-visit`
+  //       // `http://localhost:9000/api/employe-all-visit`
+  //         `http://localhost:9000/api/employe-all-visit`
   //     );
   //     console.log(response.data);
   //     setVisit(response.data);
@@ -193,8 +193,8 @@ function SuperEmployeeLeads() {
                 >
                    <option value="">Select Lead Source</option>
                      <option value="Facebook Campaign">Facebook Campaign</option>
-                    <option value="One Realty Website">
-                      One Realty Website
+                    <option value="Website">
+                      Website
                     </option>
                     <option value="99 Acres">
                     99 Acres
@@ -227,7 +227,7 @@ function SuperEmployeeLeads() {
                 >
                   <option value="">All Status</option>
                   {/* <option value="Facebook Campaign">visited</option>
-                  <option value="One Realty Website">pending</option>
+                  <option value=" Website">pending</option>
                   <option value="Trade Shows">confirm</option>
                   <option value="Cold Calling">Cold Calling</option> */}
                   <option default value="pending">

@@ -29,7 +29,7 @@ function CreateCompanyProfile() {
     const fetchQuotations = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/quotation-data`
+          `http://localhost:9000/api/quotation-data`
         );
         setQuotations(response.data);
         console.log(quotations);
@@ -81,7 +81,7 @@ function CreateCompanyProfile() {
 
     try {
       // API call to update status in the backend
-      await axios.post(`https://crm.one-realty.in/api/update-quotation-status`, {
+      await axios.post(`http://localhost:9000/api/update-quotation-status`, {
         id: id, // Send the quotation ID
         status: newStatus, // Send the updated status
       });

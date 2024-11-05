@@ -35,7 +35,7 @@ function WebsiteLeads() {
   // Fetch employees
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -45,7 +45,7 @@ function WebsiteLeads() {
   // Fetch lead assignments
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads");
       setwebsiteLeadsAssigned(response.data);
     } catch (error) {
       console.error("Error fetching assigned leads:", error);
@@ -93,7 +93,7 @@ function WebsiteLeads() {
     }
   
     try {
-      await axios.post("https://crm.one-realty.in/api/leads", {
+      await axios.post("http://localhost:9000/api/leads", {
         lead_no: selectedLead.leadId,
         assignedTo: currentLead.assignedTo,
         employeeId: currentLead.employeeId,
@@ -101,7 +101,7 @@ function WebsiteLeads() {
         actual_date:  selectedLead.date,
         name: selectedLead.fullName,
         phone: selectedLead.phoneNumber,
-        leadSource: "One Realty Website",
+        leadSource: "Website",
         subject: selectedLead.subject,
         address: selectedLead.address,
       });
@@ -332,7 +332,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
                 className="w-full p-2 border rounded"
                 disabled
               >
-                <option value="Website Inquiries">One Realty Website</option>
+                <option value="Website Inquiries">Website</option>
               </select>
             </div>
             <div className="mb-4">

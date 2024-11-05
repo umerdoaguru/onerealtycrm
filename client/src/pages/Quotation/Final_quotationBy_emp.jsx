@@ -17,7 +17,7 @@ function Final_quotationBy_emp() {
 
   const fetchQuotations = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/quotation/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/quotation/${id}`);
       if (response.status === 200) {
         setQuotationName(response.data[0].customer_name);
         setQuotations(response.data);
@@ -74,20 +74,22 @@ function Final_quotationBy_emp() {
             <div className="container border border-black rounded-lg h-auto m-2 p-4">
               <div className="flex flex-col justify-center items-center">
                 <div>
-                  <img src="https://one-realty.in/static/media/company_logo.b0c6ab3fa89a853264a3.png" alt="Company logo" />
+                  <img src="https://doaguru.com/static/media/doagurulogo-removebg.b0126812bbe704a27f8f.webp" alt="Company logo" />
                 </div>
                 <div className="flex flex-col justify-center items-center gap-2 text-black font-bold">
                   <h4 className="underline ">
-                    First Floor chamber number 1&2 Dutt Residency,opposite stadium
+                    1815 Wright Town,
+Jabalpur, Madhya pradesh INDIA
+482002
                   </h4>
                   <h4 className="underline ">
-                    North civil lines,Jabalpur(M.P.)Tel  +917614924920
+                    Tel  +917440992424
                   </h4>
                   <h4 className="underline ">
-                    Email : hronerealty@gmail.com  website : www.onerealty.in
+                    Email : hrdoaguru@gmail.com  website : www.doaguru.in
                   </h4>
                   <h4 className="underline ">
-                    REGISTRATION NO:- 04/14/01/0060/17    RERA ID NO:- P-JBP-23-4248
+                    REGISTRATION NO:- 00/01/01/0000/01    RERA ID NO:- P-JBP-24-0000
                   </h4>
 
                 </div>

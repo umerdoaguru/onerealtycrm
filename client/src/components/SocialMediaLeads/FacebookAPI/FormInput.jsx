@@ -13,7 +13,7 @@ const FormInput = () => {
 
     try {
       // Make POST request to save form ID and form name
-      const response = await axios.post('https://crm.one-realty.in/api/forms', {
+      const response = await axios.post('http://localhost:9000/api/forms', {
         formId,
         formName
       });
