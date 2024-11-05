@@ -33,7 +33,7 @@
 //     const fetchLeads = async () => {
 //         try {
 //           const response = await axios.get(
-//             `https://crm.one-realty.in/api/employe-leads/${EmpId}`);
+//             `http://localhost:9000/api/employe-leads/${EmpId}`);
 //           const data = response.data;
 //           setLeads(data);
 //         } catch (error) {
@@ -48,7 +48,7 @@
 
 //         try {
 //           // Send updated data to the backend using Axios
-//           const response = await axios.put(`https://crm.one-realty.in/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
+//           const response = await axios.put(`http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
 
 //           if (response.status === 200) {
 //             console.log('Updated successfully:', response.data);
@@ -170,7 +170,7 @@ function EmployeeLead() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `http://localhost:9000/api/employe-leads/${EmpId}`
       );
       const data = response.data;
       console.log(data);
@@ -184,7 +184,7 @@ function EmployeeLead() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
-        `https://crm.one-realty.in/api/updateOnlyLeadStatus/${lead.lead_id}`,
+        `http://localhost:9000/api/updateOnlyLeadStatus/${lead.lead_id}`,
         { lead_status: "in progress" }
       );
 

@@ -55,7 +55,7 @@ function Leads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        "https://crm.one-realty.in/api/leads"
+        "http://localhost:9000/api/leads"
       );
       setLeads(response.data);
       console.log(leads);
@@ -66,7 +66,7 @@ function Leads() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -75,7 +75,7 @@ function Leads() {
   // const fetchVisit = async () => {
   //   try {
   //     const response = await axios.get(
-  //       `https://crm.one-realty.in/api/employe-all-visit`
+  //       `http://localhost:9000/api/employe-all-visit`
   //     );
   //     console.log(response.data);
   //     setVisit(response.data);
@@ -218,11 +218,11 @@ function Leads() {
       try {
         if (isEditing) {
           await axios.put(
-            `https://crm.one-realty.in/api/leads/${currentLead.lead_id}`,
+            `http://localhost:9000/api/leads/${currentLead.lead_id}`,
             leadData
           );
         } else {
-          await axios.post("https://crm.one-realty.in/api/leads", leadData);
+          await axios.post("http://localhost:9000/api/leads", leadData);
         }
 
         fetchLeads(); // Refresh the list
@@ -239,7 +239,7 @@ function Leads() {
     );
     if (isConfirmed) {
       try {
-        await axios.delete(`https://crm.one-realty.in/api/leads/${id}`);
+        await axios.delete(`http://localhost:9000/api/leads/${id}`);
         fetchLeads(); // Refresh the list after deletion
       } catch (error) {
         console.error("Error deleting lead:", error);

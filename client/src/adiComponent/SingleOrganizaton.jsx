@@ -15,7 +15,7 @@ const SingleOrganization = () => {
   const fetchOrganization = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/getOrganization/${id}`
+        `http://localhost:9000/api/getOrganization/${id}`
       );
       setOrganization(response.data.organization);
     } catch (error) {

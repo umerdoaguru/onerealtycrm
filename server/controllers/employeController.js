@@ -322,7 +322,7 @@ const createVisit = (req, res) => {
     employee_name,
     visit,
     visit_date,
-    report,
+  
   } = req.body;
 
   const sql = `INSERT INTO visit (
@@ -331,13 +331,13 @@ const createVisit = (req, res) => {
     employeeId,
     employee_name,
     visit,
-    visit_date,
-    report
-  ) VALUES (?,?,?,?,?,?,?)`;
+    visit_date
+   
+  ) VALUES (?,?,?,?,?,?)`;
 
   db.query(
     sql,
-    [lead_id, name, employeeId, employee_name, visit, visit_date, report],
+    [lead_id, name, employeeId, employee_name, visit, visit_date],
     (err, results) => {
       if (err) {
         res.status(500).json({ error: "Error inserting data" });
@@ -415,6 +415,137 @@ const deleteVisit = (req, res) => {
       res
         .status(200)
         .json({ success: true, message: "Visit deleted successfully" });
+    }
+  });
+};
+
+const getEmployeeFollow_Up= async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sql = "SELECT * FROM follow_up_leads WHERE lead_id = ?";
+
+    const result = await new Promise((resolve, reject) => {
+      db.query(sql, [id], (err, results) => {
+        if (err) {
+          reject(err); // Reject the promise with the error
+        } else {
+          resolve(results); // Resolve the promise with the results
+        }
+      });
+    });
+    // Send the result as a response
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Database query error:", err); // Log the error for debugging
+    res.status(500).json({ message: "Internal Server Erro, error: errr" });
+  }
+};
+
+
+
+const createFollow_Up = (req, res) => {
+  const {
+    lead_id,
+    name,
+    employeeId,
+    employee_name,
+    follow_up_type,
+    follow_up_date,
+    report
+  
+  } = req.body;
+
+  const sql = `INSERT INTO follow_up_leads (
+    lead_id,
+    name,
+    employeeId,
+    employee_name,
+  follow_up_type,
+    follow_up_date,
+    report
+   
+  ) VALUES (?,?,?,?,?,?,?)`;
+
+  db.query(
+    sql,
+    [lead_id, name, employeeId, employee_name,  follow_up_type,follow_up_date,report],
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Error inserting data" });
+      } else {
+        res.status(201).json({
+          success: true,
+          message: "Follow Up data successfully submitted",
+        });
+      }
+    }
+  );
+};
+const updateFollow_Up = (req, res) => {
+  const {
+    id, // Unique identifier for the Follow Up
+    lead_id,
+    name,
+    employeeId,
+    employee_name,
+    follow_up_type,
+    follow_up_date,
+    report
+  } = req.body;
+
+  // Basic validation
+  if (!id || !follow_up_type || !follow_up_date || !report) {
+    return res
+      .status(400)
+      .json({ error: "Please provide all required fields." });
+  }
+
+  const sql = `UPDATE follow_up_leads SET 
+    lead_id = ?, 
+    name = ?, 
+    employeeId = ?, 
+    employee_name = ?, 
+    follow_up_type = ?, 
+   follow_up_date = ?,
+    report = ? 
+    WHERE id = ?`;
+
+  db.query(
+    sql,
+    [lead_id, name, employeeId, employee_name,  follow_up_type,follow_up_date, report, id],
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Error updating Follow Up data" });
+      } else if (results.affectedRows === 0) {
+        res.status(404).json({ error: "Follow Up not found" });
+      } else {
+        res
+          .status(200)
+          .json({ success: true, message: "Follow Up data updated successfully" });
+      }
+    }
+  );
+};
+
+const deleteFollow_Up = (req, res) => {
+  const { id } = req.params;
+
+  // Basic validation
+  if (!id) {
+    return res.status(400).json({ error: "Follow Up ID is required" });
+  }
+
+  const sql = `DELETE FROM follow_up_leads WHERE id = ?`;
+
+  db.query(sql, [id], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: "Error deleting visit" });
+    } else if (results.affectedRows === 0) {
+      res.status(404).json({ error: "Follow Up not found" });
+    } else {
+      res
+        .status(200)
+        .json({ success: true, message: "Follow Up deleted successfully" });
     }
   });
 };
@@ -506,6 +637,10 @@ module.exports = {
   createVisit,
   deleteVisit,
   updateVisit,
+  getEmployeeFollow_Up,
+  createFollow_Up,
+  deleteFollow_Up,
+  updateFollow_Up,
   getEmployeebyidvisit,
   AllgetEmployeebyvisit,
   updateOnlyVisitStatus,

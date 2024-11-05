@@ -33,7 +33,7 @@ const navigate = useNavigate();
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${employeeId}`
+        `http://localhost:9000/api/employe-leads/${employeeId}`
       );
       const data = response.data;
       setLeads(data);
@@ -55,7 +55,7 @@ const navigate = useNavigate();
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employeeProfile/${employeeId}`
+          `http://localhost:9000/api/employeeProfile/${employeeId}`
         ); // Fetch employee data
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data

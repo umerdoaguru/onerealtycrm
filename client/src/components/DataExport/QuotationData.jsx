@@ -18,7 +18,7 @@ const QuotationData = () => {
     const fetchQuotations = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/quotation-data`
+          `http://localhost:9000/api/quotation-data`
         );
         setQuotations(response.data);
       } catch (error) {

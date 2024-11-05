@@ -36,7 +36,7 @@ function DataExport() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads");
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -45,7 +45,7 @@ function DataExport() {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employee`);
+      const response = await axios.get(`http://localhost:9000/api/employee`);
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -55,7 +55,7 @@ function DataExport() {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/quotation-data`
+        `http://localhost:9000/api/quotation-data`
       );
       setQuotation(response.data);
     } catch (error) {
@@ -66,7 +66,7 @@ function DataExport() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/invoice-data`
+        `http://localhost:9000/api/invoice-data`
       );
       setInvoice(response.data);
     } catch (error) {
@@ -76,7 +76,7 @@ function DataExport() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit`
+        `http://localhost:9000/api/employe-all-visit`
       );
       console.log(response.data);
       setVisit(response.data);

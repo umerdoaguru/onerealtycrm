@@ -10,7 +10,7 @@ function ServicenameList() {
 
   const fetchServicelist = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/servicelist`);
+      const response = await axios.get(`http://localhost:9000/api/servicelist`);
       if (response.status === 200) {
         SetServiceList(response.data);
       }
