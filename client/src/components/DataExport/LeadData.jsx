@@ -26,7 +26,7 @@ function LeadData() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads");
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering
     } catch (error) {
@@ -36,7 +36,7 @@ function LeadData() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -70,12 +70,14 @@ function LeadData() {
   };
 
   // Pagination logic
+  // Calculate total number of pages
   const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
-  const currentLeads = filteredLeads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
 
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
     console.log("change current page ", data.selected);
@@ -192,26 +194,25 @@ function LeadData() {
 
         {/* Pagination */}
         <div className="mt-2 mb-2 flex justify-center">
-  <ReactPaginate
-    previousLabel="Previous"
-    nextLabel="Next"
-    breakLabel="..."
-    pageCount={pageCount}
-    marginPagesDisplayed={2}
-    forcePage={currentPage}
-    pageRangeDisplayed={5}
-    onPageChange={handlePageClick}
-    containerClassName="flex justify-center items-center gap-3 mt-6"
-    pageClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    pageLinkClassName="px-4 py-2 text-sm text-blue-600 no-underline hover:text-blue-700"
-    previousClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    previousLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    nextClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    nextLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    breakClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    breakLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    activeClassName="bg-blue-600 text-white border border-gray-700 rounded-md shadow-sm"
-  />
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
 </div>
       </div>
     </>

@@ -59,6 +59,7 @@ const d_fileds = {
       "FollowUp Status",
     ],
     columns: [
+      "s.no",
       "lead_no",
       "assignedTo",
       "name",
@@ -139,7 +140,7 @@ const AdminReport = () =>  {
   const [filter, setFilter] = useState("All");
   const [selectedCategory, setSelectedCategory] = useState("leads");
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowPerPage, setRowPerPage] = useState(5);
+  const [rowPerPage, setRowPerPage] = useState(10); // Default to 10 rows per page
   const [dataFields, setDataFields] = useState(d_fileds);
  
   useEffect(() => {
@@ -262,45 +263,101 @@ const AdminReport = () =>  {
   };
 
   const handleDownload = () => {
-    const itemsPerPage = 5;
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    // Get the data for the current page
-    const paginatedData = dataFields[selectedCategory][selectedCategory]
-      .slice(startIndex, endIndex)
-      .map(({ createdTime, d_closeDate, ...rest }) => rest); // Remove createdTime and closeDate
-
-    // Convert the filtered paginated data to Excel
-    const ws = XLSX.utils.json_to_sheet(paginatedData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-    // Write the Excel file
-    XLSX.writeFile(
-      wb,
-      `${selectedCategory}-${filter}-data-page-${currentPage}.xlsx`
-    );
+    // Get the data for the selected category
+    let filteredData = dataFields[selectedCategory][selectedCategory];
+  
+    // Function to convert date string to MM/DD/YYYY format
+    const convertToMMDDYYYY = (dateStr) => {
+      const [day, month, year] = dateStr.split("/"); // Split by "/"
+      return `${month}/${day}/${year}`; // Return in MM/DD/YYYY format
+    };
+  
+    // Apply the filter (week, month, year, or All)
+    if (filter !== "All") {
+      filteredData = filteredData.filter((item) => {
+        const currentDate = new Date();
+        let itemDate;
+  
+        // Select the correct date field depending on the category
+        if (selectedCategory === "leads") {
+          itemDate = new Date(convertToMMDDYYYY(item.createdTime)); // Use the convert function
+        } else if (selectedCategory === "visit") {
+          itemDate = new Date(convertToMMDDYYYY(item.visit_date)); // Use the convert function
+        } else {
+          itemDate = new Date(convertToMMDDYYYY(item.d_closeDate)); // Use the convert function
+        }
+  
+        let filterCondition = false;
+  
+        // Filter by week
+        if (filter === "week") {
+          const lastSunday = new Date(currentDate);
+          lastSunday.setDate(currentDate.getDate() - currentDate.getDay());  // Last Sunday
+          lastSunday.setHours(0, 0, 0, 0); // Start of the day
+  
+          const nextSaturday = new Date(lastSunday);
+          nextSaturday.setDate(lastSunday.getDate() + 6);  // Following Saturday
+  
+          filterCondition = itemDate >= lastSunday && itemDate <= nextSaturday;
+        }
+        // Filter by month
+        else if (filter === "month") {
+          const firstDayOfThisMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+          const lastDayOfThisMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0); // Last day of the current month
+  
+          filterCondition = itemDate >= firstDayOfThisMonth && itemDate <= lastDayOfThisMonth;
+        }
+        // Filter by year
+        else if (filter === "year") {
+          const startOfYear = new Date(currentDate.getFullYear(), 0, 1);  // January 1st
+          const endOfYear = new Date(currentDate.getFullYear(), 11, 31, 23, 59, 59);  // December 31st
+  
+          filterCondition = itemDate >= startOfYear && itemDate <= endOfYear;
+        }
+  
+        return filterCondition;
+      });
+    }
+  
+    // If the filter is "All", we download all data without pagination
+    if (filter === "All") {
+      // Remove unnecessary fields (createdTime, d_closeDate) for download
+      const dataToDownload = filteredData.map(({ createdTime, d_closeDate, ...rest }) => rest);
+  
+      // Convert the data to an Excel sheet
+      const ws = XLSX.utils.json_to_sheet(dataToDownload);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+      // Download the Excel file with all data
+      XLSX.writeFile(wb, `${selectedCategory}-all-data.xlsx`);
+    } else {
+      // If filter is not "All", apply the filter and download the filtered data (without pagination)
+      // Remove unnecessary fields (createdTime, d_closeDate) for download
+      const dataToDownload = filteredData.map(({ createdTime, d_closeDate, ...rest }) => rest);
+  
+      // Convert the filtered data to an Excel sheet
+      const ws = XLSX.utils.json_to_sheet(dataToDownload);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  
+      // Download the Excel file with the filtered data
+      XLSX.writeFile(wb, `${selectedCategory}-${filter}-data.xlsx`);
+    }
   };
-
-  // const quotationAxios = axios.create({
-  //   baseURL: "http://localhost:9000/api",
-  // });
-
-  // const invoiceAxios = axios.create({
-  //   baseURL: "http://localhost:9000/api",
-  // });
+  
+  
 
   const leadsAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://crm.one-realty.in/api",
   });
 
   const visitAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://crm.one-realty.in/api",
   });
 
   const closedAxios = axios.create({
-    baseURL: "http://localhost:9000/api",
+    baseURL: "https://crm.one-realty.in/api",
   });
 
   const formatData = (data) => {
@@ -432,68 +489,52 @@ const AdminReport = () =>  {
       <div className="flex-auto flex-col lg:flex-row min-w-screen md:mx-2">
         <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0 w-2xl">
           <center className="text-2xl text-center mt-8 font-medium">
-            Employee Report
+            Admin Report
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
-          <div className="md:flex  justify-between mb-4 ">
-            <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:justify-between  w-fit">
-              <div className="flex flex-wrap justify-center max-sm:justify-start">
-                {["leads", "visit", "closed"].map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => handleCategoryClick(category)}
-                    className={`mb-2 mr-2 px-4 py-2 rounded-lg ${
-                      selectedCategory === category
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200"
-                    }`}
-                  >
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
+          <div className="md:flex justify-between mb-4 ">
+  <div className="flex flex-col space-y-4 lg:space-y-0 lg:flex-row lg:justify-between  w-fit">
+    <div className="flex flex-wrap justify-center max-sm:justify-start">
+      {["leads", "visit", "closed"].map((category) => (
+        <button
+          key={category}
+          onClick={() => handleCategoryClick(category)}
+          className={`mb-2 mr-2 px-4 py-2 rounded-lg ${
+            selectedCategory === category
+              ? "bg-blue-500 text-white"
+              : "bg-gray-200"
+          }`}
+        >
+          {category.charAt(0).toUpperCase() + category.slice(1)}
+        </button>
+      ))}
+    </div>
+  </div>
 
-            <div className="flex flex-wrap items-center lg:flex-row justify-between lg:justify-end max-sm:justify-start ">
-              <div className="flex items-center p-2 bg-gray-100 mr-2 mb-2 border rounded-lg">
-                <label htmlFor="rowsPerPage" className="mr-2">
-                  Rows per page:
-                </label>
-                <select
-                  id="rowsPerPage"
-                  value={rowPerPage}
-                  onChange={(e) => setRowPerPage(Number(e.target.value))}
-                  className="bg-transparent border-none outline-none"
-                >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                </select>
-              </div>
+  <div className="flex flex-wrap items-center lg:flex-row justify-between lg:justify-end max-sm:justify-start ">
+    <div className="flex items-center p-2 bg-gray-100 border mr-2 mb-2 rounded-lg">
+      <BsFilter className="mr-2" />
+      <select
+        value={filter}
+        onChange={handleFilterChange}
+        className="bg-transparent border-none outline-none"
+      >
+        <option value="All">All</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+        <option value="year">Year</option>
+      </select>
+    </div>
 
-              <div className="flex items-center p-2 bg-gray-100 border mr-2 mb-2 rounded-lg">
-                <BsFilter className="mr-2" />
-                <select
-                  value={filter}
-                  onChange={handleFilterChange}
-                  className="bg-transparent border-none outline-none"
-                >
-                  <option value="All">All</option>
-                  <option value="week">Week</option>
-                  <option value="month">Month</option>
-                  <option value="year">Year</option>
-                </select>
-              </div>
-
-              <button
-                onClick={handleDownload}
-                className="flex items-center px-4 py-2 text-white mr-2 mb-2 bg-blue-500 hover:bg-blue-700 rounded-lg"
-              >
-                <BsDownload className="mr-2" /> Download
-              </button>
-            </div>
-          </div>
+    <button
+      onClick={handleDownload}
+      className="flex items-center px-4 py-2 text-white mr-2 mb-2 bg-blue-500 hover:bg-blue-700 rounded-lg"
+    >
+      <BsDownload className="mr-2" /> Download
+    </button>
+  </div>
+</div>
 
           <div className="overflow-x-auto rounded-lg shadow-md ">
             <table className="min-w-full bg-white">
@@ -532,6 +573,7 @@ const AdminReport = () =>  {
                     .map((item, index) => (
                       <tr key={index} className="border-b border-gray-200">
                         {dataFields[selectedCategory]?.columns.map((column) => (
+                          
                           <td className="px-4 py-3">{item[column]}</td>
                         ))}
                       </tr>
@@ -546,6 +588,7 @@ const AdminReport = () =>  {
               </tbody>
             </table>
           </div>
+          <div className="2xl:w-[89%] mt-4 flex justify-center">
           <Pagination
             currentPage={currentPage}
             totalItems={
@@ -554,6 +597,7 @@ const AdminReport = () =>  {
             itemsPerPage={rowPerPage}
             onPageChange={setCurrentPage}
           />
+          </div>
         </div>
       </div>
     </>

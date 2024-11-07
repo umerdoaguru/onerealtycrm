@@ -18,7 +18,7 @@ function Single_Lead_Profile() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
       console.log(response.data);
       setLeads(response.data);
 
@@ -46,7 +46,7 @@ function Single_Lead_Profile() {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up/${id}`
       );
       console.log(response.data);
     
@@ -65,7 +65,7 @@ function Single_Lead_Profile() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit/${id}`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -188,12 +188,12 @@ function Single_Lead_Profile() {
                 {quotationCreated ? (
                   <button
                     onClick={() => handleViewQuotation(leads[0])}
-                    className="bg-blue-500 text-white px-4 py-2 mx-2 rounded"
+                    className="bg-blue-500 text-white px-4 py-2 mx-1 rounded"
                   >
                     View Quotation
                   </button>
                 ) : (
-                  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
+                  <p className="text-white bg-red-400 text-center px-4 py-2 mx-1 rounded">
                     Quotation not yet created
                   </p>
                 )}
@@ -202,7 +202,7 @@ function Single_Lead_Profile() {
                 {visitCreated ? (
                   <button
                     onClick={handleViewVisit}
-                    className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
+                    className="bg-green-500 text-white px-4 py-2  rounded"
                   >
                     View Visit
                   </button>
@@ -215,12 +215,12 @@ function Single_Lead_Profile() {
 {followCreated ? (
   <button
     onClick={handleViewFollowUp}
-    className="bg-yellow-500 text-white px-4 py-2 mx-3 rounded"
+    className="bg-yellow-500 text-white px-4 py-2 mx-1 rounded"
   >
     View Follow Up
   </button>
 ) : (
-  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
     Follow Up not yet created
   </p>
 )}

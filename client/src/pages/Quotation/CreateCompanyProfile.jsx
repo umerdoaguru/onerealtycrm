@@ -29,7 +29,7 @@ function CreateCompanyProfile() {
     const fetchQuotations = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/quotation-data`
+          `https://crm.one-realty.in/api/quotation-data`
         );
         setQuotations(response.data);
         console.log(quotations);
@@ -60,28 +60,23 @@ function CreateCompanyProfile() {
     quotation.customer_name.toLowerCase().includes(filterText.toLowerCase())
   );
 
-  const offset = currentPage * itemsPerPage;
-  const currentQuotations = filteredQuotations.slice(
-    offset,
-    offset + itemsPerPage
-  );
   const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
 
-  // const handleStatusChange = (e, index) => {
-  //   const updatedQuotations = [...currentQuotations];
-  //   updatedQuotations[index].status = e.target.value;
-  //   setQuotations([...quotations]); // Update the full list
-  // };
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentQuotation = filteredQuotations.slice(indexOfFirstLead, indexOfLastLead);
+
 
   const handleStatusChange = async (e, index, id) => {
     const newStatus = e.target.value;
-    const updatedQuotations = [...currentQuotations];
+    const updatedQuotations = [...currentQuotation];
     updatedQuotations[index].status = newStatus;
     setQuotations([...quotations]);
 
     try {
       // API call to update status in the backend
-      await axios.post(`http://localhost:9000/api/update-quotation-status`, {
+      await axios.post(`https://crm.one-realty.in/api/update-quotation-status`, {
         id: id, // Send the quotation ID
         status: newStatus, // Send the updated status
       });
@@ -161,10 +156,10 @@ function CreateCompanyProfile() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {currentQuotations.map((quotation, index) => (
+                {currentQuotation.map((quotation, index) => (
                   <tr key={quotation.quotation_id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {offset + index + 1}
+                      { index + 1}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {quotation.employeeId}
@@ -194,33 +189,27 @@ function CreateCompanyProfile() {
               </tbody>
             </table>
           </div>
-          <ReactPaginate
-            previousLabel={"previous"}
-            nextLabel={"next"}
-            breakLabel={"..."}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName={"flex justify-center space-x-2 mt-4"}
-            pageClassName={"bg-white border border-gray-300 rounded-md"}
-            pageLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            previousClassName={"bg-white border border-gray-300 rounded-md"}
-            previousLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            nextClassName={"bg-white border border-gray-300 rounded-md"}
-            nextLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            breakClassName={"bg-white border border-gray-300 rounded-md"}
-            breakLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            activeClassName={"bg-gray-200"}
-          />
+          <div className="mt-3 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
         </div>
       </div>
       </div>

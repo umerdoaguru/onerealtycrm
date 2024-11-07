@@ -14,7 +14,7 @@ function TotalEmpInvoice() {
     const fetchInvoices = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/get-employee-invoice/${EmpId}`
+          `https://crm.one-realty.in/api/get-employee-invoice/${EmpId}`
         );
         setInvoices(response.data);
         console.log(response);

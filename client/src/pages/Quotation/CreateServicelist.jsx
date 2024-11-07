@@ -30,7 +30,7 @@ const CreateServicelist = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:9000/api/create-servicelist`,
+        `https://crm.one-realty.in/api/create-servicelist`,
         {
           services: services.filter(
             (service) => service.service_name.trim() !== ""

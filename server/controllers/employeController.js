@@ -77,6 +77,7 @@ const updateOnlyLeadStatus = async (req, res) => {
   }
 };
 
+
 const updateOnlyQuotationStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -105,6 +106,10 @@ const updateOnlyQuotationStatus = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: err });
   }
 };
+
+
+
+
 
 const updateLeadStatus = async (req, res) => {
   try {
@@ -623,6 +628,37 @@ const updateOnlyVisitStatus = async (req, res) => {
   }
 };
 
+const updateOnlyFollowUpStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { follow_up_status } = req.body;
+
+    console.log(follow_up_status, id);
+
+    const sql = `UPDATE leads SET 
+    follow_up_status = ?
+                    
+    WHERE lead_id = ?`;
+
+    await new Promise((resolve, reject) => {
+      db.query(sql, [follow_up_status, id], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+
+    res.status(200).json({ message: "Follow Up updated successfully" });
+  } catch (error) {
+    console.error("Database update error:", error);
+    res.status(500).json({ message: "Internal Server Error", error: err });
+  }
+};
+
+
+
 module.exports = {
   getEmployeeInvoice,
   getEmployeeLeads,
@@ -644,4 +680,5 @@ module.exports = {
   getEmployeebyidvisit,
   AllgetEmployeebyvisit,
   updateOnlyVisitStatus,
+  updateOnlyFollowUpStatus
 };

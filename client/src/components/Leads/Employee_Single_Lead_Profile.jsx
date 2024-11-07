@@ -164,7 +164,7 @@ function Employee_Single_Lead_Profile() {
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
-  //     const response = await axios.get(http://localhost:9000/api/leads/${id});
+  //     const response = await axios.get(https://crm.one-realty.in/api/leads/${id});
   //     setLeads(response.data);
   //     console.log(response);
   //   } catch (error) {
@@ -174,7 +174,7 @@ function Employee_Single_Lead_Profile() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
       console.log(response.data);
       setLeads(response.data);
 
@@ -202,7 +202,7 @@ function Employee_Single_Lead_Profile() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit/${id}`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -220,7 +220,7 @@ function Employee_Single_Lead_Profile() {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up/${id}`
       );
       console.log(response.data);
       setFollow_Up(response.data);
@@ -325,7 +325,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
-        `http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`,
+        `https://crm.one-realty.in/api/updateLeadStatus/${currentLead.lead_id}`,
         currentLead
       );
 
@@ -362,7 +362,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.post(
-        `http://localhost:9000/api/employe-visit`,
+        `https://crm.one-realty.in/api/employe-visit`,
         {
           lead_id: leads[0].lead_id,
           name: leads[0].name,
@@ -380,7 +380,7 @@ function Employee_Single_Lead_Profile() {
   
         // Update the visit status after saving the visit
         const updateResponse = await axios.put(
-          `http://localhost:9000/api/updateVisitStatus/${leads[0].lead_id}`,
+          `https://crm.one-realty.in/api/updateVisitStatus/${leads[0].lead_id}`,
           { visit: visitLead.visit }
         );
   
@@ -404,24 +404,23 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Failed to create visit.");
     }
   };
+  // Validate required fields
+  // if (!follow_up.follow_up_type) {
+  //   cogoToast.error("Please select a follow up type.");
+  //   return;
+  // }
+  // if (!follow_up.follow_up_date) {
+  //   cogoToast.error("Please select a follow up date.");
+  //   return;
+  // }
+ 
   const saveFollowUp = async () => {
-    // Validate required fields
-    // if (!follow_up.follow_up_type) {
-    //   cogoToast.error("Please select a follow up type.");
-    //   return;
-    // }
-    // if (!follow_up.follow_up_date) {
-    //   cogoToast.error("Please select a follow up date.");
-    //   return;
-    // }
-   
-  
     console.log(follow_up);
   
     try {
       // Send updated data to the backend using Axios
-      const response = await axios.post(
-        `http://localhost:9000/api/employe-follow-up`,
+      const postResponse = await axios.post(
+        `https://crm.one-realty.in/api/employe-follow-up`,
         {
           lead_id: leads[0].lead_id,
           name: leads[0].name,
@@ -429,32 +428,41 @@ function Employee_Single_Lead_Profile() {
           employee_name: leads[0].assignedTo,
           follow_up_type: follow_up.follow_up_type,
           follow_up_date: follow_up.follow_up_date,
-          report:follow_up.report
-         
+          report: follow_up.report
         }
       );
   
-      if (response.status === 201) {
-        console.log("Updated successfully:", response.data);
-        cogoToast.success("Follow Up created successfully");
+      if (postResponse.status === 201) {
+        console.log("Follow-up created successfully:", postResponse.data);
+        cogoToast.success("Follow-up created successfully");
   
         // Update the Follow Up status after saving the Follow Up
-
+        const putResponse = await axios.put(
+          `https://crm.one-realty.in/api/updateOnlyFollowUpStatus/${leads[0].lead_id}`,
+          { follow_up_status: "in progress" }
+        );
   
-      
+        if (putResponse.status === 200) {
+          console.log("Status updated successfully:", putResponse.data);
+        } else {
+          console.error("Error updating status:", putResponse.data);
+          cogoToast.error("Failed to update the lead status.");
+        }
   
-        closePopupFollowUp(); // Close the popup on success
+        // Close the popup on success
+        closePopupFollowUp();
         fetchFollowUp();
         fetchLeads();
       } else {
-        console.error("Error updating visit:", response.data);
-        cogoToast.error("Failed to create follow up.");
+        console.error("Error creating follow-up:", postResponse.data);
+        cogoToast.error("Failed to create follow-up.");
       }
     } catch (error) {
       console.error("Request failed:", error);
-      cogoToast.error("Failed to create follow up.");
+      cogoToast.error("Failed to create follow-up.");
     }
   };
+  
   
 
 
@@ -561,7 +569,7 @@ console.log(totalVisit);
                 Visit Creation
               </button>
               <button
-                className="bg-yellow-500 text-white px-4 py-2 mx-2 rounded"
+                className="bg-yellow-500 text-white px-4 py-2  rounded"
                 onClick={handleCreateClickFollowUp}
               >
                 Follow Up Creation
@@ -587,12 +595,12 @@ console.log(totalVisit);
                 {visitCreated ? (
                   <button
                     onClick={handleViewVisit}
-                    className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
+                    className="bg-green-500 text-white px-4 py-2 mx-2 rounded"
                   >
                     View Visit
                   </button>
                 ) : (
-                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                  <p className="text-white bg-red-400 text-center px-4 py-2  rounded">
                     Visit not yet created
                   </p>
                 )}
@@ -600,12 +608,12 @@ console.log(totalVisit);
 {followCreated ? (
   <button
     onClick={handleViewFollowUp}
-    className="bg-yellow-500 text-white px-4 py-2 mx-3 rounded"
+    className="bg-yellow-500 text-white px-4 py-2 mx-2 rounded"
   >
     View Follow Up
   </button>
 ) : (
-  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
     Follow Up not yet created
   </p>
 )}
@@ -623,9 +631,7 @@ console.log(totalVisit);
                     Assigned To
                   </th>
                  
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Visit
-                  </th>
+              
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Quotation
                   </th>
@@ -689,9 +695,8 @@ console.log(totalVisit);
                     </td>
 
                    
-                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
-                      {totalVisit}
-                    </td>
+                
+              
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
                       {lead.quotation}
                     </td>
@@ -916,7 +921,7 @@ console.log(totalVisit);
           {showPopupFollowUp && (
             <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
-                <h2 className="text-xl mb-4">{"Add Site Visit"}</h2>
+                <h2 className="text-xl mb-4">{"Add Follow Up"}</h2>
                 <div className="mb-4">
                   <label className="block text-gray-700">Lead Number</label>
                   <input

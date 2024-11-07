@@ -12,7 +12,7 @@ const CloseData = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 10; // Number of leads to display per page
+  const leadsPerPage = 6; // Default leads per page
   const EmpId = useSelector((state) => state.auth.user.id);
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState("");
@@ -27,7 +27,7 @@ const CloseData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/leads`
+        `https://crm.one-realty.in/api/leads`
       );
       // Filter out leads where deal status is "pending"
       const nonPendingLeads = response.data.filter(
@@ -43,7 +43,7 @@ const CloseData = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -78,13 +78,12 @@ const CloseData = () => {
     XLSX.writeFile(workbook, "ClosedData.xlsx");
   };
 
-  // Pagination logic
   const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
-  const currentLeads = filteredLeads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
 
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
@@ -230,27 +229,29 @@ const CloseData = () => {
         </div>
 
         {/* Pagination */}
-        <div className="mt-2 mb-2">
+       
+        <div className="mt-2 mb-2 flex justify-center">
         <ReactPaginate
-          previousLabel="Previous"
-          nextLabel="Next"
-          breakLabel="..."
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
           pageCount={pageCount}
           marginPagesDisplayed={2}
-          forcePage={currentPage}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={handlePageClick}
-          containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
-        /></div>
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+
+      </div>
       </div></div>
     </Wrapper>
   );
@@ -264,99 +265,6 @@ const Wrapper = styled.div`
       margin-top: 1rem;
     }
   }
-   
-  .active {
-  background-color: #1e50ff;
-}
- /* Container class */
- .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
+  
 
-  /* Page item */
-  .pagination-page {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Page link */
-  .pagination-link {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #3b82f6;
-    text-decoration: none;
-    &:hover {
-      color: #2563eb;
-    }
-  }
-
-  /* Previous button */
-  .pagination-previous {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  } 
-
-  .pagination-link-previous {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Next button */
-  .pagination-next {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-link-next {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Break item */
-  .pagination-break {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-break-link {
-    padding: 0.25rem 1rem;
-    font-size: 0.875rem;
-    color: #374151;
-    &:hover {
-      background-color: #f3f4f6;
-    }
-  }
-
-  /* Active page */
-  .pagination-active {
-    background-color: #1e50ff;
-    color: white;
-    border: 1px solid #374151;
-    border-radius: 0.375rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .pagination-active a {
-    color: white !important;
-  }
 `;

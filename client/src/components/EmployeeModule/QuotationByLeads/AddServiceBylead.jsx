@@ -113,7 +113,7 @@ const AddServiceByLead = () => {
       });
 
       const response = await axios.post(
-        `http://localhost:9000/api/services/${id}`,
+        `https://crm.one-realty.in/api/services/${id}`,
         {
           quotation_name: quotationName,
           services: servicesToSave,
@@ -134,7 +134,7 @@ const AddServiceByLead = () => {
   const getQuotationName = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/quotation/${id}`
+        `https://crm.one-realty.in/api/quotation/${id}`
       );
       setQuotationName(response.data[0].quotation_name);
     } catch (error) {
@@ -145,7 +145,7 @@ const AddServiceByLead = () => {
   const getServicelist = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:9000/api/servicelist/${userId}`
+        `https://crm.one-realty.in/api/servicelist/${userId}`
       );
       console.log(res.data);
       setServiceslist(res.data);

@@ -21,6 +21,7 @@ const {
   deleteFollow_Up,
   createFollow_Up,
   getEmployeeFollow_Up,
+  updateOnlyFollowUpStatus,
 } = require("../controllers/employeController");
 const router = express.Router();
 
@@ -40,6 +41,9 @@ router.get("/employe-follow-up/:id", getEmployeeFollow_Up);
 router.put('/employe-follow-up', updateFollow_Up);           
 router.delete('/employe-follow-up/:id', deleteFollow_Up); 
 router.post("/employe-follow-up", createFollow_Up);
+router.put("/updateOnlyFollowUpStatus/:id", updateOnlyFollowUpStatus);
+
+
 
 router.put("/updateLeadStatus/:id", updateLeadStatus);
 router.put("/updateOnlyLeadStatus/:id", updateOnlyLeadStatus);

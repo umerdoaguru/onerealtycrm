@@ -23,7 +23,7 @@ const LeadVisitChart = () => {
       setLoading(true); // Start loading
 
       try {
-        const response = await axios.get(`http://localhost:9000/api/employe-all-visit`);
+        const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit`);
         const allLeads = response.data;
 
         const today = moment();

@@ -6,12 +6,12 @@ import styled from 'styled-components'; // Import styled-components for styling
 const LeadsReport = () => {
   const [leads, setLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 5; // Define how many leads per page
+  const [leadsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const response = await fetch("http://localhost:9000/api/leads");
+        const response = await fetch("https://crm.one-realty.in/api/leads");
         const data = await response.json();
         console.log("Fetched leads data:", data); // Debugging line
 
@@ -31,12 +31,16 @@ const LeadsReport = () => {
   }, []);
 
   // Pagination logic
-  const pageCount = Math.ceil(leads.length / leadsPerPage);
-  const handlePageClick = (event) => {
-    setCurrentPage(event.selected);
-  };
-
-  const displayedLeads = leads.slice(currentPage * leadsPerPage, (currentPage + 1) * leadsPerPage);
+   // Pagination logic
+   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+   const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+ 
+   const handlePageClick = (data) => {
+     setCurrentPage(data.selected);
+   };
+ 
+ 
 
   return (
     <>
@@ -58,8 +62,8 @@ const LeadsReport = () => {
             </tr>
           </thead>
           <tbody>
-            {displayedLeads.length > 0 ? (
-              displayedLeads.map((lead, index) => (
+            {currentLeads.length > 0 ? (
+              currentLeads.map((lead, index) => (
                 <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{currentPage * leadsPerPage + index + 1}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_no}</td>
@@ -83,26 +87,25 @@ const LeadsReport = () => {
           </tbody>
         </table>
       </div>
-      <div className="mt-4">
+      <div className="mt-4 flex justify-center">
         <ReactPaginate
-          previousLabel="Previous"
-          nextLabel="Next"
-          breakLabel="..."
-          pageCount={pageCount}
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(leads.length / leadsPerPage)}
           marginPagesDisplayed={2}
-          forcePage={currentPage}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={handlePageClick}
-          containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
         />
       </div>
     </div>

@@ -5,6 +5,7 @@ import Modal from "../adiComponent/Modal"; // Assuming you have a modal componen
 import Sider from "../components/Sider";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import MainHeader from "../components/MainHeader"
+import ReactPaginate from "react-paginate";
 
 
 const EmployeeManagement = () => {
@@ -19,6 +20,8 @@ const EmployeeManagement = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [currentPage, setCurrentPage] = useState(0);
+  const leadsPerPage = 10; // Default leads per page
   const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
@@ -28,7 +31,7 @@ const EmployeeManagement = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/getAllEmployees"
+        "https://crm.one-realty.in/api/getAllEmployees"
       );
       const { employees } = response.data;
       setEmployees(employees || []); // Ensure employees is always an array
@@ -90,7 +93,7 @@ const EmployeeManagement = () => {
 
   const isEmailTaken = async (email) => {
     try {
-      const response = await axios.get("http://localhost:9000/api/checkEmail", {
+      const response = await axios.get("https://crm.one-realty.in/api/checkEmail", {
         params: { email },
       });
       return response.data.exists;
@@ -108,12 +111,12 @@ const EmployeeManagement = () => {
         // Update existing employee
         const employeeToUpdate = employees[editingIndex];
         await axios.put(
-          `http://localhost:9000/api/updateEmployee/${employeeToUpdate.employeeId}`,
+          `https://crm.one-realty.in/api/updateEmployee/${employeeToUpdate.employeeId}`,
           newEmployee
         );
       } else {
         // Add new employee
-        await axios.post("http://localhost:9000/api/addEmployee", newEmployee);
+        await axios.post("https://crm.one-realty.in/api/addEmployee", newEmployee);
       }
       setNewEmployee({
         name: "",
@@ -152,7 +155,7 @@ const EmployeeManagement = () => {
     if (isConfirmed) {
       try {
         await axios.delete(
-          `http://localhost:9000/api/deleteEmployee/${employeeId}`
+          `https://crm.one-realty.in/api/deleteEmployee/${employeeId}`
         );
         fetchEmployees(); // Fetch employees to update the list
       } catch (error) {
@@ -164,6 +167,18 @@ const EmployeeManagement = () => {
   const handleEmployeeClick = (employeeId) => {
     navigate(`/employee-single/${employeeId}`);
   };
+    // Calculate total number of pages
+    const pageCount = Math.ceil(employees.length / leadsPerPage);
+
+    // Pagination logic
+    const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+    const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+    const currentEmployees = employees.slice(indexOfFirstLead, indexOfLastLead);
+    
+    const handlePageClick = (data) => {
+      setCurrentPage(data.selected);
+      console.log("change current page ", data.selected);
+    };
 
   return (
     <>
@@ -204,8 +219,8 @@ const EmployeeManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {employees.length > 0 ? (
-                  employees
+                {currentEmployees.length > 0 ? (
+                  currentEmployees
                     .filter((employee) => employee && employee.name) // Ensure employee and employee.name exist
                     .map((employee, index) => (
                       <tr
@@ -253,6 +268,27 @@ const EmployeeManagement = () => {
               </tbody>
             </table>
           </div>
+          <div className="mt-3 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
 
           <Modal isOpen={showForm} onClose={() => setShowForm(false)}>
             <h3 className="mb-4 text-lg font-bold">

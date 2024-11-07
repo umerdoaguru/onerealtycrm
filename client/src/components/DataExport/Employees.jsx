@@ -13,7 +13,7 @@ function Employees() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage] = useState(10); // Items per page
+  const leadsPerPage = 6; // Default leads per page
 
   useEffect(() => {
     fetchEmployees();
@@ -21,7 +21,7 @@ function Employees() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee");
       setEmployee(response.data);
       setFilteredEmployee(response.data);
     } catch (error) {
@@ -41,9 +41,7 @@ function Employees() {
     }
   }, [startDate, endDate, employee]);
 
-  const handlePageClick = ({ selected }) => {
-    setCurrentPage(selected);
-  };
+
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredEmployee);
@@ -53,10 +51,18 @@ function Employees() {
   };
 
   // Pagination logic
-  const offset = currentPage * itemsPerPage;
-  const currentItems = filteredEmployee.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(filteredEmployee.length / itemsPerPage);
+   // Calculate total number of pages
+   const pageCount = Math.ceil(filteredEmployee.length / leadsPerPage);
 
+   // Pagination logic
+   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+   const currentItems = filteredEmployee.slice(indexOfFirstLead, indexOfLastLead);
+   
+   const handlePageClick = (data) => {
+     setCurrentPage(data.selected);
+     console.log("change current page ", data.selected);
+   };
   return (
     <>
       <Header />
@@ -111,7 +117,7 @@ function Employees() {
             <tbody>
               {currentItems.map((employees, index) => (
                 <tr key={employees.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{offset + index + 1}</td>
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{index + 1}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{employees.employeeId}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{employees.name}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{employees.email}</td>
@@ -126,26 +132,26 @@ function Employees() {
 
         {/* Pagination */}
         <div className="mt-2 mb-2 flex justify-center">
-          <ReactPaginate
-            previousLabel="Previous"
-            nextLabel="Next"
-            breakLabel="..."
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
-          />
-        </div>
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
       </div>
     </>
   );

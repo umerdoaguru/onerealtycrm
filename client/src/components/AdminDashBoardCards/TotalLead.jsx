@@ -6,10 +6,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import MainHeader from "../MainHeader";
 import Sider from "../Sider";
+import ReactPaginate from "react-paginate";
 
 
 const AdminTotalLead = () => {
   const [leads, setLeads] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const leadsPerPage = 7; // Default leads per page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,19 +21,30 @@ const AdminTotalLead = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads`);
       console.log(response);
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
   };
+  const pageCount = Math.ceil(leads.length / leadsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
+
   return (
     <>
       <MainHeader />
       <Sider />
-      <div className="container">
-        <div className="mt-[5rem]">
+      <div className="container ">
+        <div className="mt-[5rem] 2xl:ml-40 ">
           <button
             onClick={() => navigate(-1)}
             className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
@@ -77,7 +91,7 @@ const AdminTotalLead = () => {
             </tr>
           </thead>
           <tbody>
-            {leads.map((lead, index) => (
+            {currentLeads.map((lead, index) => (
               <tr
                 key={lead.lead_id}
                 className={index % 2 === 0 ? "bg-gray-100" : ""}
@@ -116,6 +130,27 @@ const AdminTotalLead = () => {
           </tbody>
         </table>
       </div>
+      <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
     </>
   );
 };

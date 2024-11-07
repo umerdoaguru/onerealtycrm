@@ -7,10 +7,10 @@ import ReactPaginate from "react-paginate";
 
 
 import cogoToast from "cogo-toast";
-import Sider from './../Sider';
-import MainHeader from './../MainHeader';
+import SuperAdminSider from "./SuperAdminSider";
+import MainHeader from './../../components/MainHeader';
 
-const Admin_FollowUpView = () => {
+const Super_view_followup = () => {
   const [follow_up, setFollow_Up] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage] = useState(10); // Number of items per page
@@ -118,7 +118,7 @@ const Admin_FollowUpView = () => {
   return (
     <>
       <MainHeader />
-      <Sider />
+      <SuperAdminSider />
       <div className="container mt-4 2xl:w-[91%] 2xl:ml-36">
       <button
             onClick={handleBackClick}
@@ -156,7 +156,7 @@ const Admin_FollowUpView = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Report
                     </th>
-                   
+                
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -183,7 +183,7 @@ const Admin_FollowUpView = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                        {followup.report}
                       </td>
-                   
+
                     </tr>
                   ))}
                 </tbody>
@@ -310,4 +310,4 @@ const Admin_FollowUpView = () => {
   );
 };
 
-export default Admin_FollowUpView;
+export default Super_view_followup;
