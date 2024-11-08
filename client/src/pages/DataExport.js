@@ -87,7 +87,9 @@ function DataExport() {
     }
   };
 
-  const leadCount = leads.length;
+  const leadCount = leads.filter(
+    (lead) => lead.lead_status === "completed"
+  ).length; 
   const employeeCount = employee.length;
  
 
@@ -221,7 +223,7 @@ function DataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Visit Data
+                   Site Visit Data
                   </h5>
                   <p
                     className={`${
@@ -265,7 +267,7 @@ function DataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Closed Data
+                    Closed Deal Data
                   </h5>
                   <p
                     className={`${

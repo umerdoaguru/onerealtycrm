@@ -93,7 +93,7 @@ const EmployeeOverview = () => {
     <>
       {/* <div className="w-full  h-screen"> */}
 
-      <div className="flex flex-wrap justify-around mt-5">
+      <div className="flex flex-wrap justify-around mt-5 ">
         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3  ">
           <Link to="/employees-total-leads">
             <div
@@ -147,7 +147,7 @@ const EmployeeOverview = () => {
                         : "text-gray-800"
                     }`}
                   >
-                    Visit Data
+                    Total Site Visit
                   </h5>
                   <p
                     className={`${
@@ -193,7 +193,7 @@ const EmployeeOverview = () => {
                         : "text-gray-800"
                     }`}
                   >
-                    Closed Data
+                    Total Closed Deal
                   </h5>
                   <p
                     className={`${

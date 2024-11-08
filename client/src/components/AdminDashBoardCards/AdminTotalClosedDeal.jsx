@@ -15,7 +15,7 @@ const AdminTotalClosedDeal = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 7; // Default leads per page
+  const leadsPerPage = 7; 
   const navigate = useNavigate();
   // Fetch leads from the API
   useEffect(() => {
@@ -74,7 +74,7 @@ const AdminTotalClosedDeal = () => {
     <>
       <MainHeader />
       <Sider />
-      <div className="mt-[5rem] 2xl:ml-40 ">
+      <div className="mt-[7rem] 2xl:ml-40 ">
           <button
             onClick={() => navigate(-1)}
             className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"

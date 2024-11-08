@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -17,7 +17,7 @@ const EmployeeQuotationList = () => {
   const [sortAsc, setSortAsc] = useState(true);
   const [render, setRender] = useState(false);
   const { id } = useParams();
-
+const navigate  = useNavigate();
   
 
   useEffect(() => {
@@ -146,7 +146,15 @@ const EmployeeQuotationList = () => {
     <>
       <MainHeader />
       <EmployeeeSider />
-      <div className="container mt-4">
+      <div className="container mt-4 2xl:w-[91%] 2xl:ml-36">
+      <div className="mt-[7rem] ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
         <div className="w-full px-2 mx-auto p-4">
           <div className="w-full px-2 mt-4">
             <h2 className="text-2xl font-bold mb-4 text-center">

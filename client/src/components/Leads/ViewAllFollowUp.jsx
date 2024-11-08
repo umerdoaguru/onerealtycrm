@@ -131,12 +131,14 @@ const ViewAllFollowUp = () => {
       <MainHeader />
       <EmployeeeSider />
       <div className="container mt-4 2xl:w-[91%] 2xl:ml-36">
-      <button
-            onClick={handleBackClick}
-            className="bg-blue-500 text-white mt-5 px-4 py-2 rounded"
+      <div className="mt-[7rem] ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
           >
-            Go Back
+            Back
           </button>
+        </div>
         <div className="w-full px-2 mx-auto p-4">
           <div className="w-full px-2 mt-4">
             <h2 className="text-2xl font-bold mb-4 text-center">
@@ -228,34 +230,7 @@ const ViewAllFollowUp = () => {
 
 
 
-              <ReactPaginate
-                previousLabel={"previous"}
-                nextLabel={"next"}
-                breakLabel={"..."}
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName={"flex justify-center space-x-2 mt-4"}
-                pageClassName={"bg-white border border-gray-300 rounded-md"}
-                pageLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                previousClassName={"bg-white border border-gray-300 rounded-md"}
-                previousLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                nextClassName={"bg-white border border-gray-300 rounded-md"}
-                nextLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                breakClassName={"bg-white border border-gray-300 rounded-md"}
-                breakLinkClassName={
-                  "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-                }
-                activeClassName={"bg-gray-200"}
-              />
-
+              
 
                     {/* Modal for Editing Follow Up Data */}
                     {isModalOpen && (

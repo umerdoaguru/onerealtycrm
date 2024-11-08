@@ -15,7 +15,7 @@ const EmployeeVisitData = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 10; // Default leads per page
+  const leadsPerPage = 7; // Default leads per page
   const EmpId = useSelector((state) => state.auth.user.id);
 
   // Fetch leads from the API
@@ -60,19 +60,20 @@ const EmployeeVisitData = () => {
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
 
-  // Pagination logic
-  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
-  const currentLeads = filteredLeads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
+ // Calculate total number of pages
+ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
+ // Pagination logic
+ const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+ const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+ const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+ 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
 
   return (
-    <Wrapper>
+    <>
       <div className="flex-grow md:p-4 mt-14 lg:mt-0 sm:ml-0">
         <center className="text-2xl text-center mt-8 font-medium">
           Total Visits
@@ -176,95 +177,31 @@ const EmployeeVisitData = () => {
           </table>
         </div>
 
+        <div className="mt-4 flex justify-center">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
           breakLabel={"..."}
           pageCount={pageCount}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={handlePageClick}
-          containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
         />
       </div>
-    </Wrapper>
+      </div>
+    </>
   );
 };
 
 export default EmployeeVisitData;
 
-const Wrapper = styled.div`
-  
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem; // Reduced gap for better spacing
-    margin-top: 1.5rem;
-  }
-
-  .pagination-page {
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
-  }
-
-  .pagination-link {
-    padding: 0.5rem 1rem; // Increased padding for better click area
-    font-size: 0.875rem;
-    color: #3b82f6;
-    text-decoration: none;
-    transition: color 0.3s;
-
-    &:hover {
-      color: #2563eb;
-    }
-  }
-
-  .pagination-previous,
-  .pagination-next,
-  .pagination-break {
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
-  }
-
-  .pagination-link-previous,
-  .pagination-link-next,
-  .pagination-break-link {
-    padding: 0.5rem 1rem; // Increased padding for consistency
-    font-size: 0.875rem;
-    color: #374151;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: #f3f4f6; // Light gray on hover
-      transform: translateY(-1px); // Subtle lift effect
-    }
-  }
-
-  .pagination-active {
-    background-color: #1e50ff;
-    color: white;
-    border: 1px solid #374151;
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  .pagination-active .pagination-link {
-    color: white !important; // Ensure link inside active page is white
-  }
-`;

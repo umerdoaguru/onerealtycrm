@@ -29,6 +29,8 @@ function LeadData() {
       const response = await axios.get("https://crm.one-realty.in/api/leads");
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering
+      console.log(leads);
+      
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
@@ -43,31 +45,41 @@ function LeadData() {
     }
   };
 
-  // Automatically apply date and employee filters when start or end date changes or when an employee is selected
-  useEffect(() => {
-    let filtered = leads;
+// Add a filter for completed leads within the useEffect for filtering
+useEffect(() => {
+  let filtered = leads;
 
-    if (startDate && endDate) {
-      filtered = filtered.filter((lead) => {
-        const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
-      });
-    }
+  // Filter by date range if specified
+  if (startDate && endDate) {
+    filtered = filtered.filter((lead) => {
+      const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
+      return createdTime.isBetween(startDate, endDate, undefined, "[]");
+    });
+  }
 
-    if (selectedEmployee) {
-      filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
-    }
+  // Filter by selected employee if specified
+  if (selectedEmployee) {
+    filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
+  }
 
-    setFilteredLeads(filtered);
-    setCurrentPage(0); // Reset to first page on filter change
-  }, [startDate, endDate, selectedEmployee, leads]);
+  // Filter by lead_status 'completed'
+  filtered = filtered.filter((lead) => lead.lead_status === "completed");
 
-  const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-    XLSX.writeFile(workbook, "LeadsData.xlsx");
-  };
+  setFilteredLeads(filtered);
+  setCurrentPage(0); // Reset to first page on filter change
+}, [startDate, endDate, selectedEmployee, leads]);
+
+// Update downloadExcel to only export 'completed' leads
+const downloadExcel = () => {
+  // Filter completed leads for download
+  const completedLeads = filteredLeads.filter((lead) => lead.lead_status === "completed");
+  
+  const worksheet = XLSX.utils.json_to_sheet(completedLeads);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Completed Leads");
+  XLSX.writeFile(workbook, "CompletedLeadsData.xlsx");
+};
+
 
   // Pagination logic
   // Calculate total number of pages
@@ -148,6 +160,7 @@ function LeadData() {
                 <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">Lead Status</th>
               </tr>
             </thead>
             <tbody>
@@ -183,6 +196,9 @@ function LeadData() {
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.leadSource}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.lead_status}
         </td>
       </tr>
     ))

@@ -12,8 +12,8 @@ import styled from "styled-components";
 
 const SuperAdminTotalLead = () => {
   const [leads, setLeads] = useState([]);
-const [currentPage, setCurrentPage] = useState(0);
-const leadsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(0);
+  const leadsPerPage = 7; // Default leads per page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,14 +29,16 @@ const leadsPerPage = 10;
       console.error("Error fetching leads:", error);
     }
   };
-  const displayedLeads = leads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
 
-  
-  const handlePageClick = (selectedPage) => {
-    setCurrentPage(selectedPage.selected);
+  const pageCount = Math.ceil(leads.length / leadsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
   };
   
 
@@ -45,12 +47,20 @@ const leadsPerPage = 10;
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container px-5 mt-[5rem]">
+      <div className="container px-5 mt-[7rem]">.
+      <div className="2xl:ml-40 ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
         <h1 className="text-2xl text-center ">Total Leads </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
 
-      <div className="main overflow-x-auto mt-4 px-12 lg:ml-12 xl:ml-32">
+      <div className="main overflow-x-auto mt-4 px-12 2xl:ml-40">
         <table className="bg-white border w-100">
           <thead>
             <tr>
@@ -84,7 +94,7 @@ const leadsPerPage = 10;
             </tr>
           </thead>
           <tbody>
-          {displayedLeads.map((lead, index) => (
+          {currentLeads.map((lead, index) => (
     <tr key={lead.lead_id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
         {index + 1 + currentPage * leadsPerPage}
@@ -106,25 +116,27 @@ const leadsPerPage = 10;
       </div>
       <>
 
-      <ReactPaginate
+      <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
           breakLabel={"..."}
-          pageCount={Math.ceil(leads.length / leadsPerPage)}
+          pageCount={pageCount}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={handlePageClick}
-          containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
-          />
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
         </>
     </>
   );

@@ -99,7 +99,7 @@ const VisitData = () => {
       <div className="container 2xl:w-[95%]">
       <div className="flex-grow  mt-14 lg:mt-0 sm:ml-0">
         <center className="text-2xl text-center mt-8 font-medium">
-          Total Visits
+         Site Visits Data
         </center>
         <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
         {/* Date Filter */}

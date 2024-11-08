@@ -47,6 +47,7 @@ import Admin_view_visit from "../components/Leads/Admin_view_visit";
 import Admin_view_quotations from "../components/Leads/Admin_view_quotations";
 import Admin_QuotationView from "../components/Leads/Admin_QuotationView";
 import Admin_FollowUpView from "../components/Leads/Admin_FollowUpView";
+import AdminProfile from "../components/AdminProfile";
 
 function AdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -132,6 +133,7 @@ function AdminRoutes() {
         />
         <Route path="/reporting" element={<Reporting />} />
         <Route path="/admin-report" element={<AdminReport />} />
+        <Route path="/admin-profile" element={<AdminProfile />} />
       </Routes>
     </>
   );

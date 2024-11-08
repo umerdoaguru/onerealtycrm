@@ -7,10 +7,13 @@ import Sider from "../components/Sider";
 import MainHeader from "../components/MainHeader";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import ReactPaginate from "react-paginate";
 
 const EmployeeSingle = () => {
   const { employeeId } = useParams();
   const [leads, setLeads] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 7; 
 
   const navigate = useNavigate();
   const [employee, setEmployee] = useState(null);
@@ -243,6 +246,17 @@ const EmployeeSingle = () => {
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
   };
+  const pageCount = Math.ceil(leads.length / itemsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
 
   return (
     <>
@@ -356,7 +370,7 @@ const EmployeeSingle = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {leads.map((lead, index) => (
+                      {currentLeads.map((lead, index) => (
                         <tr
                           key={lead.id}
                           className={index % 2 === 0 ? "bg-gray-100" : ""}
@@ -393,7 +407,27 @@ const EmployeeSingle = () => {
             ) : (
               <p className="text-gray-600">No employee data available.</p>
             )}
-
+<div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
             <Modal isOpen={showForm} onClose={() => setShowForm(false)}>
               <h3 className="mb-4 text-lg font-bold">
                 {editingIndex !== null ? "Edit Employee" : "Add Employee"}

@@ -32,9 +32,6 @@ const SuperQuotationList = () => {
     fetchQuotations();
   }, []);
 
-  const handlePageClick = ({ selected }) => {
-    setCurrentPage(selected);
-  };
 
   const handleFilterChange = (event) => {
     let value = event.target.value;
@@ -51,12 +48,17 @@ const SuperQuotationList = () => {
     quotation.customer_name.toLowerCase().includes(filterText.toLowerCase())
   );
 
-  const offset = currentPage * itemsPerPage;
-  const currentQuotations = filteredQuotations.slice(
-    offset,
-    offset + itemsPerPage
-  );
   const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentQuotations = filteredQuotations.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
 
   // const handleStatusChange = (e, index) => {
   //   const updatedQuotations = [...currentQuotations];
@@ -158,7 +160,7 @@ const SuperQuotationList = () => {
                 {currentQuotations.map((quotation, index) => (
                   <tr key={quotation.quotation_id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {offset + index + 1}
+                      { index + 1}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {quotation.employeeId}
@@ -202,33 +204,27 @@ const SuperQuotationList = () => {
               </tbody>
             </table>
           </div>
-          <ReactPaginate
-            previousLabel={"previous"}
-            nextLabel={"next"}
-            breakLabel={"..."}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName={"flex justify-center space-x-2 mt-4"}
-            pageClassName={"bg-white border border-gray-300 rounded-md"}
-            pageLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            previousClassName={"bg-white border border-gray-300 rounded-md"}
-            previousLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            nextClassName={"bg-white border border-gray-300 rounded-md"}
-            nextLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            breakClassName={"bg-white border border-gray-300 rounded-md"}
-            breakLinkClassName={
-              "py-2 px-4 text-sm text-gray-700 hover:bg-gray-200"
-            }
-            activeClassName={"bg-gray-200"}
-          />
+          <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
         </div>
       </div>
       </div>

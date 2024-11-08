@@ -268,13 +268,13 @@ function SuperEmployeeLeads() {
             </div>
           </div>
           <div className="flex gap-10 text-xl font-semibold mt-5">
+  <div>Total Lead: {leads.length}</div>
   <div>
     Total Lead visit:{" "}
     {leads.filter(
         (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
       ).length}
   </div>
-  <div>Total Lead: {leads.length}</div>
   <div>
     Total Closed Lead:{" "}
     {
@@ -398,7 +398,7 @@ function SuperEmployeeLeads() {
 
             </table>
           </div>
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4 flex mb-4 justify-center 2xl:w-[89%]">
             <ReactPaginate
               previousLabel={"Previous"}
               nextLabel={"Next"}

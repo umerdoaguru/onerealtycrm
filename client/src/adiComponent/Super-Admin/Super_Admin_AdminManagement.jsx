@@ -11,6 +11,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import SuperAdminSider from './SuperAdminSider';
 import MainHeader from './../../components/MainHeader';
 import Modal from './../Modal';
+import ReactPaginate from "react-paginate";
 
 function Super_Admin_Adminmanagement() {
   const [admins, setAdmins] = useState([]);
@@ -25,6 +26,8 @@ function Super_Admin_Adminmanagement() {
   const [editingIndex, setEditingIndex] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 7; 
   const navigate = useNavigate(); // Initialize useNavigate
   const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
 
@@ -225,7 +228,17 @@ function Super_Admin_Adminmanagement() {
       }
     }
   };
+  const pageCount = Math.ceil(admins.length / itemsPerPage);
 
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentAdmins = admins.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
   
 
   return (
@@ -235,7 +248,7 @@ function Super_Admin_Adminmanagement() {
 
       <div className="flex flex-col lg:flex-row">
         {/* Main Content Area */}
-        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
+        <div className="flex-grow p-4 mt-14 2xl:ml-40">
           <center className="text-2xl text-center mt-8 font-medium">
             Admin Management
           </center>
@@ -266,8 +279,8 @@ function Super_Admin_Adminmanagement() {
                 </tr>
               </thead>
               <tbody>
-                {admins.length > 0 ? (
-                  admins
+                {currentAdmins.length > 0 ? (
+                  currentAdmins
                     .filter((admin) => admin && admin.name)
                     .map((admin, index) => (
                       <tr
@@ -314,6 +327,27 @@ function Super_Admin_Adminmanagement() {
               </tbody>
             </table>
           </div>
+          <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
 
           {/* Modal */}
           <Modal isOpen={showForm} onClose={() => setShowForm(false)}>

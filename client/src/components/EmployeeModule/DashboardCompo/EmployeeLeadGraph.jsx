@@ -131,7 +131,7 @@ const EmployeeLeadsGraph = () => {
   }, []);
 
   return (
-  <div className="mx-2">
+  <div className="">
       <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
       <h2 className="text-xl font-bold mb-2">Daily Leads Overview</h2>
       {error ? (

@@ -186,9 +186,9 @@ const EmployeeManagement = () => {
       {/* <div className="flex"> */}
       {/* <Sider /> */}
       <Sider />
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row 2xl:ml-40">
         {/* Main Content Area */}
-        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
+        <div className="flex-grow p-4 mt-14">
           <center className="text-2xl text-center mt-8 font-medium">
             Empolyee Management
           </center>

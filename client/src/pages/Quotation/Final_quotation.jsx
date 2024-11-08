@@ -191,7 +191,7 @@ function Final_quotation() {
                 </div>
                 <div className="">
                   <Link
-                    to="/employee-quotation-invoice"
+                    to="/employee-all-quotation"
                     className="text-white bg-green-500 hover:bg-green-600 rounded py-2 px-4 w-full block text-center"
                   >
                     Quotation List

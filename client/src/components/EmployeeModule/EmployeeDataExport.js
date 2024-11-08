@@ -307,7 +307,9 @@ function DataExport() {
     }
   };
 
-  const leadCount = leads.length;
+  const leadCount = leads.filter(
+    (lead) => lead.lead_status === "completed"
+  ).length; 
   // const quotationCount = quotation.length;
   // const invoiceCount = invoice.length;
 
@@ -329,7 +331,7 @@ function DataExport() {
       <MainHeader />
       <EmployeeSider />
       {/* <div className="container mt-[5rem]"> */}
-      <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
+      <div className="flex-grow p-4 2xl:ml-40">
         <center className="text-2xl text-center mt-8 font-medium">
           Employee Data Export
         </center>
@@ -491,7 +493,7 @@ function DataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Visit Data
+                    Site Visits Data
                   </h5>
                   <p
                     className={`${
@@ -535,7 +537,7 @@ function DataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Closed Data
+                    Closed Deal Data
                   </h5>
                   <p
                     className={`${

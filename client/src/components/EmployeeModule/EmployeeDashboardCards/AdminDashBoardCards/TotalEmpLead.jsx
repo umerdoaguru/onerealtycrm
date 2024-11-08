@@ -6,12 +6,13 @@ import { useSelector } from "react-redux";
 import EmployeeSider from "./../../EmployeeSider";
 import MainHeader from "../../../MainHeader";
 import Pagination from "../../../../adiComponent/comp/pagination";
+import ReactPaginate from "react-paginate";
 
 function TotalEmpLead() {
   const EmpId = useSelector((state) => state.auth.user.id);
   const [leads, setLeads] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const [rowPerPage] = useState(10); // Number of rows per page
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage] = useState(7);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,18 +39,31 @@ function TotalEmpLead() {
     navigate(-1); // Go back to the previous page
   };
 
-  // Get current leads for the pagination
-  const indexOfLastLead = currentPage * rowPerPage;
-  const indexOfFirstLead = indexOfLastLead - rowPerPage;
+  const pageCount = Math.ceil(leads.length / itemsPerPage);
+
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
   const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
 
   return (
     <>
       <MainHeader />
       <EmployeeSider />
       <div className="flex flex-col 2xl:ml-44 ">
-        <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
-          <center className="text-2xl text-center mt-8 font-medium">
+      <div className="mt-[7rem] ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 mx-1 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+        <div className="flex-grow p-4 mt-2 lg:mt-5 sm:ml-0">
+          <center className="text-2xl text-center  font-medium">
             Total Assign Leads
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
@@ -128,12 +142,25 @@ function TotalEmpLead() {
             </table>
           </div>
         </div>
-        <div className="text-center">
-        <Pagination
-          currentPage={currentPage}
-          totalItems={leads.length}
-          itemsPerPage={rowPerPage}
-          onPageChange={setCurrentPage}
+        <div className="mt-4 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
         />
       </div>
       </div>

@@ -128,7 +128,7 @@ const AdminOverviewDash = () =>  {
                 </div>
                 <div className="mt-2">
                   <h5 className="text-gray-800 text-xl font-semibold ">
-                    Total Visit
+                  Total Site Visit
                   </h5>
                   <p className="text-gray-800 text-xl font-semibold ">
                    {visitCount}
@@ -190,7 +190,7 @@ const AdminOverviewDash = () =>  {
                         : "text-gray-800"
                     }`}
                   >
-                    Closed Data
+                    Total Closed Deal
                   </h5>
                   <p
                     className={`${

@@ -7,9 +7,13 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 import MainHeader from './../../components/MainHeader';
 import SuperAdminSider from './SuperAdminSider';
+import ReactPaginate from 'react-paginate';
 
 const SuperEmployeeList = () => {
   const [employees, setEmployees] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 7; 
+
 
   const navigate = useNavigate(); // Initialize useNavigate
 
@@ -31,6 +35,18 @@ const SuperEmployeeList = () => {
 
   const handleEmployeeClick = (employeeId) => {
     navigate(`/super-admin-employee-leads/${employeeId}`); 
+  };
+
+  const pageCount = Math.ceil(employees.length / itemsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentLeads = employees.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
   };
 
   return (
@@ -55,8 +71,8 @@ const SuperEmployeeList = () => {
                 </tr>
               </thead>
               <tbody>
-                {employees.length > 0 ? (
-                  employees
+                {currentLeads.length > 0 ? (
+                  currentLeads
                     .filter((employee) => employee && employee.name) // Ensure employee and employee.name exist
                     .map((employee, index) => (
                       <tr
@@ -78,6 +94,27 @@ const SuperEmployeeList = () => {
               </tbody>
             </table>
           </div>
+        <div className="mt-3 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
         </main>
       </div>
     </>

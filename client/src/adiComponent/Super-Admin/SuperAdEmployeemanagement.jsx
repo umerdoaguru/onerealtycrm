@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import SuperAdminSider from "./SuperAdminSider";
 import MainHeader from "../../components/MainHeader";
 import cogoToast from "cogo-toast"; // Import CogoToast
+import ReactPaginate from "react-paginate";
 
 const SuperAdEmployeemanagement = () => {
   const [employees, setEmployees] = useState([]);
@@ -22,6 +23,9 @@ const SuperAdEmployeemanagement = () => {
   const [showForm, setShowForm] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate(); // Initialize useNavigate
+
+ const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 7; 
 
   useEffect(() => {
     fetchEmployees();
@@ -188,6 +192,17 @@ const SuperAdEmployeemanagement = () => {
     setShowForm(false);
     setValidationErrors({})
   };
+  const pageCount = Math.ceil(employees.length / itemsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentemployee = employees.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
 
   return (
     <>
@@ -226,8 +241,8 @@ const SuperAdEmployeemanagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {employees.length > 0 ? (
-                  employees
+                {currentemployee.length > 0 ? (
+                  currentemployee
                     .filter((employee) => employee && employee.name) // Ensure employee and employee.name exist
                     .map((employee, index) => (
                       <tr
@@ -426,6 +441,27 @@ const SuperAdEmployeemanagement = () => {
               </button>
             </div>
           </Modal>
+          <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
         </main>
       </div>
     </>

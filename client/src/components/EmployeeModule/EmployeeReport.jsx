@@ -483,8 +483,8 @@ const EmployeeReport = () =>{
       <MainHeader />
       <EmployeeSider />
 
-      <div className="flex-auto flex-col lg:flex-row min-w-screen md:mx-2">
-        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0 w-2xl">
+      <div className="flex-auto flex-col lg:flex-row min-w-screen 2xl:ml-40 md:mx-2">
+        <div className="flex-grow p-4 mt-14 w-2xl">
           <center className="text-2xl text-center mt-8 font-medium">
             Admin Report
           </center>

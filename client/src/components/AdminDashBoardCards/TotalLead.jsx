@@ -44,7 +44,7 @@ const AdminTotalLead = () => {
       <MainHeader />
       <Sider />
       <div className="container ">
-        <div className="mt-[5rem] 2xl:ml-40 ">
+        <div className="mt-[7rem] 2xl:ml-40 ">
           <button
             onClick={() => navigate(-1)}
             className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
@@ -57,7 +57,7 @@ const AdminTotalLead = () => {
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
 
-      <div className="overflow-x-auto mt-4 px-12 lg:ml-12 xl:ml-32">
+      <div className="overflow-x-auto mt-4 px-12 2xl:ml-40">
         <table className="container bg-white border">
           <thead>
             <tr>

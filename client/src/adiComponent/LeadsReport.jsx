@@ -6,7 +6,7 @@ import styled from 'styled-components'; // Import styled-components for styling
 const LeadsReport = () => {
   const [leads, setLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [leadsPerPage] = useState(10);
+  const [leadsPerPage] = useState(7);
 
   useEffect(() => {
     const fetchLeads = async () => {
@@ -45,7 +45,7 @@ const LeadsReport = () => {
   return (
     <>
     
-    <div className="p-4 mt-6 bg-white rounded-lg shadow-lg">
+    <div className="p-4 mt-6 bg-white rounded-lg shadow-lg mx-7 mb-2">
       <h3 className="mb-4 text-lg font-semibold">Today's Assigned Leads</h3>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border">

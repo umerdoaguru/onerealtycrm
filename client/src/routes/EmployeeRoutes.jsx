@@ -207,7 +207,7 @@ function EmployeeRoutes() {
             element={<EmployeeDataExport />}
           />
           <Route
-            path="/employee-quotation-invoice"
+            path="/employee-all-quotation"
             element={<MainQuotation />}
           />
           <Route path="/employee-profile" element={<EmployeeProfile />} />

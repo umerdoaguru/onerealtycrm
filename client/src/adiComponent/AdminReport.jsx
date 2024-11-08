@@ -59,7 +59,7 @@ const d_fileds = {
       "FollowUp Status",
     ],
     columns: [
-      "s.no",
+      
       "lead_no",
       "assignedTo",
       "name",
@@ -486,9 +486,9 @@ const AdminReport = () =>  {
       <MainHeader />
       <Sider />
 
-      <div className="flex-auto flex-col lg:flex-row min-w-screen md:mx-2">
-        <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0 w-2xl">
-          <center className="text-2xl text-center mt-8 font-medium">
+      <div className="flex-auto flex-col lg:flex-row  md:mx-2 2xl:ml-40">
+        <div className="flex-grow p-4 mt-14 lg:mt-0  w-2xl">
+          <center className="text-2xl text-center mt-10 font-medium">
             Admin Report
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
