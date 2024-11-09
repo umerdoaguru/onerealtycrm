@@ -18,7 +18,7 @@ const InvoiceData = () => {
     const fetchInvoices = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/invoice-data`
+          `http://localhost:9000/api/invoice-data`
         );
         setInvoices(response.data);
       } catch (error) {

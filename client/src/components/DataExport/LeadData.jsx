@@ -26,7 +26,7 @@ function LeadData() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("http://localhost:9000/api/leads");
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering
       console.log(leads);
@@ -38,7 +38,7 @@ function LeadData() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);

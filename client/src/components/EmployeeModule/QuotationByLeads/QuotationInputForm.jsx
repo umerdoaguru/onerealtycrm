@@ -122,14 +122,14 @@ const QuotationInputForm = ({name}) => {
       
 
       // Send the POST request to save the quotation
-      const response = await axios.post("https://crm.one-realty.in/api/quotation-information-form", dataToSubmit);
+      const response = await axios.post("http://localhost:9000/api/quotation-information-form", dataToSubmit);
       console.log("Quotation added successfully:", response.data);
 
       
       // Send the PUT request to update the quotation status
       try {
         const updateResponse = await axios.put(
-          `https://crm.one-realty.in/api/updateOnlyQuotationStatus/${id}`,
+          `http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,
           { quotation: "created" }
         );
         if (updateResponse.status === 200) {

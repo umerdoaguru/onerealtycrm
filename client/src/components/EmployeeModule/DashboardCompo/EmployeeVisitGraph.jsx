@@ -25,7 +25,7 @@ const EmployeeVisitGraph = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employebyid-visit/${EmpId}`
+          `http://localhost:9000/api/employebyid-visit/${EmpId}`
         );
         const leadList = response.data;
         console.log(leadList);

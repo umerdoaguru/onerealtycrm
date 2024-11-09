@@ -23,7 +23,7 @@ const SuperAdminTotalClosedDeal = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads`);
+      const response = await axios.get(`http://localhost:9000/api/leads`);
       const nonPendingLeads = response.data.filter((lead) => lead.deal_status !== "pending");
       setLeads(nonPendingLeads);
       setFilteredLeads(nonPendingLeads);

@@ -17,7 +17,7 @@ function Final_quotationBy_emp() {
 
   const fetchQuotations = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/quotation/${id}`);
+      const response = await axios.get(`http://localhost:9000/api/quotation/${id}`);
       if (response.status === 200) {
         setQuotationName(response.data[0].customer_name);
         setQuotations(response.data);

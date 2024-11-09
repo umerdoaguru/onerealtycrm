@@ -24,12 +24,12 @@ const CompanyDataUpload = async (req, res) => {
     } = req.body;
 
     const headerImagePath =
-      "https://crm.one-realty.in/uploads/" + header_img[0].filename;
+      "http://localhost:9000/uploads/" + header_img[0].filename;
     const footerImagePath =
-      "https://crm.one-realty.in/uploads/" + footer_img[0].filename;
-    const logoImagePath = "https://crm.one-realty.in/uploads/" + logo[0].filename;
+      "http://localhost:9000/uploads/" + footer_img[0].filename;
+    const logoImagePath = "http://localhost:9000/uploads/" + logo[0].filename;
     const DigitalsignImagePath =
-      "https://crm.one-realty.in/uploads/" + digital_sign[0].filename;
+      "http://localhost:9000/uploads/" + digital_sign[0].filename;
 
     // Insert header and footer images with the associated company_id
     const insertHeaderFooterImages = await new Promise((resolve, reject) => {
@@ -238,12 +238,12 @@ const updateCompanyData = async (req, res) => {
     } = req.body;
 
     const headerImagePath =
-      "https://crm.one-realty.in/uploads/" + header_img[0].filename;
+      "http://localhost:9000/uploads/" + header_img[0].filename;
     const footerImagePath =
-      "https://crm.one-realty.in/uploads/" + footer_img[0].filename;
-    const logoImagePath = "https://crm.one-realty.in/uploads/" + logo[0].filename;
+      "http://localhost:9000/uploads/" + footer_img[0].filename;
+    const logoImagePath = "http://localhost:9000/uploads/" + logo[0].filename;
     const DigitalsignImagePath =
-      "https://crm.one-realty.in/uploads/" + digital_sign[0].filename;
+      "http://localhost:9000/uploads/" + digital_sign[0].filename;
 
     // Update header and footer images with the associated company_id
     const updateHeaderFooterImages = await new Promise((resolve, reject) => {

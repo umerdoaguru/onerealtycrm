@@ -36,8 +36,8 @@ function SuperEmployeeLeads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        // `https://crm.one-realty.in/api/leads-visits/${id}`
-           `https://crm.one-realty.in/api/employe-leads/${id}`
+        // `http://localhost:9000/api/leads-visits/${id}`
+           `http://localhost:9000/api/employe-leads/${id}`
       );
       const data = response.data;
       console.log(data);
@@ -49,8 +49,8 @@ function SuperEmployeeLeads() {
   // const fetchVisit = async () => {
   //   try {
   //     const response = await axios.get(
-  //       // `https://crm.one-realty.in/api/employe-all-visit`
-  //         `https://crm.one-realty.in/api/employe-all-visit`
+  //       // `http://localhost:9000/api/employe-all-visit`
+  //         `http://localhost:9000/api/employe-all-visit`
   //     );
   //     console.log(response.data);
   //     setVisit(response.data);

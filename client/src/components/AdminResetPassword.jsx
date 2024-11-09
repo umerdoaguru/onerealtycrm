@@ -22,7 +22,7 @@ const AdminResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://crm.one-realty.in/api/sendOtp-admin",
+        "http://localhost:9000/api/sendOtp-admin",
         {
           email,
         }
@@ -42,7 +42,7 @@ const AdminResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://crm.one-realty.in/api/verifyOtp-admin",
+        "http://localhost:9000/api/verifyOtp-admin",
         {
           email,
           otp,
@@ -62,7 +62,7 @@ const AdminResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "https://crm.one-realty.in/api/resetPassword-admin",
+        "http://localhost:9000/api/resetPassword-admin",
         {
           email,
           password: newPassword,

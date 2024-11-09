@@ -27,7 +27,7 @@ const navigate  = useNavigate();
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/get-quotation-byLead/${id}`
+        `http://localhost:9000/api/get-quotation-byLead/${id}`
       );
       setQuotations(response.data);
       console.log(response.data);
@@ -46,7 +46,7 @@ const navigate  = useNavigate();
   //   if (isConfirmed) {
   //     try {
   //       const response = await axios.delete(
-  //         `https://crm.one-realty.in/api/quotation/${id}`
+  //         `http://localhost:9000/api/quotation/${id}`
   //       );
   //       if (response.status === 200) {
   //         console.log("Quotation deleted successfully");
@@ -67,7 +67,7 @@ const navigate  = useNavigate();
       try {
         // Delete the quotation
         const response = await axios.delete(
-          `https://crm.one-realty.in/api/quotation/${quotation.id}`
+          `http://localhost:9000/api/quotation/${quotation.id}`
         );
         
         if (response.status === 200) {
@@ -76,7 +76,7 @@ const navigate  = useNavigate();
           // After deletion, update the leads table status
           try {
             const updateResponse = await axios.put(
-              `https://crm.one-realty.in/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
+              `http://localhost:9000/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
               { quotation: "not created" }
             );
   
@@ -103,7 +103,7 @@ const navigate  = useNavigate();
   const handleCopyQuotation = async (quotationId) => {
     try {
       const response = await axios.post(
-        `https://crm.one-realty.in/api/copy-quotation/${quotationId}`
+        `http://localhost:9000/api/copy-quotation/${quotationId}`
       );
       setRender(!render);
     } catch (error) {

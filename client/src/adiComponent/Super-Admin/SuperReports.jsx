@@ -346,15 +346,15 @@ const SuperReports = () =>
   
 
   const leadsAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const visitAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const closedAxios = axios.create({
-    baseURL: "https://crm.one-realty.in/api",
+    baseURL: "http://localhost:9000/api",
   });
 
   const formatData = (data) => {

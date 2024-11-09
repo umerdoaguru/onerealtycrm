@@ -31,7 +31,7 @@ const VisitData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit`
+        `http://localhost:9000/api/employe-all-visit`
       );
       // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(
@@ -46,7 +46,7 @@ const VisitData = () => {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("http://localhost:9000/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
