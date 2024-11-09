@@ -29,7 +29,7 @@ const MainQuoatationPage = () => {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/quotation-data`
+        `https://crmdemo.vimubds5.a2hosted.com/api/quotation-data`
       );
       setQuotations(response.data);
       console.log(response.data);
@@ -48,7 +48,7 @@ const MainQuoatationPage = () => {
   //   if (isConfirmed) {
   //     try {
   //       const response = await axios.delete(
-  //         `http://localhost:9000/api/quotation/${id}`
+  //         `https://crmdemo.vimubds5.a2hosted.com/api/quotation/${id}`
   //       );
   //       if (response.status === 200) {
   //         console.log("Quotation deleted successfully");
@@ -69,7 +69,7 @@ const MainQuoatationPage = () => {
       try {
         // Delete the quotation
         const response = await axios.delete(
-          `http://localhost:9000/api/quotation/${quotation.id}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/quotation/${quotation.id}`
         );
         
         if (response.status === 200) {
@@ -78,7 +78,7 @@ const MainQuoatationPage = () => {
           // After deletion, update the leads table status
           try {
             const updateResponse = await axios.put(
-              `http://localhost:9000/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
+              `https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
               { quotation: "not created" }
             );
   
@@ -105,7 +105,7 @@ const MainQuoatationPage = () => {
   const handleCopyQuotation = async (quotationId) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/api/copy-quotation/${quotationId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/copy-quotation/${quotationId}`
       );
       setRender(!render);
     } catch (error) {
@@ -113,9 +113,7 @@ const MainQuoatationPage = () => {
     }
   };
 
-  const handlePageClick = ({ selected }) => {
-    setCurrentPage(selected);
-  };
+
 
   const handleFilterChange = (event) => {
     setFilterText(event.target.value);
@@ -134,16 +132,16 @@ const MainQuoatationPage = () => {
   console.log('filteredQuotations', filteredQuotations);
   
 
-  const offset = currentPage * itemsPerPage;
-  const currentQuotations = filteredQuotations.slice(
-    offset,
-    offset + itemsPerPage
-  );
-  console.log('User Quotation Data :',currentQuotations);
-  
   const pageCount = Math.ceil(filteredQuotations.length / itemsPerPage);
 
-
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentQuotations= filteredQuotations.slice(indexOfFirstLead, indexOfLastLead);
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
   return (
     <>
       <MainHeader />
@@ -182,7 +180,7 @@ const MainQuoatationPage = () => {
                   {currentQuotations.map((quotation, index) => (
                     <tr key={quotation.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {offset + index + 1}
+                        { index + 1}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {quotation.customer_name}
@@ -230,6 +228,27 @@ const MainQuoatationPage = () => {
               </table>
             
             </div>
+            <div className="mt-4 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+      </div>
           </div>
         </div>
       </div>

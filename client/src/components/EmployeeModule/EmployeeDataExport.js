@@ -36,7 +36,7 @@
 //   const fetchLeads = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://localhost:9000/api/employe-leads/${EmpId}`
+//         `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
 //       );
 //       setLeads(response.data);
 //     } catch (error) {
@@ -46,7 +46,7 @@
 
 //   // const fetchEmployee = async () => {
 //   //   try {
-//   //     const response = await axios.get(`http://localhost:9000/api/employee`);
+//   //     const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employee`);
 //   //     setEmployee(response.data);
 //   //   } catch (error) {
 //   //     console.error("Error fetching employee data:", error);
@@ -56,7 +56,7 @@
 //   const fetchQuotation = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
+//         `https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byEmploye/${EmpId}`
 //       );
 //       setQuotation(response.data);
 //     } catch (error) {
@@ -67,7 +67,7 @@
 //   const fetchInvoice = async () => {
 //     try {
 //       const response = await axios.get(
-//         `http://localhost:9000/api/get-employee-invoice/${EmpId}`
+//         `https://crmdemo.vimubds5.a2hosted.com/api/get-employee-invoice/${EmpId}`
 //       );
 //       setInvoice(response.data);
 //     } catch (error) {
@@ -263,7 +263,7 @@ function DataExport() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
       );
       console.log("setLeads", response.data);
       setLeads(response.data);
@@ -275,7 +275,7 @@ function DataExport() {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byEmploye/${EmpId}`
       );
       setQuotation(response.data);
     } catch (error) {
@@ -286,7 +286,7 @@ function DataExport() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-employee-invoice/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/get-employee-invoice/${EmpId}`
       );
       setInvoice(response.data);
     } catch (error) {
@@ -296,7 +296,7 @@ function DataExport() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employebyid-visit/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employebyid-visit/${EmpId}`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -307,7 +307,9 @@ function DataExport() {
     }
   };
 
-  const leadCount = leads.length;
+  const leadCount = leads.filter(
+    (lead) => lead.lead_status === "completed"
+  ).length; 
   // const quotationCount = quotation.length;
   // const invoiceCount = invoice.length;
 
@@ -329,7 +331,7 @@ function DataExport() {
       <MainHeader />
       <EmployeeSider />
       {/* <div className="container mt-[5rem]"> */}
-      <div className="flex-grow p-4 mt-14 lg:mt-0 lg:ml-36 sm:ml-0">
+      <div className="flex-grow p-4 2xl:ml-40">
         <center className="text-2xl text-center mt-8 font-medium">
           Employee Data Export
         </center>
@@ -491,7 +493,7 @@ function DataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Visit Data
+                    Site Visits Data
                   </h5>
                   <p
                     className={`${
@@ -535,7 +537,7 @@ function DataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Closed Data
+                    Closed Deal Data
                   </h5>
                   <p
                     className={`${

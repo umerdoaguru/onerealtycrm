@@ -33,7 +33,7 @@
 //     const fetchLeads = async () => {
 //         try {
 //           const response = await axios.get(
-//             `http://localhost:9000/api/employe-leads/${EmpId}`);
+//             `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`);
 //           const data = response.data;
 //           setLeads(data);
 //         } catch (error) {
@@ -48,7 +48,7 @@
 
 //         try {
 //           // Send updated data to the backend using Axios
-//           const response = await axios.put(`http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
+//           const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateLeadStatus/${currentLead.lead_id}`, currentLead);
 
 //           if (response.status === 200) {
 //             console.log('Updated successfully:', response.data);
@@ -170,7 +170,7 @@ function EmployeeLead() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
       );
       const data = response.data;
       console.log(data);
@@ -184,7 +184,7 @@ function EmployeeLead() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
-        `http://localhost:9000/api/updateOnlyLeadStatus/${lead.lead_id}`,
+        `https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyLeadStatus/${lead.lead_id}`,
         { lead_status: "in progress" }
       );
 
@@ -255,7 +255,7 @@ function EmployeeLead() {
 
           {/* Button to create a new lead */}
 
-          <div className="md:flex justify-between mb-4 min-w-fit gap-4">
+          <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
             <div>
               <label htmlFor="">Search</label>
               <input
@@ -266,7 +266,7 @@ function EmployeeLead() {
                 className="border rounded-2xl p-2 w-full"
               />
             </div>
-            <div className="flex gap-4 w-full justify-start">
+           
               <div>
                 <label htmlFor="">Start Date</label>
                 <input
@@ -295,7 +295,7 @@ function EmployeeLead() {
                   className="border   rounded-2xl p-2 w-full"
                 />
               </div>
-            </div>
+        
           </div>
 
           <div className="overflow-x-auto rounded-lg shadow-md">

@@ -42,7 +42,7 @@ function CreateInvoiceProfile() {
       formData.append("bank", companyBank);
 
       const response = await axios.post(
-        "http://localhost:9000/api/upload-invoice-profile",
+        "https://crmdemo.vimubds5.a2hosted.com/api/upload-invoice-profile",
         formData,
         {
           headers: {

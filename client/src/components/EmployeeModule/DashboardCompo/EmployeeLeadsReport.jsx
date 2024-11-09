@@ -15,7 +15,7 @@ const EmployeeLeadsReport = () => {
     const fetchLeads = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employe-leads/${EmpId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
         );
         const data = response.data;
         const today = new Date();
@@ -37,18 +37,16 @@ const EmployeeLeadsReport = () => {
     fetchLeads();
   }, [EmpId]);
 
-  // Pagination logic
-  const pageCount = Math.ceil(leads.length / leadsPerPage);
-  const handlePageClick = (event) => {
-    setCurrentPage(event.selected);
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
   };
 
-  const displayedLeads = leads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
-
   return (
+    <div className="mx-7">
     <div className="p-4 mt-6 bg-white rounded-lg shadow-lg">
       <h3 className="mb-4 text-lg font-semibold">Leads Assign Report</h3>
       <div className="overflow-x-auto">
@@ -65,8 +63,8 @@ const EmployeeLeadsReport = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {displayedLeads.length > 0 ? (
-              displayedLeads.map((lead, index) => (
+            {currentLeads.length > 0 ? (
+              currentLeads.map((lead, index) => (
                 <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{currentPage * leadsPerPage + index + 1}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_no}</td>
@@ -88,30 +86,29 @@ const EmployeeLeadsReport = () => {
         </table>
       </div>
       {leads.length > 0 && (
-        <div className="mt-4">
-          <ReactPaginate
-            previousLabel="Previous"
-            nextLabel="Next"
-            breakLabel="..."
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            forcePage={currentPage}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="pagination-container"
-            pageClassName="pagination-page"
-            pageLinkClassName="pagination-link"
-            previousClassName="pagination-previous"
-            previousLinkClassName="pagination-link-previous"
-            nextClassName="pagination-next"
-            nextLinkClassName="pagination-link-next"
-            breakClassName="pagination-break"
-            breakLinkClassName="pagination-break-link"
-            activeClassName="pagination-active"
-          />
-        </div>
+            <div className="mt-4 flex justify-center">
+            <ReactPaginate
+              previousLabel={"Previous"}
+              nextLabel={"Next"}
+              breakLabel={"..."}
+              pageCount={Math.ceil(leads.length / leadsPerPage)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={3}
+              onPageChange={handlePageClick}
+              containerClassName={"pagination"}
+              activeClassName={"active"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              nextClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextLinkClassName={"page-link"}
+              breakClassName={"page-item"}
+              breakLinkClassName={"page-link"}
+            />
+          </div>
       )}
-    </div>
+    </div></div>
   );
 };
 

@@ -25,7 +25,7 @@ function EmployeeProfile() {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api//employeeProfile/${EmpId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/employeeProfile/${EmpId}`
         ); // Fetch employee data
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data
@@ -43,7 +43,7 @@ function EmployeeProfile() {
     <>
       <MainHeader />
       <EmployeeSider />
-      <div className="flex flex-col justify-center lg:flex-row mt-14">
+      <div className="flex flex-col justify-center  lg:flex-row mt-14">
         <div className="flex-grow md:p-4 mt-14 lg:mt-0 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
             Employee Profile

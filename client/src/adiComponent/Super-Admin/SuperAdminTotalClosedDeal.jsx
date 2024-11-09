@@ -14,7 +14,7 @@ const SuperAdminTotalClosedDeal = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 10;
+  const leadsPerPage = 7;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const SuperAdminTotalClosedDeal = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads`);
+      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/leads`);
       const nonPendingLeads = response.data.filter((lead) => lead.deal_status !== "pending");
       setLeads(nonPendingLeads);
       setFilteredLeads(nonPendingLeads);
@@ -50,25 +50,34 @@ const SuperAdminTotalClosedDeal = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
-  const displayedLeads = filteredLeads.slice(
-    currentPage * itemsPerPage,
-    (currentPage + 1) * itemsPerPage
-  );
-
-  const handlePageClick = (selectedPage) => {
-    setCurrentPage(selectedPage.selected);
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
   };
-
   return (
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container mt-[5rem] px-5 2xl:ml-44">
+      <div className="container mt-[7rem]  2xl:ml-40">
+   
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+       
       </div>
-      <div className="flex flex-col 2xl:ml-44">
-        <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
-          <center className="text-2xl text-center mt-8 font-medium">
+      <div className="flex flex-col 2xl:ml-40">
+        <div className="flex-grow p-4 mt-2  sm:ml-0">
+          <center className="text-2xl text-center  font-medium">
             Total Closed Deals
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
@@ -92,10 +101,10 @@ const SuperAdminTotalClosedDeal = () => {
                 </tr>
               </thead>
               <tbody>
-                {displayedLeads.map((lead, index) => (
+                {currentLeads.map((lead, index) => (
                   <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1 + currentPage * itemsPerPage}
+                      {index + 1 + currentPage * leadsPerPage}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.lead_no}
@@ -134,27 +143,27 @@ const SuperAdminTotalClosedDeal = () => {
             </table>
           </div>
 
-          <PaginationWrapper>
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
-              pageCount={Math.ceil(filteredLeads.length / itemsPerPage)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={5}
-              onPageChange={handlePageClick}
-              containerClassName="pagination-container"
-              pageClassName="pagination-page"
-              pageLinkClassName="pagination-link"
-              previousClassName="pagination-previous"
-              previousLinkClassName="pagination-link-previous"
-              nextClassName="pagination-next"
-              nextLinkClassName="pagination-link-next"
-              breakClassName="pagination-break"
-              breakLinkClassName="pagination-break-link"
-              activeClassName="pagination-active"
-            />
-          </PaginationWrapper>
+          <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
         </div>
       </div>
     </>
@@ -162,69 +171,3 @@ const SuperAdminTotalClosedDeal = () => {
 };
 
 export default SuperAdminTotalClosedDeal;
-const PaginationWrapper = styled.div`
-padding-bottom: 2rem;
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem; // Reduced gap for better spacing
-    margin-top: 1.5rem;
-  }
-
-  .pagination-page {
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
-  }
-
-  .pagination-link {
-    padding: 0.5rem 1rem; // Increased padding for better click area
-    font-size: 0.875rem;
-    color: #3b82f6;
-    text-decoration: none;
-    transition: color 0.3s;
-
-    &:hover {
-      color: #2563eb;
-    }
-  }
-
-  .pagination-previous,
-  .pagination-next,
-  .pagination-break {
-    background-color: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s;
-  }
-
-  .pagination-link-previous,
-  .pagination-link-next,
-  .pagination-break-link {
-    padding: 0.5rem 1rem; // Increased padding for consistency
-    font-size: 0.875rem;
-    color: #374151;
-    transition: background-color 0.3s;
-
-    &:hover {
-      background-color: #f3f4f6; // Light gray on hover
-      transform: translateY(-1px); // Subtle lift effect
-    }
-  }
-
-  .pagination-active {
-    background-color: #1e50ff;
-    color: white;
-    border: 1px solid #374151;
-    border-radius: 0.375rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  .pagination-active .pagination-link {
-    color: white !important; // Ensure link inside active page is white
-  }
-`;

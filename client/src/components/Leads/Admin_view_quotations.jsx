@@ -24,7 +24,7 @@ const Admin_view_quotations = () => {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-quotation-byLead/${id}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byLead/${id}`
       );
       setQuotations(response.data);
       console.log(response);
@@ -40,7 +40,7 @@ const Admin_view_quotations = () => {
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:9000/api/quotation/${id}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/quotation/${id}`
         );
         if (response.status === 200) {
           console.log("Quotation deleted successfully");
@@ -56,7 +56,7 @@ const Admin_view_quotations = () => {
   const handleCopyQuotation = async (quotationId) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/api/copy-quotation/${quotationId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/copy-quotation/${quotationId}`
       );
       setRender(!render);
     } catch (error) {

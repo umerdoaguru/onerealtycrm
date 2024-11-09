@@ -29,7 +29,7 @@ const Registration = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:9000/api/register",
+        "https://crmdemo.vimubds5.a2hosted.com/api/register",
         formData
       );
       setLoading(false);

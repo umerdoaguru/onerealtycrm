@@ -22,7 +22,7 @@ const EmployeeOverview = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
       );
       setLeads(response.data);
     } catch (error) {
@@ -34,7 +34,7 @@ const EmployeeOverview = () => {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byEmploye/${EmpId}`
       );
       console.log(response.data);
       setQuotation(response.data);
@@ -46,7 +46,7 @@ const EmployeeOverview = () => {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-employee-invoice/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/get-employee-invoice/${EmpId}`
       );
       setInvoice(response.data);
     } catch (error) {
@@ -59,7 +59,7 @@ const EmployeeOverview = () => {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employebyid-visit/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employebyid-visit/${EmpId}`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -93,7 +93,7 @@ const EmployeeOverview = () => {
     <>
       {/* <div className="w-full  h-screen"> */}
 
-      <div className="flex flex-wrap justify-around mt-5">
+      <div className="flex flex-wrap justify-around mt-5 ">
         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3  ">
           <Link to="/employees-total-leads">
             <div
@@ -147,7 +147,7 @@ const EmployeeOverview = () => {
                         : "text-gray-800"
                     }`}
                   >
-                    Visit Data
+                    Total Site Visit
                   </h5>
                   <p
                     className={`${
@@ -193,7 +193,7 @@ const EmployeeOverview = () => {
                         : "text-gray-800"
                     }`}
                   >
-                    Closed Data
+                    Total Closed Deal
                   </h5>
                   <p
                     className={`${

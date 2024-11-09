@@ -21,7 +21,7 @@ const Dashboard = () => {
   };
   const getInvoiceData = () => {
     try {
-      const response = axios.get("http://localhost:9000/api/invoiceData");
+      const response = axios.get("https://crmdemo.vimubds5.a2hosted.com/api/invoiceData");
     } catch (err) {}
   };
 
@@ -33,7 +33,7 @@ const Dashboard = () => {
       <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       <div className="flex min-h-screen overflow-hidden ">
         {/* Main Content */}
-        <div className="flex-1 max-w-full lg:ml-64 xl:ml-52 mr-3 ">
+        <div className="flex-1 max-w-full 2xl:w-[93%] 2xl:ml-32 ">
           {/* Hamburger Menu Button for Mobile */}
           {/* <div className="p-4 lg:hidden">
                     <button onClick={toggleSidebar} className="text-2xl">
@@ -45,9 +45,9 @@ const Dashboard = () => {
           <div>
             <AdminOverviewDash />
           </div>
-          <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
-            <Invoice />
+          <div className="grid grid-cols-1 gap-2 mt-6 mx-7 md:grid-cols-2 lg:grid-cols-3">
             <LeadsGraph />
+            <Invoice />
 
             <QuotationGraph />
           </div>

@@ -7,10 +7,13 @@ import Sider from "../components/Sider";
 import MainHeader from "../components/MainHeader";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import ReactPaginate from "react-paginate";
 
 const EmployeeSingle = () => {
   const { employeeId } = useParams();
   const [leads, setLeads] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 7; 
 
   const navigate = useNavigate();
   const [employee, setEmployee] = useState(null);
@@ -30,7 +33,7 @@ const EmployeeSingle = () => {
   // Fetch employee data
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/getEmployeeById/${employeeId}`);
+      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/getEmployeeById/${employeeId}`);
       if (response.data.success) {
         setEmployee(response.data.employee);
         setNewEmployee({
@@ -97,7 +100,7 @@ const EmployeeSingle = () => {
 
   const isEmailTaken = async (email) => {
     try {
-      const response = await axios.get('http://localhost:9000/api/checkEmail', {
+      const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/checkEmail', {
         params: { email },
       });
       return response.data.exists;
@@ -109,7 +112,7 @@ const EmployeeSingle = () => {
 
   const isPhoneNumberTaken = async (phone) => {
     try {
-      const response = await axios.get('http://localhost:9000/api/checkPhoneNumber', {
+      const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/checkPhoneNumber', {
         params: { phone },
       });
       return response.data.exists;
@@ -164,11 +167,11 @@ const EmployeeSingle = () => {
 
       let response;
       if (editingIndex !== null) {
-        response = await axios.put(`http://localhost:9000/api/updateSingleEmployee/${employee.employeeId}`, formData, {
+        response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateSingleEmployee/${employee.employeeId}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       } else {
-        response = await axios.post('http://localhost:9000/api/addEmployee', formData, {
+        response = await axios.post('https://crmdemo.vimubds5.a2hosted.com/api/addEmployee', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
@@ -216,7 +219,7 @@ const EmployeeSingle = () => {
       );
       if (isConfirmed) {
         try {
-          await axios.delete(`http://localhost:9000/api/deleteEmployee/${employee.employeeId}`);
+          await axios.delete(`https://crmdemo.vimubds5.a2hosted.com/api/deleteEmployee/${employee.employeeId}`);
           navigate('/employee-management');
         } catch (error) {
           setError("Error deleting employee");
@@ -233,7 +236,7 @@ const EmployeeSingle = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${employeeId}`);
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${employeeId}`);
       const data = response.data;
       setLeads(data);
     } catch (error) {
@@ -242,6 +245,17 @@ const EmployeeSingle = () => {
   };
   const handleBackClick = () => {
     navigate(-1); // -1 navigates to the previous page in history
+  };
+  const pageCount = Math.ceil(leads.length / itemsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
   };
 
   return (
@@ -279,7 +293,7 @@ const EmployeeSingle = () => {
                 <div className="flex items-center mb-6">
                   {/* {employee.photo ? (
                     <img
-                      src={`https://crm.one-realty.in${employee.photo}`}
+                      src={`https://crmdemo.vimubds5.a2hosted.com${employee.photo}`}
                       alt="Profile"
                       className="w-24 h-24 border-2 border-gray-300 rounded-full"
                     />
@@ -308,7 +322,7 @@ const EmployeeSingle = () => {
                       Signature
                     </h4>
                     <img
-                      src={`https://crm.one-realty.in${employee.signature}`}
+                      src={`https://crmdemo.vimubds5.a2hosted.com${employee.signature}`}
                       alt="Signature"
                       className="w-32 h-16 border-t border-gray-300"
                     />
@@ -356,7 +370,7 @@ const EmployeeSingle = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {leads.map((lead, index) => (
+                      {currentLeads.map((lead, index) => (
                         <tr
                           key={lead.id}
                           className={index % 2 === 0 ? "bg-gray-100" : ""}
@@ -393,7 +407,27 @@ const EmployeeSingle = () => {
             ) : (
               <p className="text-gray-600">No employee data available.</p>
             )}
-
+<div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
             <Modal isOpen={showForm} onClose={() => setShowForm(false)}>
               <h3 className="mb-4 text-lg font-bold">
                 {editingIndex !== null ? "Edit Employee" : "Add Employee"}

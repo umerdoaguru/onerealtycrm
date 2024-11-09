@@ -26,14 +26,14 @@ function EmployeeProfile() {
   const { employeeId } = useParams();
   const [leads, setLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-const leadsPerPage = 10; 
+const itemsPerPage = 7; 
 const navigate = useNavigate();
 
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${employeeId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${employeeId}`
       );
       const data = response.data;
       setLeads(data);
@@ -41,21 +41,24 @@ const navigate = useNavigate();
       console.error("Error fetching leads:", error);
     }
   };
-    
-  const displayedLeads = leads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
+  
+  const pageCount = Math.ceil(leads.length / itemsPerPage);
 
-  const handlePageClick = (selectedPage) => {
-    setCurrentPage(selectedPage.selected);
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
   };
 
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employeeProfile/${employeeId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/employeeProfile/${employeeId}`
         ); // Fetch employee data
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data
@@ -165,13 +168,13 @@ const navigate = useNavigate();
                   </tr>
                 </thead>
                 <tbody>
-                {displayedLeads.map((lead, index) => (
+                {currentLeads.map((lead, index) => (
                     <tr
                       key={lead.id}
                       className={index % 2 === 0 ? "bg-gray-100" : ""}
                     >
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1 + currentPage * leadsPerPage}
+                      {index + 1 + currentPage * itemsPerPage}
                       </td>
                       <Link
                         to={`/super-admin-lead-single-data/${lead.lead_id}`}
@@ -204,28 +207,27 @@ const navigate = useNavigate();
           </div>
         </div>
       </div>
-      <PaginationWrapper>
-
-      <ReactPaginate
+      <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
           breakLabel={"..."}
-          pageCount={Math.ceil(leads.length / leadsPerPage)}
+          pageCount={pageCount}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={handlePageClick}
-          containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
-          />
-        </PaginationWrapper>
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
     </>
   );
 };

@@ -29,7 +29,7 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
 
   return (
     <nav className="mt-6">
-      <ul className="inline-flex -space-x-px text-base h-10 flex-wrap">
+      <ul className="inline-flex gap-2 text-base h-10 flex-wrap">
         {/* Previous Button */}
         <li>
           <p

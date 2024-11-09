@@ -31,7 +31,7 @@ const AddImageComponent = () => {
       formData.append("image", selectedFile);
 
       await axios.post(
-        `http://localhost:9000/api/${quotationId}/${imageType}`,
+        `https://crmdemo.vimubds5.a2hosted.com/api/${quotationId}/${imageType}`,
         formData
       );
 

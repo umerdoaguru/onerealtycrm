@@ -14,7 +14,7 @@ const DeleteNotes = () => {
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:9000/api/notes/${noteId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/notes/${noteId}`
         );
 
         if (response.status === 200) {
@@ -30,7 +30,7 @@ const DeleteNotes = () => {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/notes/${id}`);
+      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/notes/${id}`);
 
       if (response.status === 200) {
         setNotes(response.data);

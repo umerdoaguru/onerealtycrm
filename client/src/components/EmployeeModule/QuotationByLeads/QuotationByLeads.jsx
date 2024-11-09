@@ -36,13 +36,13 @@ const QuotationByLeads = () => {
   
       };
   
-      const response = await axios.post("http://localhost:9000/api/quotation", dataToSubmit);
+      const response = await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/quotation", dataToSubmit);
       
       console.log("Quotation added successfully:", response.data);
       
       try {
         const updateResponse = await axios.put(
-          `http://localhost:9000/api/updateOnlyQuotationStatus/${id}`,
+          `https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyQuotationStatus/${id}`,
           { quotation: "created" }
         );
   
@@ -70,8 +70,16 @@ const QuotationByLeads = () => {
       <MainHeader />
       <EmployeeeSider />
       <div className="flex flex-col  2xl:ml-44 ">
-        <div className="p-4 mt-5">
-          <div className="mt-5">
+      <div className="mt-[4rem] ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+        <div className="p-4 ">
+          <div className="">
             <div className=" gap-4">
               <div
                 className="bg-white p-6 rounded shadow-md" >

@@ -23,7 +23,7 @@ const SuperDash = () => {
   };
   const getInvoiceData = () => {
     try {
-      const response = axios.get("http://localhost:9000/api/invoiceData");
+      const response = axios.get("https://crmdemo.vimubds5.a2hosted.com/api/invoiceData");
     } catch (err) {}
   };
 
@@ -33,19 +33,19 @@ const SuperDash = () => {
       <SuperAdminSider />
       {/* <SuperHeader /> */}
 
-      <div className="md:w-[85%] xxl:w-screen lg:ml-[10rem]">
+      <div className="">
         <h1 className="text-2xl text-center mt-[5rem] font-medium">
           Super Admin Dashboard
         </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
         <div className="flex min-h-screen overflow-hidden ">
-          <div className="flex-1 max-w-full xxl:w-screen mr-3 ">
+          <div className="flex-1 max-w-full 2xl:w-[93%] 2xl:ml-32 ">
             <div>
               <Overview />
             </div>
-            <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-3">
-              <Invoice />
+            <div className="grid grid-cols-1 gap-2 mx-7 mt-6 md:grid-cols-2 lg:grid-cols-3">
               <LeadsGraph />
+              <Invoice />
               <DealGraph />
             </div>
 
@@ -59,3 +59,7 @@ const SuperDash = () => {
 };
 
 export default SuperDash;
+
+
+
+

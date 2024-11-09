@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -17,7 +17,7 @@ const EmployeeQuotationList = () => {
   const [sortAsc, setSortAsc] = useState(true);
   const [render, setRender] = useState(false);
   const { id } = useParams();
-
+const navigate  = useNavigate();
   
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const EmployeeQuotationList = () => {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-quotation-byLead/${id}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byLead/${id}`
       );
       setQuotations(response.data);
       console.log(response.data);
@@ -46,7 +46,7 @@ const EmployeeQuotationList = () => {
   //   if (isConfirmed) {
   //     try {
   //       const response = await axios.delete(
-  //         `http://localhost:9000/api/quotation/${id}`
+  //         `https://crmdemo.vimubds5.a2hosted.com/api/quotation/${id}`
   //       );
   //       if (response.status === 200) {
   //         console.log("Quotation deleted successfully");
@@ -67,7 +67,7 @@ const EmployeeQuotationList = () => {
       try {
         // Delete the quotation
         const response = await axios.delete(
-          `http://localhost:9000/api/quotation/${quotation.id}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/quotation/${quotation.id}`
         );
         
         if (response.status === 200) {
@@ -76,7 +76,7 @@ const EmployeeQuotationList = () => {
           // After deletion, update the leads table status
           try {
             const updateResponse = await axios.put(
-              `http://localhost:9000/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
+              `https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyQuotationStatus/${quotation.lead_id}`,
               { quotation: "not created" }
             );
   
@@ -103,7 +103,7 @@ const EmployeeQuotationList = () => {
   const handleCopyQuotation = async (quotationId) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/api/copy-quotation/${quotationId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/copy-quotation/${quotationId}`
       );
       setRender(!render);
     } catch (error) {
@@ -146,7 +146,15 @@ const EmployeeQuotationList = () => {
     <>
       <MainHeader />
       <EmployeeeSider />
-      <div className="container mt-4">
+      <div className="container mt-4 2xl:w-[91%] 2xl:ml-36">
+      <div className="mt-[7rem] ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
         <div className="w-full px-2 mx-auto p-4">
           <div className="w-full px-2 mt-4">
             <h2 className="text-2xl font-bold mb-4 text-center">

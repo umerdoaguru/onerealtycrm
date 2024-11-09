@@ -41,7 +41,7 @@ function SuperDataExport() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crmdemo.vimubds5.a2hosted.com/api/leads");
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -50,7 +50,7 @@ function SuperDataExport() {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employee`);
+      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employee`);
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -60,7 +60,7 @@ function SuperDataExport() {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/quotation-data`
+        `https://crmdemo.vimubds5.a2hosted.com/api/quotation-data`
       );
       setQuotation(response.data);
     } catch (error) {
@@ -71,7 +71,7 @@ function SuperDataExport() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/invoice-data`
+        `https://crmdemo.vimubds5.a2hosted.com/api/invoice-data`
       );
       setInvoice(response.data);
     } catch (error) {
@@ -81,7 +81,7 @@ function SuperDataExport() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-all-visit`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-all-visit`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -91,8 +91,9 @@ function SuperDataExport() {
       console.error("Error fetching quotations:", error);
     }
   };
-
-  const leadCount = leads.length;
+  const leadCount = leads.filter(
+    (lead) => lead.lead_status === "completed"
+  ).length; 
   const employeeCount = employee.length;
  
 
@@ -226,7 +227,7 @@ function SuperDataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Visit Data
+                    Site Visits Data
                   </h5>
                   <p
                     className={`${
@@ -270,7 +271,7 @@ function SuperDataExport() {
                         : "text-gray-800"
                     }`}
                   >
-                    Closed Data
+                    Closed Deal Data
                   </h5>
                   <p
                     className={`${

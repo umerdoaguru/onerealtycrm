@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaHistory } from "react-icons/fa";
+import { FaHistory, FaUserCircle } from "react-icons/fa";
 import { RiSecurePaymentLine } from "react-icons/ri";
 import { BsFileEarmarkPerson, BsHouse } from "react-icons/bs";
 import { MdOutlineManageAccounts } from "react-icons/md";
@@ -36,7 +36,7 @@ const Sider = () => {
       >
         {/* Close (Cross) Button - Hidden on large screens */}
         <button
-          className="aabsolute left-14 md:left-32 lg-left-32 text-gray-400 2xl:hidden" // Hidden on large screens (lg)
+          className="absolute left-14 md:left-32 lg-left-32 text-gray-400 2xl:hidden" // Hidden on large screens (lg)
           onClick={toggleSidebar}
         >
           <AiOutlineClose size={25} />
@@ -131,6 +131,18 @@ const Sider = () => {
                 <MdOutlineManageAccounts className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
                   Employees Management
+                </h3>
+              </Link>
+            </li>
+            <hr className="w-full border-gray-400" />
+            <li className={`xl:w-full ${getSidebarClass("/super-admin-profile")}`}>
+              <Link
+                to="/admin-profile"
+                className="flex flex-col items-center py-3"
+              >
+                <FaUserCircle className="text-white text-2xl md:text-3xl" />
+                <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
+                 Admin Profile
                 </h3>
               </Link>
             </li>

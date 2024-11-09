@@ -15,6 +15,7 @@ function Employee_Single_Lead_Profile() {
   const [visit, setVisit] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupVisit, setShowPopupVisit] = useState(false);
+  const [showPopupFollowUp, setShowPopupFollowUp] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [render, setRender] = useState(false);
 
@@ -25,12 +26,24 @@ function Employee_Single_Lead_Profile() {
     employeeId: "",
     employee_name: "",
     visit: "",
-    visit_date: "",
-    report: "",
+    visit_date: "", 
+
+  });
+  const [follow_up, setFollow_Up] = useState({
+    
+    lead_id: "",
+    name: "",
+    employeeId: "",
+    employee_name: "",
+    follow_up_type: "",
+    follow_up_date: "", 
+    report:""
+
   });
 
   const [quotationCreated, setQuotationCreated] = useState(false);
   const [visitCreated, setVisitCreated] = useState(false);
+  const [followCreated, setFollowCreated] = useState(false);
 
   // const leads = [{ /* lead data */ }];
 
@@ -147,10 +160,11 @@ function Employee_Single_Lead_Profile() {
     fetchLeads();
 
     fetchVisit();
+    fetchFollowUp();
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
-  //     const response = await axios.get(http://localhost:9000/api/leads/${id});
+  //     const response = await axios.get(https://crmdemo.vimubds5.a2hosted.com/api/leads/${id});
   //     setLeads(response.data);
   //     console.log(response);
   //   } catch (error) {
@@ -160,7 +174,7 @@ function Employee_Single_Lead_Profile() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/leads/${id}`);
       console.log(response.data);
       setLeads(response.data);
 
@@ -188,7 +202,7 @@ function Employee_Single_Lead_Profile() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-visit/${id}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-visit/${id}`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -199,6 +213,19 @@ function Employee_Single_Lead_Profile() {
           "repeated"
       );
       setVisitCreated(hasCreatedvisit);
+    } catch (error) {
+      console.error("Error fetching quotations:", error);
+    }
+  };
+  const fetchFollowUp = async () => {
+    try {
+      const response = await axios.get(
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-follow-up/${id}`
+      );
+      console.log(response.data);
+      setFollow_Up(response.data);
+      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+      setFollowCreated(response.data[0]);
     } catch (error) {
       console.error("Error fetching quotations:", error);
     }
@@ -233,6 +260,13 @@ function Employee_Single_Lead_Profile() {
       [name]: value,
     }));
   };
+  const handleInputChangeFollowUp = (e) => {
+    const { name, value } = e.target;
+    setFollow_Up((prevLead) => ({
+      ...prevLead,
+      [name]: value,
+    }));
+  };
 
   const handleUpdate = (lead) => {
     setIsEditing(true);
@@ -248,12 +282,29 @@ function Employee_Single_Lead_Profile() {
       employee_name: "",
       visit: "",
       visit_date: "",
-      report: "",
+    
+
     });
     setShowPopupVisit(true);
   };
+  const handleCreateClickFollowUp = () => {
+    setFollow_Up({
+      lead_id: "",
+      name: "",
+      employeeId: "",
+      employee_name: "",
+      follow_up_type: "",
+      follow_up_date: "", 
+      report:""
+
+    });
+    setShowPopupFollowUp(true);
+  };
   const handleViewVisit = () => {
     navigate(`/view_visit/${leads[0].lead_id}`);
+  };
+  const handleViewFollowUp = () => {
+    navigate(`/view_follow_up/${leads[0].lead_id}`);
   };
 
   const saveChanges = async () => {
@@ -274,7 +325,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
-        `http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`,
+        `https://crmdemo.vimubds5.a2hosted.com/api/updateLeadStatus/${currentLead.lead_id}`,
         currentLead
       );
 
@@ -293,54 +344,7 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Failed to update the lead status.");
     }
   };
-  // const saveVisit = async () => {
-  //   // Validate required fields
-  //   if (!visitLead.visit) {
-  //     cogoToast.error("Please select a visit type.");
-  //     return;
-  //   }
-  //   if (!visitLead.visit_date) {
-  //     cogoToast.error("Please select a visit date.");
-  //     return;
-  //   }
-  //   if (!visitLead.report || visitLead.report.trim().length <5) {
-  //     cogoToast.error("Report is required and must be at least 5 characters.");
-  //     return;
-  //   }
-
-  //   console.log(visitLead);
-
-  //   try {
-  //     // Send updated data to the backend using Axios
-  //     const response = await axios.post(
-  //       `http://localhost:9000/api/employe-visit`,
-  //       {
-  //         lead_id: leads[0].lead_id,
-  //         name:leads[0].name,
-  //         employeeId: leads[0].employeeId,
-  //         employee_name: leads[0].assignedTo,
-  //         visit: visitLead.visit,
-  //         visit_date: visitLead.visit_date,
-  //         report: visitLead.report,
-  //       }
-  //     );
-
-  //     if (response.status === 201) {
-  //       console.log("Updated successfully:", response.data);
-  //       cogoToast.success("Visit created successfully");
-
-  //       closePopupVisit(); // Close the popup on success
-  //       fetchVisit();
-  //     } else {
-  //       console.error("Error updating:", response.data);
-  //       cogoToast.error("Failed to update the lead status.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Request failed:", error);
-  //     cogoToast.error("Failed to update the lead status.");
-  //   }
-  // };
-
+  
   const saveVisit = async () => {
     // Validate required fields
     if (!visitLead.visit) {
@@ -351,17 +355,14 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Please select a visit date.");
       return;
     }
-    if (!visitLead.report || visitLead.report.trim().length < 5) {
-      cogoToast.error("Report is required and must be at least 5 characters.");
-      return;
-    }
+   
   
     console.log(visitLead);
   
     try {
       // Send updated data to the backend using Axios
       const response = await axios.post(
-        `http://localhost:9000/api/employe-visit`,
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-visit`,
         {
           lead_id: leads[0].lead_id,
           name: leads[0].name,
@@ -369,7 +370,7 @@ function Employee_Single_Lead_Profile() {
           employee_name: leads[0].assignedTo,
           visit: visitLead.visit,
           visit_date: visitLead.visit_date,
-          report: visitLead.report,
+         
         }
       );
   
@@ -379,7 +380,7 @@ function Employee_Single_Lead_Profile() {
   
         // Update the visit status after saving the visit
         const updateResponse = await axios.put(
-          `http://localhost:9000/api/updateVisitStatus/${leads[0].lead_id}`,
+          `https://crmdemo.vimubds5.a2hosted.com/api/updateVisitStatus/${leads[0].lead_id}`,
           { visit: visitLead.visit }
         );
   
@@ -403,6 +404,65 @@ function Employee_Single_Lead_Profile() {
       cogoToast.error("Failed to create visit.");
     }
   };
+  // Validate required fields
+  // if (!follow_up.follow_up_type) {
+  //   cogoToast.error("Please select a follow up type.");
+  //   return;
+  // }
+  // if (!follow_up.follow_up_date) {
+  //   cogoToast.error("Please select a follow up date.");
+  //   return;
+  // }
+ 
+  const saveFollowUp = async () => {
+    console.log(follow_up);
+  
+    try {
+      // Send updated data to the backend using Axios
+      const postResponse = await axios.post(
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-follow-up`,
+        {
+          lead_id: leads[0].lead_id,
+          name: leads[0].name,
+          employeeId: leads[0].employeeId,
+          employee_name: leads[0].assignedTo,
+          follow_up_type: follow_up.follow_up_type,
+          follow_up_date: follow_up.follow_up_date,
+          report: follow_up.report
+        }
+      );
+  
+      if (postResponse.status === 201) {
+        console.log("Follow-up created successfully:", postResponse.data);
+        cogoToast.success("Follow-up created successfully");
+  
+        // Update the Follow Up status after saving the Follow Up
+        const putResponse = await axios.put(
+          `https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyFollowUpStatus/${leads[0].lead_id}`,
+          { follow_up_status: "in progress" }
+        );
+  
+        if (putResponse.status === 200) {
+          console.log("Status updated successfully:", putResponse.data);
+        } else {
+          console.error("Error updating status:", putResponse.data);
+          cogoToast.error("Failed to update the lead status.");
+        }
+  
+        // Close the popup on success
+        closePopupFollowUp();
+        fetchFollowUp();
+        fetchLeads();
+      } else {
+        console.error("Error creating follow-up:", postResponse.data);
+        cogoToast.error("Failed to create follow-up.");
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+      cogoToast.error("Failed to create follow-up.");
+    }
+  };
+  
   
 
 
@@ -411,6 +471,9 @@ function Employee_Single_Lead_Profile() {
   };
   const closePopupVisit = () => {
     setShowPopupVisit(false);
+  };
+  const closePopupFollowUp = () => {
+    setShowPopupFollowUp(false);
   };
   
   const totalVisit = visit.length;
@@ -505,6 +568,12 @@ console.log(totalVisit);
               >
                 Visit Creation
               </button>
+              <button
+                className="bg-yellow-500 text-white px-4 py-2  rounded"
+                onClick={handleCreateClickFollowUp}
+              >
+                Follow Up Creation
+              </button>
             </div>
             <div className="">
               {/* Conditionally render the View Quotation button */}
@@ -526,15 +595,29 @@ console.log(totalVisit);
                 {visitCreated ? (
                   <button
                     onClick={handleViewVisit}
-                    className="bg-green-500 text-white px-4 py-2 mx-3 rounded"
+                    className="bg-green-500 text-white px-4 py-2 mx-2 rounded"
                   >
                     View Visit
                   </button>
                 ) : (
-                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                  <p className="text-white bg-red-400 text-center px-4 py-2  rounded">
                     Visit not yet created
                   </p>
                 )}
+
+{followCreated ? (
+  <button
+    onClick={handleViewFollowUp}
+    className="bg-yellow-500 text-white px-4 py-2 mx-2 rounded"
+  >
+    View Follow Up
+  </button>
+) : (
+  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
+    Follow Up not yet created
+  </p>
+)}
+
               </div>
             </div>
           </div>
@@ -548,9 +631,7 @@ console.log(totalVisit);
                     Assigned To
                   </th>
                  
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Visit
-                  </th>
+              
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Quotation
                   </th>
@@ -614,9 +695,8 @@ console.log(totalVisit);
                     </td>
 
                    
-                    <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
-                      {totalVisit}
-                    </td>
+                
+              
                     <td className="px-6 py-4  border-b border-gray-200 text-gray-800">
                       {lead.quotation}
                     </td>
@@ -819,16 +899,7 @@ console.log(totalVisit);
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label className="block text-gray-700">Report</label>
-                  <input
-                    type="text"
-                    name="report"
-                    value={visitLead.report}
-                    onChange={handleInputChangeVisit}
-                    className={`w-full px-3 py-2 border  rounded`}
-                  />
-                </div>
+               
 
                 <div className="flex justify-end">
                   <button
@@ -840,6 +911,87 @@ console.log(totalVisit);
                   <button
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
                     onClick={closePopupVisit}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {showPopupFollowUp && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+                <h2 className="text-xl mb-4">{"Add Follow Up"}</h2>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Lead Number</label>
+                  <input
+                    type="number"
+                    name="lead_no"
+                    value={leads[0].lead_no}
+                    onChange={handleInputChangeFollowUp}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={leads[0].name}
+                    onChange={handleInputChangeFollowUp}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+            
+                <div className="mb-4">
+                  <label className="block text-gray-700">Follow Up Type</label>
+                  <select
+                    name="follow_up_type"
+                    value={follow_up.follow_up_type}
+                    onChange={handleInputChangeFollowUp}
+                    className="border rounded-2xl p-2 w-full"
+                  >
+                    <option value="">Select Follow Type</option>
+                    <option value="call">Call</option>
+                    <option value="email">Email</option>
+                    <option value="in-person">In Person</option>
+                    <option value="whatsapp-chat">Whatsapp Chat</option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700">Follow Up Date</label>
+                  <input
+                    type="date"
+                    name="follow_up_date"
+                    value={follow_up.follow_up_date}
+                    onChange={handleInputChangeFollowUp}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700">Report</label>
+                  <input
+                    type="text"
+                    name="report"
+                    value={follow_up.report}
+                    onChange={handleInputChangeFollowUp}
+                    className={`w-full px-3 py-2 border  rounded`}
+                  />
+                </div>
+
+               
+
+                <div className="flex justify-end">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+                    onClick={saveFollowUp}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    onClick={closePopupFollowUp}
                   >
                     Cancel
                   </button>

@@ -17,7 +17,7 @@ const EmployeeLeadsGraph = () => {
   // useEffect(() => {
   //   const fetchLeadsData = async () => {
   //     try {
-  //       const response = await axios.get(`http://localhost:9000/api/employe-leads/${EmpId}`);
+  //       const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`);
   //       const allLeads = response.data;
 
   //       // Get today's date and the date 28 days ago (to include today and 27 previous days)
@@ -81,7 +81,7 @@ const EmployeeLeadsGraph = () => {
     const fetchLeadsData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employe-leads/${EmpId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
         );
         const allLeads = response.data;
 
@@ -131,7 +131,7 @@ const EmployeeLeadsGraph = () => {
   }, []);
 
   return (
-  <div className="mx-2">
+  <div className="">
       <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
       <h2 className="text-xl font-bold mb-2">Daily Leads Overview</h2>
       {error ? (
