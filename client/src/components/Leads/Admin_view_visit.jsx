@@ -29,7 +29,7 @@ const Admin_view_visit = () => {
   const fetchvisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-visit/${id}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-visit/${id}`
       );
       setVisit(response.data);
       console.log(response);
@@ -45,7 +45,7 @@ const Admin_view_visit = () => {
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:9000/api/employe-visit/${id}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/employe-visit/${id}`
         );
         if (response.status === 200) {
           console.log("visit deleted successfully");
@@ -79,7 +79,7 @@ const Admin_view_visit = () => {
   // Function to send the PUT request to update the visit data
   const updateVisit = async () => {
     try {
-      const response = await axios.put(`http://localhost:9000/api/employe-visit`, modalData);
+      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/employe-visit`, modalData);
       if (response.status === 200) {
         cogoToast.success("Visit updated successfully!");
         setRender(!render); // Refresh the list after updating
@@ -116,7 +116,7 @@ const Admin_view_visit = () => {
     <>
       <MainHeader />
       <Sider />
-      <div className="container mt-4">
+      <div className="container mt-4 2xl:w-[91%] 2xl:ml-36">
       <button
             onClick={handleBackClick}
             className="bg-blue-500 text-white mt-5 px-4 py-2 rounded"

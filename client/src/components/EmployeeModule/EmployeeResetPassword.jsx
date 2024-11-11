@@ -20,7 +20,7 @@ const EmployeeResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/sendOtp-employee",
+        "https://crmdemo.vimubds5.a2hosted.com/api/sendOtp-employee",
         {
           email,
         }
@@ -40,7 +40,7 @@ const EmployeeResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:9000/api/verifyOtp-employee",
+        "https://crmdemo.vimubds5.a2hosted.com/api/verifyOtp-employee",
         {
           email,
           otp,
@@ -60,7 +60,7 @@ const EmployeeResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "http://localhost:9000/api/resetPassword-employee",
+        "https://crmdemo.vimubds5.a2hosted.com/api/resetPassword-employee",
         {
           email,
           password: newPassword,

@@ -67,8 +67,8 @@ function SuperEmployeeLeads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        // `http://localhost:9000/api/leads-visits/${id}`
-           `http://localhost:9000/api/employe-leads/${id}`
+        // `https://crmdemo.vimubds5.a2hosted.com/api/leads-visits/${id}`
+           `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${id}`
       );
       const data = response.data;
       console.log(data);
@@ -77,6 +77,20 @@ function SuperEmployeeLeads() {
       console.error("Error fetching leads:", error);
     }
   };
+  // const fetchVisit = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       // `https://crmdemo.vimubds5.a2hosted.com/api/employe-all-visit`
+  //         `https://crmdemo.vimubds5.a2hosted.com/api/employe-all-visit`
+  //     );
+  //     console.log(response.data);
+  //     setVisit(response.data);
+  //     // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+    
+  //   } catch (error) {
+  //     console.error("Error fetching quotations:", error);
+  //   }
+  // };
 
   const handleSearch = (value) =>{
     if(value === ' '){
@@ -283,13 +297,13 @@ function SuperEmployeeLeads() {
             </div>
           </div>
           <div className="flex gap-10 text-xl font-semibold mt-5">
+  <div>Total Lead: {leads.length}</div>
   <div>
     Total Lead visit:{" "}
     {leads.filter(
         (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
       ).length}
   </div>
-  <div>Total Lead: {leads.length}</div>
   <div>
     Total Closed Lead:{" "}
     {
@@ -413,7 +427,7 @@ function SuperEmployeeLeads() {
 
             </table>
           </div>
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4 flex mb-4 justify-center 2xl:w-[89%]">
             <ReactPaginate
               previousLabel={"Previous"}
               nextLabel={"Next"}

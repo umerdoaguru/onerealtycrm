@@ -6,15 +6,16 @@ import { useSelector } from "react-redux";
 import SuperAdminSider from "./SuperAdminSider";
 import MainHeader from "../../components/MainHeader";
 import Pagination from "../comp/pagination";
+import ReactPaginate from "react-paginate";
 
 const SuperAdminVisit = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const itemsPerPage = 10; // Set how many items you want per page
- 
+  const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
+  const itemsPerPage = 7; // Set how many items you want per page
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchLeads();
@@ -22,7 +23,7 @@ const SuperAdminVisit = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employe-all-visit`);
+      const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/employe-all-visit`);
       const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
 
       setLeads(nonPendingLeads);
@@ -47,22 +48,35 @@ const SuperAdminVisit = () => {
 
   // Calculate page data for pagination
   const pageCount = Math.ceil(filteredLeads.length / itemsPerPage);
-  const displayedLeads = filteredLeads.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
 
   return (
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="flex flex-col 2xl:ml-44 ">
-        <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
-          <center className="text-2xl text-center mt-8 font-medium">
+      <div className="mt-[7rem] 2xl:ml-44 mx-1 ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+      <div className="flex flex-col 2xl:ml-40 ">
+        <div className="flex-grow p-4  sm:ml-0">
+          <center className="text-2xl text-center font-medium">
             Total Visits
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-          <div className="overflow-x-auto mt-4">
+          <div className="overflow-x-auto mt-2">
             <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
               <thead className="bg-gray-100">
               <tr>
@@ -91,8 +105,8 @@ const SuperAdminVisit = () => {
                   </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {displayedLeads.length > 0 ? (
-                  displayedLeads.map((visit, index) => (
+                {currentLeads.length > 0 ? (
+                  currentLeads.map((visit, index) => (
                     <tr key={visit.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {index + 1}
@@ -128,15 +142,30 @@ const SuperAdminVisit = () => {
               </tbody>
             </table>
           </div>
-          <div className="text-center">
+        
             
-          <Pagination
-            currentPage={currentPage}
-            totalItems={filteredLeads.length}
-            itemsPerPage={itemsPerPage}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+          <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
+      
       </div>
       </div>
     </>

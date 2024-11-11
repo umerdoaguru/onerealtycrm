@@ -24,12 +24,12 @@ function EmployeeDashboard() {
       <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       <div className="flex min-h-screen overflow-hidden">
         {/* Main Content */}
-        <div className="flex-1 max-w-full lg:ml-64 xl:ml-52 mr-3 ">
+        <div className="flex-1 max-w-full 2xl:w-[93%] 2xl:ml-32 ">
           {/* Adjust grid layout for different screen sizes */}
           <div>
             <EmployeeOverview />
           </div>
-          <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2 mt-6 mx-8 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
             {/* <Invoice /> */}
             {/* <EmployeeInvoiceGraph /> */}
             <EmployeeLeadsGraph />

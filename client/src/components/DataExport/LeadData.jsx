@@ -26,9 +26,11 @@ function LeadData() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crmdemo.vimubds5.a2hosted.com/api/leads");
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering
+      console.log(leads);
+      
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
@@ -36,46 +38,58 @@ function LeadData() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/employee");
+      const response = await axios.get("https://crmdemo.vimubds5.a2hosted.com/api/employee");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
     }
   };
 
-  // Automatically apply date and employee filters when start or end date changes or when an employee is selected
-  useEffect(() => {
-    let filtered = leads;
+// Add a filter for completed leads within the useEffect for filtering
+useEffect(() => {
+  let filtered = leads;
 
-    if (startDate && endDate) {
-      filtered = filtered.filter((lead) => {
-        const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
-      });
-    }
+  // Filter by date range if specified
+  if (startDate && endDate) {
+    filtered = filtered.filter((lead) => {
+      const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
+      return createdTime.isBetween(startDate, endDate, undefined, "[]");
+    });
+  }
 
-    if (selectedEmployee) {
-      filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
-    }
+  // Filter by selected employee if specified
+  if (selectedEmployee) {
+    filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
+  }
 
-    setFilteredLeads(filtered);
-    setCurrentPage(0); // Reset to first page on filter change
-  }, [startDate, endDate, selectedEmployee, leads]);
+  // Filter by lead_status 'completed'
+  filtered = filtered.filter((lead) => lead.lead_status === "completed");
 
-  const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-    XLSX.writeFile(workbook, "LeadsData.xlsx");
-  };
+  setFilteredLeads(filtered);
+  setCurrentPage(0); // Reset to first page on filter change
+}, [startDate, endDate, selectedEmployee, leads]);
+
+// Update downloadExcel to only export 'completed' leads
+const downloadExcel = () => {
+  // Filter completed leads for download
+  const completedLeads = filteredLeads.filter((lead) => lead.lead_status === "completed");
+  
+  const worksheet = XLSX.utils.json_to_sheet(completedLeads);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Completed Leads");
+  XLSX.writeFile(workbook, "CompletedLeadsData.xlsx");
+};
+
 
   // Pagination logic
+  // Calculate total number of pages
   const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
-  const currentLeads = filteredLeads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
 
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
     console.log("change current page ", data.selected);
@@ -146,6 +160,7 @@ function LeadData() {
                 <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">Lead Status</th>
               </tr>
             </thead>
             <tbody>
@@ -182,6 +197,9 @@ function LeadData() {
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.leadSource}
         </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.lead_status}
+        </td>
       </tr>
     ))
   )}
@@ -192,26 +210,25 @@ function LeadData() {
 
         {/* Pagination */}
         <div className="mt-2 mb-2 flex justify-center">
-  <ReactPaginate
-    previousLabel="Previous"
-    nextLabel="Next"
-    breakLabel="..."
-    pageCount={pageCount}
-    marginPagesDisplayed={2}
-    forcePage={currentPage}
-    pageRangeDisplayed={5}
-    onPageChange={handlePageClick}
-    containerClassName="flex justify-center items-center gap-3 mt-6"
-    pageClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    pageLinkClassName="px-4 py-2 text-sm text-blue-600 no-underline hover:text-blue-700"
-    previousClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    previousLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    nextClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    nextLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    breakClassName="bg-white border border-gray-300 rounded-md shadow-sm"
-    breakLinkClassName="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-    activeClassName="bg-blue-600 text-white border border-gray-700 rounded-md shadow-sm"
-  />
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
 </div>
       </div>
     </>

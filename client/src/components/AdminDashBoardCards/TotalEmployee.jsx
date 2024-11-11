@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import MainHeader from "../MainHeader";
 import Sider from "../Sider";
 import { useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 function TotalEmployee() {
   const [employees, setEmployees] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const leadsPerPage = 7; // Default leads per page
   const navigate = useNavigate();
   useEffect(() => {
     fetchEmployees();
@@ -14,7 +17,7 @@ function TotalEmployee() {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:9000/api/getAllEmployees"
+        "https://crmdemo.vimubds5.a2hosted.com/api/getAllEmployees"
       );
       const { employees } = response.data;
       setEmployees(employees || []); // Ensure employees is always an array
@@ -27,15 +30,34 @@ function TotalEmployee() {
     navigate(`/employee-single/${employeeId}`);
   };
 
+ const pageCount = Math.ceil(employees.length / leadsPerPage);
+
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentemployees = employees.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
   return (
     <>
       <MainHeader />
       <Sider />
       <div className="container">
-        <h1 className="text-2xl text-center mt-[5rem]">Total Employees </h1>
+      <div className="mt-[7rem] 2xl:ml-40 ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+        <h1 className="text-2xl text-center mt-[2rem]">Total Employees </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
-      <div className="overflow-x-auto rounded-lg shadow-md xl:ml-48 mx-12">
+      <div className="overflow-x-auto rounded-lg shadow-md 2xl:ml-40 mx-12">
         
         <table className="container bg-white">
           <thead>
@@ -47,8 +69,8 @@ function TotalEmployee() {
             </tr>
           </thead>
           <tbody>
-            {employees.length > 0 ? (
-              employees
+            {currentemployees.length > 0 ? (
+              currentemployees
                 .filter((employee) => employee && employee.name) // Ensure employee and employee.name exist
                 .map((employee, index) => (
                   <tr
@@ -72,6 +94,27 @@ function TotalEmployee() {
           </tbody>
         </table>
       </div>
+      <div className="mt-3 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
     </>
   );
 }

@@ -12,7 +12,7 @@ const EmployeeCloseData = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 10; // Number of leads to display per page
+  const leadsPerPage = 7; // Number of leads to display per page
   const EmpId = useSelector((state) => state.auth.user.id);
 
   // Fetch leads from the API
@@ -23,7 +23,7 @@ const EmployeeCloseData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
       );
       // Filter out leads where deal status is "pending"
       const nonPendingLeads = response.data.filter(
@@ -56,14 +56,14 @@ const EmployeeCloseData = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
+ // Calculate total number of pages
+ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
-  // Pagination logic
-  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
-  const currentLeads = filteredLeads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
-
+ // Pagination logic
+ const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+ const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+ const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+ 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
@@ -192,27 +192,27 @@ const EmployeeCloseData = () => {
             </tbody>
           </table>
         </div>
-
-        {/* Pagination */}
+        <div className="mt-4 flex justify-center">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}
           breakLabel={"..."}
           pageCount={pageCount}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={handlePageClick}
-          containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
         />
+      </div>
       </div>
     </Wrapper>
   );

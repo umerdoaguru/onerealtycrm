@@ -14,7 +14,7 @@ function TotalEmpQuotation() {
     const fetchQuotations = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/get-quotation-byEmploye/${EmpId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/get-quotation-byEmploye/${EmpId}`
         );
         setQuotations(response.data);
         console.log(response);

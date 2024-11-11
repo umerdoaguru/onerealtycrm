@@ -61,7 +61,7 @@ const EmployeeCloseGraph = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
       );
       const data = response.data;
 
@@ -80,7 +80,7 @@ const EmployeeCloseGraph = () => {
 
   return (
     <>
-     <div className="mx-2">
+     <div className="">
       
      <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
         <h2 className="text-xl font-bold mb-2">Closed Deal Overview</h2>

@@ -1,71 +1,4 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
 
-// import moment from 'moment';
-// import Sider from '../Sider';
-// import Header from '../../pages/Quotation/Header';
-
-// function LeadData() {
-//     const [leads, setLeads] = useState([]);
-
-//     // Fetch leads from the API
-//     useEffect(() => {
-//         fetchLeads();
-//     }, []);
-
-//     const fetchLeads = async () => {
-//         try {
-//             const response = await axios.get('http://localhost:9000/api/leads');
-//             setLeads(response.data);
-//         } catch (error) {
-//             console.error('Error fetching leads:', error);
-//         }
-//     };
-
-//     return (
-//         <>
-//             <Header />
-//             <Sider />
-//             <div className="container">
-//                 <h1 className="text-2xl text-center mt-[2rem]">Leads Management</h1>
-//                 <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-
-//                 <div className="overflow-x-auto mt-4">
-//                     <table className="min-w-full bg-white border">
-//                         <thead>
-//                             <tr>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">S.no</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Lead Number</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Assigned To</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Created Time</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Name</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Phone</th>
-//                                 <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">Lead Source</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             {leads.map((lead, index) => (
-//                                 <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{index + 1}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_no}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.assignedTo}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{moment(lead.createdTime).format('DD/MM/YYYY')}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.phone}</td>
-//                                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.leadSource}</td>
-
-//                                 </tr>
-//                             ))}
-//                         </tbody>
-//                     </table>
-//                 </div>
-
-//             </div>
-//         </>
-//     );
-// }
-
-// export default LeadData;
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
@@ -84,7 +17,7 @@ function EmployeeLeadData() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 10; // Adjust as needed
+  const leadsPerPage = 7; // Adjust as needed
   const EmpId = useSelector((state) => state.auth.user.id);
 
   // Fetch leads from the API
@@ -95,7 +28,7 @@ function EmployeeLeadData() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
       );
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering
@@ -104,40 +37,55 @@ function EmployeeLeadData() {
     }
   };
 
-  // Automatically apply date filter when start or end date changes
-  useEffect(() => {
-    if (startDate && endDate) {
-      const filtered = leads.filter((lead) => {
-        const createdTime = moment(lead.createdTime);
-        return createdTime.isBetween(
-          moment(startDate),
-          moment(endDate),
-          null,
-          "[]"
-        );
-      });
-      setFilteredLeads(filtered);
-    } else {
-      setFilteredLeads(leads);
-    }
-  }, [startDate, endDate, leads]);
+// Automatically apply date and lead_status filter when start, end date, or lead_status changes
+useEffect(() => {
+  let filtered = leads;
 
-  const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
-    XLSX.writeFile(workbook, "LeadsData.xlsx");
-  };
+  // Filter by date range if both dates are set
+  if (startDate && endDate) {
+    filtered = filtered.filter((lead) => {
+      const createdTime = moment(lead.createdTime);
+      return createdTime.isBetween(
+        moment(startDate),
+        moment(endDate),
+        null,
+        "[]"
+      );
+    });
+  }
+
+  // Further filter only "completed" leads
+  filtered = filtered.filter((lead) => lead.lead_status === "completed");
+
+  setFilteredLeads(filtered); // Update state with fully filtered data
+}, [startDate, endDate, leads]);
+
+// Function to download only "completed" filtered leads as Excel
+const downloadExcel = () => {
+  const completedLeads = filteredLeads.filter((lead) => lead.lead_status === "completed");
+
+  if (completedLeads.length === 0) {
+    alert("No completed leads available to download.");
+    return;
+  }
+
+  const worksheet = XLSX.utils.json_to_sheet(completedLeads); // Create worksheet from completed leads
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Completed Leads");
+
+  // Trigger download with a descriptive filename
+  XLSX.writeFile(workbook, "CompletedLeadsData.xlsx");
+};
+
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
   // Pagination logic
-  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
-  const currentLeads = filteredLeads.slice(
-    currentPage * leadsPerPage,
-    (currentPage + 1) * leadsPerPage
-  );
-
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
   };
 
   return (
@@ -197,6 +145,9 @@ function EmployeeLeadData() {
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Subject
                 </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  Lead Status
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -236,6 +187,9 @@ function EmployeeLeadData() {
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.subject}
         </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.lead_status}
+        </td>
       </tr>
     ))
   )}
@@ -243,30 +197,27 @@ function EmployeeLeadData() {
 
           </table>
         </div>
-
-        <PaginationWrapper>
-        <div className="mt-2 mb-2 flex justify-center">
+        <div className="mt-4 flex justify-center">
         <ReactPaginate
-          previousLabel="Previous"
-          nextLabel="Next"
-          breakLabel="..."
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
           pageCount={pageCount}
           marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
+          pageRangeDisplayed={3}
           onPageChange={handlePageClick}
-          containerClassName="pagination-container"
-          pageClassName="pagination-page"
-          pageLinkClassName="pagination-link"
-          previousClassName="pagination-previous"
-          previousLinkClassName="pagination-link-previous"
-          nextClassName="pagination-next"
-          nextLinkClassName="pagination-link-next"
-          breakClassName="pagination-break"
-          breakLinkClassName="pagination-break-link"
-          activeClassName="pagination-active"
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
         />
       </div>
-    </PaginationWrapper>
       </div>
     </>
   );

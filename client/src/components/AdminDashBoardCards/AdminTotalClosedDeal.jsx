@@ -5,6 +5,8 @@ import moment from "moment";
 import * as XLSX from "xlsx";
 import MainHeader from "../MainHeader";
 import Sider from "../Sider";
+import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
 
 const AdminTotalClosedDeal = () => {
@@ -12,9 +14,9 @@ const AdminTotalClosedDeal = () => {
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [currentPage, setCurrentPage] = useState(0); // Current page state
-  const [itemsPerPage] = useState(10); // Items per page state
-  
+  const [currentPage, setCurrentPage] = useState(0);
+  const leadsPerPage = 7; 
+  const navigate = useNavigate();
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
@@ -23,7 +25,7 @@ const AdminTotalClosedDeal = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/leads`
+        `https://crmdemo.vimubds5.a2hosted.com/api/leads`
       );
       // Filter out leads where deal_status is not "pending"
       const nonPendingLeads = response.data.filter(
@@ -57,23 +59,38 @@ const AdminTotalClosedDeal = () => {
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
 
-  // Calculate the index of the last lead on the current page
-  const lastLeadIndex = currentPage * itemsPerPage;
-  const firstLeadIndex = lastLeadIndex + itemsPerPage;
-  const currentLeads = filteredLeads.slice(lastLeadIndex, firstLeadIndex); // Get leads for the current page
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
   return (
     <>
       <MainHeader />
       <Sider />
-      <div className="flex flex-col  2xl:ml-44">
-        <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
+      <div className="mt-[7rem] 2xl:ml-40 ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
+      <div className="flex flex-col  2xl:ml-40">
+
+        <div className="flex-grow p-4  lg:mt-2 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
             Total Closed Deals
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
-          <div className="overflow-x-auto mt-4">
+          <div className="overflow-x-auto mt-2">
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>
@@ -120,7 +137,7 @@ const AdminTotalClosedDeal = () => {
                       className={index % 2 === 0 ? "bg-gray-100" : ""}
                     >
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lastLeadIndex + index + 1}{" "}
+                        { index + 1}{" "}
                         {/* Adjusted for pagination */}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
@@ -160,6 +177,27 @@ const AdminTotalClosedDeal = () => {
             </table>
           </div>
         </div>
+      <div className="mt-2 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
       </div>
     </>
   );

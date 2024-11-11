@@ -6,6 +6,8 @@ import * as XLSX from "xlsx";
 import MainHeader from "../MainHeader";
 import EmployeeSider from "../EmployeeModule/EmployeeSider";
 import Pagination from "../../adiComponent/comp/pagination";
+import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
 const CloseTable = () => {
   const [leads, setLeads] = useState([]);
@@ -13,8 +15,9 @@ const CloseTable = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // Current page state
-  const [itemsPerPage] = useState(10); // Items per page state
+  const [itemsPerPage] = useState(7); // Items per page state
   const EmpId = useSelector((state) => state.auth.user.id);
+  const navigate = useNavigate();
 
   // Fetch leads from the API
   useEffect(() => {
@@ -24,7 +27,7 @@ const CloseTable = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/employe-leads/${EmpId}`
       );
       // Filter out leads where deal_status is not "pending"
       const nonPendingLeads = response.data.filter(
@@ -58,16 +61,29 @@ const CloseTable = () => {
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
 
-  // Calculate the index of the last lead on the current page
-  const lastLeadIndex = currentPage * itemsPerPage;
-  const firstLeadIndex = lastLeadIndex + itemsPerPage;
-  const currentLeads = filteredLeads.slice(lastLeadIndex, firstLeadIndex); // Get leads for the current page
+  const pageCount = Math.ceil(filteredLeads.length / itemsPerPage);
 
+  // Pagination logic
+  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
+  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+    console.log("change current page ", data.selected);
+  };
   return (
     <>
       <MainHeader />
       <EmployeeSider />
-      <div className="flex flex-col  2xl:ml-44">
+      <div className="flex flex-col  2xl:ml-44"> 
+          <div className="mt-[7rem] ">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            Back
+          </button>
+        </div>
         <div className="flex-grow p-4 mt-14 lg:mt-5 sm:ml-0">
           <center className="text-2xl text-center mt-8 font-medium">
             Total Closed Deals
@@ -114,7 +130,8 @@ const CloseTable = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentLeads
+              {currentLeads.length > 0 ? (
+                currentLeads
                   .filter((lead) => lead.deal_status === "close") // Filter out closed deals
                   .map((lead, index) => (
                     <tr
@@ -122,7 +139,7 @@ const CloseTable = () => {
                       className={index % 2 === 0 ? "bg-gray-100" : ""}
                     >
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lastLeadIndex + index + 1}{" "}
+                        {index + 1}{" "}
                         {/* Adjusted for pagination */}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
@@ -159,16 +176,38 @@ const CloseTable = () => {
                         {lead.d_closeDate}
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={11} className="py-4 text-center">
+                      No data found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
-          <Pagination
-            currentPage={currentPage}
-            totalItems={filteredLeads.length}
-            itemsPerPage={itemsPerPage}
-            onPageChange={(selectedPage) => setCurrentPage(selectedPage)}
-          />
+          <div className="mt-4 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+      </div>
         </div>
       </div>
     </>

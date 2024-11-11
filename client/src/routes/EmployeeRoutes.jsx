@@ -70,6 +70,7 @@ import Final_quotationBy_emp from "../pages/Quotation/Final_quotationBy_emp";
 import QuotationInputForm from "../components/EmployeeModule/QuotationByLeads/QuotationInputForm";
 import ViewAllVisit from "../components/Leads/ViewAllVisit";
 import Final_Quotation_All from "../pages/Quotation/Final_Quotation_All";
+import ViewAllFollowUp from "../components/Leads/ViewAllFollowUp";
 
 function EmployeeRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -179,6 +180,10 @@ function EmployeeRoutes() {
             path="/view_visit/:id"
             element={<ViewAllVisit />}
           />
+          <Route
+            path="/view_follow_up/:id"
+            element={<ViewAllFollowUp />}
+          />
 
           <Route path="/overview" element={<Overview />} />
 
@@ -202,7 +207,7 @@ function EmployeeRoutes() {
             element={<EmployeeDataExport />}
           />
           <Route
-            path="/employee-quotation-invoice"
+            path="/employee-all-quotation"
             element={<MainQuotation />}
           />
           <Route path="/employee-profile" element={<EmployeeProfile />} />

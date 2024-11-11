@@ -19,7 +19,7 @@ function FinalInvoice() {
   const fetchInvoices = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/invoice/${id}`
+        `https://crmdemo.vimubds5.a2hosted.com/api/invoice/${id}`
       );
 
       if (response.status === 200) {
@@ -60,7 +60,7 @@ function FinalInvoice() {
       try {
         // Make an API call to delete the service
         const response = await axios.delete(
-          `http://localhost:9000/api/invoice-service/${serviceId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/invoice-service/${serviceId}`
         );
 
         if (response.status === 200) {
@@ -121,7 +121,7 @@ function FinalInvoice() {
           <div className="grid grid-cols-12 gap-2">
             <div className="col-span-12 lg:col-span-3">
               <Link
-                to="/employee-quotation-invoice"
+                to="/employee-all-quotation"
                 className="text-white bg-green-600 hover:bg-green-700 btn w-full"
               >
                 <i className="bi bi-arrow-return-left mr-1"></i>Back

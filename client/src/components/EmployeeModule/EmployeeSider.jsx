@@ -59,7 +59,7 @@ const EmployeeeSider = () => {
               <Link to="/employee-leads" className="flex flex-col items-center py-3">
                 <FaHistory className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs max-md:pt-3 lg:inline text-white md:text-base mx-3">
-                Assigned Leads
+                Assigned <br /> <span>Leads</span>
                 </h3>
               </Link>
             </li>
@@ -88,8 +88,8 @@ const EmployeeeSider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`xl:w-full ${getSidebarClass("/employee-quotation-invoice")}`}>
-              <Link to="/employee-quotation-invoice" className="flex flex-col items-center py-1">
+            <li className={`xl:w-full ${getSidebarClass("/employee-all-quotation")}`}>
+              <Link to="/employee-all-quotation" className="flex flex-col items-center py-1">
                 <BsFileEarmarkPerson className="text-white text-2xl md:text-3xl" />
                 <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
                   Quotation 

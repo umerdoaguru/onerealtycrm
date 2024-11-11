@@ -25,7 +25,7 @@ const EmployeeVisitGraph = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employebyid-visit/${EmpId}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/employebyid-visit/${EmpId}`
         );
         const leadList = response.data;
         console.log(leadList);
@@ -76,8 +76,8 @@ const EmployeeVisitGraph = () => {
 
   return (
     <>
-    <div className="mx-2">
-      <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white">
+    <div className="mx-2 ">
+      <div className="w-full max-w-4xl mx-auto p-4 border rounded-lg shadow-md bg-white ">
         <h2 className="text-xl font-bold mb-2">Daily Visit Overview</h2>
         <p className="text-sm text-gray-500 mb-4">
           Visits for the past 28 days

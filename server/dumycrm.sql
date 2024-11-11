@@ -3,9 +3,15 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<<< HEAD:server/dumycrm.sql
 -- Generation Time: Nov 05, 2024 at 09:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
+========
+-- Generation Time: Nov 09, 2024 at 01:35 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -175,6 +181,34 @@ INSERT INTO `employee` (`employeeId`, `name`, `email`, `password`, `position`, `
 (24, 'test', 'test@gmail.com', 'test', 'sale', '9858582253', 150007.00, NULL, '/Assets/1726383330972-208977126-imgnew1.png', '/Assets/1726383330997-469333504-lead_profile.png', 'Employee', '2024-09-15 06:55:31'),
 (25, 'vinay', 'vinay@gmail.com', '', 'sale', '6260550661', 150007.00, NULL, NULL, NULL, 'Employee', '2024-10-18 11:55:43'),
 (29, 'umer', 'umer@gmail.com', 'umer', 'saless', '6260550661', 150007.00, NULL, NULL, NULL, 'Employee', '2024-09-14 16:09:03');
+<<<<<<<< HEAD:server/dumycrm.sql
+========
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `follow_up_leads`
+--
+
+CREATE TABLE `follow_up_leads` (
+  `id` int(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `lead_id` int(255) NOT NULL,
+  `employee_name` varchar(255) NOT NULL,
+  `employeeId` int(255) NOT NULL,
+  `follow_up_type` varchar(255) NOT NULL,
+  `follow_up_date` varchar(255) NOT NULL,
+  `report` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `follow_up_leads`
+--
+
+INSERT INTO `follow_up_leads` (`id`, `name`, `lead_id`, `employee_name`, `employeeId`, `follow_up_type`, `follow_up_date`, `report`) VALUES
+(9, 'Prakash Pandey', 149, 'umer', 29, 'call', '2024-11-09', 'he said that plots is good '),
+(10, 'Prakash Pandey', 149, 'umer', 29, 'call', '2024-11-08', 'he said that plots is good ');
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 -- --------------------------------------------------------
 
@@ -325,6 +359,7 @@ CREATE TABLE `leads` (
 -- Dumping data for table `leads`
 --
 
+<<<<<<<< HEAD:server/dumycrm.sql
 INSERT INTO `leads` (`lead_id`, `lead_no`, `assignedTo`, `employeeId`, `createdTime`, `actual_date`, `name`, `phone`, `leadSource`, `lead_status`, `subject`, `booking_amount`, `payment_mode`, `registry`, `address`, `quotation`, `quotation_status`, `deal_status`, `d_closeDate`, `status`, `reason`, `follow_up_status`) VALUES
 (84, '4545234', 'umer', 29, '2024-02-22', '2024-02-22', 'Mr. Sufi', '7586868566', 'Direct Mail', 'pending', '2BHK plots', '', '', 'pending', 'Jabalpur', 'created', 'not approved', 'close', '2024-10-17', 'pending', '', 'pending'),
 (85, '4545235', 'ali', 30, '2024-02-23', '2024-02-23', 'Mr. Khan', '7586868567', 'Social Media', 'pending', '3BHK plots', '', '', 'pending', 'Mumbai', 'not created', 'approved', 'open', '2024-10-18', 'in progress', '', 'completed'),
@@ -336,6 +371,15 @@ INSERT INTO `leads` (`lead_id`, `lead_no`, `assignedTo`, `employeeId`, `createdT
 (91, '4545241', 'aman', 36, '2024-02-29', '2024-02-29', 'Mr. Ravi', '7586868573', 'Direct Mail', 'pending', '1BHK plots', '', '', 'pending', 'Chennai', 'not created', 'approved', 'open', '2024-10-24', 'in progress', '', 'completed'),
 (92, '4545242', 'rahul', 37, '2024-03-01', '2024-03-01', 'Ms. Geeta', '7586868574', 'Social Media', 'follow-up', 'Villa', '45000', 'Cash', 'pending', 'Ahmedabad', 'created', 'not approved', 'close', '2024-10-25', 'pending', '', 'pending'),
 (93, '4545243', 'ankit', 38, '2024-03-02', '2024-03-02', 'Mr. Suresh', '7586868575', 'Website', 'pending', 'Studio', '35000', 'Online', 'pending', 'Jaipur', 'not created', 'approved', 'open', '2024-10-26', 'closed', 'Property unavailable', 'completed');
+========
+INSERT INTO `leads` (`lead_id`, `lead_no`, `assignedTo`, `employeeId`, `createdTime`, `actual_date`, `name`, `phone`, `leadSource`, `lead_status`, `subject`, `booking_amount`, `payment_mode`, `registry`, `address`, `quotation`, `quotation_status`, `visit`, `deal_status`, `d_closeDate`, `status`, `reason`, `follow_up_status`) VALUES
+(149, '905447731177547', 'umer', 29, '2024-10-30', '2024-10-30', 'Prakash Pandey', '8770276615', 'Facebook Campaign', 'completed', 'META Ad One', 'pending', 'pending', 'pending', 'Gorakhpur', 'created', 'not approved', 'associative', 'close', '2024-11-09', 'pending', 'pending', 'in progress'),
+(150, '224', 'umer', 29, '2024-11-06', '2024-11-06', 'Pooja Mehta', '9812349987', '99 Acres', 'completed', 'Green Acres', 'pending', 'pending', 'pending', 'Ahmedabad', 'not created', 'not approved', 'pending ', 'close', '2024-10-30', 'pending', 'pending', 'pending'),
+(151, '223', 'umer', 29, '2024-11-05', '2024-11-05', 'Vikas Choudhary', '9856734321', '99 Acres', 'pending', 'Golden Heights', 'pending', 'pending', 'pending', 'Jaipur', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending'),
+(152, '218', 'umer', 29, '2024-11-07', '2024-11-07', 'Priya Desai', '9801234567', '99 Acres', 'pending', 'Sunshine Heights', 'pending', 'pending', 'pending', 'Pune', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending'),
+(153, '219', 'umer', 29, '2024-11-23', '2024-11-05', 'Karthik Reddy', '9845671234', '99 Acres', 'pending', 'Palm Grove Villas', 'pending', 'pending', 'pending', 'Chennai', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending'),
+(154, '222', 'umer', 29, '2024-11-09', '2024-11-08', 'Swati Singh', '9823451234', '99 Acres', 'pending', 'Maple Woods', 'pending', 'pending', 'pending', 'Hyderabad', 'not created', 'not approved', 'pending ', 'pending', 'pending', 'pending', 'pending', 'pending');
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 -- --------------------------------------------------------
 
@@ -367,7 +411,61 @@ INSERT INTO `leadstable` (`id`, `lead_id`, `full_name`, `phone_number`, `street_
 (792, '1238283060819459', 'Sunita Patil', '+917333336969', 'House no 65, Sector B, Ujjain', '2024-10-25 13:22:11', '1935750583597667'),
 (793, '1238283060819460', 'Rajesh Thakur', '+917222226970', 'Flat 10, Green Valley, Dewas', '2024-10-26 20:18:37', '1935750583597667'),
 (794, '1238283060819461', 'Manoj Joshi', '+917111116971', 'House no 45, Patel Nagar, Rewa', '2024-10-27 15:40:29', '1935750583597667'),
+<<<<<<<< HEAD:server/dumycrm.sql
 (795, '1238283060819462', 'Priya Saxena', '+917000006972', 'Plot no 29, Shree Nagar, Sagar', '2024-10-28 11:55:18', '1935750583597667');
+========
+(795, '1238283060819462', 'Priya Saxena', '+917000006972', 'Plot no 29, Shree Nagar, Sagar', '2024-10-28 11:55:18', '1935750583597667'),
+(849, '905447731177547', 'Prakash Pandey', '+918770276615', 'Gorakhpur', '2024-11-08 21:57:12', '1935750583597667'),
+(850, '393676367044210', 'sanyogita Shrivastava', '+919340384104', 'Jabalpur', '2024-11-08 21:09:22', '1935750583597667'),
+(851, '567007272549426', 'Adv Pawan Shrivastava', '+919827236339', 'H.No.1013 Shastri Nagar Colony Near Medical College Garha jabalpur', '2024-11-08 20:45:04', '1935750583597667'),
+(852, '2982149905266875', 'Abhisek', '+918109693544', '7995221', '2024-11-08 20:20:32', '1935750583597667'),
+(853, '1644922746406510', 'Deepak', '7000168165', '1307 bai ka Bagicha ghamapur', '2024-11-08 19:22:54', '1935750583597667'),
+(854, '1102624208137098', 'Tulika Tanu', '+916263988285', 'Chhoti omti jabalpur', '2024-11-07 20:46:08', '1935750583597667'),
+(855, '1241536497090053', 'Prashant Rajak', '+919300751787', 'daya nagar', '2024-11-07 20:44:20', '1935750583597667'),
+(856, '1262813061705939', 'Sumit Kasture', '+918965850379', '1441, Ganga Nagar, Garha, JBP', '2024-11-07 18:22:18', '1935750583597667'),
+(857, '574825791789436', 'Ajay Soni', '+918109081039', 'rampur', '2024-11-06 20:19:03', '1935750583597667'),
+(858, '3469281410047928', 'Nitesh Malviya', '+919111464771', 'Dewas naka', '2024-11-06 15:18:21', '1935750583597667'),
+(859, '948847300396687', 'Naveena BADKUR', '+919399221587', 'main road kandeli narshingpur', '2024-11-06 14:17:17', '1935750583597667'),
+(860, '1336161474460078', 'Sanjay Shukla', '+919098575700', 'Kundqm', '2024-11-06 12:53:37', '1935750583597667'),
+(861, '456402320349143', 'Shilpi sethiya', '+919340718557', 'Katni', '2024-11-05 20:49:32', '1935750583597667'),
+(862, '1344756813594775', 'Swatantra Pandey', '+919425824229', 'civil line', '2024-11-05 20:37:34', '1935750583597667'),
+(863, '992984739507795', 'Nitin Bachkainya', '7987114066', 'Ganga Nagar, Garha, jabalpur', '2024-11-05 20:05:04', '1935750583597667'),
+(864, '445488648575396', 'Dr-Shubh Kushwaha PT', '+919685965749', 'gwarighat', '2024-11-05 19:53:45', '1935750583597667'),
+(865, '1573437423273037', 'Sanjay Soni', '+918518075283', 'mp', '2024-11-05 18:57:38', '1935750583597667'),
+(866, '1699552000777846', 'ˢᵏᵗ-ᵐʸʷᵒʳˡᵈ', '+919827753865', 'Indore', '2024-11-05 17:01:49', '1935750583597667'),
+(867, '909655464482601', 'Rahul Bundela', '+918871495350', 'Swiss villa', '2024-11-05 15:55:33', '1935750583597667'),
+(868, '573378211850413', 'satish kumar patel', '+919522447446', 'jabalpur', '2024-11-05 14:06:14', '1935750583597667'),
+(869, '475200745566059', 'Sonamamit', '+919098892952', 'Vijay nagar', '2024-11-05 13:00:27', '1935750583597667'),
+(870, '1124799508986784', 'Rajesh Patel', '+919893049076', 'Jabalpur', '2024-11-04 23:41:20', '1935750583597667'),
+(871, '1255326728952107', 'Radhe Shyam Shrivas', '+919977254854', '2 manth', '2024-11-04 22:55:34', '1935750583597667'),
+(872, '347772928394529', 'Shailash George', '+917389210683', '800 dawarka Nagar khanchghar jabalpur', '2024-11-04 22:25:22', '1935750583597667'),
+(873, '1810383329762541', 'Shivansh Tiwari', '+916267192049', 'Sagda bypass road lamheghat', '2024-11-04 22:25:20', '1935750583597667'),
+(874, '393676367044210', 'sanyogita Shrivastava', '+919340384104', 'Jabalpur', '2024-11-08 21:09:22', '1935750583597667'),
+(875, '567007272549426', 'Adv Pawan Shrivastava', '+919827236339', 'H.No.1013 Shastri Nagar Colony Near Medical College Garha jabalpur', '2024-11-08 20:45:04', '1935750583597667'),
+(876, '2982149905266875', 'Abhisek', '+918109693544', '7995221', '2024-11-08 20:20:32', '1935750583597667'),
+(877, '1644922746406510', 'Deepak', '7000168165', '1307 bai ka Bagicha ghamapur', '2024-11-08 19:22:54', '1935750583597667'),
+(878, '1102624208137098', 'Tulika Tanu', '+916263988285', 'Chhoti omti jabalpur', '2024-11-07 20:46:08', '1935750583597667'),
+(879, '1241536497090053', 'Prashant Rajak', '+919300751787', 'daya nagar', '2024-11-07 20:44:20', '1935750583597667'),
+(880, '1262813061705939', 'Sumit Kasture', '+918965850379', '1441, Ganga Nagar, Garha, JBP', '2024-11-07 18:22:18', '1935750583597667'),
+(881, '574825791789436', 'Ajay Soni', '+918109081039', 'rampur', '2024-11-06 20:19:03', '1935750583597667'),
+(882, '3469281410047928', 'Nitesh Malviya', '+919111464771', 'Dewas naka', '2024-11-06 15:18:21', '1935750583597667'),
+(883, '948847300396687', 'Naveena BADKUR', '+919399221587', 'main road kandeli narshingpur', '2024-11-06 14:17:17', '1935750583597667'),
+(884, '1336161474460078', 'Sanjay Shukla', '+919098575700', 'Kundqm', '2024-11-06 12:53:37', '1935750583597667'),
+(885, '456402320349143', 'Shilpi sethiya', '+919340718557', 'Katni', '2024-11-05 20:49:32', '1935750583597667'),
+(886, '1344756813594775', 'Swatantra Pandey', '+919425824229', 'civil line', '2024-11-05 20:37:34', '1935750583597667'),
+(887, '992984739507795', 'Nitin Bachkainya', '7987114066', 'Ganga Nagar, Garha, jabalpur', '2024-11-05 20:05:04', '1935750583597667'),
+(888, '445488648575396', 'Dr-Shubh Kushwaha PT', '+919685965749', 'gwarighat', '2024-11-05 19:53:45', '1935750583597667'),
+(889, '1573437423273037', 'Sanjay Soni', '+918518075283', 'mp', '2024-11-05 18:57:38', '1935750583597667'),
+(890, '1699552000777846', 'ˢᵏᵗ-ᵐʸʷᵒʳˡᵈ', '+919827753865', 'Indore', '2024-11-05 17:01:49', '1935750583597667'),
+(891, '909655464482601', 'Rahul Bundela', '+918871495350', 'Swiss villa', '2024-11-05 15:55:33', '1935750583597667'),
+(892, '573378211850413', 'satish kumar patel', '+919522447446', 'jabalpur', '2024-11-05 14:06:14', '1935750583597667'),
+(893, '475200745566059', 'Sonamamit', '+919098892952', 'Vijay nagar', '2024-11-05 13:00:27', '1935750583597667'),
+(894, '1124799508986784', 'Rajesh Patel', '+919893049076', 'Jabalpur', '2024-11-04 23:41:20', '1935750583597667'),
+(895, '1255326728952107', 'Radhe Shyam Shrivas', '+919977254854', '2 manth', '2024-11-04 22:55:34', '1935750583597667'),
+(896, '347772928394529', 'Shailash George', '+917389210683', '800 dawarka Nagar khanchghar jabalpur', '2024-11-04 22:25:22', '1935750583597667'),
+(897, '1810383329762541', 'Shivansh Tiwari', '+916267192049', 'Sagda bypass road lamheghat', '2024-11-04 22:25:20', '1935750583597667'),
+(898, '3619593168184124', 'Deepak Kumar', '+919009555111', 'Jabalpur', '2024-11-09 15:44:04', '1935750583597667');
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 -- --------------------------------------------------------
 
@@ -472,6 +570,50 @@ INSERT INTO `organization` (`companyId`, `name`, `bankDetails`, `signature`, `lo
 -- --------------------------------------------------------
 
 --
+<<<<<<<< HEAD:server/dumycrm.sql
+========
+-- Table structure for table `otpcollections`
+--
+
+CREATE TABLE `otpcollections` (
+  `otp_id` int(100) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `code` int(10) DEFAULT NULL,
+  `expiresIn` int(20) DEFAULT NULL,
+  `createdAt` timestamp(6) NOT NULL DEFAULT current_timestamp(6)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `otpcollections`
+--
+
+INSERT INTO `otpcollections` (`otp_id`, `email`, `code`, `expiresIn`, `createdAt`) VALUES
+(1, 'kuldeepdoauruinfosystems@gmail.com', 224603, NULL, '2024-08-13 06:59:36.777227'),
+(2, 'mohitsahu1993@gmail.com', 254910, NULL, '2024-08-22 07:31:13.481316'),
+(3, 'shadab@gmail.com', 617412, NULL, '2024-09-02 07:06:14.109336'),
+(4, 'kuldeepdoauruinfosystems@gmail.com', 694511, NULL, '2024-10-28 06:46:34.286922'),
+(5, 'umer@gmail.com', 141174, NULL, '2024-10-28 09:38:09.772837'),
+(6, 'umerqureshidoaguru@gmail.com', 284783, NULL, '2024-10-28 09:40:56.211954'),
+(7, 'umerqureshi786786@gmail.com', 438900, NULL, '2024-10-28 10:06:47.009743'),
+(8, 'umerqureshi786786@gmail.com', 766856, NULL, '2024-10-28 10:36:44.825756'),
+(9, 'umerqureshi786786@gmail.com', 91347, NULL, '2024-10-28 10:42:44.327534'),
+(10, 'umerqureshidoaguru@gmail.com', 965997, NULL, '2024-10-28 11:01:44.891003'),
+(11, 'umerqureshi786786@gmail.com', 214866, NULL, '2024-10-28 11:06:44.496840'),
+(12, 'umerqureshidoaguru@gmail.com', 595652, NULL, '2024-10-28 11:10:16.926784'),
+(13, 'umerqureshi786786@gmail.com', 916447, NULL, '2024-10-28 11:48:37.518558'),
+(14, 'umerqureshidoaguru@gmail.com', 164218, NULL, '2024-11-02 08:29:38.226751'),
+(15, 'umerqureshi786786@gmail.com', 384225, NULL, '2024-11-02 08:32:31.049691'),
+(16, 'umerqureshi786786@gmail.com', 49893, NULL, '2024-11-02 08:33:44.304847'),
+(17, 'umerqureshi786786@gmail.com', 29892, NULL, '2024-11-02 08:43:57.239706'),
+(18, 'umerqureshi786786@gmail.com', 132098, NULL, '2024-11-02 08:46:17.708877'),
+(19, 'vinaydhariya21@gmail.com', 197511, NULL, '2024-11-02 10:01:02.463107'),
+(20, 'shubhsoni1996th@gmail.com', 649018, NULL, '2024-11-02 12:21:31.975979'),
+(21, 'vinaydhariya21@gmail.com', 52445, NULL, '2024-11-02 13:02:07.761740');
+
+-- --------------------------------------------------------
+
+--
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 -- Table structure for table `payments`
 --
 
@@ -512,6 +654,7 @@ CREATE TABLE `quotations_data` (
   `status` varchar(255) NOT NULL DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<<< HEAD:server/dumycrm.sql
 --
 -- Dumping data for table `quotations_data`
 --
@@ -520,6 +663,8 @@ INSERT INTO `quotations_data` (`quotation_id`, `quotation_name`, `created_date`,
 (269, 'Dharm Das Diwan', '2024-10-16 11:53:26', 29, 0, 'umer', 'Pending'),
 (270, 'mr sufi', '2024-10-18 06:28:15', 29, 84, 'umer', 'Pending');
 
+========
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 -- --------------------------------------------------------
 
 --
@@ -561,6 +706,16 @@ CREATE TABLE `quotations_information` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<<< HEAD:server/dumycrm.sql
+========
+--
+-- Dumping data for table `quotations_information`
+--
+
+INSERT INTO `quotations_information` (`id`, `customer_name`, `contact_number`, `alternate_number`, `address`, `adhaar_number`, `pan_number`, `project_name`, `unit_number`, `dimension`, `rate`, `variant`, `total_deal`, `booking_amount`, `booking_amount_words`, `payment_mode`, `finance_bank`, `duration`, `balance_amount`, `balance_amount_words`, `payment_due_date1`, `payment_due_date2`, `payment_due_date3`, `payment_due_date4`, `registry_charges`, `p1p2_charges`, `remarks`, `status`, `employeeId`, `employee_name`, `lead_id`, `created_at`) VALUES
+(30, 'Prakash Pandey', '6268254252', '8888888888', 'jabalpur', '343434343453', 'QFGGF5445G', 'test', '50', '2', 34.00, '34', 34.00, 500.00, 'five hundred', '34', 'dsl;fk', '34', 10000.00, 'ten thousand', '2024-11-10', '2024-11-12', '2024-11-21', '2024-11-28', 0.00, 0.00, 'test', 'Pending', 29, 'umer', 149, '2024-11-09 06:31:24');
+
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 -- --------------------------------------------------------
 
 --
@@ -609,6 +764,7 @@ CREATE TABLE `responses_99acres` (
 --
 
 INSERT INTO `responses_99acres` (`id`, `query_id`, `project_name`, `city_name`, `query_info`, `received_on`, `contact_name`, `email`, `phone`) VALUES
+<<<<<<<< HEAD:server/dumycrm.sql
 (171, '', 'Nirvana Homes', 'Jabalpur', 'Hot Lead, Interested in 3BHK, Reach out to customer via Whatsapp', '2024-10-23 17:18:57', 'Santosh Kumar', 'santoshuk368@gmail.com', '+91-8619342277'),
 (172, '', 'Nirvana Homes', 'Jabalpur', 'Hot Lead, Interested in 3BHK, Reach out to customer via Whatsapp', '2024-10-23 16:56:36', 'Prashant', 'richapra143@gmail.com', '+91-9149686958'),
 (173, '', 'Nirvana Homes', 'Jabalpur', 'Hot Lead, Interested in 3BHK, Reach out to customer via Whatsapp', '2024-10-23 16:46:49', 'Nishikant singh', 'nishikantsingh12@gmail.com', '+91-9836011466'),
@@ -653,6 +809,18 @@ INSERT INTO `responses_99acres` (`id`, `query_id`, `project_name`, `city_name`, 
 (212, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this property. Please call back.', '2024-10-29 19:42:07', 'Ramganesh yadav', 'Ramganeshy20@gmail.comR', '+91-9399799741'),
 (213, '', 'Nirvana Homes', 'Jabalpur', 'I am interested in this Project.', '2024-10-30 14:43:56', 'deep gupta', 'cs.deepgupta@gmail.com', '+91-9131635996'),
 (214, '', 'Nirvana Homes', 'Jabalpur', '', '2024-10-30 14:06:37', 'shiva', 'Not Mentioned', '+91-6266749896');
+========
+(215, '1', 'Green Meadows', 'Mumbai', 'Interested in 2BHK', '2024-11-01 00:00:00', 'Amit Shah', 'amit.shah@email.com', '9876543210'),
+(216, '2', 'Blue Horizon', 'Delhi', 'Need loan assistance', '2024-11-02 00:00:00', 'Neha Verma', 'neha.verma@email.com', '9812345678'),
+(217, '3', 'Lake View', 'Bangalore', 'Request for 3BHK price quote', '2024-11-03 00:00:00', 'Rakesh Iyer', 'rakesh.iyer@email.com', '9823456789'),
+(218, '4', 'Sunshine Heights', 'Pune', 'Availability of 1BHK', '2024-11-04 00:00:00', 'Priya Desai', 'priya.desai@email.com', '9801234567'),
+(219, '5', 'Palm Grove Villas', 'Chennai', 'Interested in site visit', '2024-11-05 00:00:00', 'Karthik Reddy', 'karthik.reddy@email.com', '9845671234'),
+(220, '6', 'Ocean Breeze', 'Goa', 'Wants floor plan details', '2024-11-06 00:00:00', 'Sneha Patil', 'sneha.patil@email.com', '9876544321'),
+(221, '7', 'Skyline Residency', 'Kolkata', 'Availability of penthouse', '2024-11-07 00:00:00', 'Ankit Ghosh', 'ankit.ghosh@email.com', '9812348765'),
+(222, '8', 'Maple Woods', 'Hyderabad', 'Request for 4BHK price quote', '2024-11-08 00:00:00', 'Swati Singh', 'swati.singh@email.com', '9823451234'),
+(223, '9', 'Golden Heights', 'Jaipur', 'Interested in down payment info', '2024-11-09 00:00:00', 'Vikas Choudhary', 'vikas.choudhary@email.com', '9856734321'),
+(224, '10', 'Green Acres', 'Ahmedabad', 'Availability of 2BHK and 3BHK', '2024-11-10 00:00:00', 'Pooja Mehta', 'pooja.mehta@email.com', '9812349987');
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 -- --------------------------------------------------------
 
@@ -794,7 +962,7 @@ CREATE TABLE `visit` (
   `employeeId` int(255) NOT NULL,
   `visit` varchar(255) NOT NULL,
   `visit_date` varchar(255) NOT NULL,
-  `report` varchar(255) NOT NULL
+  `report` varchar(255) NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -802,9 +970,15 @@ CREATE TABLE `visit` (
 --
 
 INSERT INTO `visit` (`id`, `name`, `employee_name`, `lead_id`, `employeeId`, `visit`, `visit_date`, `report`) VALUES
+<<<<<<<< HEAD:server/dumycrm.sql
 (26, 'mr sufi', 'umer', 84, 29, 'repeated', '2024-10-28', 'testdsf4343'),
 (27, 'mr sufi', 'umer', 84, 29, 'associative', '2024-10-30', 'testdsf4343'),
 (28, 'Roshan Ahire', 'umer', 93, 29, 'fresh', '2024-10-16', 'az cx gdfgdf dfgdfg dfgdf ');
+========
+(30, 'Prakash Pandey', 'umer', 149, 29, 'fresh', '2024-11-09', 'pending'),
+(31, 'Prakash Pandey', 'umer', 149, 29, 'repeated', '2024-11-07', 'pending'),
+(32, 'Prakash Pandey', 'umer', 149, 29, 'associative', '2024-11-01', 'pending');
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 --
 -- Indexes for dumped tables
@@ -848,6 +1022,12 @@ ALTER TABLE `device_usage`
 ALTER TABLE `employee`
   ADD PRIMARY KEY (`employeeId`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `follow_up_leads`
+--
+ALTER TABLE `follow_up_leads`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `formtable`
@@ -1014,6 +1194,15 @@ ALTER TABLE `device_usage`
 --
 ALTER TABLE `employee`
   MODIFY `employeeId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+<<<<<<<< HEAD:server/dumycrm.sql
+========
+
+--
+-- AUTO_INCREMENT for table `follow_up_leads`
+--
+ALTER TABLE `follow_up_leads`
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 --
 -- AUTO_INCREMENT for table `formtable`
@@ -1049,13 +1238,21 @@ ALTER TABLE `invoice_services_data`
 -- AUTO_INCREMENT for table `leads`
 --
 ALTER TABLE `leads`
+<<<<<<<< HEAD:server/dumycrm.sql
   MODIFY `lead_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+========
+  MODIFY `lead_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 --
 -- AUTO_INCREMENT for table `leadstable`
 --
 ALTER TABLE `leadstable`
+<<<<<<<< HEAD:server/dumycrm.sql
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=849;
+========
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=899;
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 --
 -- AUTO_INCREMENT for table `notes`
@@ -1076,6 +1273,15 @@ ALTER TABLE `organization`
   MODIFY `companyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
+<<<<<<<< HEAD:server/dumycrm.sql
+========
+-- AUTO_INCREMENT for table `otpcollections`
+--
+ALTER TABLE `otpcollections`
+  MODIFY `otp_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
@@ -1091,7 +1297,11 @@ ALTER TABLE `quotations_data`
 -- AUTO_INCREMENT for table `quotations_information`
 --
 ALTER TABLE `quotations_information`
+<<<<<<<< HEAD:server/dumycrm.sql
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+========
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 --
 -- AUTO_INCREMENT for table `registered_data`
@@ -1103,7 +1313,11 @@ ALTER TABLE `registered_data`
 -- AUTO_INCREMENT for table `responses_99acres`
 --
 ALTER TABLE `responses_99acres`
+<<<<<<<< HEAD:server/dumycrm.sql
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=215;
+========
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=225;
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 --
 -- AUTO_INCREMENT for table `services`
@@ -1133,7 +1347,11 @@ ALTER TABLE `user_data`
 -- AUTO_INCREMENT for table `visit`
 --
 ALTER TABLE `visit`
+<<<<<<<< HEAD:server/dumycrm.sql
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+========
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+>>>>>>>> 2b42b2fdb1849644b93c107d1485470145bd83b7:server/dumycrm (2).sql
 
 --
 -- Constraints for dumped tables
