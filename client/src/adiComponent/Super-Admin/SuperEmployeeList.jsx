@@ -23,7 +23,7 @@ const SuperEmployeeList = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:9000/api/getAllEmployee-Toal-lead');
+      const response = await axios.get('https://crm.one-realty.in/api/getAllEmployee-Toal-lead');
       const { employees } = response.data;
       setEmployees(employees || []); // Ensure employees is always an array
       console.log(employees);

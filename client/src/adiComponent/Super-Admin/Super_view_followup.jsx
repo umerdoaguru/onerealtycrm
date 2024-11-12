@@ -29,7 +29,7 @@ const Super_view_followup = () => {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up/${id}`
       );
       setFollow_Up(response.data);
       console.log(response);
@@ -46,7 +46,7 @@ const Super_view_followup = () => {
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:9000/api/employe-follow-up/${followup.id}`
+          `https://crm.one-realty.in/api/employe-follow-up/${followup.id}`
         );
         if (response.status === 200) {
           console.log("follow up deleted successfully");
@@ -82,7 +82,7 @@ const Super_view_followup = () => {
   // Function to send the PUT request to update the visit data
   const updateVisit = async () => {
     try {
-      const response = await axios.put(`http://localhost:9000/api/employe-follow-up`, modalData);
+      const response = await axios.put(`https://crm.one-realty.in/api/employe-follow-up`, modalData);
       if (response.status === 200) {
         cogoToast.success("Follow Up updated successfully!");
         setRender(!render); // Refresh the list after updating

@@ -23,7 +23,7 @@ const SuperAdminVisit = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employe-all-visit`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit`);
       const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
 
       setLeads(nonPendingLeads);

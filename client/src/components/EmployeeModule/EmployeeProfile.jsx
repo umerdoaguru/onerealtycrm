@@ -25,7 +25,7 @@ function EmployeeProfile() {
     const fetchEmployee = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:9000/api/employeeProfile/${EmpId}`
+          `https://crm.one-realty.in/api/employeeProfile/${EmpId}`
         ); // Fetch employee data
         setUser(response.data[0]); // Set employee data to state
         console.log(response.data); // Debug: log employee data

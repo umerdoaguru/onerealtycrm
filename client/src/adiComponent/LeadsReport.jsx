@@ -11,7 +11,7 @@ const LeadsReport = () => {
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const response = await fetch("http://localhost:9000/api/leads");
+        const response = await fetch("https://crm.one-realty.in/api/leads");
         const data = await response.json();
         console.log("Fetched leads data:", data); // Debugging line
 

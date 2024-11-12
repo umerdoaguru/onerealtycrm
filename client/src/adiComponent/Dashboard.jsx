@@ -21,7 +21,7 @@ const Dashboard = () => {
   };
   const getInvoiceData = () => {
     try {
-      const response = axios.get("http://localhost:9000/api/invoiceData");
+      const response = axios.get("https://crm.one-realty.in/api/invoiceData");
     } catch (err) {}
   };
 
@@ -46,8 +46,8 @@ const Dashboard = () => {
             <AdminOverviewDash />
           </div>
           <div className="grid grid-cols-1 gap-2 mt-6 mx-7 md:grid-cols-2 lg:grid-cols-3">
-            <Invoice />
             <LeadsGraph />
+            <Invoice />
 
             <QuotationGraph />
           </div>

@@ -30,7 +30,7 @@ const Overview2 = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("http://localhost:9000/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads");
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -39,7 +39,7 @@ const Overview2 = () => {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/employee`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employee`);
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -48,7 +48,7 @@ const Overview2 = () => {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-all-visit`
+        `https://crm.one-realty.in/api/employe-all-visit`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -61,7 +61,7 @@ const Overview2 = () => {
 
   // const fetchQuotation = async () => {
   //   try {
-  //     const response = await axios.get(`http://localhost:9000/api/get-quotation-data`);
+  //     const response = await axios.get(`https://crm.one-realty.in/api/get-quotation-data`);
   //     console.log(response.data);
   //     setQuotation(response.data.data);
   //   } catch (error) {
@@ -71,7 +71,7 @@ const Overview2 = () => {
 
   // const fetchInvoice = async () => {
   //   try {
-  //     const response = await axios.get(`http://localhost:9000/api/invoice-data`);
+  //     const response = await axios.get(`https://crm.one-realty.in/api/invoice-data`);
   //     setInvoice(response.data);
   //   } catch (error) {
   //     console.error("Error fetching invoices:", error);

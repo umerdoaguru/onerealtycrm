@@ -24,7 +24,7 @@ const Admin_view_quotations = () => {
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/get-quotation-byLead/${id}`
+        `https://crm.one-realty.in/api/get-quotation-byLead/${id}`
       );
       setQuotations(response.data);
       console.log(response);
@@ -40,7 +40,7 @@ const Admin_view_quotations = () => {
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `http://localhost:9000/api/quotation/${id}`
+          `https://crm.one-realty.in/api/quotation/${id}`
         );
         if (response.status === 200) {
           console.log("Quotation deleted successfully");
@@ -56,7 +56,7 @@ const Admin_view_quotations = () => {
   const handleCopyQuotation = async (quotationId) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/api/copy-quotation/${quotationId}`
+        `https://crm.one-realty.in/api/copy-quotation/${quotationId}`
       );
       setRender(!render);
     } catch (error) {

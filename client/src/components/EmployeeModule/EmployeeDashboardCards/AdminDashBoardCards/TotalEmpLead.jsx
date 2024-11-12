@@ -27,7 +27,7 @@ function TotalEmpLead() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
       );
       setLeads(response.data);
     } catch (error) {

@@ -164,7 +164,7 @@ function Employee_Single_Lead_Profile() {
   }, [id]);
   // const fetchLeads = async () => {
   //   try {
-  //     const response = await axios.get(http://localhost:9000/api/leads/${id});
+  //     const response = await axios.get(https://crm.one-realty.in/api/leads/${id});
   //     setLeads(response.data);
   //     console.log(response);
   //   } catch (error) {
@@ -174,7 +174,7 @@ function Employee_Single_Lead_Profile() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
       console.log(response.data);
       setLeads(response.data);
 
@@ -202,7 +202,7 @@ function Employee_Single_Lead_Profile() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit/${id}`
       );
       console.log(response.data);
       setVisit(response.data);
@@ -220,7 +220,7 @@ function Employee_Single_Lead_Profile() {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up/${id}`
       );
       console.log(response.data);
       setFollow_Up(response.data);
@@ -325,7 +325,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.put(
-        `http://localhost:9000/api/updateLeadStatus/${currentLead.lead_id}`,
+        `https://crm.one-realty.in/api/updateLeadStatus/${currentLead.lead_id}`,
         currentLead
       );
 
@@ -362,7 +362,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const response = await axios.post(
-        `http://localhost:9000/api/employe-visit`,
+        `https://crm.one-realty.in/api/employe-visit`,
         {
           lead_id: leads[0].lead_id,
           name: leads[0].name,
@@ -380,7 +380,7 @@ function Employee_Single_Lead_Profile() {
   
         // Update the visit status after saving the visit
         const updateResponse = await axios.put(
-          `http://localhost:9000/api/updateVisitStatus/${leads[0].lead_id}`,
+          `https://crm.one-realty.in/api/updateVisitStatus/${leads[0].lead_id}`,
           { visit: visitLead.visit }
         );
   
@@ -420,7 +420,7 @@ function Employee_Single_Lead_Profile() {
     try {
       // Send updated data to the backend using Axios
       const postResponse = await axios.post(
-        `http://localhost:9000/api/employe-follow-up`,
+        `https://crm.one-realty.in/api/employe-follow-up`,
         {
           lead_id: leads[0].lead_id,
           name: leads[0].name,
@@ -438,7 +438,7 @@ function Employee_Single_Lead_Profile() {
   
         // Update the Follow Up status after saving the Follow Up
         const putResponse = await axios.put(
-          `http://localhost:9000/api/updateOnlyFollowUpStatus/${leads[0].lead_id}`,
+          `https://crm.one-realty.in/api/updateOnlyFollowUpStatus/${leads[0].lead_id}`,
           { follow_up_status: "in progress" }
         );
   

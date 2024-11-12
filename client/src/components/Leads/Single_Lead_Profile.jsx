@@ -18,7 +18,7 @@ function Single_Lead_Profile() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`http://localhost:9000/api/leads/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
       console.log(response.data);
       setLeads(response.data);
 
@@ -46,7 +46,7 @@ function Single_Lead_Profile() {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up/${id}`
       );
       console.log(response.data);
     
@@ -65,7 +65,7 @@ function Single_Lead_Profile() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit/${id}`
       );
       console.log(response.data);
       setVisit(response.data);
