@@ -23,9 +23,69 @@ const saveForm = (req, res) => {
   );
 };
 
+const updateForm = (req, res) => {
+  const { id, form_id, form_name } = req.body;
+  
+
+  // Check if form_id and form_name are provided
+  if (!id || !form_id || !form_name ) {
+    return res.status(400).json({ error: 'ID ,Form ID and Form Name are required' });
+  }
+
+  // Update the form data in the database
+  db.query(
+    'UPDATE formtable SET  form_id = ?, form_name = ? WHERE id = ?',
+    [ form_id,form_name,id],
+    (err, result) => {
+      if (err) {
+        console.error('Error updating form data:', err);
+        return res.status(500).json({ error: 'Failed to update form data' });
+      }
+
+      // Check if any row was affected by the update
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Form not found' });
+      }
+
+      res.status(200).json({ message: 'Form updated successfully!' });
+    }
+  );
+};
+
+const deleteForm = (req, res) => {
+  const { id } = req.params;
+
+  // Check if id is provided
+  if (!id) {
+    return res.status(400).json({ error: 'Form ID is required' });
+  }
+
+  // Delete the form from the database
+  db.query(
+    'DELETE FROM formtable WHERE id = ?',
+    [id],
+    (err, result) => {
+      if (err) {
+        console.error('Error deleting form data:', err);
+        return res.status(500).json({ error: 'Failed to delete form data' });
+      }
+
+      // Check if any row was affected by the delete
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Form not found' });
+      }
+
+      res.status(200).json({ message: 'Form deleted successfully!' });
+    }
+  );
+};
+
+
+
+
 // Fetch all forms from the database
 const getAllForms = (req, res) => {
-  db.query('SELECT form_id, form_name FROM formtable', (err, results) => {
+  db.query('SELECT * FROM formtable', (err, results) => {
     if (err) {
       console.error('Error fetching forms:', err);
       return res.status(500).json({ error: 'Failed to fetch forms' });
@@ -110,4 +170,4 @@ const extractFieldValue = (fieldData, fieldName) => {
   return field ? field.values[0] : '';
 };
 
-module.exports = { saveForm, getAllForms, fetchLeads, getLeadsByFormId };
+module.exports = { saveForm,updateForm,deleteForm, getAllForms, fetchLeads, getLeadsByFormId };

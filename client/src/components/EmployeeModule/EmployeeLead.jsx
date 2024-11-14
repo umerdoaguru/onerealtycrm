@@ -297,7 +297,31 @@ function EmployeeLead() {
               </div>
         
           </div>
+          <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
+              {/* Filter leads based on the selected employee */}
+         
 
+              <div>
+                Total Lead:{" "}
+                {
+                  leads.length
+                }
+              </div>
+              <div>
+  Total Lead visit:{" "}
+  {
+    leads.filter(
+        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+      ).length
+  }
+</div>
+              <div>
+                Total Closed Lead:{" "}
+                {
+                  leads.filter((lead) => lead.deal_status === "close").length
+                }
+              </div>
+            </div>
           <div className="overflow-x-auto rounded-lg shadow-md">
             <table className="min-w-full bg-white">
               <thead>
@@ -309,14 +333,15 @@ function EmployeeLead() {
                     Lead Number
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Assigned To
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Created Time
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Name
-                  </th>
+                
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Phone
                   </th>
@@ -344,14 +369,15 @@ function EmployeeLead() {
           </Link>
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.name}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.assignedTo}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {moment(lead.createdTime).format("DD/MM/YYYY")}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.name}
-        </td>
+     
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.phone}
         </td>

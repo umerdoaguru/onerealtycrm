@@ -541,6 +541,17 @@ const handlePageClick = (data) => {
           </div>
           <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
               {/* Filter leads based on the selected employee */}
+         
+
+              <div>
+                Total Lead:{" "}
+                {
+                  leads.filter(
+                    (lead) =>
+                      !employeeFilter || lead.assignedTo === employeeFilter
+                  ).length
+                }
+              </div>
               <div>
   Total Lead visit:{" "}
   {
@@ -554,16 +565,6 @@ const handlePageClick = (data) => {
       ).length
   }
 </div>
-
-              <div>
-                Total Lead:{" "}
-                {
-                  leads.filter(
-                    (lead) =>
-                      !employeeFilter || lead.assignedTo === employeeFilter
-                  ).length
-                }
-              </div>
               <div>
                 Total Closed Lead:{" "}
                 {

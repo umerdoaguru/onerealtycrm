@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const FormInput = () => {
+const FormInput = ({ setShowForm,onFormSubmit }) => {
   const [formId, setFormId] = useState('');
   const [formName, setFormName] = useState('');
   const [success, setSuccess] = useState('');
@@ -23,6 +23,9 @@ const FormInput = () => {
         setError('');
         setFormId('');
         setFormName('');
+        setShowForm(false);  // Hide form on successful submit
+          // Trigger LeadsTable refresh
+          onFormSubmit();
       }
     } catch (err) {
       console.error('Error saving form:', err);
@@ -67,12 +70,21 @@ const FormInput = () => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Save Form
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Save Form
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowForm(false)}  // Hide form on cancel
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

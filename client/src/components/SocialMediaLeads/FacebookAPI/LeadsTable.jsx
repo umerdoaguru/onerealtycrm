@@ -6,6 +6,7 @@ import LeadsDisplay from './LeadsDisplay';
 import FormInput from './FormInput';
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
+import UpdateForm from './UpdateForm';
 
 const LeadsTable = () => {
   const [leads, setLeads] = useState([]);
@@ -14,8 +15,11 @@ const LeadsTable = () => {
   const [gotId, setGotId] = useState("");
   const [selectedFormId, setSelectedFormId] = useState(''); // Store selected form ID
   const [showForm, setShowForm] = useState(false);  
+  const [showUpdateForm, setShowUpdateForm] = useState(false);  
   
   const [leadsAssigned, setLeadsAssigned] = useState([]);
+  const [refreshLeads, setRefreshLeads] = useState(false);  // State to trigger refresh
+
 
   // Fetch leads based on selected form ID
   // const fetchLeadsByFormId = async (formId) => {
@@ -229,17 +233,44 @@ window.open(whatsappLink, "_blank");
   useEffect(() => {
     saveIntoDB();
   }, [gotId])
+  
+  const handleRefreshLeads = () => {
+    setRefreshLeads(!refreshLeads);
+    window.location.reload();
+
+    // Toggle state to trigger re-fetch
+  };
+  
 
   return (
     <div className="container 2xl:w-[95%]">
-      <button
-        className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
-        onClick={() => setShowForm(!showForm)}  // toggle form visibility
-      >
-        Add Form Details
-      </button>
+ <div>
+      <div className="flex gap-2">
+        <button
+          className="bg-blue-500 text-white py-2 px-3 rounded mb-4"
+          onClick={() => {
+            setShowForm(!showForm);        // Toggle Add Form visibility
+            setShowUpdateForm(false);      // Hide Edit/Delete Form if active
+          }}
+        >
+          Add Form Details
+        </button>
+        
+        <button
+          className="bg-orange-500 text-white py-2 px-3 rounded mb-4"
+          onClick={() => {
+            setShowUpdateForm(!showUpdateForm);  // Toggle Edit/Delete Form visibility
+            setShowForm(false);                  // Hide Add Form if active
+          }}
+        >
+          Edit And Delete Form
+        </button>
+      </div>
 
-      {showForm && <FormInput />} 
+      {/* Conditional rendering for forms */}
+      {showForm && <FormInput setShowForm={setShowForm} onFormSubmit={handleRefreshLeads} />}
+      {showUpdateForm && <UpdateForm />}
+    </div>
       
       <h1 className="text-2xl font-bold mb-4">Select Form to Fetch Leads</h1>
 
