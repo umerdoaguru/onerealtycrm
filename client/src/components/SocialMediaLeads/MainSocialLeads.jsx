@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import MainHeader from './../MainHeader';
 import Sider from '../Sider';
 import FacebookLeads from './FacebookLeads';
-import WebsiteLeads from './WebsiteLeads';
+import WebsiteLeads from './WebsiteApi/WebsiteLeads';
 import { GiFiles } from 'react-icons/gi';
 import { SiMoneygram } from 'react-icons/si';
 import Accrs from './AccrsLeads';

@@ -13,6 +13,7 @@ const Router3 = require("./routers/dashboardRoutes");
 const Router = require("./routers/userdataroutes");
 const Router5 = require("./routers/response_99acres");
 const Router6 = require("./routers/FacebookRoutes");
+const Router7 = require("./routers/WebsiteRoutes");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api", Router4);
 app.use("/api", Router);
 app.use("/api", Router5);
 app.use("/api", Router6);
+app.use("/api", Router7);
 app.use(cors({ origin: "http://localhost:3000" }));
 app.use("/Assets", express.static(path.join(__dirname, "Assets")));
 

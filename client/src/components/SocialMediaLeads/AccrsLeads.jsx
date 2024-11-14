@@ -26,7 +26,7 @@ function Accrs() {
     try {
       const response = await axios.get('https://crm.one-realty.in/api/get-responses');
       console.log('Response received from API:', response.data);
-      setResponses(response.data);
+      setResponses(response.data);   
     } catch (error) {
       console.error('Error fetching 99Acres responses:', error);
     }

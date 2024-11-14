@@ -1,9 +1,12 @@
 const express = require('express');
-const { saveForm, getAllForms, fetchLeads, getLeadsByFormId } = require('../controllers/FacebookController');
+const { saveForm, getAllForms, fetchLeads, getLeadsByFormId, updateForm, deleteForm } = require('../controllers/FacebookController');
 const router = express.Router();
 
 
 // Routes for form operations
+router.post('/forms', saveForm);
+router.put('/updateform', updateForm);
+router.delete('/deleteform/:id', deleteForm);
 router.post('/forms', saveForm);
 router.get('/forms', getAllForms);
 

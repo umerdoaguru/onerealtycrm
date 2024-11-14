@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { toWords } from 'number-to-words'; // Importing only the needed function
 import axios from 'axios'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -43,68 +42,104 @@ const QuotationInputForm = ({name}) => {
   const [formData, setFormData] = useState(initialFormData);
 
 
-  // Function to convert number to words
-  const numberToWords = (num) => {
-    return toWords(num);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    let updatedFormData = { ...formData };
-
-    // Contact number validation (exactly 10 digits)
-    if (name === 'contactNumber') {
-      if (value.length <= 10 && /^\d*$/.test(value)) {
-        updatedFormData.contactNumber = value;
+    // Function to convert number to words in Indian format
+    function numberToWordsIndian(num) {
+      const units = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+      const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+      const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+      const thousands = ["", "Thousand", "Lakh", "Crore"];
+  
+      if (num === 0) return "Zero";
+  
+      const parseTwoDigits = (n) => {
+          if (n < 10) return units[n];
+          else if (n < 20) return teens[n - 10];
+          return tens[Math.floor(n / 10)] + (n % 10 ? " " + units[n % 10] : "");
+      };
+  
+      const parseThreeDigits = (n) => {
+          if (n >= 100) {
+              return units[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + parseTwoDigits(n % 100) : "");
+          } else {
+              return parseTwoDigits(n);
+          }
+      };
+  
+      const getIndianFormattedWords = (number) => {
+          let result = "";
+          let unitIndex = 0;
+  
+          // Handle each block of three digits
+          while (number > 0) {
+              let currentBlock = number % 1000; // Get the current block (Thousand, Lakh, etc.)
+              if (currentBlock > 0) {
+                  result = parseThreeDigits(currentBlock) + (thousands[unitIndex] ? " " + thousands[unitIndex] : "") + (result ? " " + result : "");
+              }
+  
+              number = Math.floor(number / 1000); // Reduce the number by dividing it by 1000 for the next block
+              unitIndex++;
+          }
+  
+          return result.trim(); // Remove extra spaces from the result
+      };
+  
+      return getIndianFormattedWords(num);
+  }  
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      let updatedFormData = { ...formData };
+  
+      // Contact number validation (exactly 10 digits)
+      if (name === 'contactNumber') {
+        if (value.length <= 10 && /^\d*$/.test(value)) {
+          updatedFormData.contactNumber = value;
+        }
       }
-    }
-
-    // Aadhaar number validation (exactly 12 digits)
-    else if (name === 'adhaarNumber') {
-      if (value.length <= 12 && /^\d*$/.test(value)) {
-        updatedFormData.adhaarNumber = value;
+  
+      // Aadhaar number validation (exactly 12 digits)
+      else if (name === 'adhaarNumber') {
+        if (value.length <= 12 && /^\d*$/.test(value)) {
+          updatedFormData.adhaarNumber = value;
+        }
       }
-    }
-
-    // PAN number validation and formatting
-    else if (name === 'panNumber') {
-      let formattedValue = value.toUpperCase();
-
-      // Only allow first 5 characters as letters, next 4 as numbers, last as letter
-      if (formattedValue.length <= 5) {
-        formattedValue = formattedValue.replace(/[^A-Z]/g, ''); // Only uppercase letters
-      } else if (formattedValue.length <= 9) {
-        formattedValue = formattedValue.slice(0, 5) + formattedValue.slice(5).replace(/[^0-9]/g, ''); // Only numbers for next 4
-      } else {
-        formattedValue = formattedValue.slice(0, 9) + formattedValue.slice(9).replace(/[^A-Z]/g, ''); // Last character as letter
+  
+      // PAN number validation and formatting
+      else if (name === 'panNumber') {
+        let formattedValue = value.toUpperCase();
+  
+        // Only allow first 5 characters as letters, next 4 as numbers, last as letter
+        if (formattedValue.length <= 5) {
+          formattedValue = formattedValue.replace(/[^A-Z]/g, ''); // Only uppercase letters
+        } else if (formattedValue.length <= 9) {
+          formattedValue = formattedValue.slice(0, 5) + formattedValue.slice(5).replace(/[^0-9]/g, ''); // Only numbers for next 4
+        } else {
+          formattedValue = formattedValue.slice(0, 9) + formattedValue.slice(9).replace(/[^A-Z]/g, ''); // Last character as letter
+        }
+  
+        updatedFormData.panNumber = formattedValue;
       }
-
-      updatedFormData.panNumber = formattedValue;
-    }
-
-    // Automatically convert Booking Amount to words
-    else if (name === 'bookingAmount') {
-      updatedFormData.bookingAmount = value;
-      updatedFormData.bookingAmountWords = value && !isNaN(value) ? numberToWords(value) : '';
-    }
-
-    // Automatically convert Balance Amount to words
-    else if (name === 'balanceAmount') {
-      updatedFormData.balanceAmount = value;
-      updatedFormData.balanceAmountWords = value && !isNaN(value) ? numberToWords(value) : '';
-    }
-
-    // Default case for other fields
-    else {
-      updatedFormData[name] = value;
-    }
-
-    console.log('data on change :', updatedFormData);
-    
-
-    // Update formData state once at the end
-    setFormData(updatedFormData);
-  };
+  
+      // Automatically convert Booking Amount to words
+      else if (name === 'bookingAmount') {
+        updatedFormData.bookingAmount = value;
+        updatedFormData.bookingAmountWords = value && !isNaN(value) ? numberToWordsIndian(Number(value)) : '';
+      }
+  
+      // Automatically convert Balance Amount to words
+      else if (name === 'balanceAmount') {
+        updatedFormData.balanceAmount = value;
+        updatedFormData.balanceAmountWords = value && !isNaN(value) ? numberToWordsIndian(Number(value)) : '';
+      }
+  
+      // Default case for other fields
+      else {
+        updatedFormData[name] = value;
+      }
+  
+      console.log('data on change :', updatedFormData);
+      setFormData(updatedFormData);
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -122,14 +157,14 @@ const QuotationInputForm = ({name}) => {
       
 
       // Send the POST request to save the quotation
-      const response = await axios.post("https://crm.one-realty.in/api/quotation-information-form", dataToSubmit);
+      const response = await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/quotation-information-form", dataToSubmit);
       console.log("Quotation added successfully:", response.data);
 
       
       // Send the PUT request to update the quotation status
       try {
         const updateResponse = await axios.put(
-          `https://crm.one-realty.in/api/updateOnlyQuotationStatus/${id}`,
+          `https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyQuotationStatus/${id}`,
           { quotation: "created" }
         );
         if (updateResponse.status === 200) {
@@ -233,3 +268,7 @@ const QuotationInputForm = ({name}) => {
 };
 
 export default QuotationInputForm;
+
+
+
+
