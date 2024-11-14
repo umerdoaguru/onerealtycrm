@@ -173,27 +173,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
   return (
     <>
       <div className="container 2xl:w-[95%]">
-      <div className="flex gap-2">
-        <button
-          className="bg-blue-500 text-white py-2 px-3 rounded mb-4"
-          onClick={() => {
-            setShowWebsiteApi(!showWebsite);        // Toggle Add Form visibility
-            setShowUpdateWebsiteApi(false);      // Hide Edit/Delete Form if active
-          }}
-        >
-          Add Website Api
-        </button>
-        
-        <button
-          className="bg-orange-500 text-white py-2 px-3 rounded mb-4"
-          onClick={() => {
-            setShowUpdateWebsiteApi(!showUpdateWebsiteApi);  // Toggle Edit/Delete Form visibility
-            setShowWebsiteApi(false);                  // Hide Add Form if active
-          }}
-        >
-          Edit And Delete Website Api
-        </button>
-      </div>
+   
         <h1 className="text-2xl text-center mt-[2rem]">Website Leads Data</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
