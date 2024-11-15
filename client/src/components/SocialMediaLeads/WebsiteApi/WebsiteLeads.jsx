@@ -4,15 +4,21 @@ import React, { useEffect, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import ReactPaginate from "react-paginate";
 import { Link, useNavigate } from "react-router-dom";
+import AddFormApi from "./AddFormApi";
+import UpdateFormApi from "./UpdateFormApi";
 
 function WebsiteLeads() {
   const [websiteleads, setWebsiteLeads] = useState([]);
+  const [websiteApi, setWebsiteApi] = useState([]);
+
   const [showPopup, setShowPopup] = useState(false);
   const [websiteleadsAssigned, setwebsiteLeadsAssigned] = useState([]);
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [showWebsite, setShowWebsiteApi] = useState(false);  
   const [showUpdateWebsiteApi, setShowUpdateWebsiteApi] = useState(false);  
+  const [refreshLeads, setRefreshLeads] = useState(false);  // State to trigger refresh
+
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
     employeeId: "",
@@ -24,15 +30,35 @@ function WebsiteLeads() {
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
 
-  // Fetch leads
+ 
+    const fetchApiData = async () => {
+    try {
+      const response = await axios.get(
+        `https://crmdemo.vimubds5.a2hosted.com/api/get-website-api`
+      );
+      setWebsiteApi(response.data[0].api);
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching form:", error);
+    }
+  };
+  const WebsiteApiUrl = websiteApi
+  console.log(WebsiteApiUrl);
+  
+
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://one-realty.in/api/user-data");
-      setWebsiteLeads(response.data);
+      const response = await axios.get(WebsiteApiUrl);
+      if (Array.isArray(response.data)) {
+        setWebsiteLeads(response.data);
+      } else {
+        console.error("Unexpected data format", response.data);
+      }
     } catch (error) {
       console.error("Error fetching website leads:", error);
     }
   };
+  
 
   // Fetch employees
   const fetchEmployees = async () => {
@@ -55,10 +81,15 @@ function WebsiteLeads() {
   };
 
   useEffect(() => {
-    fetchLeads();
+        fetchLeads();
+    fetchApiData();
     fetchEmployees();
     fetchLeadassigned();
   }, []);
+  useEffect(() => {
+    fetchLeads();
+
+  }, [websiteApi]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -170,6 +201,13 @@ window.open(whatsappLink, "_blank");
 console.log("Leads:", currentLeads);
 console.log("Assigned Leads:", websiteleadsAssigned);
 
+const handleRefreshLeads = () => {
+  setRefreshLeads(!refreshLeads);
+  window.location.reload();
+
+  // Toggle state to trigger re-fetch
+};
+
   return (
     <>
       <div className="container 2xl:w-[95%]">
@@ -194,6 +232,11 @@ console.log("Assigned Leads:", websiteleadsAssigned);
           Edit And Delete Website Api
         </button>
       </div>
+      {showWebsite && <AddFormApi setShowForm={setShowWebsiteApi} onFormSubmit={handleRefreshLeads} />}
+      {showUpdateWebsiteApi && <UpdateFormApi />}
+
+
+
         <h1 className="text-2xl text-center mt-[2rem]">Website Leads Data</h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
 
@@ -231,55 +274,50 @@ console.log("Assigned Leads:", websiteleadsAssigned);
               </tr>
             </thead>
             <tbody>
-            {currentLeads.filter(
+            {websiteleads?.filter(
   (lead) =>
     !websiteleadsAssigned.some((assigned) => assigned.lead_no === lead.id.toString())
-).map((lead, index) => (
-  <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{index + 1}</td>
-    <td className="px-6 py-4 border-b border-gray-200">{lead.id}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.email}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.mobile_no}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.address}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-      {moment(lead.created_date).format('DD-MM-YYYY')}
-    </td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-      <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
-        Assign
-      </button>
+).length === 0 ? (
+  // Display "No data found" message when there are no leads
+  <tr>
+    <td colSpan="9" className="text-center py-4 text-gray-500">
+      No data found Please Check Api
     </td>
   </tr>
-))}
+) : (
+  // Display leads if data is available
+  websiteleads
+    .filter(
+      (lead) =>
+        !websiteleadsAssigned.some((assigned) => assigned.lead_no === lead.id.toString())
+    )
+    .map((lead, index) => (
+      <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{index + 1}</td>
+        <td className="px-6 py-4 border-b border-gray-200">{lead.id}</td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.email}</td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.mobile_no}</td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.address}</td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {moment(lead.created_date).format('DD-MM-YYYY')}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
+            Assign
+          </button>
+        </td>
+      </tr>
+    ))
+)}
+
 
 </tbody>
 
           </table>
 
-          {/* Pagination Component */}
-          <div className="mt-4 flex justify-center">
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              breakLabel={"..."}
-              pageCount={Math.ceil(websiteleads.length / leadsPerPage)}
-              marginPagesDisplayed={2}
-              pageRangeDisplayed={3}
-              onPageChange={handlePageClick}
-              containerClassName={"pagination"}
-              activeClassName={"active"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              nextClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextLinkClassName={"page-link"}
-              breakClassName={"page-item"}
-              breakLinkClassName={"page-link"}
-            />
-          </div>
+    
         </div>
 
         {/* Popup */}
