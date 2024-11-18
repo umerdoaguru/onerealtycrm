@@ -19,6 +19,7 @@ const LeadsTable = () => {
   
   const [leadsAssigned, setLeadsAssigned] = useState([]);
   const [refreshLeads, setRefreshLeads] = useState(false);  // State to trigger refresh
+  const [loadingbutton , setLoadingButton] = useState(false)
 
 
   // Fetch leads based on selected form ID
@@ -35,6 +36,7 @@ const LeadsTable = () => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [formName, setFormName] = useState([]);
+  
 
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
@@ -46,6 +48,7 @@ const LeadsTable = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
+
   
 
   const fetchLeadsByFormId = async () => {
@@ -117,6 +120,7 @@ const LeadsTable = () => {
       return; // Stop further execution if the field is empty
     }
     try {
+      setLoadingButton(true)
       await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/leads", {
         lead_no:  selectedLead.leadId,    
         assignedTo:currentLead.assignedTo,
@@ -158,8 +162,10 @@ const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${cur
 window.open(whatsappLink, "_blank");
 
 
-
+setLoadingButton(false)
     } catch (error) {
+setLoadingButton(false)
+
       console.error("Error adding lead:", error);
     }
   };
@@ -483,9 +489,9 @@ window.open(whatsappLink, "_blank");
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                onClick={saveChanges}
+                onClick={saveChanges} disabled = {loadingbutton}
               >
-                Save
+                 {loadingbutton ? 'Save...' : 'Save'}
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"

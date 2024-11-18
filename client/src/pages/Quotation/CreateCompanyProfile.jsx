@@ -126,7 +126,7 @@ function CreateCompanyProfile() {
               placeholder="Filter by Quotation Name"
               value={filterText}
               onChange={handleFilterChange}
-              className="form-input border-gray-300 rounded-md shadow-sm w-full max-w-md"
+              className="form-input border-gray-300 rounded-md p-2 border shadow-sm w-full max-w-md"
             />
           </div>
 
