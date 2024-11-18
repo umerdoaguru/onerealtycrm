@@ -142,6 +142,7 @@ const AdminReport = () =>  {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowPerPage, setRowPerPage] = useState(10); // Default to 10 rows per page
   const [dataFields, setDataFields] = useState(d_fileds);
+  
  
   useEffect(() => {
     filterData();

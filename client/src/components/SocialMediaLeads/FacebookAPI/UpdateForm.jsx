@@ -25,7 +25,7 @@ const UpdateForm = () => {
   const fetchFormData = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/forms`
+        `https://crmdemo.vimubds5.a2hosted.com/api/forms`
       );
       setForm(response.data);
       console.log(response);
@@ -42,7 +42,7 @@ const UpdateForm = () => {
     if (isConfirmed) {
       try {
         const response = await axios.delete(
-          `https://crm.one-realty.in/api/deleteform/${form.id}`
+          `https://crmdemo.vimubds5.a2hosted.com/api/deleteform/${form.id}`
         );
         if (response.status === 200) {
           console.log("form deleted successfully");
@@ -80,7 +80,7 @@ const UpdateForm = () => {
   // Function to send the PUT request to update the Form data
   const updateFrom = async () => {
     try {
-      const response = await axios.put(`https://crm.one-realty.in/api/updateform`, modalData);
+      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateform`, modalData);
       if (response.status === 200) {
         cogoToast.success("Form updated successfully!");
         setRender(!render); // Refresh the list after updating
