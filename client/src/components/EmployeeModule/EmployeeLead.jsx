@@ -166,7 +166,7 @@ function EmployeeLead() {
   useEffect(() => {
     fetchLeads();
   }, []);
-
+  
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
@@ -174,11 +174,12 @@ function EmployeeLead() {
       );
       const data = response.data;
       console.log(data);
-      setLeads(data);
+      setLeads(data.reverse()); // Reverse the data here
     } catch (error) {
       console.error("Error fetching leads:", error);
     }
   };
+  
 
   const handleUpdate = async (lead) => {
     try {

@@ -10,7 +10,7 @@ const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
   const fetchForms = async () => {
     try {
       const response = await axios.get('https://crm.one-realty.in/api/forms');
-      setForms(response.data);
+      setForms(response.data.reverse());
     } catch (err) {
       console.error('Error fetching forms:', err);
       setError('Failed to fetch forms');

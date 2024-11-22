@@ -201,10 +201,20 @@ window.open(whatsappLink, "_blank");
     setShowPopup(false);
     setSelectedLead(null);
   };
-  // Pagination logic
-  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
-  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+
+  const filteredLeads = leads.filter(
+    (lead) =>
+      !leadsAssigned.some((assigned) => assigned.lead_no === lead.lead_id)
+  );
+
+
+ // Pagination logic
+ const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+ const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+ const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+ 
+ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
@@ -269,7 +279,7 @@ window.open(whatsappLink, "_blank");
 
       {/* Conditional rendering for forms */}
       {showForm && <FormInput setShowForm={setShowForm} onFormSubmit={handleRefreshLeads} />}
-      {showUpdateForm && <UpdateForm />}
+      {showUpdateForm && <UpdateForm setShowUpdateForm={setShowUpdateForm} />}
     </div>
       
       <h1 className="text-2xl font-bold mb-4">Select Form to Fetch Leads</h1>
@@ -281,84 +291,85 @@ window.open(whatsappLink, "_blank");
 
 
       {loading && <p>Loading...</p>}
+      {filteredLeads.length > 0 ? (
+  <div className="overflow-x-auto">
+    <table className="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr>
+          <th colSpan="6" className="py-2 px-4 border-b">
+            Ad Name: {formName}
+          </th>
+        </tr>
+        <tr className="bg-gray-100">
+          <th className="py-2 px-4 border-b">Lead S.no</th>
+          <th className="py-2 px-4 border-b">Lead ID</th>
+          <th className="py-2 px-4 border-b">Full Name</th>
+          <th className="py-2 px-4 border-b">Phone Number</th>
+          <th className="py-2 px-4 border-b">Address</th>
+          <th className="py-2 px-4 border-b">Subject</th>
+          <th className="py-2 px-4 border-b">Date</th>
+          <th className="py-2 px-4 border-b">Assign Lead</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Array.isArray(currentLeads) &&
+          currentLeads.map((lead, index) => (
+            <tr key={lead.id}>
+              <td className="py-2 px-4 border-b">{index + 1}</td>
+              <td className="py-2 px-4 border-b">{lead.lead_id}</td>
+              <td className="py-2 px-4 border-b">{lead.full_name}</td>
+              <td className="py-2 px-4 border-b">{lead.phone_number}</td>
+              <td className="py-2 px-4 border-b">{lead.street_address}</td>
+              <td className="py-2 px-4 border-b">{formName}</td>
+              <td className="py-2 px-4 border-b">
+                {lead.created_time
+                  ? `${new Date(lead.created_time).toLocaleDateString(
+                      "en-GB"
+                    )} ${new Date(lead.created_time).toLocaleTimeString()}`
+                  : "N/A"}
+              </td>
+              <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                <button
+                  className="text-blue-500 hover:text-blue-700"
+                  onClick={() => handleEditClick(lead)}
+                >
+                  Assign
+                </button>
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
 
-      {leads.length > 0 &&
+    {/* Pagination */}
+    <div className="mt-4 flex justify-center">
+      <ReactPaginate
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        breakLabel={"..."}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageClick}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        pageClassName={"page-item"}
+        pageLinkClassName={"page-link"}
+        previousClassName={"page-item"}
+        nextClassName={"page-item"}
+        previousLinkClassName={"page-link"}
+        nextLinkClassName={"page-link"}
+        breakClassName={"page-item"}
+        breakLinkClassName={"page-link"}
+      />
+    </div>
+  </div>
+) : (
+  <div className="text-center py-8 text-gray-500">
+    No Data Found Please Select Currently Form
+  </div>
+)}
 
-         <div className="overflow-x-auto">
-         <table className="min-w-full bg-white border border-gray-200">
-           <thead>
-           <th colSpan="6" className='py-2 px-4 border-b"'>Ad Name : {formName}</th>
-             <tr className="bg-gray-100">
-               <th className="py-2 px-4 border-b">Lead S.no</th>
-               <th className="py-2 px-4 border-b">Lead ID</th>
-               <th className="py-2 px-4 border-b">Full Name</th>
-               <th className="py-2 px-4 border-b">Phone Number</th>
-               <th className="py-2 px-4 border-b">Address</th>
-               <th className="py-2 px-4 border-b">Subject</th>
-               <th className="py-2 px-4 border-b">Date</th>
-               <th className="py-2 px-4 border-b">Assign Lead</th>
-             </tr>
-           </thead>
-           <tbody>
-  {Array.isArray(currentLeads) && currentLeads
-    .filter(
-      (lead) =>
-        !leadsAssigned.some(
-          (assigned) => assigned.lead_no === lead.lead_id
-        )
-    )
-    .map((lead, index) => (
-      <tr key={lead.id}>
-        <td className="py-2 px-4 border-b">{index + 1}</td>
-        <td className="py-2 px-4 border-b">{lead.lead_id}</td>
-        <td className="py-2 px-4 border-b">{lead.full_name}</td>
-        <td className="py-2 px-4 border-b">{lead.phone_number}</td>
-        <td className="py-2 px-4 border-b">{lead.street_address}</td>
-        <td className="py-2 px-4 border-b">{formName}</td>
-        <td className="py-2 px-4 border-b">
-          {lead.created_time
-            ? `${new Date(lead.created_time).toLocaleDateString('en-GB')} ${new Date(lead.created_time).toLocaleTimeString()}`
-            : 'N/A'}
-        </td>
-
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          <button
-            className="text-blue-500 hover:text-blue-700"
-            onClick={() => handleEditClick(lead)}
-          >
-            Assign
-          </button>
-        </td>
-      </tr>
-    ))}
-</tbody>
-
-         </table>
-           {/* Pagination */}
-      <div className="mt-4 flex justify-center">
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          breakLabel={"..."}
-          pageCount={Math.ceil(leads.length / leadsPerPage)}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={3}
-          onPageChange={handlePageClick}
-          containerClassName={"pagination"}
-          activeClassName={"active"}
-          pageClassName={"page-item"}
-          pageLinkClassName={"page-link"}
-          previousClassName={"page-item"}
-          nextClassName={"page-item"}
-          previousLinkClassName={"page-link"}
-          nextLinkClassName={"page-link"}
-          breakClassName={"page-item"}
-          breakLinkClassName={"page-link"}
-        />
-      </div>
-       </div>
-       
-}
 {showPopup && selectedLead && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
           <div className="w-full max-w-md p-6 mx-2 bg-white rounded-lg shadow-lg h-[95%] overflow-y-auto">

@@ -101,7 +101,8 @@ const SuperAdminTotalClosedDeal = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentLeads.map((lead, index) => (
+              {currentLeads.length > 0 ? (
+                currentLeads.map((lead, index) => (
                   <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {index + 1 + currentPage * leadsPerPage}
@@ -138,7 +139,14 @@ const SuperAdminTotalClosedDeal = () => {
                       {lead.d_closeDate}
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={11} className="py-4 text-center">
+                    No data found
+                  </td>
+                </tr>
+              )}
               </tbody>
             </table>
           </div>

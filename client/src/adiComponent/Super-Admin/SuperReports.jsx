@@ -533,59 +533,70 @@ const SuperReports = () =>
   </div>
 </div>
 
-          <div className="overflow-x-auto rounded-lg shadow-md ">
-            <table className="min-w-full bg-white">
-              <thead>
-                <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
-                  {dataFields?.[selectedCategory].heading.map((head) => (
-                    <th className="px-4 py-3">{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {dataFields?.[selectedCategory]?.[selectedCategory]?.length >
-                0 ? (
-                  dataFields?.[selectedCategory]?.[selectedCategory]
+<div className="overflow-x-auto rounded-lg shadow-md">
+  <table className="min-w-full bg-white">
+    <thead>
+      <tr className="text-sm font-semibold text-left text-gray-600 uppercase bg-gray-200">
+        {dataFields?.[selectedCategory]?.heading?.map((head, index) => (
+          <th key={index} className="px-4 py-3">
+            {head}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {dataFields?.[selectedCategory]?.[selectedCategory] ? (
+        (() => {
+          // Filter the data based on the selected category
+          const filteredData = dataFields[selectedCategory][selectedCategory].filter((item) => {
+            if (selectedCategory === "visit" && item.visit === "pending") {
+              return false; // Exclude rows with pending visits
+            }
+            if (selectedCategory === "closed" && item.deal_status === "pending") {
+              return false; // Exclude rows with pending deal_status
+            }
+            return true; // Include other rows
+          });
 
-                    .filter((item, index, array) => {
-                      if (
-                        selectedCategory === "visit" &&
-                        item.visit === "pending"
-                      ) {
-                        return false;
-                      }
-                      if (
-                        selectedCategory === "closed" &&
-                        item.deal_status === "pending" // Ensure correct case for 'pending'
-                      ) {
-                        return false;
-                      }
+          // Check if there are any rows after filtering
+          if (filteredData.length === 0) {
+            return (
+              <tr>
+                <td
+                  colSpan={dataFields[selectedCategory]?.columns?.length || 1}
+                  className="py-4 text-center"
+                >
+                  No data found
+                </td>
+              </tr>
+            );
+          }
 
-                      return true; // Include all other rows
-                    })
-                    .slice(
-                      (currentPage - 1) * rowPerPage,
-                      currentPage * rowPerPage
-                    )
-                    .map((item, index) => (
-                      <tr key={index} className="border-b border-gray-200">
-                        {dataFields[selectedCategory]?.columns.map((column) => (
-                          
-                          <td className="px-4 py-3">{item[column]}</td>
-                        ))}
-                      </tr>
-                    ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="py-4 text-center">
-                      No data found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-          <div className="2xl:w-[89%] mt-4 flex justify-center">
+          // Render filtered rows with pagination
+          return filteredData
+            .slice((currentPage - 1) * rowPerPage, currentPage * rowPerPage)
+            .map((item, index) => (
+              <tr key={index} className="border-b border-gray-200">
+                {dataFields[selectedCategory]?.columns?.map((column, colIndex) => (
+                  <td key={colIndex} className="px-4 py-3">
+                    {item[column] || "N/A"}
+                  </td>
+                ))}
+              </tr>
+            ));
+        })()
+      ) : (
+        <tr>
+          <td colSpan={dataFields?.[selectedCategory]?.columns?.length || 1} className="py-4 text-center">
+            No data found
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </table>
+</div>
+
+          <div className="2xl:w-[89%] 2xl:ml-28 mt-4 flex justify-center">
           <Pagination
             currentPage={currentPage}
             totalItems={

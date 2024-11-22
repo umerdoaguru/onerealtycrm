@@ -45,7 +45,7 @@ const LeadsReport = () => {
   return (
     <>
     
-    <div className="p-4 mt-6 bg-white rounded-lg shadow-lg mx-7 mb-2">
+    <div className="p-4 mt-6 bg-white rounded-lg shadow-lg mx-7 mb-2 ">
       <h3 className="mb-4 text-lg font-semibold">Today's Assigned Leads</h3>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border">
@@ -83,7 +83,8 @@ const LeadsReport = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="px-6 py-4 text-center text-gray-500">No Data Available</td>
+                
+                <td colSpan="11" className="px-6 py-4 text-center  text-gray-500">No Data Available</td>
               </tr>
             )}
           </tbody>

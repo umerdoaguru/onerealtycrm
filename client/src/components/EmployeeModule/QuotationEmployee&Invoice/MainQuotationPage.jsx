@@ -177,7 +177,8 @@ const MainQuoatationPage = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {currentQuotations.map((quotation, index) => (
+                {currentQuotations.length > 0 ? ( 
+                  currentQuotations.map((quotation, index) => (
                     <tr key={quotation.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         { index + 1}
@@ -223,7 +224,14 @@ const MainQuoatationPage = () => {
                       </button> */}
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={11} className="py-4 text-center">
+                      No data found
+                    </td>
+                  </tr>
+                )}
                 </tbody>
               </table>
             
