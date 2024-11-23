@@ -72,7 +72,7 @@ function SuperEmployeeLeads() {
       );
       const data = response.data;
       console.log(data);
-      setLeads(data);
+      setLeads(data.reverse());
     } catch (error) {
       console.error("Error fetching leads:", error);
     }

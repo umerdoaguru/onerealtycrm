@@ -129,53 +129,61 @@ const AdminTotalClosedDeal = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentLeads
-                  .filter((lead) => lead.deal_status === "close") // Filter out closed deals
-                  .map((lead, index) => (
-                    <tr
-                      key={lead.id}
-                      className={index % 2 === 0 ? "bg-gray-100" : ""}
-                    >
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        { index + 1}{" "}
-                        {/* Adjusted for pagination */}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.lead_no}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.assignedTo}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.name}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.subject}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.phone}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.leadSource}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.visit}
-                      </td>
-                   
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.follow_up_status}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.deal_status}
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.d_closeDate}
-                      </td>
-                    </tr>
-                  ))}
+              {currentLeads.length > 0 ? (
+  currentLeads
+    .filter((lead) => lead.deal_status === "close") // Filter out closed deals
+    .map((lead, index) => (
+      <tr
+        key={lead.id}
+        className={index % 2 === 0 ? "bg-gray-100" : ""}
+      >
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {index + 1} {/* Adjusted for pagination */}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.lead_no}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.assignedTo}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.name}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.subject}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.phone}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.leadSource}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.visit}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.follow_up_status}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.deal_status}
+        </td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+          {lead.d_closeDate}
+        </td>
+      </tr>
+    ))
+) : (
+  <tr>
+    <td colSpan={11} className="py-4 text-center">
+      No data found
+    </td>
+  </tr>
+)}
+
               </tbody>
             </table>
           </div>
+
         </div>
       <div className="mt-2 mb-2 flex justify-center">
         <ReactPaginate

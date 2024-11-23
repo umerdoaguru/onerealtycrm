@@ -149,25 +149,25 @@ const VisitData = () => {
           <table className="min-w-full bg-white border">
             <thead>
             <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
                       S.no
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
                      Lead Id 
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
                      Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
                       Assigned To
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
                       Visit 
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
                       Visit Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
                       Report
                     </th>
                 

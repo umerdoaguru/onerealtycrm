@@ -156,7 +156,8 @@ function CreateCompanyProfile() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {currentQuotation.map((quotation, index) => (
+              {currentQuotation.length > 0 ? (
+                currentQuotation.map((quotation, index) => (
                   <tr key={quotation.quotation_id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       { index + 1}
@@ -185,7 +186,14 @@ function CreateCompanyProfile() {
 
                  
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={11} className="py-4 text-center">
+                    No data found
+                  </td>
+                </tr>
+              )}
               </tbody>
             </table>
           </div>

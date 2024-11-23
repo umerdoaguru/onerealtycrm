@@ -5,11 +5,12 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 
 import cogoToast from "cogo-toast";
+import ReactPaginate from "react-paginate";
 
-const UpdateForm = () => {
+const UpdateForm = ({setShowUpdateForm}) => {
   const [form, setForm] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage] = useState(10); // Number of items per page
+  const [itemsPerPage] = useState(4); // Number of items per page
   const [filterText, setFilterText] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
   const [render, setRender] = useState(false);
@@ -27,7 +28,7 @@ const UpdateForm = () => {
       const response = await axios.get(
         `https://crmdemo.vimubds5.a2hosted.com/api/forms`
       );
-      setForm(response.data);
+      setForm(response.data.reverse());
       console.log(response);
     } catch (error) {
       console.error("Error fetching form:", error);
@@ -170,21 +171,41 @@ const UpdateForm = () => {
                           Delete
                         </button>
                        
-                        {/* <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded m-1"
-                        onClick={() =>
-                          handleCopyvisit(visit.visit_id)
-                        }
-                      >
-                        Copy
-                      </button> */}
+                     
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <div className="2xl:w-[89%] mt-4 mb-3 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+      </div>
 
-
+              <button
+            type="button"
+            onClick={() => setShowUpdateForm(false)}  // Hide form on cancel
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 mt-3 rounded"
+          >
+            Cancel
+          </button>
 
 
          

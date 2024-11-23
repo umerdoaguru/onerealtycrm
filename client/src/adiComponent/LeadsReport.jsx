@@ -45,7 +45,7 @@ const LeadsReport = () => {
   return (
     <>
     
-    <div className="p-4 mt-6 bg-white rounded-lg shadow-lg mx-7 mb-2">
+    <div className="p-4 mt-6 bg-white rounded-lg shadow-lg mx-7 mb-2 ">
       <h3 className="mb-4 text-lg font-semibold">Today's Assigned Leads</h3>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border">
@@ -55,6 +55,7 @@ const LeadsReport = () => {
               <th className="px-6 py-3 border-b-2 border-gray-300">Lead Number</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">Assign To</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Assigned To</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Subject</th>
@@ -69,6 +70,7 @@ const LeadsReport = () => {
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_no}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.phone}</td>
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.assignedTo}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.leadSource}</td>
                   <td className="px-6 py-4 bg-primary-100 text-primary-800 text-gray-700">
                     <span className="bg-blue-200 text-gray-800 font-medium rounded px-2">{lead.assignedTo}</span>
@@ -81,7 +83,8 @@ const LeadsReport = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="px-6 py-4 text-center text-gray-500">No Data Available</td>
+                
+                <td colSpan="11" className="px-6 py-4 text-center  text-gray-500">No Data Available</td>
               </tr>
             )}
           </tbody>

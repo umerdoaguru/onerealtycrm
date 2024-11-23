@@ -159,13 +159,25 @@ setLoadingButton(false)
     setSelectedLead(null);
   };
   
-  // Pagination logic
-  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
-  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = responses.slice(indexOfFirstLead, indexOfLastLead);
+  
+  const filteredLeads = responses.filter(
+    (lead) =>
+      !leadsAssigned.some(
+        (assigned) => assigned.lead_no === lead.id.toString()
+      )
+  );
 
-  const handlePageClick = (data) => {
-    setCurrentPage(data.selected);
+ 
+  const indexOfLastLead = currentPage * leadsPerPage + leadsPerPage;
+  const indexOfFirstLead = currentPage * leadsPerPage;
+  const  currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
+  
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+
+  
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
   };
 
   return (
@@ -189,10 +201,7 @@ setLoadingButton(false)
            </tr>
          </thead>
          <tbody>
-           {currentLeads.filter(
-  (lead) =>
-    !leadsAssigned.some((assigned) => assigned.lead_no === lead.id.toString())
-).map((lead, index) => (
+           {currentLeads.map((lead, index) => (
              <tr key={index} className="border-b">
                <td className="py-2 px-4">{lead.id || 'N/A'}</td>
                <td className="py-2 px-4">{lead.project_name || 'N/A'}</td>
@@ -218,7 +227,9 @@ setLoadingButton(false)
        </table>
      </div>
       ) : (
-        <p>Loading data...</p>
+        <div className="text-center py-8 text-gray-500">
+        No Data Found
+      </div>
       )}
     </div>
 
@@ -228,7 +239,7 @@ setLoadingButton(false)
               previousLabel={"Previous"}
               nextLabel={"Next"}
               breakLabel={"..."}
-              pageCount={Math.ceil(responses.length / leadsPerPage)}
+              pageCount={pageCount}
               marginPagesDisplayed={2}
               pageRangeDisplayed={3}
               onPageChange={handlePageClick}
