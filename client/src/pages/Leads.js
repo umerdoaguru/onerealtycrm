@@ -44,6 +44,7 @@ function Leads() {
   const [dealFilter, setDealFilter] = useState("");
   const [employeeFilter, setEmployeeFilter] = useState("");
   const [visit, setVisit] = useState([]);
+  const [loading , setLoading] = useState(false)
 
   // Fetch leads and employees from the API
   useEffect(() => {
@@ -259,6 +260,7 @@ function Leads() {
       };
   
       try {
+        setLoading(true)
         if (isEditing) {
           // Update existing lead
           await axios.put(
@@ -279,7 +281,9 @@ function Leads() {
           fetchLeads(); // Refresh the list
           closePopup();
         }
+        setLoading(false)
       } catch (error) {
+        setLoading(false)
         console.error("Error saving lead:", error);
       }
     }
@@ -923,9 +927,9 @@ const handlePageClick = (data) => {
                 <div className="flex justify-end">
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                    onClick={saveChanges}
+                    onClick={saveChanges} disabled = {loading}
                   >
-                    Save
+                       {loading ? 'Save...' : 'Save'}
                   </button>
                   <button
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"

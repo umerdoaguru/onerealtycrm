@@ -23,6 +23,7 @@ function WebsiteLeads() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
+  const [loading , setLoading] = useState(false)
 
   // Fetch leads
   const fetchLeads = async () => {
@@ -95,6 +96,7 @@ function WebsiteLeads() {
     }
   
     try {
+      setLoading(true)
       await axios.post("https://crm.one-realty.in/api/leads", {
         lead_no: selectedLead.leadId,
         assignedTo: currentLead.assignedTo,
@@ -135,8 +137,10 @@ const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${cur
 
 // Open WhatsApp link
 window.open(whatsappLink, "_blank");
+setLoading(false)
 
     } catch (error) {
+      setLoading(false)
       console.error("Error adding lead:", error);
     }
   };
@@ -400,9 +404,9 @@ console.log("Assigned Leads:", websiteleadsAssigned);
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                onClick={saveChanges}
+                onClick={saveChanges} disabled = {loading}
               >
-                Save
+                    {loading ? 'Save...' : 'Save'}
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"

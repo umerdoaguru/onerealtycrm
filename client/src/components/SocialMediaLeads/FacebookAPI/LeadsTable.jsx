@@ -11,6 +11,7 @@ import UpdateForm from './UpdateForm';
 const LeadsTable = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingsave, setLoadingsave] = useState(false);
   const [error, setError] = useState('');
   const [gotId, setGotId] = useState("");
   const [selectedFormId, setSelectedFormId] = useState(''); // Store selected form ID
@@ -117,6 +118,7 @@ const LeadsTable = () => {
       return; // Stop further execution if the field is empty
     }
     try {
+      setLoadingsave(true)
       await axios.post("https://crm.one-realty.in/api/leads", {
         lead_no:  selectedLead.leadId,    
         assignedTo:currentLead.assignedTo,
@@ -157,9 +159,10 @@ const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${cur
 // Open WhatsApp link
 window.open(whatsappLink, "_blank");
 
-
+setLoadingsave(false)
 
     } catch (error) {
+      setLoadingsave(false)
       console.error("Error adding lead:", error);
     }
   };
@@ -494,9 +497,9 @@ window.open(whatsappLink, "_blank");
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                onClick={saveChanges}
+                onClick={saveChanges} disabled = {loadingsave}
               >
-                Save
+                 {loadingsave ? 'Save...' : 'Save'}
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"

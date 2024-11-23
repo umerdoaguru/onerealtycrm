@@ -9,6 +9,7 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 function SuperAdminLogin() {
   const [formData, setFormData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [loading , setLoading] = useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -19,6 +20,7 @@ function SuperAdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const res = await axios.post("https://crm.one-realty.in/api/login", formData);
       if (res.data.success) {
         dispatch(loginUser(res.data.user));
@@ -29,7 +31,9 @@ function SuperAdminLogin() {
       } else {
         cogoToast.error(res.data.message);
       }
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       cogoToast.error(error?.response?.data?.message || "An error occurred");
     }
   };
@@ -101,8 +105,9 @@ function SuperAdminLogin() {
           <button
             type="submit"
             className="w-full px-4 py-2 font-semibold text-white bg-blue-500 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-          >
-            Submit
+            disabled = {loading}
+>
+       {loading ? 'Submiting...' : 'Submit'}
           </button>
           <p className="mt-4 text-sm text-center text-gray-600">
            
