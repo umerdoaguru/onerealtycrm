@@ -62,7 +62,7 @@ const SuperAdminVisit = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="mt-[7rem] 2xl:ml-44 mx-1 ">
+      <div className="mt-[7rem] 2xl:ml-40 ">
           <button
             onClick={() => navigate(-1)}
             className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
