@@ -7,7 +7,7 @@ import ReactPaginate from 'react-paginate';
 function Accrs() {
   const [responses, setResponses] = useState([]);
   const [leadsAssigned, setLeadsAssigned] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);

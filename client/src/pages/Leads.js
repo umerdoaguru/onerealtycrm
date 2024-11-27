@@ -544,43 +544,51 @@ const handlePageClick = (data) => {
             </div>
           </div>
           <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
-              {/* Filter leads based on the selected employee */}
-         
+  {/* Total Lead Count */}
+  <div>
+    Total Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+            (!employeeFilter || lead.assignedTo === employeeFilter) &&
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        ).length
+    }
+  </div>
 
-              <div>
-                Total Lead:{" "}
-                {
-                  leads.filter(
-                    (lead) =>
-                      !employeeFilter || lead.assignedTo === employeeFilter
-                  ).length
-                }
-              </div>
-              <div>
-  Total Lead visit:{" "}
-  {
-    leads
-      .filter(
-        (lead) =>
-          !employeeFilter || lead.assignedTo === employeeFilter
-      )
-      .filter(
-        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
-      ).length
-  }
+  {/* Total Lead Visits */}
+  <div>
+    Total Lead Visit:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+            (!employeeFilter || lead.assignedTo === employeeFilter) &&
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter(
+          (lead) =>
+            ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+        ).length
+    }
+  </div>
+
+  {/* Total Closed Leads */}
+  <div>
+    Total Closed Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+            (!employeeFilter || lead.assignedTo === employeeFilter) &&
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter((lead) => lead.deal_status === "close").length
+    }
+  </div>
 </div>
-              <div>
-                Total Closed Lead:{" "}
-                {
-                  leads
-                    .filter(
-                      (lead) =>
-                        !employeeFilter || lead.assignedTo === employeeFilter
-                    )
-                    .filter((lead) => lead.deal_status === "close").length
-                }
-              </div>
-            </div>
+
           <div className=" overflow-x-auto mt-4 whitespace-nowrap  2xl:w-[89%]">
          
 

@@ -13,12 +13,13 @@ const EmployeeResetPassword = () => {
   const [showOtp, setShowOtp] = useState(true);
   const [showVerify, setShowVerify] = useState(false);
   const [showReset, setShowReset] = useState(false);
-
+  const [loading , setLoading] = useState(false)
   const currentUser = useSelector((state) => state.auth.user);
 
   const sendOtp = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.post(
         "https://crm.one-realty.in/api/sendOtp-employee",
         {
@@ -30,8 +31,10 @@ const EmployeeResetPassword = () => {
       setShowOtp(false);
       setShowVerify(true);
       setShowReset(false);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       cogoToast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
@@ -39,6 +42,7 @@ const EmployeeResetPassword = () => {
   const verifyOtpAdmin = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.post(
         "https://crm.one-realty.in/api/verifyOtp-employee",
         {
@@ -50,8 +54,10 @@ const EmployeeResetPassword = () => {
       setShowOtp(false);
       setShowVerify(false);
       setShowReset(true);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       cogoToast.error("Wrong OTP!");
     }
   };
@@ -59,6 +65,7 @@ const EmployeeResetPassword = () => {
   const changePassword = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.put(
         "https://crm.one-realty.in/api/resetPassword-employee",
         {
@@ -70,8 +77,10 @@ const EmployeeResetPassword = () => {
       console.log(response);
       cogoToast.success("Password updated successfully");
       navigate("/");
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       cogoToast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
@@ -117,8 +126,9 @@ const EmployeeResetPassword = () => {
                   </div>
                 </div>
                 <div className="flex justify-center mx-3">
-                  <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5">
-                    Send OTP
+                  <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5"    disabled = {loading}>
+                {loading ? 'Sending OTP...' : 'Send OTP'}
+
                   </button>
                 </div>
               </form>
@@ -155,8 +165,9 @@ const EmployeeResetPassword = () => {
                   </div>
                 </div>
                 <div className="flex justify-center mx-3">
-                  <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5">
-                    Verify OTP
+                  <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5"    disabled = {loading}>
+                  {loading ? 'Verifying OTP...' : 'Verify OTP'}
+
                   </button>
                 </div>
               </form>
@@ -178,8 +189,8 @@ const EmployeeResetPassword = () => {
                   </div>
                 </div>
                 <div className="flex justify-center mx-3">
-                  <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5">
-                    Reset Password
+                  <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5"    disabled = {loading} >
+                  {loading ? 'Resetting Password...' : 'Reset Password'}
                   </button>
                 </div>
               </form>

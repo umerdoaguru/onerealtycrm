@@ -129,7 +129,9 @@ function SuperEmployeeLeads() {
   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
   const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
 
-  const handlePageClick = (data) => {
+const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+
+const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
 
@@ -267,21 +269,54 @@ function SuperEmployeeLeads() {
               </div>
             </div>
           </div>
-          <div className="flex gap-10 text-xl font-semibold mt-5">
-  <div>Total Lead: {leads.length}</div>
+         
+
+<div className="flex gap-10 text-xl font-semibold my-3 mt-5">
+  {/* Total Lead Count */}
   <div>
-    Total Lead visit:{" "}
-    {leads.filter(
-        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
-      ).length}
+    Total Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+          
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        ).length
+    }
   </div>
+
+  {/* Total Lead Visits */}
+  <div>
+    Total Lead Visit:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+           
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter(
+          (lead) =>
+            ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+        ).length
+    }
+  </div>
+
+  {/* Total Closed Leads */}
   <div>
     Total Closed Lead:{" "}
     {
-      leads.filter((lead) => lead.deal_status === "close").length
+      leads
+        .filter(
+          (lead) =>
+           
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter((lead) => lead.deal_status === "close").length
     }
   </div>
 </div>
+
           <div className="overflow-x-auto mt-4 2xl:w-[89%]">
         
 
@@ -403,7 +438,7 @@ function SuperEmployeeLeads() {
               previousLabel={"Previous"}
               nextLabel={"Next"}
               breakLabel={"..."}
-              pageCount={Math.ceil(leads.length / leadsPerPage)}
+              pageCount={pageCount}
               marginPagesDisplayed={2}
               pageRangeDisplayed={3}
               onPageChange={handlePageClick}
