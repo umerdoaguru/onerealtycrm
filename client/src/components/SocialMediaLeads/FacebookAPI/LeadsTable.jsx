@@ -127,7 +127,7 @@ const LeadsTable = () => {
         actual_date:  selectedLead.date,
         name: selectedLead.fullName,         
         phone:  selectedLead.phoneNumber,   
-        leadSource: "Facebook Campaign", 
+        leadSource: "Facebook", 
         subject:  formName, 
         address:selectedLead.address,
       });
@@ -174,7 +174,7 @@ setLoadingsave(false)
      
       fullName:lead.full_name,
       address: lead.street_address,
-      phoneNumber: lead.phone_number,
+      phoneNumber:lead.phone_number.replace("+91", ""),
       date: moment(lead.created_time).format("YYYY-MM-DD"), // Format the createdTime
 
     });
@@ -321,7 +321,7 @@ setLoadingsave(false)
               <td className="py-2 px-4 border-b">{index + 1}</td>
               <td className="py-2 px-4 border-b">{lead.lead_id}</td>
               <td className="py-2 px-4 border-b">{lead.full_name}</td>
-              <td className="py-2 px-4 border-b">{lead.phone_number}</td>
+              <td className="py-2 px-4 border-b">{lead.phone_number.replace("+91", "")}</td>
               <td className="py-2 px-4 border-b">{lead.street_address}</td>
               <td className="py-2 px-4 border-b">{formName}</td>
               <td className="py-2 px-4 border-b">
@@ -445,7 +445,7 @@ setLoadingsave(false)
                 className="w-full p-2 border rounded"
                 disabled
               >
-                <option value="Website Inquiries">Facebook Campaign</option>
+                <option value="Facebook ">Facebook </option>
               </select>
             </div>
             <div className="mb-4">

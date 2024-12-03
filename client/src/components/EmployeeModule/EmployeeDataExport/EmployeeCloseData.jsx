@@ -31,6 +31,8 @@ const EmployeeCloseData = () => {
       );
 
       setLeads(nonPendingLeads);
+      console.log(leads);
+      
       setFilteredLeads(nonPendingLeads); // Initial data set for filtering
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -127,7 +129,7 @@ const EmployeeCloseData = () => {
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Visit Date
+                 Date
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   FollowUp Status
@@ -178,7 +180,9 @@ const EmployeeCloseData = () => {
                       {lead.visit}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.visit_date}
+                  
+          {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
+
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.follow_up_status}

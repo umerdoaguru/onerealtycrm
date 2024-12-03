@@ -12,7 +12,7 @@ const SuperAdminSider = () => {
 
   // Function to get active class for the sidebar links
   const getSidebarClass = (path) => {
-    return location.pathname === path ? "bg-gray-700" : "";
+    return location.pathname === path ? "bg-blue-800 shadow-lg" : "";
   };
 
   const toggleSidebar = () => {

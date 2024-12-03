@@ -69,7 +69,7 @@ function Employee_Single_Lead_Profile() {
         { value: "pending", label: "pending" },
         { value: "close", label: "close" },
         { value: "cancelled", label: "cancelled" },
-        { value: "in-progress", label: "in-progress" },
+      
       ],
     },
     {
@@ -416,6 +416,18 @@ function Employee_Single_Lead_Profile() {
  
   const saveFollowUp = async () => {
     console.log(follow_up);
+    if (!follow_up.follow_up_type) {
+      cogoToast.error("Please select a follow up type.");
+      return;
+    }
+    if (!follow_up.follow_up_date) {
+      cogoToast.error("Please select a folllow up date.");
+      return;
+    }
+    if (!follow_up.report) {
+      cogoToast.error("Please Enter a report.");
+      return;
+    }
   
     try {
       // Send updated data to the backend using Axios
@@ -542,10 +554,11 @@ console.log(totalVisit);
                   </div>
 
                   <div>
-                    <label className="text-info">Created Date</label>
+                    <label className="text-info"> Date</label>
                     <div className="p-2 bg-gray-100 rounded">
                       <p className="m-0">
-                        {moment(lead.createdTime).format("DD/MM/YYYY")}
+                     
+                        {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                       </p>
                     </div>
                   </div>
@@ -882,7 +895,7 @@ console.log(totalVisit);
                   >
                     <option value="">Select Visit Type</option>
                     <option value="fresh">Fresh</option>
-                    <option value="repeated">Repeated</option>
+                    <option value="re-visit">Re-Visit</option>
                     <option value="self">Self</option>
                     <option value="associative">Associative</option>
                   </select>

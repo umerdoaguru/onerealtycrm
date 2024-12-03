@@ -12,8 +12,10 @@ import styled from "styled-components";
 
 const SuperAdminTotalLead = () => {
   const [leads, setLeads] = useState([]);
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 7; // Default leads per page
+  const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,15 +32,42 @@ const SuperAdminTotalLead = () => {
     }
   };
 
-  const pageCount = Math.ceil(leads.length / leadsPerPage);
+
+  useEffect(() => {
+    let filtered = leads;
+
+    // Filter by search term
+    if (searchTerm) {
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource", "phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
+      );
+    }
+
+    // Update the filtered leads and reset to the first page
+    setFilteredLeads(filtered);
+    setCurrentPage(0); // Reset to the first page when the search term changes
+  }, [searchTerm, leads]);
 
   // Pagination logic
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+  // const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const currentLeads = leadsPerPage === Infinity ? filteredLeads : filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
+
+
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
     console.log("change current page ", data.selected);
+  };
+  const handleLeadsPerPageChange = (e) => {
+    const value = e.target.value;
+    setLeadsPerPage(value === "All" ? Infinity : parseInt(value, 10));
+    setCurrentPage(0); // Reset to the first page
   };
   
 
@@ -47,7 +76,7 @@ const SuperAdminTotalLead = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container px-5 mt-[7rem]">.
+      <div className="container px-5 mt-[4rem]">.
       <div className="2xl:ml-40 ">
           <button
             onClick={() => navigate(-1)}
@@ -55,12 +84,38 @@ const SuperAdminTotalLead = () => {
           >
             Back
           </button>
-        </div>
+        </div >
         <h1 className="text-2xl text-center ">Total Leads </h1>
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
+      
       </div>
+   
 
       <div className="main overflow-x-auto mt-4 px-12 2xl:ml-40">
+
+      <div className="flex justify-between mb-3" >
+               
+               <input
+                 type="text"
+                 placeholder=" Name,Lead No,Lead Source,Phone No"
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className="border rounded-2xl p-2 w-25"
+               />
+           
+            
+             <select
+            onChange={handleLeadsPerPageChange}
+            className="border rounded-2xl p-2 w-1/4"
+          
+          >
+            <option value={7}>7 Pages</option>
+            <option value={10}>10 Pages</option>
+            <option value={20}>20 Pages</option>
+            <option value={50}>50 Pages</option>
+            <option value="All">All Pages</option>
+          </select>
+             </div>
         <table className="bg-white border w-100">
           <thead>
             <tr>
@@ -97,7 +152,8 @@ const SuperAdminTotalLead = () => {
           {currentLeads.map((lead, index) => (
     <tr key={lead.lead_id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-        {index + 1 + currentPage * leadsPerPage}
+      {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
+
       </td>
       <td className="px-6 py-4 border-b border-gray-200">{lead.lead_no}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
@@ -107,7 +163,7 @@ const SuperAdminTotalLead = () => {
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_status}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-        {moment(lead.createdTime).format("YYYY-MM-DD")}
+        {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
       </td>
     </tr>
   ))}

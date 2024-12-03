@@ -109,7 +109,7 @@ const Sider = () => {
 
             <hr className="w-full border-gray-400" />
 
-            <li className={`xl:w-full ${getSidebarClass("/quotation-invoice")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/quotation-section")}`}>
               <Link
                 to="/quotation-section"
                 className="flex flex-col items-center py-1"
@@ -135,7 +135,7 @@ const Sider = () => {
               </Link>
             </li>
             <hr className="w-full border-gray-400" />
-            <li className={`xl:w-full ${getSidebarClass("/super-admin-profile")}`}>
+            <li className={`xl:w-full ${getSidebarClass("/admin-profile")}`}>
               <Link
                 to="/admin-profile"
                 className="flex flex-col items-center py-3"

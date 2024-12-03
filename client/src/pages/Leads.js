@@ -305,24 +305,20 @@ function Leads() {
     }
   };
 
-  const handleSearch = (value) => {
-    if (value === " ") {
-      return;
-    }
-    setSearchTerm(value);
-  };
+ 
   useEffect(() => {
     let filtered = leads;
     console.log(filtered);
-    // Filter by search term
+   
     if (searchTerm) {
-      filtered = filtered.filter(
-        (lead) =>
-          lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource","phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
       );
     }
+    
 
     // Filter by date range
     if (startDate && endDate) {
@@ -429,9 +425,9 @@ const handlePageClick = (data) => {
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
-                  placeholder="Search by Name, Lead No, Lead Source"
+                  placeholder=" Name,Lead No,Lead Source,Phone No"
                   value={searchTerm}
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 />
               </div>
@@ -462,7 +458,7 @@ const handlePageClick = (data) => {
                   className="border rounded-2xl p-2 w-full"
                 >
                   <option value="">All Lead Sources</option>
-                  <option value="Facebook Campaign">Facebook Campaign</option>
+                  <option value="Facebook">Facebook</option>
                   <option value="One Realty Website">One Realty Website</option>
                   <option value="99 Acres">99 Acres</option>
                   <option value="Referrals">Referrals</option>
@@ -506,7 +502,7 @@ const handlePageClick = (data) => {
                 >
                   <option value="">All visit</option>
                   <option value="fresh">Fresh Visit</option>
-                  <option value="repeated">Repeated Visit</option>
+                  <option value="re-visit">Re-Visit</option>
                   <option value="associative">Associative Visit</option>
                   <option value="self">Self Visit</option>
                 </select>
@@ -613,9 +609,7 @@ const handlePageClick = (data) => {
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Subject
-                  </th>
+                 
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Address
                   </th>
@@ -625,9 +619,7 @@ const handlePageClick = (data) => {
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Deal Status
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Visit
-                  </th>
+                  
                  
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Date
@@ -676,9 +668,7 @@ const handlePageClick = (data) => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.assignedTo}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.subject}
-                      </td>
+                     
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.address}
                       </td>
@@ -710,15 +700,13 @@ const handlePageClick = (data) => {
                       </td>
 
                       {/* Visit Status */}
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold">
-                        {lead.visit}
-                      </td>
+                      
 
                   
 
                       {/* Created Time */}
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {moment(lead.createdTime).format("DD-MM-YYYY")}
+                        {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                       </td>
 
                       {/* Actions */}

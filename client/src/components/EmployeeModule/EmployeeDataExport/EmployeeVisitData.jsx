@@ -164,7 +164,9 @@ const EmployeeVisitData = () => {
                      {visit.visit}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                     {visit.visit_date}
+                   
+          {moment(visit.visit_date).format("DD MMM YYYY").toUpperCase()}
+
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                      {visit.report}

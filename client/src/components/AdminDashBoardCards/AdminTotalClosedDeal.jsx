@@ -12,10 +12,12 @@ import { useNavigate } from "react-router-dom";
 const AdminTotalClosedDeal = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const leadsPerPage = 7; 
+  const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
   const navigate = useNavigate();
   // Fetch leads from the API
   useEffect(() => {
@@ -41,16 +43,32 @@ const AdminTotalClosedDeal = () => {
 
   // Automatically apply date filter when start or end date changes
   useEffect(() => {
-    if (startDate && endDate) {
-      const filtered = leads.filter((lead) => {
-        const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
-      });
-      setFilteredLeads(filtered);
-    } else {
-      setFilteredLeads(leads);
+    let filtered = leads;
+
+    // Filter by search term
+    if (searchTerm) {
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource", "phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
+      );
     }
-  }, [startDate, endDate, leads]);
+
+    // Update the filtered leads and reset to the first page
+    setFilteredLeads(filtered);
+    setCurrentPage(0); // Reset to the first page when the search term changes
+  }, [searchTerm, leads]);
+
+  // Pagination logic
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  // const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const currentLeads =
+  leadsPerPage === Infinity ? filteredLeads : filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
+
 
   const downloadExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
@@ -59,16 +77,17 @@ const AdminTotalClosedDeal = () => {
     XLSX.writeFile(workbook, "LeadsData.xlsx");
   };
 
-  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
-
-  // Pagination logic
-  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
-  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+ 
   
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
     console.log("change current page ", data.selected);
+  };
+
+  const handleLeadsPerPageChange = (e) => {
+    const value = e.target.value;
+    setLeadsPerPage(value === "All" ? Infinity : parseInt(value, 10));
+    setCurrentPage(0); // Reset to the first page
   };
   return (
     <>
@@ -91,6 +110,26 @@ const AdminTotalClosedDeal = () => {
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
           <div className="overflow-x-auto mt-2">
+           <div className="flex justify-between mb-3" >
+               
+               <input
+                 type="text"
+                 placeholder=" Name,Lead No,Lead Source,Phone No"
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className="border rounded-2xl p-2 w-25"
+               />
+                <select
+            onChange={handleLeadsPerPageChange}
+            className="border rounded-2xl p-2 w-1/4"
+          >
+            <option value={7}>7</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value="All">All</option>
+          </select>
+             </div>
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>
@@ -138,7 +177,8 @@ const AdminTotalClosedDeal = () => {
         className={index % 2 === 0 ? "bg-gray-100" : ""}
       >
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {index + 1} {/* Adjusted for pagination */}
+        {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
+
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.lead_no}
@@ -168,7 +208,8 @@ const AdminTotalClosedDeal = () => {
           {lead.deal_status}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.d_closeDate}
+  
+          {moment(lead.d_closeDate).format("DD MMM YYYY").toUpperCase()}
         </td>
       </tr>
     ))

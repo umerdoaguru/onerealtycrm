@@ -30,6 +30,8 @@ const itemsPerPage = 7;
 const navigate = useNavigate();
 
 
+
+
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
@@ -78,7 +80,7 @@ const navigate = useNavigate();
       <MainHeader />
       <SuperAdminSider />
       <div className="container px-5 ">
-        <div className="mt-[5rem]">
+      <div className="mt-[5rem] 2xl:ml-32 ">
           <button
             onClick={() => navigate(-1)}
             className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
@@ -135,7 +137,8 @@ const navigate = useNavigate();
                   <label className="text-info">Created Date</label>
                   <div className="p-2 bg-gray-100 rounded">
                     <p className="m-0">
-                      {moment(user.createdTime).format("DD/MM/YYYY")}
+              
+                      {moment(user.createdTime).format("DD MMM YYYY").toUpperCase()}
                     </p>
                   </div>
                 </div>
@@ -154,7 +157,7 @@ const navigate = useNavigate();
                       Assigned To
                     </th>
                     <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                      Created Time
+                      Date
                     </th>
                     <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                       Name
@@ -187,7 +190,7 @@ const navigate = useNavigate();
                         {lead.assignedTo}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {moment(lead.createdTime).format("DD/MM/YYYY")}
+                        {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.name}

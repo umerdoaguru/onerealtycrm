@@ -209,11 +209,11 @@ function EmployeeLead() {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(
-        (lead) =>
-          lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource","phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
       );
     }
 
@@ -275,7 +275,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
               <label htmlFor="">Search</label>
               <input
                 type="text"
-                placeholder="Search by Name, Lead No, Lead Source"
+                 placeholder=" Name,Lead No,Lead Source,Phone No"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded-2xl p-2 w-full"
@@ -299,7 +299,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                   className="border rounded-2xl p-2 w-full"
                 >
                    <option value="">Select Lead Source</option>
-                     <option value="Facebook Campaign">Facebook Campaign</option>
+                     <option value="Facebook">Facebook</option>
                     <option value="One Realty Website">
                       One Realty Website
                     </option>
@@ -405,10 +405,10 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                     Name
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Assigned To
+                    Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Created Time
+                   Date
                   </th>
                 
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
@@ -441,10 +441,10 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
           {lead.name}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.assignedTo}
+          {lead.status}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("DD/MM/YYYY")}
+          {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
         </td>
      
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">

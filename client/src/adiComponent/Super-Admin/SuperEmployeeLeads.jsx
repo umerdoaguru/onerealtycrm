@@ -9,7 +9,7 @@ import styled from "styled-components";
 import MainHeader from "./../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
 
-function SuperEmployeeLeads() {
+function SuperEmployeeLeads() {  
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,12 +72,12 @@ function SuperEmployeeLeads() {
     let filtered = leads;
     console.log(filtered);
     // Filter by search term
-    if (searchTerm) { 
-      filtered = filtered.filter(
-        (lead) =>
-          (lead.name && lead.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (lead.lead_no && lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (lead.leadSource && lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase()))
+    if (searchTerm) {
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource","phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
       );
     }
 
@@ -161,9 +161,9 @@ const handlePageClick = (data) => {
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
-                  placeholder="Search by Name, Lead No, Lead Source"
+                   placeholder=" Name,Lead No,Lead Source,Phone No"
                   value={searchTerm}
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 />
               </div>
@@ -194,7 +194,7 @@ const handlePageClick = (data) => {
                   className="border rounded-2xl p-2 w-full"
                 >
                    <option value="">Select Lead Source</option>
-                     <option value="Facebook Campaign">Facebook Campaign</option>
+                     <option value="Facebook">Facebook</option>
                     <option value="One Realty Website">
                       One Realty Website
                     </option>
@@ -248,7 +248,7 @@ const handlePageClick = (data) => {
                 >
                   <option value="">All visit</option>
                   <option value="fresh">Fresh Visit</option>
-                  <option value="repeated">Repeated Visit</option>
+                  <option value="re-visit">Re-Visit</option>
                   <option value="associative">Associative Visit</option>
                   <option value="self">Self Visit</option>
                 </select>
@@ -341,24 +341,18 @@ const handlePageClick = (data) => {
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Assigned To
                   </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Subject
-                  </th>
+               
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Status
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Created Time
+                   Date
                   </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Status
-                  </th>
+                
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Deal Status
                   </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Visit
-                  </th>
+                
                
                 </tr>
               </thead>
@@ -389,9 +383,7 @@ const handlePageClick = (data) => {
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.assignedTo}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject}
-        </td>
+      
         {lead.lead_status === "pending" && (
           <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
             {lead.lead_status}
@@ -408,17 +400,13 @@ const handlePageClick = (data) => {
           </td>
         )}
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("YYYY-MM-DD")}
+          {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.status}
-        </td>
+      
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.deal_status}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit} 
-        </td>
+      
        
       </tr>
     ))

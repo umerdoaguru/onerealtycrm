@@ -213,7 +213,8 @@ const CloseData = () => {
                       {lead.visit}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.visit_date}
+                    
+                      {moment(lead.visit_date).format("DD MMM YYYY").toUpperCase()}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.follow_up_status}

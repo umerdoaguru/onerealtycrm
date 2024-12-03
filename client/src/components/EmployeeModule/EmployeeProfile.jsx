@@ -100,6 +100,8 @@ function EmployeeProfile() {
                   <div className="p-2 bg-gray-100 rounded">
                     <p className="m-0">
                       {moment(user.createdTime).format("DD/MM/YYYY")}
+                     
+
                     </p>
                   </div>
                 </div>

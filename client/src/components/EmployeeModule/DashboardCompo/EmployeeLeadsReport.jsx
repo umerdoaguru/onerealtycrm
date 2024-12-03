@@ -69,7 +69,7 @@ const EmployeeLeadsReport = () => {
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{currentPage * leadsPerPage + index + 1}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_no}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.assignedTo}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{moment(lead.createdTime).format("DD/MM/YYYY")}</td>
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.phone}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.leadSource}</td>
