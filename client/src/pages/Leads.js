@@ -257,6 +257,7 @@ function Leads() {
           currentLead.leadSource === "Other"
             ? customLeadSource
             : currentLead.leadSource,
+             assignedBy: "Admin"
       };
   
       try {

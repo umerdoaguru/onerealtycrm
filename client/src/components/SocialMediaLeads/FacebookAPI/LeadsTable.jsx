@@ -130,6 +130,7 @@ const LeadsTable = () => {
         leadSource: "Facebook", 
         subject:  formName, 
         address:selectedLead.address,
+         assignedBy: "Admin"
       });
       fetchLeadsByFormId(); // Refresh the list
       fetchLeadassigned();

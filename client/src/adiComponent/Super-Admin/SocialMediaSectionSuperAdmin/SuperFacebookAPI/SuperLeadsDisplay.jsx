@@ -1,4 +1,4 @@
-const LeadsDisplay = ({ leads }) => {
+const SuperLeadsDisplay = ({ leads }) => {
   return (
     <div className="mt-6">
       <h2 className="text-xl font-bold mb-4">Leads Data</h2>
@@ -34,4 +34,4 @@ const LeadsDisplay = ({ leads }) => {
   );
 };
 
-export default LeadsDisplay;
+export default SuperLeadsDisplay;

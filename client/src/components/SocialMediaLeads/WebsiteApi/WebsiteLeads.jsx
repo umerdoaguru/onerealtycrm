@@ -108,6 +108,7 @@ function WebsiteLeads() {
         leadSource: "One Realty Website",
         subject: selectedLead.subject,
         address: selectedLead.address,
+         assignedBy: "Admin"
       });
       fetchLeads();
       fetchLeadassigned();

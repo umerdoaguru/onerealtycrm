@@ -100,6 +100,7 @@ function SuperAccrs() {
         leadSource: "99 Acres", 
         subject: selectedLead.subject,
         address: selectedLead.address,
+         assignedBy: "Super Admin"
       });
       fetchResponses(); // Refresh the list
       fetchLeadassigned();

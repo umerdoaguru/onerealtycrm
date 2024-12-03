@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
+const SuperFormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
   const [forms, setForms] = useState([]);
   const [selectedFormId, setSelectedFormId] = useState('');
   const [selectedFormName, setSelectedFormName] = useState('');
@@ -90,4 +90,4 @@ const FormSelector = ({  setLoading, setMe, setError, onFormSelect  }) => {
   );
 };
 
-export default FormSelector;
+export default SuperFormSelector;

@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import MainHeader from './../MainHeader';
-import Sider from '../Sider';
-import FacebookLeads from './FacebookLeads';
-import WebsiteLeads from './WebsiteApi/WebsiteLeads';
+
 import { GiFiles } from 'react-icons/gi';
 import { SiMoneygram } from 'react-icons/si';
-import Accrs from './AccrsLeads';
-import LeadsTable from './SuperFacebookAPI/SuperLeadsTable';
+
+import SuperLeadsTable from './SuperFacebookAPI/SuperLeadsTable';
+import SuperWebsiteLeads from './SuperWebsiteLeads';
+import SuperAccrs from './SuperAccrsLeads';
+import MainHeader from '../../../components/MainHeader';
+import SuperAdminSider from '../SuperAdminSider';
 
 
 
@@ -17,7 +18,7 @@ function SuperMainSocialLeads() {
   return (
    <>
    <MainHeader/>
-   <Sider/>
+   <SuperAdminSider/>
 
    <div className="container 2xl:w-[93%] 2xl:ml-32 ">
       <h1 className="text-2xl text-center mt-[5rem] font-medium">Social Media Leads</h1>
@@ -87,9 +88,9 @@ function SuperMainSocialLeads() {
         {/* Conditionally render the selected component */}
         <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
           {/* {selectedComponent === 'FacebookData' && <FacebookLeads />} */}
-          {selectedComponent === 'FacebookData' && <LeadsTable />}
-          {selectedComponent === 'WebsiteData' && < WebsiteLeads/>}
-          {selectedComponent === '99AcresData' && < Accrs/>}
+          {selectedComponent === 'FacebookData' && <SuperLeadsTable />}
+          {selectedComponent === 'WebsiteData' && < SuperWebsiteLeads/>}
+          {selectedComponent === '99AcresData' && < SuperAccrs/>}
        
         </div>
       </div>

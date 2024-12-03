@@ -108,6 +108,7 @@ function SuperWebsiteLeads() {
         leadSource: "One Realty Website",
         subject: selectedLead.subject,
         address: selectedLead.address,
+         assignedBy: "Super Admin"
       });
       fetchLeads();
       fetchLeadassigned();
