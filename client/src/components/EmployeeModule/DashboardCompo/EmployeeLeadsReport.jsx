@@ -48,7 +48,7 @@ const EmployeeLeadsReport = () => {
   return (
     <div className="mx-7">
     <div className="p-4 mt-6 bg-white rounded-lg shadow-lg">
-      <h3 className="mb-4 text-lg font-semibold">Leads Assign Report</h3>
+      <h3 className="mb-4 text-lg font-semibold">Today's Assigned Leads</h3>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100">
@@ -69,7 +69,7 @@ const EmployeeLeadsReport = () => {
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{currentPage * leadsPerPage + index + 1}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_no}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.assignedTo}</td>
-                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{moment(lead.createdTime).format("DD/MM/YYYY")}</td>
+                  <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.phone}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.leadSource}</td>

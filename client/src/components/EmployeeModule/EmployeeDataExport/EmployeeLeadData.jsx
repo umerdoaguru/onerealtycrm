@@ -173,7 +173,8 @@ const downloadExcel = () => {
           {lead.assignedTo}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("DD/MM/YYYY")}
+        
+          {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.name}

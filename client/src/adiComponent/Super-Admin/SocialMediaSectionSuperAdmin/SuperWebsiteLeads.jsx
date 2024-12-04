@@ -5,7 +5,7 @@ import { BsPencilSquare } from "react-icons/bs";
 import ReactPaginate from "react-paginate";
 import { Link, useNavigate } from "react-router-dom";
 
-function WebsiteLeads() {
+function SuperWebsiteLeads() {
   const [websiteleads, setWebsiteLeads] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [websiteleadsAssigned, setwebsiteLeadsAssigned] = useState([]);
@@ -23,8 +23,7 @@ function WebsiteLeads() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
-  const [loadingbutton , setLoadingButton] = useState(false)
-
+  const [loading , setLoading] = useState(false)
 
   // Fetch leads
   const fetchLeads = async () => {
@@ -97,7 +96,7 @@ function WebsiteLeads() {
     }
   
     try {
-      setLoadingButton(true)
+      setLoading(true)
       await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/leads", {
         lead_no: selectedLead.leadId,
         assignedTo: currentLead.assignedTo,
@@ -109,7 +108,7 @@ function WebsiteLeads() {
         leadSource: "One Realty Website",
         subject: selectedLead.subject,
         address: selectedLead.address,
-         assignedBy: "Admin"
+         assignedBy: "Super Admin"
       });
       fetchLeads();
       fetchLeadassigned();
@@ -139,10 +138,10 @@ const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${cur
 
 // Open WhatsApp link
 window.open(whatsappLink, "_blank");
-setLoadingButton(false)
+setLoading(false)
 
     } catch (error) {
-      setLoadingButton(false)
+      setLoading(false)
       console.error("Error adding lead:", error);
     }
   };
@@ -353,7 +352,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
                 className="w-full p-2 border rounded"
                 disabled
               >
-                <option value="Website Inquiries">Website</option>
+                <option value="Website Inquiries">One Realty Website</option>
               </select>
             </div>
             <div className="mb-4">
@@ -406,9 +405,9 @@ console.log("Assigned Leads:", websiteleadsAssigned);
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                onClick={saveChanges} disabled = {loadingbutton}
+                onClick={saveChanges} disabled = {loading}
               >
-         {loadingbutton ? 'Save...' : 'Save'}
+                    {loading ? 'Save...' : 'Save'}
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
@@ -425,4 +424,4 @@ console.log("Assigned Leads:", websiteleadsAssigned);
   );
 }
 
-export default WebsiteLeads;
+export default SuperWebsiteLeads;

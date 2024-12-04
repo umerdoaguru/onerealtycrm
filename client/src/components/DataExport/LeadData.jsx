@@ -156,7 +156,7 @@ const downloadExcel = () => {
                 <th className="px-6 py-3 border-b-2 border-gray-300">S.no</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Lead Number</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Assigned To</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Created Time</th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">Date</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
@@ -186,7 +186,7 @@ const downloadExcel = () => {
           {lead.assignedTo}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("DD/MM/YYYY")}
+        {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.name}

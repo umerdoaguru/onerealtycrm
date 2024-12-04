@@ -11,8 +11,10 @@ import ReactPaginate from "react-paginate";
 function TotalEmpLead() {
   const EmpId = useSelector((state) => state.auth.user.id);
   const [leads, setLeads] = useState([]);
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage] = useState(7);
+  const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,15 +40,43 @@ function TotalEmpLead() {
   const handleBackClick = () => {
     navigate(-1); // Go back to the previous page
   };
+  useEffect(() => {
+    let filtered = leads;
 
-  const pageCount = Math.ceil(leads.length / itemsPerPage);
+    // Filter by search term
+    if (searchTerm) {
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource", "phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
+      );
+    }
 
-  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
-  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
-  const currentLeads = leads.slice(indexOfFirstLead, indexOfLastLead);
+    // Update the filtered leads and reset to the first page
+    setFilteredLeads(filtered);
+    setCurrentPage(0); // Reset to the first page when the search term changes
+  }, [searchTerm, leads]);
 
+  // Pagination logic
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  // const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
+  const currentLeads =
+  leadsPerPage === Infinity ? filteredLeads : filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
+
+
+ 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
+  };
+  const handleLeadsPerPageChange = (e) => {
+    const value = e.target.value;
+    setLeadsPerPage(value === "All" ? Infinity : parseInt(value, 10));
+    setCurrentPage(0); // Reset to the first page
   };
 
   return (
@@ -54,7 +84,7 @@ function TotalEmpLead() {
       <MainHeader />
       <EmployeeSider />
       <div className="flex flex-col 2xl:ml-44 ">
-      <div className="mt-[7rem] ">
+      <div className="mt-[5rem] ">
           <button
             onClick={() => navigate(-1)}
             className="bg-blue-500 text-white px-3 mx-1 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
@@ -69,6 +99,26 @@ function TotalEmpLead() {
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
           <div className="overflow-x-auto mt-4">
+          <div className="flex justify-between mb-3" >
+               
+               <input
+                 type="text"
+                 placeholder=" Name,Lead No,Lead Source,Phone No"
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className="border rounded-2xl p-2 w-25"
+               />
+                <select
+            onChange={handleLeadsPerPageChange}
+            className="border rounded-2xl p-2 w-1/4"
+          >
+            <option value={7}>7</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value="All">All</option>
+          </select>
+             </div>
             <table className="container bg-white border">
               <thead>
                 <tr>
@@ -108,7 +158,8 @@ function TotalEmpLead() {
                     className={index % 2 === 0 ? "bg-gray-100" : ""}
                   >
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {index + 1 + indexOfFirstLead}
+                    {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
+
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
                       <Link to={`/employee-lead-single-data/${lead.lead_id}`}>
@@ -134,7 +185,8 @@ function TotalEmpLead() {
                       {lead.lead_status}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {moment(lead.createdTime).format("YYYY-MM-DD")}
+                   
+                      {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                     </td>
                   </tr>
                 ))}
@@ -142,7 +194,7 @@ function TotalEmpLead() {
             </table>
           </div>
         </div>
-        <div className="mt-4 flex justify-center">
+        <div className="mt-4 mb-3 flex justify-center">
         <ReactPaginate
           previousLabel={"Previous"}
           nextLabel={"Next"}

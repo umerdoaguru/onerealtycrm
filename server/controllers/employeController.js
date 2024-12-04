@@ -243,6 +243,7 @@ const employeeProfile = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: err });
   }
 };
+
 const getAllEmployeeTotalLeads = async (req, res) => {
   try {
     const query = `
@@ -250,6 +251,7 @@ const getAllEmployeeTotalLeads = async (req, res) => {
     e.employeeId,
     e.name,
     e.email,
+    e.phone,
     COUNT(l.lead_id) AS total_leads
     FROM employee e
     LEFT JOIN leads l ON e.employeeId = l.employeeId
@@ -276,6 +278,7 @@ const getAllEmployeeTotalLeads = async (req, res) => {
     });
   }
 };
+
 const getLeadQuotation = async (req, res) => {
   try {
     const { id } = req.params;

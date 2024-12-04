@@ -12,10 +12,11 @@ import ReactPaginate from "react-paginate";
 const TotalVisit = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
-  const itemsPerPage = 7; // Set how many items you want per page
+  const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
  
   const navigate = useNavigate();
   useEffect(() => {
@@ -35,28 +36,40 @@ const TotalVisit = () => {
   };
 
   useEffect(() => {
-    if (startDate && endDate) {
-      const filtered = leads.filter((lead) => {
-        const createdTime = moment(lead.createdTime, "YYYY-MM-DD");
-        return createdTime.isBetween(startDate, endDate, undefined, "[]");
-      });
-      setFilteredLeads(filtered);
-    } else {
-      setFilteredLeads(leads);
+    let filtered = leads;
+
+    // Filter by search term
+    if (searchTerm) {
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter((lead) =>
+        ["name", "employee_name", "visit"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
+      );
     }
-  }, [startDate, endDate, leads]);
 
-
-  // Calculate page data for pagination
-  const pageCount = Math.ceil(filteredLeads.length / itemsPerPage);
+    // Update the filtered leads and reset to the first page
+    setFilteredLeads(filtered);
+    setCurrentPage(0); // Reset to the first page when the search term changes
+  }, [searchTerm, leads]);
 
   // Pagination logic
-  const indexOfLastLead = (currentPage + 1) * itemsPerPage;
-  const indexOfFirstLead = indexOfLastLead - itemsPerPage;
-  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+  const indexOfLastLead = (currentPage + 1) * leadsPerPage;
+  const indexOfFirstLead = indexOfLastLead - leadsPerPage;
+  // const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const currentLeads =
+  leadsPerPage === Infinity ? filteredLeads : filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
+
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
     console.log("change current page ", data.selected);
+  };
+  const handleLeadsPerPageChange = (e) => {
+    const value = e.target.value;
+    setLeadsPerPage(value === "All" ? Infinity : parseInt(value, 10));
+    setCurrentPage(0); // Reset to the first page
   };
   return (
     <>
@@ -77,6 +90,27 @@ const TotalVisit = () => {
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
           <div className="overflow-x-auto">
+          <div className="flex justify-between mb-3" >
+               
+               <input
+                 type="text"
+                placeholder=" Name,Visit Type,Assigned To"
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className="border rounded-2xl p-2 w-25"
+               />
+                  <select
+            onChange={handleLeadsPerPageChange}
+            className="border rounded-2xl p-2 w-1/4"
+          
+          >
+            <option value={7}>7 Pages</option>
+            <option value={10}>10 Pages</option>
+            <option value={20}>20 Pages</option>
+            <option value={50}>50 Pages</option>
+            <option value="All">All Pages</option>
+          </select>
+             </div>
             <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
               <thead className="bg-gray-100">
               <tr>
@@ -109,7 +143,8 @@ const TotalVisit = () => {
                   currentLeads.map((visit, index) => (
                     <tr key={visit.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {index + 1}
+                    {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
+
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {visit.lead_id}
@@ -124,7 +159,8 @@ const TotalVisit = () => {
                      {visit.visit}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                     {visit.visit_date}
+                   
+                     {moment(visit.visit_date).format("DD MMM YYYY").toUpperCase()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                      {visit.report}

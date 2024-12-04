@@ -7,7 +7,7 @@ import ReactPaginate from 'react-paginate';
 function Accrs() {
   const [responses, setResponses] = useState([]);
   const [leadsAssigned, setLeadsAssigned] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
@@ -102,6 +102,7 @@ console.log(responses, 'Line number 7 data check');
         leadSource: "99 Acres", 
         subject: selectedLead.subject,
         address: selectedLead.address,
+         assignedBy: "Admin"
       });
       fetchResponses(); // Refresh the list
       fetchLeadassigned();
@@ -144,7 +145,7 @@ setLoadingButton(false)
     setSelectedLead({
       leadId: lead.id,
       fullName: lead.contact_name,
-      phoneNumber: lead.phone ,
+      phoneNumber: lead.phone.replace("+91-", ""),
       subject: lead.project_name,
       address: lead.city_name,
       date: moment(lead.received_on).format("YYYY-MM-DD"),
@@ -213,9 +214,9 @@ setLoadingButton(false)
     : 'N/A'}
 </td>
 
-               <td className="py-2 px-4">{lead.contact_name || 'N/A'}</td>
+               <td className="py-2 px-4">{lead.contact_name}</td>
                <td className="py-2 px-4">{lead.email || 'N/A'}</td>
-               <td className="py-2 px-4">{lead.phone || 'N/A'}</td>
+               <td className="py-2 px-4">{lead.phone.replace("+91-", "") || 'N/A' }</td>
                <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
       <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
         Assign

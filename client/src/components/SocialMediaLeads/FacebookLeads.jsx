@@ -121,6 +121,7 @@ const FacebookLeads = () => {
         leadSource: "Facebook Campaign", 
         subject:  formName, 
         address:selectedLead.address,
+         assignedBy: "Admin"
       });
       fetchLeads(); // Refresh the list
       fetchLeadassigned();

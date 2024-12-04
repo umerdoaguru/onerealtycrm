@@ -178,7 +178,7 @@ fetchFollowUp();
                   <label className="text-info">Created Date</label>
                   <div className="p-2 bg-gray-100 rounded">
                     <p className="m-0">
-                      {moment(lead.createdTime).format("DD/MM/YYYY")}
+                              {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                     </p>
                   </div>
                 </div>

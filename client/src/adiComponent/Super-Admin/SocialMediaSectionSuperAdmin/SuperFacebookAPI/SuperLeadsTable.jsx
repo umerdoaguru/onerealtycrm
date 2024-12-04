@@ -1,14 +1,13 @@
 
 import { useEffect, useState } from 'react';
 import axios from "axios";
-import FormSelector from './SelectForm';
-import LeadsDisplay from './LeadsDisplay';
-import FormInput from './FormInput';
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
-import UpdateForm from './UpdateForm';
+import SuperFormInput from './SuperFormInput';
+import SuperUpdateForm from './SuperUpdateForm';
+import SuperFormSelector from './SuperSelectForm';
 
-const LeadsTable = () => {
+const SuperLeadsTable = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingsave, setLoadingsave] = useState(false);
@@ -20,7 +19,6 @@ const LeadsTable = () => {
   
   const [leadsAssigned, setLeadsAssigned] = useState([]);
   const [refreshLeads, setRefreshLeads] = useState(false);  // State to trigger refresh
-  const [loadingbutton , setLoadingButton] = useState(false)
 
 
   // Fetch leads based on selected form ID
@@ -37,7 +35,6 @@ const LeadsTable = () => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
   const [formName, setFormName] = useState([]);
-  
 
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
@@ -49,7 +46,6 @@ const LeadsTable = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
-
   
 
   const fetchLeadsByFormId = async () => {
@@ -121,7 +117,7 @@ const LeadsTable = () => {
       return; // Stop further execution if the field is empty
     }
     try {
-      setLoadingButton(true)
+      setLoadingsave(true)
       await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/leads", {
         lead_no:  selectedLead.leadId,    
         assignedTo:currentLead.assignedTo,
@@ -133,7 +129,7 @@ const LeadsTable = () => {
         leadSource: "Facebook", 
         subject:  formName, 
         address:selectedLead.address,
-         assignedBy: "Admin"
+         assignedBy: "Super Admin"
       });
       fetchLeadsByFormId(); // Refresh the list
       fetchLeadassigned();
@@ -163,11 +159,10 @@ const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${cur
 // Open WhatsApp link
 window.open(whatsappLink, "_blank");
 
+setLoadingsave(false)
 
-setLoadingButton(false)
     } catch (error) {
-setLoadingButton(false)
-
+      setLoadingsave(false)
       console.error("Error adding lead:", error);
     }
   };
@@ -286,8 +281,8 @@ setLoadingButton(false)
       </div>
 
       {/* Conditional rendering for forms */}
-      {showForm && <FormInput setShowForm={setShowForm} onFormSubmit={handleRefreshLeads} />}
-      {showUpdateForm && <UpdateForm setShowUpdateForm={setShowUpdateForm} />}
+      {showForm && <SuperFormInput setShowForm={setShowForm} onFormSubmit={handleRefreshLeads} />}
+      {showUpdateForm && <SuperUpdateForm setShowUpdateForm={setShowUpdateForm} />}
     </div>
       
       <h1 className="text-2xl font-bold mb-4">Select Form to Fetch Leads</h1>
@@ -295,7 +290,7 @@ setLoadingButton(false)
       {/* {error && <p className="text-red-500 mb-4">{error}</p>} */}
 
       {/* <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={handleFormSelect} /> */}
-      <FormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={(formId, formName) => handleFormSelect(formId, formName)} />
+      <SuperFormSelector setLoading={setLoading} setMe={setGotId} setError={setError} onFormSelect={(formId, formName) => handleFormSelect(formId, formName)} />
 
 
       {loading && <p>Loading...</p>}
@@ -502,9 +497,9 @@ setLoadingButton(false)
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                onClick={saveChanges} disabled = {loadingbutton}
+                onClick={saveChanges} disabled = {loadingsave}
               >
-                 {loadingbutton ? 'Save...' : 'Save'}
+                 {loadingsave ? 'Save...' : 'Save'}
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
@@ -524,4 +519,4 @@ setLoadingButton(false)
   );
 };
 
-export default LeadsTable;
+export default SuperLeadsTable;

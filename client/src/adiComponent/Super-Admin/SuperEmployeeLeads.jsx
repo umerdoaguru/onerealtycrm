@@ -9,40 +9,9 @@ import styled from "styled-components";
 import MainHeader from "./../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
 
-function SuperEmployeeLeads() {
-  const dummyData = [
-    {
-      sNo: 1,
-      leadNumber: 'LN001',
-      name: 'John Doe',
-      phone: '1234567890',
-      leadSource: 'Website',
-      assignedTo: 'Priya Sharma',
-      subject: 'Product Inquiry',
-      leadStatus: 'Open',
-      createdTime: '2024-11-05 10:00 AM',
-      status: 'Active',
-      dealStatus: 'Pending',
-      visit: 'Yes'
-    },
-    {
-      sNo: 2,
-      leadNumber: 'LN002',
-      name: 'Jane Smith',
-      phone: '0987654321',
-      leadSource: 'Referral',
-      assignedTo: 'Ravi Kumar',
-      subject: 'Service Inquiry',
-      leadStatus: 'Closed',
-      createdTime: '2024-11-05 11:00 AM',
-      status: 'Inactive',
-      dealStatus: 'Won',
-      visit: 'No'
-    },
-   
-  ];
+function SuperEmployeeLeads() {  
   const [leads, setLeads] = useState([]);
-  const [filteredLeads, setFilteredLeads] = useState(dummyData);
+  const [filteredLeads, setFilteredLeads] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -103,12 +72,12 @@ function SuperEmployeeLeads() {
     let filtered = leads;
     console.log(filtered);
     // Filter by search term
-    if (searchTerm) { 
-      filtered = filtered.filter(
-        (lead) =>
-          (lead.name && lead.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (lead.lead_no && lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (lead.leadSource && lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase()))
+    if (searchTerm) {
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource","phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
       );
     }
 
@@ -158,7 +127,9 @@ function SuperEmployeeLeads() {
   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
   const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
 
-  const handlePageClick = (data) => {
+const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+
+const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
 
@@ -188,9 +159,9 @@ function SuperEmployeeLeads() {
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
-                  placeholder="Search by Name, Lead No, Lead Source"
+                   placeholder=" Name,Lead No,Lead Source,Phone No"
                   value={searchTerm}
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 />
               </div>
@@ -221,9 +192,9 @@ function SuperEmployeeLeads() {
                   className="border rounded-2xl p-2 w-full"
                 >
                    <option value="">Select Lead Source</option>
-                     <option value="Facebook Campaign">Facebook Campaign</option>
-                    <option value="Website">
-                      Website
+                     <option value="Facebook">Facebook</option>
+                    <option value="One Realty Website">
+                      One Realty Website
                     </option>
                     <option value="99 Acres">
                     99 Acres
@@ -275,7 +246,7 @@ function SuperEmployeeLeads() {
                 >
                   <option value="">All visit</option>
                   <option value="fresh">Fresh Visit</option>
-                  <option value="repeated">Repeated Visit</option>
+                  <option value="re-visit">Re-Visit</option>
                   <option value="associative">Associative Visit</option>
                   <option value="self">Self Visit</option>
                 </select>
@@ -296,21 +267,54 @@ function SuperEmployeeLeads() {
               </div>
             </div>
           </div>
-          <div className="flex gap-10 text-xl font-semibold mt-5">
-  <div>Total Lead: {leads.length}</div>
+         
+
+<div className="flex gap-10 text-xl font-semibold my-3 mt-5">
+  {/* Total Lead Count */}
   <div>
-    Total Lead visit:{" "}
-    {leads.filter(
-        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
-      ).length}
+    Total Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+          
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        ).length
+    }
   </div>
+
+  {/* Total Lead Visits */}
+  <div>
+    Total Lead Visit:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+           
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter(
+          (lead) =>
+            ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+        ).length
+    }
+  </div>
+
+  {/* Total Closed Leads */}
   <div>
     Total Closed Lead:{" "}
     {
-      leads.filter((lead) => lead.deal_status === "close").length
+      leads
+        .filter(
+          (lead) =>
+           
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter((lead) => lead.deal_status === "close").length
     }
   </div>
 </div>
+
           <div className="overflow-x-auto mt-4 2xl:w-[89%]">
         
 
@@ -335,24 +339,18 @@ function SuperEmployeeLeads() {
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Assigned To
                   </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Subject
-                  </th>
+               
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Status
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Created Time
+                   Date
                   </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Status
-                  </th>
+                
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Deal Status
                   </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Visit
-                  </th>
+                
                
                 </tr>
               </thead>
@@ -383,9 +381,7 @@ function SuperEmployeeLeads() {
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.assignedTo || "NA"}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject || "NA"}
-        </td>
+      
         {lead.lead_status === "pending" && (
           <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
             {lead.lead_status || "Pending"}
@@ -402,17 +398,13 @@ function SuperEmployeeLeads() {
           </td>
         )}
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("YYYY-MM-DD")}
+          {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.status || "Pending"}
-        </td>
+      
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.deal_status || "NA"}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.visit || "NA"} 
-        </td>
+      
        
       </tr>
     ))
@@ -432,7 +424,7 @@ function SuperEmployeeLeads() {
               previousLabel={"Previous"}
               nextLabel={"Next"}
               breakLabel={"..."}
-              pageCount={Math.ceil(leads.length / leadsPerPage)}
+              pageCount={pageCount}
               marginPagesDisplayed={2}
               pageRangeDisplayed={3}
               onPageChange={handlePageClick}

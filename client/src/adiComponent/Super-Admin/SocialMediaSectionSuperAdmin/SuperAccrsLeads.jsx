@@ -1,42 +1,36 @@
-import axios from "axios";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { BsPencilSquare } from "react-icons/bs";
-import ReactPaginate from "react-paginate";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import moment from 'moment';
+import ReactPaginate from 'react-paginate';
 
-function WebsiteLeads() {
-  const [websiteleads, setWebsiteLeads] = useState([]);
+
+function SuperAccrs() {
+  const [responses, setResponses] = useState([]);
+  const [leadsAssigned, setLeadsAssigned] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [websiteleadsAssigned, setwebsiteLeadsAssigned] = useState([]);
   const [selectedLead, setSelectedLead] = useState(null);
   const [employees, setEmployees] = useState([]);
-  const [showWebsite, setShowWebsiteApi] = useState(false);  
-  const [showUpdateWebsiteApi, setShowUpdateWebsiteApi] = useState(false);  
+  const [currentPage, setCurrentPage] = useState(0);
+  const [leadsPerPage] = useState(10);
   const [currentLead, setCurrentLead] = useState({
     assignedTo: "",
     employeeId: "",
     employeephone: "",
     createdTime:"",
   });
+  console.log(responses, 'Line number 7 data check');
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(0);
-  const [leadsPerPage] = useState(10);
-  const [loadingbutton , setLoadingButton] = useState(false)
-
-
-  // Fetch leads
-  const fetchLeads = async () => {
+  const fetchResponses = async () => {
     try {
-      const response = await axios.get("https://one-realty.in/api/user-data");
-      setWebsiteLeads(response.data);
+      const response = await axios.get('https://crmdemo.vimubds5.a2hosted.com/api/get-responses');
+      console.log('Response received from API:', response.data);
+      setResponses(response.data);   
     } catch (error) {
-      console.error("Error fetching website leads:", error);
+      console.error('Error fetching 99Acres responses:', error);
     }
   };
-
-  // Fetch employees
   const fetchEmployees = async () => {
     try {
       const response = await axios.get("https://crmdemo.vimubds5.a2hosted.com/api/employee");
@@ -45,19 +39,18 @@ function WebsiteLeads() {
       console.error("Error fetching employees:", error);
     }
   };
-
-  // Fetch lead assignments
   const fetchLeadassigned = async () => {
     try {
       const response = await axios.get("https://crmdemo.vimubds5.a2hosted.com/api/leads");
-      setwebsiteLeadsAssigned(response.data);
+      setLeadsAssigned(response.data);
+      // console.log(leadsAssigned);
     } catch (error) {
-      console.error("Error fetching assigned leads:", error);
+      console.error("Error fetching employees:", error);
     }
   };
 
   useEffect(() => {
-    fetchLeads();
+    fetchResponses();
     fetchEmployees();
     fetchLeadassigned();
   }, []);
@@ -86,7 +79,6 @@ function WebsiteLeads() {
   };
   
   const saveChanges = async () => {
-    // Check if assignedTo field is empty
     if (!currentLead.assignedTo) {
       alert("Please assign the lead to an employee."); // Show an alert message
       return; // Stop further execution if the field is empty
@@ -95,30 +87,29 @@ function WebsiteLeads() {
       alert("Please Select Assign Date."); // Show an alert message
       return; // Stop further execution if the field is empty
     }
-  
     try {
-      setLoadingButton(true)
+      setLoading(true)
       await axios.post("https://crmdemo.vimubds5.a2hosted.com/api/leads", {
-        lead_no: selectedLead.leadId,
-        assignedTo: currentLead.assignedTo,
-        employeeId: currentLead.employeeId,
+        lead_no:  selectedLead.leadId,    
+        assignedTo:currentLead.assignedTo,
+        employeeId:currentLead.employeeId,
         createdTime:  currentLead.createdTime,
         actual_date:  selectedLead.date,
-        name: selectedLead.fullName,
-        phone: selectedLead.phoneNumber,
-        leadSource: "One Realty Website",
+        name: selectedLead.fullName,         
+        phone:  selectedLead.phoneNumber,   
+        leadSource: "99 Acres", 
         subject: selectedLead.subject,
         address: selectedLead.address,
-         assignedBy: "Admin"
+         assignedBy: "Super Admin"
       });
-      fetchLeads();
+      fetchResponses(); // Refresh the list
       fetchLeadassigned();
         // Reset form data
     setCurrentLead({
       assignedTo: '',
       employeeId: '',
       createdTime: '',
-     
+    
       // Add other fields here if needed
     });
     setSelectedLead({
@@ -127,47 +118,54 @@ function WebsiteLeads() {
       fullName: '',
       phoneNumber: '',
       address: '',
+
       // Add other fields here if needed
     });
-      closePopup();
 
-      // Format the createdTime using moment
+      closePopup();
+    // Format the createdTime using moment
 const formattedDate = moment(currentLead.createdTime).format("DD-MM-YYYY"); // Format the date as 'DD-MM-YYYY'
 
 // Generate the WhatsApp link with the formatted date
-const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${selectedLead.leadId}%0A3)%20Name:%20${selectedLead.fullName}%0A4)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A5)%20Lead%20Source:%20One%20Realty%20Website%0A6)%20Address:%20${selectedLead.address}%0A7)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
+const whatsappLink = `https://wa.me/${currentLead.employeephone}?text=Hi%20${currentLead.assignedTo},%20you%20have%20been%20assigned%20a%20new%20lead%20with%20the%20following%20details:%0A%0A1)%20Date:-${formattedDate}%0A2)%20Lead%20No.%20${selectedLead.leadId}%0A3)%20Name:%20${selectedLead.fullName}%0A4)%20Phone%20Number:%20${selectedLead.phoneNumber}%0A5)%20Lead%20Source:%2099%20Acres%0A6)%20Address:%20${selectedLead.address}%0A7)%20Subject:%20${selectedLead.subject}%0A%0APlease%20check%20your%20dashboard%20for%20details.`;
 
 // Open WhatsApp link
 window.open(whatsappLink, "_blank");
-setLoadingButton(false)
 
+setLoading(false)
     } catch (error) {
-      setLoadingButton(false)
+      setLoading(false)
       console.error("Error adding lead:", error);
     }
   };
-  
+
   const handleEditClick = (lead) => {
     setSelectedLead({
       leadId: lead.id,
-      fullName: lead.name,
-      phoneNumber: lead.mobile_no,
-      subject: lead.subject,
-      address: lead.address,
-      date: moment(lead.created_date).format("YYYY-MM-DD"),
+      fullName: lead.contact_name,
+      phoneNumber: lead.phone.replace("+91-", ""),
+      subject: lead.project_name,
+      address: lead.city_name,
+      date: moment(lead.received_on).format("YYYY-MM-DD"),
     });
     setShowPopup(true);
   };
+
+ 
 
   const closePopup = () => {
     setShowPopup(false);
     setSelectedLead(null);
   };
-
-  const filteredLeads = websiteleads.filter(
+  
+  
+  const filteredLeads = responses.filter(
     (lead) =>
-      !websiteleadsAssigned.some((assigned) => assigned.lead_no === lead.id.toString())
-  )
+      !leadsAssigned.some(
+        (assigned) => assigned.lead_no === lead.id.toString()
+      )
+  );
+
  
   const indexOfLastLead = currentPage * leadsPerPage + leadsPerPage;
   const indexOfFirstLead = currentPage * leadsPerPage;
@@ -176,83 +174,66 @@ setLoadingButton(false)
   
   const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
-
-
-
- const handlePageClick = (data) => {
-  setCurrentPage(data.selected);
-};
-
-console.log("Leads:", currentLeads);
-console.log("Assigned Leads:", websiteleadsAssigned);
+  
+  const handlePageClick = ({ selected }) => {
+    setCurrentPage(selected);
+  };
 
   return (
     <>
-      <div className="container 2xl:w-[95%]">
-   
-        <h1 className="text-2xl text-center mt-[2rem]">Website Leads Data</h1>
-        <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
-        {filteredLeads.length > 0 ? (
-        <div className="overflow-x-auto mt-4">
-          <table className="container bg-white border">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  S.no
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Lead Number
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Email Id
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Phone
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Subject
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                 Address
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Created Time
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                  Assigned Lead
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-            {currentLeads?.map((lead, index) => (
-  <tr key={lead.id} className={index % 2 === 0 ? "bg-gray-100" : ""}>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{index + 1}</td>
-    <td className="px-6 py-4 border-b border-gray-200">{lead.id}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.email}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.mobile_no}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.address}</td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-      {moment(lead.created_date).format('DD-MM-YYYY')}
-    </td>
-    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+        <div className="container 2xl:w-[95%]">
+      <h1 className="text-2xl font-bold text-gray-800 mb-4">99Acres Responses</h1>
+      {responses.length > 0 ? (
+       <div className="overflow-x-auto">
+       <table className="min-w-full text-sm bg-white border border-gray-200">
+         <thead className="bg-gray-200">
+           <tr>
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">Query ID</th>
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">Project Name</th>
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">City</th>
+         
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">Received On</th>
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">Contact Name</th>
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">Email</th>
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">Phone</th>
+             <th className="py-2 px-4 text-left font-semibold text-gray-700">Assigned Lead</th>
+           </tr>
+         </thead>
+         <tbody>
+           {currentLeads.map((lead, index) => (
+             <tr key={index} className="border-b">
+               <td className="py-2 px-4">{lead.id || 'N/A'}</td>
+               <td className="py-2 px-4">{lead.project_name || 'N/A'}</td>
+               <td className="py-2 px-4">{lead.city_name || 'N/A'}</td>
+             
+               <td className="py-2 px-4">
+  {lead.received_on 
+    ? `${new Date(lead.received_on).toLocaleDateString('en-GB')} ${new Date(lead.received_on).toLocaleTimeString()}`
+    : 'N/A'}
+</td>
+
+               <td className="py-2 px-4">{lead.contact_name}</td>
+               <td className="py-2 px-4">{lead.email || 'N/A'}</td>
+               <td className="py-2 px-4">{lead.phone.replace("+91-", "") || 'N/A' }</td>
+               <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
       <button className="text-blue-500 hover:text-blue-700" onClick={() => handleEditClick(lead)}>
         Assign
       </button>
     </td>
-  </tr>
-))}
+             </tr>
+           ))}
+         </tbody>
+       </table>
+     </div>
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+        No Data Found
+      </div>
+      )}
+    </div>
 
-</tbody>
-
-          </table>
-
-          {/* Pagination Component */}
-          <div className="mt-4 flex justify-center">
+   {/* Pagination Component */}
+   <div className="mt-4 mb-5 flex justify-center">
             <ReactPaginate
               previousLabel={"Previous"}
               nextLabel={"Next"}
@@ -273,12 +254,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
               breakLinkClassName={"page-link"}
             />
           </div>
-        </div>
-        ) : (
-          <div className="text-center py-8 text-gray-500">
-            No Data Found
-          </div>
-        )}
+  
 
         {/* Popup */}
         {showPopup && selectedLead && (
@@ -353,7 +329,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
                 className="w-full p-2 border rounded"
                 disabled
               >
-                <option value="Website Inquiries">Website</option>
+                <option value="Website Inquiries">99 Acres</option>
               </select>
             </div>
             <div className="mb-4">
@@ -406,9 +382,9 @@ console.log("Assigned Leads:", websiteleadsAssigned);
             <div className="flex justify-end">
               <button
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                onClick={saveChanges} disabled = {loadingbutton}
+                onClick={saveChanges} disabled = {loading}
               >
-         {loadingbutton ? 'Save...' : 'Save'}
+                    {loading ? 'Save...' : 'Save'}
               </button>
               <button
                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
@@ -420,9 +396,10 @@ console.log("Assigned Leads:", websiteleadsAssigned);
           </div>
         </div>
       )}
-      </div>
+    
     </>
+
   );
 }
 
-export default WebsiteLeads;
+export default SuperAccrs;

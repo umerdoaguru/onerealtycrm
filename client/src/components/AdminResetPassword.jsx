@@ -15,12 +15,14 @@ const AdminResetPassword = () => {
   const [showOtp, setShowOtp] = useState(true);
   const [showVerify, setShowVerify] = useState(false);
   const [showReset, setShowReset] = useState(false);
+  const [loading , setLoading] = useState(false)
 
   const currentUser = useSelector((state) => state.auth.user);
 
   const sendOtp = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.post(
         "https://crmdemo.vimubds5.a2hosted.com/api/sendOtp-admin",
         {
@@ -32,8 +34,10 @@ const AdminResetPassword = () => {
       setShowOtp(false);
       setShowVerify(true);
       setShowReset(false);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       cogoToast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
@@ -41,6 +45,7 @@ const AdminResetPassword = () => {
   const verifyOtpAdmin = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.post(
         "https://crmdemo.vimubds5.a2hosted.com/api/verifyOtp-admin",
         {
@@ -52,8 +57,10 @@ const AdminResetPassword = () => {
       setShowOtp(false);
       setShowVerify(false);
       setShowReset(true);
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       cogoToast.error("Wrong OTP!");
     }
   };
@@ -61,6 +68,7 @@ const AdminResetPassword = () => {
   const changePassword = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.put(
         "https://crmdemo.vimubds5.a2hosted.com/api/resetPassword-admin",
         {
@@ -72,114 +80,16 @@ const AdminResetPassword = () => {
       console.log(response);
       cogoToast.success("Password updated successfully");
       navigate("/");
+      setLoading(false)
     } catch (error) {
       console.log(error);
+      setLoading(false)
       cogoToast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
 
   return (
-    // <div className="flex justify-center">
-    //   <div className="bg-teal-100 rounded-xl shadow-md w-4/5 my-8 p-6 text-black">
-    //     <div className="flex flex-col md:flex-row justify-center items-center">
-    //       <div className="md:w-1/2">
-    //         <p className="text-center text-2xl font-bold mb-6">Password Reset</p>
-    //         {showOtp && (
-    //           <form className="sendOtp" onSubmit={sendOtp}>
-    //             <div className="flex items-center mb-4">
-    //               <i className="fas fa-envelope text-lg mr-3"></i>
-    //               <div className="flex-grow">
-    //                 <label className="block mb-1">Email</label>
-    //                 <input
-    //                   type="email"
-    //                   name="email"
-    //                   id="email"
-    //                   value={email}
-    //                   onChange={(e) => setEmail(e.target.value)}
-    //                   className="w-full p-2 border rounded"
-    //                   placeholder="Email"
-    //                 />
-    //               </div>
-    //             </div>
-    //             <div className="flex justify-center">
-    //               <button type="submit" className="btn-primary">
-    //                 Send OTP
-    //               </button>
-    //             </div>
-    //           </form>
-    //         )}
-    //         {showVerify && (
-    //           <form className="verify-otp" onSubmit={verifyOtpAdmin}>
-    //             <div className="flex items-center mb-4">
-    //               <i className="fas fa-envelope text-lg mr-3"></i>
-    //               <div className="flex-grow">
-    //                 <label className="block mb-1">Email</label>
-    //                 <input
-    //                   type="email"
-    //                   name="email"
-    //                   id="email"
-    //                   value={email}
-    //                   onChange={(e) => setEmail(e.target.value)}
-    //                   className="w-full p-2 border rounded"
-    //                   placeholder="Email"
-    //                 />
-    //               </div>
-    //             </div>
-    //             <div className="flex items-center mb-4">
-    //               <i className="fas fa-lock text-lg mr-3"></i>
-    //               <div className="flex-grow">
-    //                 <label className="block mb-1">OTP</label>
-    //                 <input
-    //                   type="text"
-    //                   name="otp"
-    //                   value={otp}
-    //                   onChange={(e) => setOtp(e.target.value)}
-    //                   className="w-full p-2 border rounded"
-    //                   placeholder="OTP"
-    //                 />
-    //               </div>
-    //             </div>
-    //             <div className="flex justify-center">
-    //               <button type="submit" className="btn-primary">
-    //                 Verify OTP
-    //               </button>
-    //             </div>
-    //           </form>
-    //         )}
-    //         {showReset && (
-    //           <form className="reset" onSubmit={changePassword}>
-    //             <div className="flex items-center mb-4">
-    //               <i className="fas fa-lock text-lg mr-3"></i>
-    //               <div className="flex-grow">
-    //                 <label className="block mb-1">New Password</label>
-    //                 <input
-    //                   type="password"
-    //                   name="newPassword"
-    //                   value={newPassword}
-    //                   onChange={(e) => setNewPassword(e.target.value)}
-    //                   className="w-full p-2 border rounded"
-    //                   placeholder="New Password"
-    //                 />
-    //               </div>
-    //             </div>
-    //             <div className="flex justify-center">
-    //               <button type="submit" className="btn-primary">
-    //                 Reset Password
-    //               </button>
-    //             </div>
-    //           </form>
-    //         )}
-    //       </div>
-    //       <div className="md:w-1/2 flex justify-center items-center">
-    //         <img
-    //           src="https://res.cloudinary.com/dq5upuxm8/image/upload/v1708075638/dental%20guru/Login-page_1_cwadmt.png"
-    //           className="w-auto h-full"
-    //           alt="Sample"
-    //         />
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
+
     <div className="min-h-screen flex items-center justify-center">
     <section className="vh-100 w-full">
       <div className="flex justify-center items-center h-full">
@@ -216,8 +126,10 @@ const AdminResetPassword = () => {
                 </div>
               </div>
               <div className="flex justify-center mx-3">
-                <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5">
-                  Send OTP
+                <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5"
+                disabled = {loading}
+                >
+                    {loading ? 'Sending OTP...' : 'Send OTP'}
                 </button>
               </div>
             </form>
@@ -254,8 +166,10 @@ const AdminResetPassword = () => {
                 </div>
               </div>
               <div className="flex justify-center mx-3">
-                <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5">
-                  Verify OTP
+                <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5"
+                  disabled = {loading} 
+                >
+               {loading ? 'Verifying OTP...' : 'Verify OTP'}
                 </button>
               </div>
             </form>
@@ -277,8 +191,10 @@ const AdminResetPassword = () => {
                 </div>
               </div>
               <div className="flex justify-center mx-3">
-                <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5">
-                  Reset Password
+                <button type="submit" className="w-full bg-blue-600 text-white text-lg font-semibold py-2 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 focus:outline-none flex items-center justify-center mb-5"
+                  disabled = {loading}
+                >
+                {loading ? 'Resetting Password...' : 'Reset Password'}
                 </button>
               </div>
             </form>

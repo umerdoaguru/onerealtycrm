@@ -10,7 +10,7 @@ import MainHeader from "../MainHeader";
 import Sider from "../Sider";
 
 
-const VisitData = () => {
+const VisitReport = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
@@ -19,7 +19,19 @@ const VisitData = () => {
   const leadsPerPage = 6; // Default leads per page
   const EmpId = useSelector((state) => state.auth.user.id);
   const [employees, setEmployees] = useState([]);
+  const [duration, setDuration] = useState("all"); // Default is "all"
   const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [selectedColumns, setSelectedColumns] = useState([
+ 'lead_id',
+'name',
+'employee_name',
+'employeeId',
+'visit',
+'report', 
+'visit_date',
+
+  ]);
+  
 
 
   // Fetch leads from the API
@@ -54,32 +66,87 @@ const VisitData = () => {
   };
 
 
+
+  const filterByDuration = (leads, duration) => {
+    const today = moment();
+
+    switch (duration) {
+      case "week":
+        return leads.filter((lead) =>
+          moment(lead.visit_date).isSame(today, "week")
+        );
+      case "month":
+        return leads.filter((lead) =>
+          moment(lead.visit_date).isSame(today, "month")
+        );
+      case "year":
+        return leads.filter((lead) =>
+          moment(lead.visit_date).isSame(today, "year")
+        );
+      case "all":
+      default:
+        return leads;
+    }
+  };
+
+
+
   // Automatically apply date filter when start or end date changes
 
   useEffect(() => {
     let filtered = leads;
 
-    // Filter by date
-    if (startDate && endDate) {
-      filtered = filtered.filter((lead) => {
-        const visitDate = moment(lead.visit_date, "YYYY-MM-DD");
-        return visitDate.isBetween(startDate, endDate, undefined, "[]");
-      });
-    }
+    
 
     // Filter by selected employee
     if (selectedEmployee) {
       filtered = filtered.filter((lead) => lead.employee_name === selectedEmployee);
     }
+    filtered = filterByDuration(filtered, duration);
 
     setFilteredLeads(filtered);
-  }, [startDate, endDate, selectedEmployee, leads]);
+  }, [ selectedEmployee,duration, leads]);
 
   const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
+    // Map to rename keys for export
+    const columnMapping = {
+        lead_id: "Lead ID",          
+        name: "Name",                
+        employee_name: "Employee Name", 
+        employeeId: "Employee ID",   
+        visit: "Visit",              
+        report: "Report",            
+        visit_date: "Visit Date", 
+      };
+      
+  
+    const completedLeads = filteredLeads
+      .filter((lead) => lead.visit !== "pending")
+      .map((lead) => {
+        const formattedLead = {};
+  
+        // Dynamically include selected columns
+        selectedColumns.forEach((col) => {
+          const newKey = columnMapping[col] || col; // Use mapped name if available
+          formattedLead[newKey] = 
+            (col === "visit_date") && lead[col]
+              ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
+              : lead[col]; // Format dates or copy value
+        });
+  
+      
+       
+        
+
+  
+        return formattedLead;
+      });
+  
+    // Generate Excel file
+    const worksheet = XLSX.utils.json_to_sheet(completedLeads);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Visit");
-    XLSX.writeFile(workbook, "VisitData.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Visit Report");
+    XLSX.writeFile(workbook, "VisitReport.xlsx");
   };
 
   // Pagination logic
@@ -95,54 +162,46 @@ const VisitData = () => {
   };
 
   return (
-    <Wrapper>
+    <>
       <div className="container 2xl:w-[95%]">
       <div className="flex-grow  mt-14 lg:mt-0 sm:ml-0">
-        <center className="text-2xl text-center mt-8 font-medium">
-         Site Visits Data
-        </center>
-        <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
+       
+       
         {/* Date Filter */}
-        <div className="flex  mb-4 sm:flex-row flex-col gap-2">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="border p-1"
-          />
-          <div className="p-1">
-            <p>to</p>
-          </div>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="border p-1"
-          />
-            <div className="">
-            <select
-              value={selectedEmployee}
-              onChange={(e) => setSelectedEmployee(e.target.value)}
-              className="border p-1"
-            >
-              <option value="">Select Employee</option>
-              {employees.map((employee) => (
-                <option key={employee.id} value={employee.name}>
-                  {employee.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="respo ">
+        <div className="flex mb-4 sm:flex-row justify-end flex-col gap-2">
+            <div>
+              <select
+                value={selectedEmployee}
+                onChange={(e) => setSelectedEmployee(e.target.value)}
+                className="border p-2 rounded"
+              >
+                <option value="">Select Employee</option>
+                {employees.map((employee) => (
+                  <option key={employee.id} value={employee.name}>
+                    {employee.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                className="border p-2 rounded"
+              >
+                <option value="all">All</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
             <button
               onClick={downloadExcel}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white font-medium px-4 py-2 rounded hover:bg-blue-700"
             >
               Download Excel
             </button>
           </div>
-        
-        </div>
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
@@ -165,10 +224,10 @@ const VisitData = () => {
                       Visit 
                     </th>
                     <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
-                      Visit Date
+                      Report
                     </th>
                     <th className="px-6 py-3  border-b-2 border-gray-300 text-black-500">
-                      Report
+                      Visit Date
                     </th>
                 
                   </tr>
@@ -203,11 +262,11 @@ const VisitData = () => {
                      {visit.visit}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                    
-                     {moment(visit.visit_date).format("DD MMM YYYY").toUpperCase()}
+                     {visit.report}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                     {visit.report}
+                    
+                     {moment(visit.visit_date).format("DD MMM YYYY").toUpperCase()}
                     </td>
       </tr>
     ))
@@ -238,18 +297,10 @@ const VisitData = () => {
         />
 </div>
       </div></div>
-    </Wrapper>
+    </>
   );
 };
 
-export default VisitData;
+export default VisitReport;
 
-const Wrapper = styled.div`
-  /* Container class */
-  .respo {
-    @media screen and (max-width: 768px) {
-      margin-top: 1rem;
-    }
-  }
 
-`;

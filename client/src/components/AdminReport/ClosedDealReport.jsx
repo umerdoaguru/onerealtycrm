@@ -6,7 +6,7 @@ import ReactPaginate from "react-paginate";
 import * as XLSX from "xlsx";
 import styled from "styled-components";
 
-const CloseData = () => {
+const ClosedDealReport = () => {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [startDate, setStartDate] = useState("");
@@ -15,8 +15,32 @@ const CloseData = () => {
   const leadsPerPage = 6; // Default leads per page
   const EmpId = useSelector((state) => state.auth.user.id);
   const [employees, setEmployees] = useState([]);
+  const [duration, setDuration] = useState("all"); // Default is "all"
   const [selectedEmployee, setSelectedEmployee] = useState("");
-
+  const [selectedColumns, setSelectedColumns] = useState([
+    "lead_no",
+    "assignedTo",
+    "createdTime",
+    "name",
+    "phone",
+    "leadSource",
+    "lead_status",
+    "address",
+    "booking_amount",
+    "d_closeDate",
+    "deal_status",
+    "employeeId",
+    "follow_up_status",
+    "payment_mode",
+    "quotation",
+    "quotation_status",
+    "reason",
+    "registry",
+    "status",
+    "subject",
+    "visit"
+  ]);
+  
 
   // Fetch leads from the API
   useEffect(() => {
@@ -50,17 +74,33 @@ const CloseData = () => {
     }
   };
 
+  const filterByDuration = (leads, duration) => {
+    const today = moment();
+
+    switch (duration) {
+      case "week":
+        return leads.filter((lead) =>
+          moment(lead.createdTime).isSame(today, "week")
+        );
+      case "month":
+        return leads.filter((lead) =>
+          moment(lead.createdTime).isSame(today, "month")
+        );
+      case "year":
+        return leads.filter((lead) =>
+          moment(lead.createdTime).isSame(today, "year")
+        );
+      case "all":
+      default:
+        return leads;
+    }
+  };
+
+
 
   // Automatically apply date filter when start or end date changes
   useEffect(() => {
     let filtered = leads;
-
-    if (startDate && endDate) {
-      filtered = filtered.filter((lead) => {
-        const closeDate = moment(lead.d_closeDate, "YYYY-MM-DD");
-        return closeDate.isBetween(startDate, endDate, undefined, "[]");
-      });
-    }
 
     
       // Filter by selected employee
@@ -68,14 +108,71 @@ const CloseData = () => {
       filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
     }
 
+    filtered = filterByDuration(filtered, duration);
+
     setFilteredLeads(filtered);
-  }, [startDate, endDate,selectedEmployee, leads]);
+  }, [selectedEmployee,duration, leads]);
 
   const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
+    // Map to rename keys for export
+    const columnMapping = {
+        lead_no: "Lead Number",
+        assignedTo: "Assigned To",
+        createdTime: "Assigned Date",
+        name: "Name",
+        phone: "Phone",
+        leadSource: "Lead Source",
+        lead_status: "Lead Status",
+        address: "Address",
+        booking_amount: "Booking Amount",
+        d_closeDate: "Close Date",
+        deal_status: "Deal Status",
+        employeeId: "Employee ID",
+        follow_up_status: "Follow-up Status",
+        payment_mode: "Payment Mode",
+        quotation: "Quotation",
+        quotation_status: "Quotation Status",
+        reason: "Reason",
+        registry: "Registry",
+        status: "Status",
+        subject: "Subject",
+        visit: "Visit"
+      };
+      
+  
+    const completedLeads = filteredLeads
+      .filter((lead) => lead.deal_status !== "pending")
+      .map((lead) => {
+        const formattedLead = {};
+  
+        // Dynamically include selected columns
+        selectedColumns.forEach((col) => {
+          const newKey = columnMapping[col] || col; // Use mapped name if available
+          formattedLead[newKey] = 
+            (col === "actual_date" || col === "createdTime") && lead[col]
+              ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
+              : lead[col]; // Format dates or copy value
+        });
+  
+        // Ensure renamed dates are included, even if not in selectedColumns
+        formattedLead["Actual Date"] = lead["actual_date"]
+          ? moment(lead["actual_date"]).format("DD MMM YYYY").toUpperCase()
+          : "";
+        formattedLead["Assigned Date"] = lead["createdTime"]
+          ? moment(lead["createdTime"]).format("DD MMM YYYY").toUpperCase()
+          : "";
+        formattedLead["Close Date"] = lead["d_closeDate"]
+          ? moment(lead["d_closeDate"]).format("DD MMM YYYY").toUpperCase()
+          : "pending";
+  
+        return formattedLead;
+      });
+  
+    // Generate Excel file
+    const worksheet = XLSX.utils.json_to_sheet(completedLeads);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Closed");
-    XLSX.writeFile(workbook, "ClosedData.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Close Deal Report");
+    XLSX.writeFile(workbook, "Cloase Deal Report.xlsx");
   };
 
   const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
@@ -89,54 +186,46 @@ const CloseData = () => {
   };
 
   return (
-    <Wrapper>
+    <>
       <div className="container 2xl:w-[95%]">
       <div className="flex-grow mt-14 lg:mt-0 sm:ml-0">
-        <center className="text-2xl text-center mt-8 font-medium">
-          Closed Deal Data
-        </center>
-        <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-
+      
+       
         {/* Date Filter */}
-        <div className="flex  mb-4 sm:flex-row flex-col gap-2">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="border p-1"
-          />
-          <div className="p-1">
-            <p>to</p>
-          </div>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="border p-1"
-          />
-            <div className="">
-            <select
-              value={selectedEmployee}
-              onChange={(e) => setSelectedEmployee(e.target.value)}
-              className="border p-1"
-            >
-              <option value="">Select Employee</option>
-              {employees.map((employee) => (
-                <option key={employee.id} value={employee.name}>
-                  {employee.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="respo  ">
+        <div className="flex mb-4 sm:flex-row justify-end flex-col gap-2">
+            <div>
+              <select
+                value={selectedEmployee}
+                onChange={(e) => setSelectedEmployee(e.target.value)}
+                className="border p-2 rounded"
+              >
+                <option value="">Select Employee</option>
+                {employees.map((employee) => (
+                  <option key={employee.id} value={employee.name}>
+                    {employee.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                className="border p-2 rounded"
+              >
+                <option value="all">All</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="year">This Year</option>
+              </select>
+            </div>
             <button
               onClick={downloadExcel}
-              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded "
+              className="bg-blue-500 text-white font-medium px-4 py-2 rounded hover:bg-blue-700"
             >
               Download Excel
             </button>
           </div>
-        </div>
 
         {/* Table */}
         <div className="overflow-x-auto mt-4">
@@ -161,14 +250,15 @@ const CloseData = () => {
                   Lead Source
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Visit Date
-                </th>
+               
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   FollowUp Status
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Deal Status
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  Close Date
                 </th>
               </tr>
             </thead>
@@ -212,16 +302,17 @@ const CloseData = () => {
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.visit}
                     </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                    
-                      {moment(lead.visit_date).format("DD MMM YYYY").toUpperCase()}
-                    </td>
+            
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.follow_up_status}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.deal_status}
                     </td>
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                    
+                    {moment(lead.d_closeDate).format("DD MMM YYYY").toUpperCase()}
+                  </td>
                   </tr>
                 ))
               )}
@@ -254,18 +345,10 @@ const CloseData = () => {
 
       </div>
       </div></div>
-    </Wrapper>
+    </>
   );
 };
 
-export default CloseData;
+export default ClosedDealReport;
 
-const Wrapper = styled.div`
-  .respo {
-    @media screen and (max-width: 768px) {
-      margin-top: 1rem;
-    }
-  }
-  
 
-`;

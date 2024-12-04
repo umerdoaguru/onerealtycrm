@@ -153,6 +153,8 @@ function EmployeeLead() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [startDate, setStartDate] = useState("");
+  const [leadSourceFilter, setLeadSourceFilter] = useState("");
+
   const [endDate, setEndDate] = useState("");
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
@@ -207,11 +209,11 @@ function EmployeeLead() {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(
-        (lead) =>
-          lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource","phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
       );
     }
 
@@ -223,6 +225,16 @@ function EmployeeLead() {
       });
     }
 
+// Filter by lead source
+if (leadSourceFilter) {
+  filtered = filtered.filter(
+    (lead) => lead.leadSource === leadSourceFilter
+  );
+}
+
+
+
+
     if (filterDate) {
       filtered = filtered.filter((lead) => {
         const leadDate = moment(lead.createdTime).format("YYYY-MM-DD");
@@ -231,12 +243,14 @@ function EmployeeLead() {
     }
 
     setFilteredLeads(filtered);
-  }, [searchTerm, startDate, endDate, leads,filterDate]);
+  }, [searchTerm, startDate, endDate, leads,filterDate,leadSourceFilter]);
 
   // Use filteredLeads for pagination
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
   const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
+
 
   const handlePageClick = (data) => {
     setCurrentPage(data.selected);
@@ -261,7 +275,7 @@ function EmployeeLead() {
               <label htmlFor="">Search</label>
               <input
                 type="text"
-                placeholder="Search by Name, Lead No, Lead Source"
+                 placeholder=" Name,Lead No,Lead Source,Phone No"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border rounded-2xl p-2 w-full"
@@ -276,6 +290,39 @@ function EmployeeLead() {
                   onChange={(e) => setStartDate(e.target.value)}
                   className="border  rounded-2xl p-2 w-full"
                 />
+              </div>
+              <div>
+                <label htmlFor="">Lead Source Filter</label>
+                <select
+                  value={leadSourceFilter}
+                  onChange={(e) => setLeadSourceFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                   <option value="">Select Lead Source</option>
+                     <option value="Facebook">Facebook</option>
+                    <option value="One Realty Website">
+                      One Realty Website
+                    </option>
+                    <option value="99 Acres">
+                    99 Acres
+                    </option>
+                    <option value="Referrals">Referrals</option>
+                    <option value="Cold Calling">Cold Calling</option>
+                    <option value="Email Campaigns">Email Campaigns</option>
+                    <option value="Networking Events">Networking Events</option>
+                    <option value="Paid Advertising">Paid Advertising</option>
+                    <option value="Content Marketing">Content Marketing</option>
+                    <option value="SEO">Search Engine Optimization</option>
+                    <option value="Trade Shows">Trade Shows</option>
+                   
+                    <option value="Affiliate Marketing">
+                      Affiliate Marketing
+                    </option>
+                    <option value="Direct Mail">Direct Mail</option>
+                    <option value="Online Directories">
+                      Online Directories
+                    </option>
+                </select>
               </div>
 
               <div>
@@ -299,30 +346,51 @@ function EmployeeLead() {
         
           </div>
           <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
-              {/* Filter leads based on the selected employee */}
-         
+  {/* Total Lead Count */}
+  <div>
+    Total Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+          
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        ).length
+    }
+  </div>
 
-              <div>
-                Total Lead:{" "}
-                {
-                  leads.length
-                }
-              </div>
-              <div>
-  Total Lead visit:{" "}
-  {
-    leads.filter(
-        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
-      ).length
-  }
+  {/* Total Lead Visits */}
+  <div>
+    Total Lead Visit:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+           
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter(
+          (lead) =>
+            ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+        ).length
+    }
+  </div>
+
+  {/* Total Closed Leads */}
+  <div>
+    Total Closed Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+           
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter((lead) => lead.deal_status === "close").length
+    }
+  </div>
 </div>
-              <div>
-                Total Closed Lead:{" "}
-                {
-                  leads.filter((lead) => lead.deal_status === "close").length
-                }
-              </div>
-            </div>
+
           <div className="overflow-x-auto rounded-lg shadow-md">
             <table className="min-w-full bg-white">
               <thead>
@@ -337,10 +405,10 @@ function EmployeeLead() {
                     Name
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Assigned To
+                    Status
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Created Time
+                   Date
                   </th>
                 
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
@@ -373,10 +441,10 @@ function EmployeeLead() {
           {lead.name}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.assignedTo}
+          {lead.status}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {moment(lead.createdTime).format("DD/MM/YYYY")}
+          {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
         </td>
      
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
@@ -430,7 +498,7 @@ function EmployeeLead() {
               previousLabel={"Previous"}
               nextLabel={"Next"}
               breakLabel={"..."}
-              pageCount={Math.ceil(leads.length / leadsPerPage)}
+              pageCount={pageCount}
               marginPagesDisplayed={2}
               pageRangeDisplayed={3}
               onPageChange={handlePageClick}

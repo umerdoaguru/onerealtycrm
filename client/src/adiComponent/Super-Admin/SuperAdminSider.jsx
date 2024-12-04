@@ -12,7 +12,7 @@ const SuperAdminSider = () => {
 
   // Function to get active class for the sidebar links
   const getSidebarClass = (path) => {
-    return location.pathname === path ? "bg-gray-700" : "";
+    return location.pathname === path ? "bg-blue-800 shadow-lg" : "";
   };
 
   const toggleSidebar = () => {
@@ -70,18 +70,20 @@ const SuperAdminSider = () => {
               </Link>
             </li>
 
-            {/* <hr className="w-full border-gray-400" />
-            <li className={`w-full ${getSidebarClass("/social-media-leads")}`}>
-              <Link
-                to="/social-media-leads"
-                className="flex flex-col items-center py-3"
-              >
-                <FaHistory className="text-white text-2xl md:text-3xl" />
-                <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
-                  Social Media <br /> <span>Leads</span>
-                </h3>
-              </Link>
-            </li> */}
+
+              <hr className="w-full border-gray-400" />
+              <li className={`xl:w-full ${getSidebarClass("/social-media-leads")}`}>
+                <Link
+                  to="/social-media-super-admin-leads"
+                  className="flex flex-col items-center py-3"
+                >
+                  <FaHistory className="text-white text-2xl md:text-3xl" />
+                  <h3 className="text-xs text-center max-md:pt-3 lg:inline text-white md:text-base">
+                   Social Media <br /> <span>Leads</span>
+                  </h3>
+                </Link>
+              </li>
+
 
             <hr className="w-full border-gray-400" />
 

@@ -257,6 +257,7 @@ function Leads() {
           currentLead.leadSource === "Other"
             ? customLeadSource
             : currentLead.leadSource,
+             assignedBy: "Admin"
       };
   
       try {
@@ -306,24 +307,20 @@ function Leads() {
     }
   };
 
-  const handleSearch = (value) => {
-    if (value === " ") {
-      return;
-    }
-    setSearchTerm(value);
-  };
+ 
   useEffect(() => {
     let filtered = leads;
     console.log(filtered);
-    // Filter by search term
+   
     if (searchTerm) {
-      filtered = filtered.filter(
-        (lead) =>
-          lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.lead_no.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lead.leadSource.toLowerCase().includes(searchTerm.toLowerCase())
+      const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
+      filtered = filtered.filter((lead) =>
+        ["name", "lead_no", "leadSource","phone"].some((key) =>
+          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+        )
       );
     }
+    
 
     // Filter by date range
     if (startDate && endDate) {
@@ -430,9 +427,9 @@ const handlePageClick = (data) => {
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
-                  placeholder="Search by Name, Lead No, Lead Source"
+                  placeholder=" Name,Lead No,Lead Source,Phone No"
                   value={searchTerm}
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 />
               </div>
@@ -463,8 +460,8 @@ const handlePageClick = (data) => {
                   className="border rounded-2xl p-2 w-full"
                 >
                   <option value="">All Lead Sources</option>
-                  <option value="Facebook Campaign">Facebook Campaign</option>
-                  <option value="Website">Website</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="One Realty Website">One Realty Website</option>
                   <option value="99 Acres">99 Acres</option>
                   <option value="Referrals">Referrals</option>
                   <option value="Trade Shows">Trade Shows</option>
@@ -507,7 +504,7 @@ const handlePageClick = (data) => {
                 >
                   <option value="">All visit</option>
                   <option value="fresh">Fresh Visit</option>
-                  <option value="repeated">Repeated Visit</option>
+                  <option value="re-visit">Re-Visit</option>
                   <option value="associative">Associative Visit</option>
                   <option value="self">Self Visit</option>
                 </select>
@@ -545,43 +542,51 @@ const handlePageClick = (data) => {
             </div>
           </div>
           <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
-              {/* Filter leads based on the selected employee */}
-         
+  {/* Total Lead Count */}
+  <div>
+    Total Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+            (!employeeFilter || lead.assignedTo === employeeFilter) &&
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        ).length
+    }
+  </div>
 
-              <div>
-                Total Lead:{" "}
-                {
-                  leads.filter(
-                    (lead) =>
-                      !employeeFilter || lead.assignedTo === employeeFilter
-                  ).length
-                }
-              </div>
-              <div>
-  Total Lead visit:{" "}
-  {
-    leads
-      .filter(
-        (lead) =>
-          !employeeFilter || lead.assignedTo === employeeFilter
-      )
-      .filter(
-        (lead) => ["fresh", "repeated", "self", "associative"].includes(lead.visit)
-      ).length
-  }
+  {/* Total Lead Visits */}
+  <div>
+    Total Lead Visit:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+            (!employeeFilter || lead.assignedTo === employeeFilter) &&
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter(
+          (lead) =>
+            ["fresh", "repeated", "self", "associative"].includes(lead.visit)
+        ).length
+    }
+  </div>
+
+  {/* Total Closed Leads */}
+  <div>
+    Total Closed Lead:{" "}
+    {
+      leads
+        .filter(
+          (lead) =>
+            (!employeeFilter || lead.assignedTo === employeeFilter) &&
+            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
+        )
+        .filter((lead) => lead.deal_status === "close").length
+    }
+  </div>
 </div>
-              <div>
-                Total Closed Lead:{" "}
-                {
-                  leads
-                    .filter(
-                      (lead) =>
-                        !employeeFilter || lead.assignedTo === employeeFilter
-                    )
-                    .filter((lead) => lead.deal_status === "close").length
-                }
-              </div>
-            </div>
+
           <div className=" overflow-x-auto mt-4 whitespace-nowrap  2xl:w-[89%]">
          
 
@@ -606,9 +611,7 @@ const handlePageClick = (data) => {
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Subject
-                  </th>
+                 
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Address
                   </th>
@@ -618,9 +621,7 @@ const handlePageClick = (data) => {
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Deal Status
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Visit
-                  </th>
+                  
                  
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Date
@@ -669,9 +670,7 @@ const handlePageClick = (data) => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.assignedTo}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.subject}
-                      </td>
+                     
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.address}
                       </td>
@@ -703,15 +702,13 @@ const handlePageClick = (data) => {
                       </td>
 
                       {/* Visit Status */}
-                      <td className="px-6 py-4 border-b border-gray-200 font-semibold">
-                        {lead.visit}
-                      </td>
+                      
 
                   
 
                       {/* Created Time */}
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {moment(lead.createdTime).format("DD-MM-YYYY")}
+                        {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                       </td>
 
                       {/* Actions */}

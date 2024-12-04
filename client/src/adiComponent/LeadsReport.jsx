@@ -55,10 +55,9 @@ const LeadsReport = () => {
               <th className="px-6 py-3 border-b-2 border-gray-300">Lead Number</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Name</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
-              <th className="px-6 py-3 border-b-2 border-gray-300">Assign To</th>
-              <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Assigned To</th>
-              <th className="px-6 py-3 border-b-2 border-gray-300">Subject</th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">Lead Source</th>
+              <th className="px-6 py-3 border-b-2 border-gray-300">Date</th>
               <th className="px-6 py-3 border-b-2 border-gray-300">Lead Status</th>
             </tr>
           </thead>
@@ -73,7 +72,7 @@ const LeadsReport = () => {
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.assignedTo}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.leadSource}</td>
                   <td className="px-6 py-4 bg-primary-100 text-primary-800 text-gray-700">
-                    <span className="bg-blue-200 text-gray-800 font-medium rounded px-2">{lead.assignedTo}</span>
+                    <span className="bg-blue-200 text-gray-800 font-medium rounded px-2">{moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}</span>
                   </td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
                   <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
