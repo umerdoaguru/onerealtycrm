@@ -37,7 +37,7 @@ function Leads() {
   const [endDate, setEndDate] = useState("");
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
-  const [leadsPerPage] = useState(10);
+  const [leadsPerPage, setLeadsPerPage] = useState(10);
   const [leadSourceFilter, setLeadSourceFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [visitFilter, setVisitFilter] = useState("");
@@ -45,7 +45,9 @@ function Leads() {
   const [employeeFilter, setEmployeeFilter] = useState("");
   const [visit, setVisit] = useState([]);
   const [loading , setLoading] = useState(false)
-
+  const [leadStatusFilter, setLeadStatusFilter] = useState("");
+  const [leadnotInterestedStatusFilter, setLeadnotInterestedStatusFilter] = useState("");
+  const [meetingStatusFilter, setMeetingStatusFilter] = useState("");
   // Fetch leads and employees from the API
   useEffect(() => {
     fetchLeads();
@@ -310,7 +312,7 @@ function Leads() {
   useEffect(() => {
     let filtered = leads;
     console.log(filtered);
-   
+    // Filter by search term
     if (searchTerm) {
       const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
       filtered = filtered.filter((lead) =>
@@ -319,7 +321,6 @@ function Leads() {
         )
       );
     }
-    
 
     // Filter by date range
     if (startDate && endDate) {
@@ -342,12 +343,44 @@ function Leads() {
 
     // Filter by visit
     if (visitFilter) {
-      filtered = filtered.filter((visit) => visit.visit === visitFilter);
+      filtered = filtered.filter((lead) => lead.visit === visitFilter);
     }
 
     // Filter by Deak
     if (dealFilter) {
+      console.log(dealFilter);
       filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
+      console.log(filtered);
+    }
+
+    if (leadStatusFilter) {
+      console.log(leadStatusFilter);
+      filtered = filtered.filter((lead) => lead.lead_status === leadStatusFilter);
+      console.log(filtered);
+    }
+    if (leadnotInterestedStatusFilter) {
+      console.log(leadnotInterestedStatusFilter);
+    
+      if (leadnotInterestedStatusFilter === "other") {
+        // Exclude "price", "budget", "distance" and show all other data
+        filtered = filtered.filter(
+          (lead) => !["price", "budget", "distance"].includes(lead.reason)
+        );
+      } else {
+        // Filter by specific reason
+        filtered = filtered.filter(
+          (lead) => lead.reason === leadnotInterestedStatusFilter
+        );
+      }
+    
+      console.log(filtered);
+    }
+    
+
+    if (meetingStatusFilter) {
+      console.log(meetingStatusFilter);
+      filtered = filtered.filter((lead) => lead.meeting_status === meetingStatusFilter);
+      console.log(filtered);
     }
     if (employeeFilter) {
       filtered = filtered.filter(
@@ -355,9 +388,7 @@ function Leads() {
       );
     }
 
-    console.log(filtered);
     setFilteredLeads(filtered);
-    setCurrentPage(0); // Reset to first page on filter change
   }, [
     searchTerm,
     startDate,
@@ -367,7 +398,9 @@ function Leads() {
     statusFilter,
     visitFilter,
     dealFilter,
-    employeeFilter,
+    leadStatusFilter,
+    leadnotInterestedStatusFilter,
+    meetingStatusFilter,employeeFilter
   ]);
 
   const closePopup = () => {
@@ -391,10 +424,16 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 // Pagination logic
 const indexOfLastLead = (currentPage + 1) * leadsPerPage;
 const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+const currentLeads = leadsPerPage === Infinity ? filteredLeads : filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
 
 const handlePageClick = (data) => {
   setCurrentPage(data.selected);
+};
+const handleLeadsPerPageChange = (e) => {
+  const value = e.target.value;
+  setLeadsPerPage(value === "All" ? Infinity : parseInt(value, 10));
+  setCurrentPage(0); // Reset to the first page
 };
 
   
@@ -420,13 +459,12 @@ const handlePageClick = (data) => {
                 Add Lead
               </button>
             </div>
-          
             <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
-                  placeholder=" Name,Lead No,Lead Source,Phone No"
+                   placeholder=" Name,Lead No,Lead Source,Phone No"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
@@ -458,42 +496,34 @@ const handlePageClick = (data) => {
                   onChange={(e) => setLeadSourceFilter(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 >
-                  <option value="">All Lead Sources</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="One Realty Website">One Realty Website</option>
-                  <option value="99 Acres">99 Acres</option>
-                  <option value="Referrals">Referrals</option>
-                  <option value="Trade Shows">Trade Shows</option>
-                  <option value="Cold Calling">Cold Calling</option>
-                  <option value="Email Campaigns">Email Campaigns</option>
-                  <option value="Networking Events">Networking Events</option>
-                  <option value="Paid Advertising">Paid Advertising</option>
-                  <option value="Content Marketing">Content Marketing</option>
-                  <option value="SEO">Search Engine Optimization</option>
-                  <option value="Trade Shows">Trade Shows</option>
-                  <option value="Affiliate Marketing">
-                    Affiliate Marketing
-                  </option>
-                  <option value="Direct Mail">Direct Mail</option>
-                  <option value="Online Directories">Online Directories</option>
+                   <option value="">Select Lead Source</option>
+                     <option value="Facebook">Facebook</option>
+                    <option value="One Realty Website">
+                      One Realty Website
+                    </option>
+                    <option value="99 Acres">
+                    99 Acres
+                    </option>
+                    <option value="Referrals">Referrals</option>
+                    <option value="Cold Calling">Cold Calling</option>
+                    <option value="Email Campaigns">Email Campaigns</option>
+                    <option value="Networking Events">Networking Events</option>
+                    <option value="Paid Advertising">Paid Advertising</option>
+                    <option value="Content Marketing">Content Marketing</option>
+                    <option value="SEO">Search Engine Optimization</option>
+                    <option value="Trade Shows">Trade Shows</option>
+                   
+                    <option value="Affiliate Marketing">
+                      Affiliate Marketing
+                    </option>
+                    <option value="Direct Mail">Direct Mail</option>
+                    <option value="Online Directories">
+                      Online Directories
+                    </option>
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="">Status Filter</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
-                >
-                  <option value="">All Status</option>
-                       <option default value="pending">
-                    Pending
-                  </option>
-                  <option value="interested">Interested</option>
-                  <option value="not-interested">Non-Interested</option>
-                </select>
-              </div>
+           
               <div>
                 <label htmlFor="">Visit Filter</label>
                 <select
@@ -523,6 +553,61 @@ const handlePageClick = (data) => {
                 </select>
               </div>
               <div>
+                <label htmlFor="">Lead Status</label>
+                <select
+                  value={leadStatusFilter}
+                  onChange={(e) => setLeadStatusFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Lead Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="active lead">Active Lead</option>
+                  <option value="calling done">Calling Done</option>
+                  <option value="site visit done">Site Visit Done</option>
+                  <option value="interested">Interested</option>
+                  <option value="not-interested">Not-Interested</option>
+        
+                 
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              {leadStatusFilter === "not-interested" && (
+  <div>
+  <label htmlFor="">Not Interested</label>
+  <select
+    value={leadnotInterestedStatusFilter}
+    onChange={(e) => setLeadnotInterestedStatusFilter(e.target.value)}
+    className="border rounded-2xl p-2 w-full"
+  >
+    <option value="">All Not Interested</option>
+    <option value="price">Price</option>
+    <option value="budget">Budget</option>
+    <option value="distance">Distance</option>
+       <option value="other">Other</option>
+   
+   
+
+  </select>
+</div>
+
+
+              )}
+              
+              <div>
+                <label htmlFor="">Meeting Status</label>
+                <select
+                  value={meetingStatusFilter}
+                  onChange={(e) => setMeetingStatusFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Meeting Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="done by director">Done By Director</option>
+                  <option value="done by manager">Done By Manager</option>
+                 
+                </select>
+              </div>
+              <div>
                 <label htmlFor="">Employee Filter</label>
                 <select
                   name="assignedTo"
@@ -538,6 +623,7 @@ const handlePageClick = (data) => {
                   ))}
                 </select>
               </div>
+            
             </div>
           </div>
           <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
@@ -584,57 +670,76 @@ const handlePageClick = (data) => {
         .filter((lead) => lead.deal_status === "close").length
     }
   </div>
+  <select
+            onChange={handleLeadsPerPageChange}
+            className="border rounded-2xl w-1/4"
+          
+          >
+            <option value={10}>Select Pages</option>
+            <option value={10}>10 Pages</option>
+            <option value={20}>20 Pages</option>
+            <option value={50}>50 Pages</option>
+            <option value="All">All Pages</option>
+          </select>
 </div>
 
           <div className=" overflow-x-auto mt-4 whitespace-nowrap  2xl:w-[89%]">
          
 
             <table className="min-w-full bg-white border">
+             
               <thead>
                 <tr>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     S.no
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Number
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Name
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Phone
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Source
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Assigned To
                   </th>
-                 
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Address
-                  </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+               
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Lead Status
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Deal Status
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Reason
                   </th>
-                  
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Meeting Status
+                  </th>
                  
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Date
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Remark Status
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Answer Remark
+                  </th>
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                  Assigned Date
+                  </th>
+                    <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Action
                   </th>
+                
+               
                 </tr>
               </thead>
               <tbody>
                 {currentLeads.length === 0 ? (
                   <tr>
                     <td
-                      colSpan="11"
+                      colSpan="15"
                       className="px-6 py-4 border-b border-gray-200 text-center text-gray-500"
                     >
                       No data found
@@ -645,19 +750,19 @@ const handlePageClick = (data) => {
                       console.log(lead, "fdfsdfsdfsdfds");
                       
                     return (
-                    <tr
+                      <tr
                       key={index}
                       className={index % 2 === 0 ? "bg-gray-100" : ""}
                     >
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {index + 1}
+                      {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
                         <Link to={`/lead-single-data/${lead.lead_id}`}>
-                          {lead.lead_no}
+                {lead.lead_no}
                         </Link>
-                      </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+              </td>
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 text-wrap">
                         {lead.name}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
@@ -669,48 +774,30 @@ const handlePageClick = (data) => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.assignedTo}
                       </td>
+                    
+                    
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+                          {lead.lead_status}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+                          {lead.reason}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+                          {lead.meeting_status}
+                        </td>
+                    
                      
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.address}
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 text-wrap">
+                        {lead.remark_status}
                       </td>
-
-                      {/* Lead Status */}
-                      <td
-                        className={`px-6 py-4 border-b border-gray-200 font-semibold ${
-                          lead.lead_status === "pending"
-                            ? "text-[red]"
-                            : lead.lead_status === "in progress"
-                            ? "text-[orange]"
-                            : "text-[green]"
-                        }`}
-                      >
-                        {lead.lead_status}
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800  text-wrap" >
+                        {lead.answer_remark}
+                        
+                                       
                       </td>
-
-                      {/* Status */}
-                      <td
-                        className={`px-6 py-4 border-b border-gray-200 font-semibold ${
-                          lead.status === "pending"
-                            ? "text-[red]"
-                            : lead.status === "in progress"
-                            ? "text-[orange]"
-                            : "text-[black]"
-                        }`}
-                      >
-                        {lead.status}
-                      </td>
-
-                      {/* Visit Status */}
-                      
-
-                  
-
-                      {/* Created Time */}
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                       </td>
-
-                      {/* Actions */}
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         <button
                           className="text-blue-500 hover:text-blue-700"
@@ -725,6 +812,8 @@ const handlePageClick = (data) => {
                           <BsTrash size={20} />
                         </button>
                       </td>
+                    
+                     
                     </tr>
                   )})
                 )}

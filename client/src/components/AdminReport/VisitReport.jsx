@@ -145,8 +145,8 @@ const VisitReport = () => {
     // Generate Excel file
     const worksheet = XLSX.utils.json_to_sheet(completedLeads);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Visit Report");
-    XLSX.writeFile(workbook, "VisitReport.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, `Visit of ${duration} Report`);
+    XLSX.writeFile(workbook, `Visit of ${duration} Report.xlsx`);
   };
 
   // Pagination logic

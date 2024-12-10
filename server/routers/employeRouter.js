@@ -21,7 +21,10 @@ const {
   deleteFollow_Up,
   createFollow_Up,
   getEmployeeFollow_Up,
-  updateOnlyFollowUpStatus,
+  updateOnlyFollowUpStatus,createRemark,updateRemark,deleteRemark,getEmployeeRemark,
+  updateOnlyRemarkStatus,
+  updateOnlyRemarkAnswer,
+  updateOnlyRemarkAnswerStatus
 } = require("../controllers/employeController");
 const router = express.Router();
 
@@ -51,5 +54,25 @@ router.put("/updateOnlyQuotationStatus/:id", updateOnlyQuotationStatus);
 router.get("/get-quotation-byEmploye/:id", getEmployeeQuotation);
 router.get("/get-quotation-byLead/:id", getLeadQuotation);
 router.get("/getAllEmployee-Toal-lead", getAllEmployeeTotalLeads);
+
+
+
+
+
+router.post("/remarks", createRemark);
+
+
+router.put("/remarks", updateRemark);
+
+
+router.delete("/remarks/:id", deleteRemark);
+
+
+router.get("/remarks/:id", getEmployeeRemark);
+
+router.put("/updateOnlyRemarkStatus/:id", updateOnlyRemarkStatus);
+router.put("/updateOnlyRemarkAnswerStatus/:id", updateOnlyRemarkAnswerStatus);
+router.put("/updateOnlyAnswerRemark", updateOnlyRemarkAnswer);
+
 
 module.exports = router;
