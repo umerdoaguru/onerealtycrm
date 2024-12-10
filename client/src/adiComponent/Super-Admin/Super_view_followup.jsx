@@ -41,50 +41,14 @@ const Super_view_followup = ({id,closeModalFollowUp}) => {
   };
 
 
-  const handleDelete = async (followup) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this follow up?"
-    );
-    if (isConfirmed) {
-      try {
-        const response = await axios.delete(
-          `https://crmdemo.vimubds5.a2hosted.com/api/employe-follow-up/${followup.id}`
-        );
-        if (response.status === 200) {
-          console.log("follow up deleted successfully");
 
  
 
  
 
-  // Handle updating field values in modalData
-  const handleInputChange = (e) => {
-    setModalData({
-      ...modalData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  
 
-  // Function to send the PUT request to update the visit data
-  const updateVisit = async () => {
-    try {
-      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/employe-follow-up`, modalData);
-      if (response.status === 200) {
-        cogoToast.success("Follow Up updated successfully!");
-        setRender(!render); // Refresh the list after updating
-        closeModal(); // Close the modal
-      }
-    } catch (error) {
-      console.error("Error updating visit:", error);
-    }
-  };
-
-
-  const handlePageClick = ({ selected }) => {
-    setCurrentPage(selected);
-  };
-
-
+  
 
   const filteredfollowup = follow_up.filter((follow) =>
     follow.name.toLowerCase().includes(filterText.toLowerCase())
