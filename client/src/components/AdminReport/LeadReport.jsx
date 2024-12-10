@@ -34,7 +34,7 @@ function LeadReport() {
         "quotation_status",
         "reason",
         "registry",
-        "status",
+      
         "subject",
         "visit",
         "d_closeDate",
@@ -134,7 +134,7 @@ function LeadReport() {
             quotation_status: "Quotation Status",
             reason: "Reason",
             registry: "Registry",
-            status: "Status",
+           
             subject: "Subject",
             visit: "Visit",
             d_closeDate: "Close Date",
