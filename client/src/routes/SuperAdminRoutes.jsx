@@ -39,6 +39,7 @@ import Super_view_quotations from "../adiComponent/Super-Admin/Super_view_quotat
 import SuperDataExport from "../adiComponent/Super-Admin/SuperDataExport";
 import Super_view_followup from "../adiComponent/Super-Admin/Super_view_followup";
 import SuperMainSocialLeads from "../adiComponent/Super-Admin/SocialMediaSectionSuperAdmin/SuperMainSocialLeads";
+import Super_view_remarks from "../adiComponent/Super-Admin/Super_view_remaks";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
@@ -69,7 +70,7 @@ function SuperAdminRoutes() {
         />
         <Route path="/super-admin-reporting" element={<SuperReports />} />
         <Route
-          path="/super-admin-lead-single-data/:id"
+          path="/super-admin-lead-single-data"
           element={<Super_Single_Lead_Profile />}
         />
         <Route
@@ -77,12 +78,16 @@ function SuperAdminRoutes() {
           element={<Super_view_visit />}
         />
         <Route
-          path="/super_view_visit/:id"
+          path="/super_view_visit"
           element={<Super_view_visit />}
         />
         <Route
-          path="/super_view_follow_up/:id"
+          path="/super_view_follow_up"
           element={<Super_view_followup/>}
+        />
+        <Route
+          path="/super_view_remarks"
+          element={<Super_view_remarks/>}
         />
         <Route
           path="/super-admin-employee-single/:employeeId"

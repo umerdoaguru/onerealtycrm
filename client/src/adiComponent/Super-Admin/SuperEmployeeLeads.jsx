@@ -8,6 +8,8 @@ import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import MainHeader from "./../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
+import cogoToast from "cogo-toast";
+import Super_Single_Lead_Profile from "./Super_Single_Lead_Profile";
 
 function SuperEmployeeLeads() {  
   const [leads, setLeads] = useState([]);
@@ -17,11 +19,24 @@ function SuperEmployeeLeads() {
   const [endDate, setEndDate] = useState("");
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
-  const [leadsPerPage] = useState(10);
+  const [leadsPerPage, setLeadsPerPage] = useState(10);
   const [leadSourceFilter, setLeadSourceFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [visitFilter, setVisitFilter] = useState("");
   const [dealFilter, setDealFilter] = useState("");
+  const [leadStatusFilter, setLeadStatusFilter] = useState("");
+  const [leadnotInterestedStatusFilter, setLeadnotInterestedStatusFilter] = useState("");
+  const [meetingStatusFilter, setMeetingStatusFilter] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+
+  const [isModalOpenLeadProfile, setIsModalOpenLeadProfile] = useState(false);
+  const [selectedLeadId, setSelectedLeadId] = useState(null);
+
+
+  
+
 
   const navigate = useNavigate();
 
@@ -60,6 +75,28 @@ function SuperEmployeeLeads() {
   //     console.error("Error fetching quotations:", error);
   //   }
   // };
+
+  const handleInputChange = (e) => {
+    setModalData({
+      ...modalData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const updateAnswerRemark = async () => {
+    try {
+      const response = await axios.put(`https://crmdemo.vimubds5.a2hosted.com/api/updateOnlyAnswerRemark`, modalData);
+      if (response.status === 200) {
+        cogoToast.success("AnswerRemark updated successfully!");
+       fetchLeads();
+        closeModal(); // Close the modal
+      }
+    } catch (error) {
+      console.error("Error updating AnswerRemark:", error);
+    }
+  };
+
+  
 
   const handleSearch = (value) =>{
     if(value === ' '){
@@ -110,6 +147,36 @@ function SuperEmployeeLeads() {
       filtered = filtered.filter((lead) => lead.dealStatus === dealFilter);
     }
 
+    if (leadStatusFilter) {
+      console.log(leadStatusFilter);
+      filtered = filtered.filter((lead) => lead.lead_status === leadStatusFilter);
+      console.log(filtered);
+    }
+    if (leadnotInterestedStatusFilter) {
+      console.log(leadnotInterestedStatusFilter);
+    
+      if (leadnotInterestedStatusFilter === "other") {
+        // Exclude "price", "budget", "distance" and show all other data
+        filtered = filtered.filter(
+          (lead) => !["price", "budget", "distance"].includes(lead.reason)
+        );
+      } else {
+        // Filter by specific reason
+        filtered = filtered.filter(
+          (lead) => lead.reason === leadnotInterestedStatusFilter
+        );
+      }
+    
+      console.log(filtered);
+    }
+    
+
+    if (meetingStatusFilter) {
+      console.log(meetingStatusFilter);
+      filtered = filtered.filter((lead) => lead.meeting_status === meetingStatusFilter);
+      console.log(filtered);
+    }
+
     setFilteredLeads(filtered);
   }, [
     searchTerm,
@@ -120,12 +187,18 @@ function SuperEmployeeLeads() {
     statusFilter,
     visitFilter,
     dealFilter,
+    leadStatusFilter,
+    leadnotInterestedStatusFilter,
+    meetingStatusFilter
   ]);
 
   // Use filteredLeads for pagination
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
-  const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+
+
+  // const currentLeads = filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
+  const currentLeads = leadsPerPage === Infinity ? filteredLeads : filteredLeads.slice(indexOfFirstLead, indexOfLastLead);
 
 const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
@@ -133,12 +206,42 @@ const handlePageClick = (data) => {
     setCurrentPage(data.selected);
   };
 
+  const handleLeadsPerPageChange = (e) => {
+    const value = e.target.value;
+    setLeadsPerPage(value === "All" ? Infinity : parseInt(value, 10));
+    setCurrentPage(0); // Reset to the first page
+  };
+  
+
+  const openModal = (data) => {
+    setModalData(data);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalData(null);
+  };
+
+  // Function to open modal and set lead_id
+const handleRowClick = (leadId) => {
+  setSelectedLeadId(leadId);
+  setIsModalOpenLeadProfile(true);
+};
+
+// Function to close the modal
+const closeModalLead = () => {
+  setIsModalOpenLeadProfile(false);
+  setSelectedLeadId(null);
+};
+
+
   return (
     <>
       <MainHeader />
       <SuperAdminSider />
       <Wrapper>
-        <div className="container mt-16 2xl:ml-40">
+        <div className="container mt-28 2xl:ml-40">
           <div className="main 2xl:w-[89%] ">
             <div>
               <button
@@ -218,25 +321,7 @@ const handlePageClick = (data) => {
                 </select>
               </div>
 
-              <div>
-                <label htmlFor="">Status Filter</label>
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
-                >
-                  <option value="">All Status</option>
-                  {/* <option value="Facebook Campaign">visited</option>
-                  <option value=" Website">pending</option>
-                  <option value="Trade Shows">confirm</option>
-                  <option value="Cold Calling">Cold Calling</option> */}
-                  <option default value="pending">
-                    Pending
-                  </option>
-                  <option value="interested">Interested</option>
-                  <option value="non interested">Non-Interested</option>
-                </select>
-              </div>
+           
               <div>
                 <label htmlFor="">Visit Filter</label>
                 <select
@@ -262,9 +347,65 @@ const handlePageClick = (data) => {
                   <option value="pending">Pending</option>
                   <option value="in progress">In Progress</option>
                   <option value="close">Closed</option>
-                  <option value="not closed">Not Closed</option>
+                  <option value="cancelled">Cancelled</option>
                 </select>
               </div>
+              <div>
+                <label htmlFor="">Lead Status</label>
+                <select
+                  value={leadStatusFilter}
+                  onChange={(e) => setLeadStatusFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Lead Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="active lead">Active Lead</option>
+                  <option value="calling done">Calling Done</option>
+                  <option value="site visit done">Site Visit Done</option>
+                  <option value="interested">Interested</option>
+                  <option value="not-interested">Not-Interested</option>
+        
+                 
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              {leadStatusFilter === "not-interested" && (
+  <div>
+  <label htmlFor="">Not Interested</label>
+  <select
+    value={leadnotInterestedStatusFilter}
+    onChange={(e) => setLeadnotInterestedStatusFilter(e.target.value)}
+    className="border rounded-2xl p-2 w-full"
+  >
+    <option value="">All Not Interested</option>
+    <option value="price">Price</option>
+    <option value="budget">Budget</option>
+    <option value="distance">Distance</option>
+       <option value="other">Other</option>
+   
+   
+
+  </select>
+</div>
+
+
+              )}
+              
+              <div>
+                <label htmlFor="">Meeting Status</label>
+                <select
+                  value={meetingStatusFilter}
+                  onChange={(e) => setMeetingStatusFilter(e.target.value)}
+                  className="border rounded-2xl p-2 w-full"
+                >
+                  <option value="">All Meeting Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="done by director">Done By Director</option>
+                  <option value="done by manager">Done By Manager</option>
+                 
+                </select>
+              </div>
+            
             </div>
           </div>
          
@@ -313,9 +454,21 @@ const handlePageClick = (data) => {
         .filter((lead) => lead.deal_status === "close").length
     }
   </div>
+
+  <select
+            onChange={handleLeadsPerPageChange}
+            className="border rounded-2xl w-1/4"
+          
+          >
+            <option value={10}>Select Pages</option>
+            <option value={10}>10 Pages</option>
+            <option value={20}>20 Pages</option>
+            <option value={50}>50 Pages</option>
+            <option value="All">All Pages</option>
+          </select>
 </div>
 
-          <div className="overflow-x-auto mt-4 2xl:w-[89%]">
+          <div className="overflow-x-auto mt-2 2xl:w-[89%]">
         
 
             <table className="tt min-w-full bg-white border whitespace-nowrap">
@@ -344,12 +497,22 @@ const handlePageClick = (data) => {
                     Lead Status
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                   Date
+                    Reason
+                  </th>
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Meeting Status
+                  </th>
+                 
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Remark Status
+                  </th>
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Answer Remark
+                  </th>
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                  Assigned Date
                   </th>
                 
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Deal Status
-                  </th>
                 
                
                 </tr>
@@ -362,15 +525,16 @@ const handlePageClick = (data) => {
         className={index % 2 === 0 ? "bg-gray-100" : ""}
       >
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {index + 1}
+        {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
         </td>
-        <Link to={`/super-admin-lead-single-data/${lead.lead_id}`}>
-          <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-            {lead.lead_no || "L001"}
-          </td>
-        </Link>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.name || "Name"}
+        <td
+  className="px-6 py-4 border-b border-gray-200 underline text-[blue] cursor-pointer"
+  onClick={() => handleRowClick(lead.lead_id)}
+>
+  {lead.lead_no}
+</td>
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800 text-wrap">
+          {lead.name}
         </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.phone || "9630412500"}
@@ -382,35 +546,37 @@ const handlePageClick = (data) => {
           {lead.assignedTo || "NA"}
         </td>
       
-        {lead.lead_status === "pending" && (
-          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[red]">
-            {lead.lead_status || "Pending"}
-          </td>
-        )}
-        {lead.lead_status === "in progress" && (
-          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[orange]">
+      
+          <td className="px-6 py-4 border-b border-gray-200 font-semibold">
             {lead.lead_status}
           </td>
-        )}
-        {lead.lead_status === "completed" && (
-          <td className="px-6 py-4 border-b border-gray-200 font-semibold text-[green]">
-            {lead.lead_status}
+          <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+            {lead.reason}
           </td>
-        )}
+          <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+            {lead.meeting_status}
+          </td>
+      
+       
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800 text-wrap">
+          {lead.remark_status}
+        </td>
+        <td className="px-6 text-[blue] underline cursor-pointer text-wrap"  onClick={() => openModal(lead)}>
+          {lead.answer_remark}
+          
+                         
+        </td>
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
         </td>
       
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.deal_status || "NA"}
-        </td>
       
        
       </tr>
     ))
   ) : (
     <tr>
-      <td colSpan={13} className="py-4 text-center">
+      <td colSpan={15} className="py-4 text-center">
         No data found
       </td>
     </tr>
@@ -419,7 +585,59 @@ const handlePageClick = (data) => {
 
             </table>
           </div>
-          <div className="mt-4 flex mb-4 justify-center 2xl:w-[89%]">
+
+          {isModalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-[500px]">
+      <h2 className="text-xl mb-4 font-bold">Edit Visit</h2>
+      <form>
+    
+        
+        <div className="mb-4">
+          <label className="block text-gray-700">Remark Status:</label>
+          <input
+            type="text"
+            name="remark_status"
+            value={modalData.remark_status || ""}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+            disabled
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Answer Remarks</label>
+          <input
+            type="text"
+            name="answer_remark"
+            value={modalData.answer_remark || ""}
+            onChange={handleInputChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+          />
+        </div>
+
+
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={updateAnswerRemark}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
+          >
+            Update
+          </button>
+          <button
+            type="button"
+            onClick={closeModal}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
+<div className="mt-4 flex mb-4 justify-center 2xl:w-[89%]">
             <ReactPaginate
               previousLabel={"Previous"}
               nextLabel={"Next"}
@@ -440,7 +658,20 @@ const handlePageClick = (data) => {
               breakLinkClassName={"page-link"}
             />
           </div>
+
+
+
+
         </div>
+{isModalOpenLeadProfile && selectedLeadId && (
+       <div className=" fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[1055]">
+              <div className="w-75 bg-white p-6 rounded-lg shadow-lg max-h-[80vh] overflow-auto mx-4 my-5">
+     
+              <Super_Single_Lead_Profile id={selectedLeadId} closeModalLead={closeModalLead} />
+            
+    </div>
+  </div>
+)}
       </Wrapper>
     </>
   );

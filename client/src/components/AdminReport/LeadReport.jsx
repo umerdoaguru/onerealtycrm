@@ -19,6 +19,10 @@ function LeadReport() {
         "name",
         "phone",
         "leadSource",
+        "remark_status",
+        "answer_remark",
+        "meeting_status",
+        "assignedBy",
         "lead_status",
         "address",
         "booking_amount",
@@ -30,7 +34,7 @@ function LeadReport() {
         "quotation_status",
         "reason",
         "registry",
-        "status",
+      
         "subject",
         "visit",
         "d_closeDate",
@@ -115,6 +119,10 @@ function LeadReport() {
             name: "Name",
             phone: "Phone",
             leadSource: "Lead Source",
+            remark_status: "Remark Status",
+            answer_remark: "Answer Remark",
+            meeting_status: "Meeting Status",
+            assignedBy: "Assigned By",
             lead_status: "Lead Status",
             address: "Address",
             booking_amount: "Booking Amount",
@@ -126,7 +134,7 @@ function LeadReport() {
             quotation_status: "Quotation Status",
             reason: "Reason",
             registry: "Registry",
-            status: "Status",
+           
             subject: "Subject",
             visit: "Visit",
             d_closeDate: "Close Date",
@@ -160,8 +168,8 @@ function LeadReport() {
   
       const worksheet = XLSX.utils.json_to_sheet(completedLeads);
       const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Leads Report");
-      XLSX.writeFile(workbook, "FilteredLeadsReport.xlsx");
+      XLSX.utils.book_append_sheet(workbook, worksheet, `Lead of ${duration} Report`);
+      XLSX.writeFile(workbook,`Lead of ${duration} Report.xlsx`);
     };
   
     // Pagination logic

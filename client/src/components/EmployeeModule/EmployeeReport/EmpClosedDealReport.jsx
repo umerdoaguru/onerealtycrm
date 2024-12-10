@@ -23,6 +23,10 @@ const EmpClosedDealReport = () => {
     "name",
     "phone",
     "leadSource",
+    "remark_status",
+    "answer_remark",
+    "meeting_status",
+    "assignedBy",
     "lead_status",
     "address",
     "booking_amount",
@@ -34,7 +38,7 @@ const EmpClosedDealReport = () => {
     "quotation_status",
     "reason",
     "registry",
-    "status",
+   
     "subject",
     "visit",
     "d_closeDate",
@@ -111,6 +115,10 @@ const EmpClosedDealReport = () => {
         name: "Name",
         phone: "Phone",
         leadSource: "Lead Source",
+        remark_status: "Remark Status",
+        answer_remark: "Answer Remark",
+        meeting_status: "Meeting Status",
+        assignedBy: "Assigned By",
         lead_status: "Lead Status",
         address: "Address",
         booking_amount: "Booking Amount",
@@ -122,7 +130,7 @@ const EmpClosedDealReport = () => {
         quotation_status: "Quotation Status",
         reason: "Reason",
         registry: "Registry",
-        status: "Status",
+      
         subject: "Subject",
         visit: "Visit",
         d_closeDate: "Close Date",
@@ -163,7 +171,7 @@ const EmpClosedDealReport = () => {
     const worksheet = XLSX.utils.json_to_sheet(completedLeads);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Close Deal Report");
-    XLSX.writeFile(workbook, "Cloase Deal Report.xlsx");
+    XLSX.writeFile(workbook, `Closed Lead of ${duration} Report.xlsx`);
   };
 
   const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);

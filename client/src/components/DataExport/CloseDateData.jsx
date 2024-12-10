@@ -16,7 +16,34 @@ const CloseData = () => {
   const EmpId = useSelector((state) => state.auth.user.id);
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState("");
-
+  const [selectedColumns, setSelectedColumns] = useState([
+    "lead_no",
+        "assignedTo",
+        "name",
+        "phone",
+        "leadSource",
+        "remark_status",
+        "answer_remark",
+        "meeting_status",
+        "assignedBy",
+        "lead_status",
+        "address",
+        "booking_amount",
+        "deal_status",
+        "employeeId",
+        "follow_up_status",
+        "payment_mode",
+        "quotation",
+        "quotation_status",
+        "reason",
+        "registry",
+       
+        "subject",
+        "visit",
+        "d_closeDate",
+        "createdTime",
+        "actual_date",
+  ]);
 
   // Fetch leads from the API
   useEffect(() => {
@@ -51,32 +78,108 @@ const CloseData = () => {
   };
 
 
-  // Automatically apply date filter when start or end date changes
   useEffect(() => {
     let filtered = leads;
-
+  
+    // Filter by date range
     if (startDate && endDate) {
       filtered = filtered.filter((lead) => {
-        const closeDate = moment(lead.d_closeDate, "YYYY-MM-DD");
-        return closeDate.isBetween(startDate, endDate, undefined, "[]");
+        const closeDate = moment(lead.d_closeDate, "YYYY-MM-DD", true); // Strict date parsing
+        return closeDate.isValid() && closeDate.isBetween(startDate, endDate, undefined, "[]");
       });
     }
-
-    
-      // Filter by selected employee
+  
+    // Filter by selected employee
     if (selectedEmployee) {
       filtered = filtered.filter((lead) => lead.assignedTo === selectedEmployee);
     }
-
+  
     setFilteredLeads(filtered);
-  }, [startDate, endDate,selectedEmployee, leads]);
-
+  }, [startDate, endDate, selectedEmployee, leads]);
+  
   const downloadExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(filteredLeads);
+    const columnMapping = {
+      lead_no: "Lead Number",
+      assignedTo: "Assigned To",
+      name: "Name",
+      phone: "Phone",
+      leadSource: "Lead Source",
+      remark_status: "Remark Status",
+      answer_remark: "Answer Remark",
+      meeting_status: "Meeting Status",
+      assignedBy: "Assigned By",
+      lead_status: "Lead Status",
+      address: "Address",
+      booking_amount: "Booking Amount",
+      deal_status: "Deal Status",
+      employeeId: "Employee ID",
+      follow_up_status: "Follow-up Status",
+      payment_mode: "Payment Mode",
+      quotation: "Quotation",
+      quotation_status: "Quotation Status",
+      reason: "Reason",
+      registry: "Registry",
+    
+      subject: "Subject",
+      visit: "Visit",
+      d_closeDate: "Close Date",
+      createdTime: "Assigned Date",
+      actual_date: "Actual Date",
+    };
+  
+    // Filter and format data for the Excel report
+    const completedLeads = filteredLeads
+      .filter((lead) => lead.deal_status !== "pending")
+      .map((lead) => {
+        const formattedLead = {};
+  
+        // Dynamically include selected columns
+        if (Array.isArray(selectedColumns)) {
+          selectedColumns.forEach((col) => {
+            const newKey = columnMapping[col] || col; // Use mapped name if available
+            formattedLead[newKey] =
+              (col === "actual_date" || col === "createdTime") && lead[col]
+                ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
+                : lead[col]; // Format dates or copy value
+          });
+        }
+  
+        // Ensure renamed dates are included, even if not in selectedColumns
+        formattedLead["Actual Date"] = lead["actual_date"]
+          ? moment(lead["actual_date"]).format("DD MMM YYYY").toUpperCase()
+          : "";
+        formattedLead["Assigned Date"] = lead["createdTime"]
+          ? moment(lead["createdTime"]).format("DD MMM YYYY").toUpperCase()
+          : "";
+        formattedLead["Close Date"] = lead["d_closeDate"]
+          ? moment(lead["d_closeDate"]).format("DD MMM YYYY").toUpperCase()
+          : "pending";
+  
+        return formattedLead;
+      });
+  
+    // Ensure we handle empty reports gracefully
+    if (completedLeads.length === 0) {
+      alert("No data available for the selected date range.");
+      return;
+    }
+  
+    // Generate the Excel workbook
+    const worksheet = XLSX.utils.json_to_sheet(completedLeads);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Closed");
-    XLSX.writeFile(workbook, "ClosedData.xlsx");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+  
+    // Generate a valid filename
+    const filename = `Closed Lead Report ${
+      startDate ? moment(startDate).format("DD-MM-YYYY") : "Start"
+    } to ${
+      endDate ? moment(endDate).format("DD-MM-YYYY") : "End"
+    }.xlsx`;
+  
+    // Download the Excel file
+    XLSX.writeFile(workbook, filename);
   };
+  
 
   const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
@@ -160,15 +263,14 @@ const CloseData = () => {
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Lead Source
                 </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Visit Date
-                </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  FollowUp Status
-                </th>
+             
+             
+              
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Deal Status
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  Closed Deal Date
                 </th>
               </tr>
             </thead>
@@ -209,18 +311,15 @@ const CloseData = () => {
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.leadSource}
                     </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.visit}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                     
-                      {moment(lead.visit_date).format("DD MMM YYYY").toUpperCase()}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.follow_up_status}
-                    </td>
+                 
+                    
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.deal_status}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+               
+                      {moment(lead.d_closeDate).format("DD MMM YYYY").toUpperCase()}
                     </td>
                   </tr>
                 ))
