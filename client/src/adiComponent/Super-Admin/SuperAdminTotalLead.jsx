@@ -109,11 +109,11 @@ const SuperAdminTotalLead = () => {
             className="border rounded-2xl p-2 w-1/4"
           
           >
-            <option value={7}>7 Pages</option>
-            <option value={10}>10 Pages</option>
-            <option value={20}>20 Pages</option>
-            <option value={50}>50 Pages</option>
-            <option value="All">All Pages</option>
+                   <option value={7}>Number of rows: 7</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value="All">All</option>
           </select>
              </div>
         <table className="bg-white border w-100">

@@ -413,11 +413,11 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
             className="border rounded-2xl w-1/4"
           
           >
-            <option value={10}>Select Pages</option>
-            <option value={10}>10 Pages</option>
-            <option value={20}>20 Pages</option>
-            <option value={50}>50 Pages</option>
-            <option value="All">All Pages</option>
+                   <option value={10}>Number of rows: 10</option>
+           
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+            <option value="All">All</option>
           </select>
 </div>
 
