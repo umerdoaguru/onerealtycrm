@@ -181,7 +181,7 @@ function Single_Lead_Profile() {
                   </div>
                 </div>
                 <div>
-                  <label className="text-info">Subject</label>
+                  <label className="text-info">Project</label>
                   <div className="p-2 bg-gray-100 rounded">
                     <p className="m-0">{lead.subject}</p>
                   </div>
@@ -194,7 +194,7 @@ function Single_Lead_Profile() {
                 </div>
 
                 <div>
-                  <label className="text-info">Created Date</label>
+                  <label className="text-info">Assigned Date</label>
                   <div className="p-2 bg-gray-100 rounded">
                     <p className="m-0">
                     {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
@@ -292,7 +292,7 @@ function Single_Lead_Profile() {
       <th className="px-6 py-3 border-b-2 border-gray-300">Reason</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Registry</th>
     
-      <th className="px-6 py-3 border-b-2 border-gray-300">Subject</th>
+      <th className="px-6 py-3 border-b-2 border-gray-300">Project</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Close Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Assigned Date</th>

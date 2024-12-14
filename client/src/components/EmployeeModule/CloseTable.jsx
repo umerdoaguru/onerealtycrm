@@ -46,14 +46,16 @@ const CloseTable = () => {
     let filtered = leads;
 
     // Filter by search term
-    if (searchTerm) {
-      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter((lead) =>
-        ["name", "lead_no", "leadSource", "phone"].some((key) =>
-          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
-        )
-      );
-    }
+ // Filter by search term
+ if (searchTerm) {
+  const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+  filtered = filtered.filter((lead) =>
+    ["name", "leadSource", "phone","assignedTo"].some((key) =>
+      lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+    )
+  );
+}
+
 
     // Update the filtered leads and reset to the first page
     setFilteredLeads(filtered);
@@ -104,7 +106,7 @@ const CloseTable = () => {
                
                <input
                  type="text"
-                 placeholder=" Name,Lead No,Lead Source,Phone No"
+                  placeholder=" Name,Lead Source,Assigned To,Phone No"
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
                  className="border rounded-2xl p-2 w-25"
@@ -127,7 +129,7 @@ const CloseTable = () => {
                 <tr>
                   <th className="px-6 py-3 border-b-2 border-gray-300">S.no</th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Lead Number
+                    Lead Id
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Assigned To
@@ -135,9 +137,7 @@ const CloseTable = () => {
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Lead Name
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300">
-                    Subject
-                  </th>
+              
                   <th className="px-6 py-3 border-b-2 border-gray-300">
                     Phone
                   </th>
@@ -174,7 +174,7 @@ const CloseTable = () => {
                         {/* Adjusted for pagination */}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.lead_no}
+                        {lead.lead_id}
                       </td>
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.assignedTo}
@@ -182,9 +182,7 @@ const CloseTable = () => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.name}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.subject}
-                      </td>
+                  
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.phone}
                       </td>
@@ -194,9 +192,7 @@ const CloseTable = () => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.visit}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                        {lead.visit_date}
-                      </td>
+                      
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                         {lead.follow_up_status}
                       </td>

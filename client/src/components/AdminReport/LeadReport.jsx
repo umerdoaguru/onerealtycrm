@@ -135,7 +135,7 @@ function LeadReport() {
             reason: "Reason",
             registry: "Registry",
            
-            subject: "Subject",
+            subject: "Project",
             visit: "Visit",
             d_closeDate: "Close Date",
             createdTime: "Assigned Date",

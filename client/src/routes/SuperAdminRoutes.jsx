@@ -15,7 +15,7 @@ import QuotationList from "../pages/Quotation/QuotationList";
 import AdminQuotationVIew from "../pages/Quotation/AdminQuotationVIew";
 
 import SuperDash from "../adiComponent/SuperDash";
-import AdminManagement from "../adiComponent/AdminManagement";
+// import AdminManagement from "../adiComponent/AdminManagement";
 import SuperAdminLead from "../adiComponent/Super-Admin/SuperAdminLead";
 import SuperAdEmployeemanagement from "../adiComponent/Super-Admin/SuperAdEmployeemanagement";
 import SuperQuotationList from "../adiComponent/Super-Admin/SuperQuotationList";
@@ -57,10 +57,10 @@ function SuperAdminRoutes() {
         <Route path="/super-admin-employee-management" element={<SuperAdEmployeemanagement />} />
         <Route path="/super-admin-AdminManagement" element={<Super_Admin_Adminmanagement />} />
         <Route path="/super-admin-employee-list" element={<SuperEmployeeList />} />
-        <Route path="/super-admin-employee-leads/:id" element={<SuperEmployeeLeads />} />
+        <Route path="/super-admin-employee-leads" element={<SuperEmployeeLeads />} />
 {/*         
         <Route path="/super-admin-quotation-section" element={<CreateCompanyProfile />} /> */}
-        <Route
+        <Route 
           path="/super-admin-quotationlist"
           element={<SuperQuotationList />}
         />
