@@ -142,7 +142,7 @@ const ClosedDealReport = () => {
       reason: "Reason",
       registry: "Registry",
       
-      subject: "Subject",
+      subject: "Project",
       visit: "Visit",
       d_closeDate: "Close Date",
       createdTime: "Assigned Date",
@@ -252,9 +252,6 @@ const ClosedDealReport = () => {
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Lead Name
                 </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Subject
-                </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">Phone</th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Lead Source
@@ -263,6 +260,9 @@ const ClosedDealReport = () => {
                
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   FollowUp Status
+                </th>
+                <th className="px-6 py-3 border-b-2 border-gray-300">
+                  Project
                 </th>
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Deal Status
@@ -301,9 +301,6 @@ const ClosedDealReport = () => {
                       {lead.name}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.subject}
-                    </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.phone}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
@@ -315,6 +312,9 @@ const ClosedDealReport = () => {
             
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.follow_up_status}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      {lead.subject}
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.deal_status}

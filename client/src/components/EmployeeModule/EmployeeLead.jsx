@@ -26,6 +26,10 @@ function EmployeeLead() {
   const [leadStatusFilter, setLeadStatusFilter] = useState("");
   const [leadnotInterestedStatusFilter, setLeadnotInterestedStatusFilter] = useState("");
   const [meetingStatusFilter, setMeetingStatusFilter] = useState("");
+  const [monthFilter, setMonthFilter] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc"); 
+
+
 
   const [endDate, setEndDate] = useState("");
   // Pagination state
@@ -78,26 +82,28 @@ function EmployeeLead() {
   };
 
 
-  useEffect(() => {
-    let filtered = leads;
-    console.log(filtered);
-    // Filter by search term
-    if (searchTerm) {
-      const trimmedSearchTerm = searchTerm.toLowerCase().trim(); // Normalize the search term
-      filtered = filtered.filter((lead) =>
-        ["name", "lead_no", "leadSource","phone"].some((key) =>
-          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
-        )
-      );
-    }
-
-    if (filterDate) {
-      filtered = filtered.filter((lead) => {
-        const leadDate = moment(lead.createdTime).format("YYYY-MM-DD");
-        return leadDate === filterDate;
-      });
-    }
-
+  const applyFilters = () => {
+    let filtered = [...leads];
+  
+    // Sort by date
+    filtered = filtered.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return new Date(a.createdTime) - new Date(b.createdTime);
+      } else {
+        return new Date(b.createdTime) - new Date(a.createdTime);
+      }
+    });
+  
+ // Filter by search term
+ if (searchTerm) {
+  const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+  filtered = filtered.filter((lead) =>
+    ["name", "leadSource", "phone","assignedTo"].some((key) =>
+      lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+    )
+  );
+}
+  
     // Filter by date range
     if (startDate && endDate) {
       filtered = filtered.filter((lead) => {
@@ -105,64 +111,69 @@ function EmployeeLead() {
         return leadDate >= startDate && leadDate <= endDate;
       });
     }
-
+  
     // Filter by lead source
     if (leadSourceFilter) {
-      filtered = filtered.filter(
-        (lead) => lead.leadSource === leadSourceFilter
-      );
+      filtered = filtered.filter((lead) => lead.leadSource === leadSourceFilter);
     }
+  
     // Filter by status
     if (statusFilter) {
       filtered = filtered.filter((lead) => lead.status === statusFilter);
     }
-
-    // Filter by visit
-    if (visitFilter) {
-      filtered = filtered.filter((lead) => lead.visit === visitFilter);
-    }
-
-    // Filter by Deak
+  
+    // Filter by deal
     if (dealFilter) {
-      console.log(dealFilter);
-      filtered = filtered.filter((deal) => deal.deal_status === dealFilter);
-      console.log(filtered);
+      filtered = filtered.filter((lead) => lead.deal_status === dealFilter);
     }
-
+  
+    // Filter by lead status
     if (leadStatusFilter) {
-      console.log(leadStatusFilter);
       filtered = filtered.filter((lead) => lead.lead_status === leadStatusFilter);
-      console.log(filtered);
     }
+  
+    // Filter by not interested reason
     if (leadnotInterestedStatusFilter) {
-      console.log(leadnotInterestedStatusFilter);
-    
       if (leadnotInterestedStatusFilter === "other") {
-        // Exclude "price", "budget", "distance" and show all other data
         filtered = filtered.filter(
           (lead) => !["price", "budget", "distance"].includes(lead.reason)
         );
       } else {
-        // Filter by specific reason
         filtered = filtered.filter(
           (lead) => lead.reason === leadnotInterestedStatusFilter
         );
       }
-    
-      console.log(filtered);
     }
-    
-
+  
+    // Filter by visit
+    if (visitFilter) {
+      filtered = filtered.filter((lead) => lead.visit === visitFilter);
+    }
+  
+    // Filter by meeting status
     if (meetingStatusFilter) {
-      console.log(meetingStatusFilter);
-      filtered = filtered.filter((lead) => lead.meeting_status === meetingStatusFilter);
-      console.log(filtered);
+      filtered = filtered.filter(
+        (lead) => lead.meeting_status === meetingStatusFilter
+      );
     }
+  
+  
+    // Filter by month
+    if (monthFilter) {
+      filtered = filtered.filter((lead) => {
+        const leadMonth = moment(lead.createdTime).format("MM");
+        return leadMonth === monthFilter;
+      });
+    }
+  
+    return filtered;
+  };
 
+  useEffect(() => {
+    const filtered = applyFilters();
     setFilteredLeads(filtered);
   }, [
     searchTerm,
-    filterDate,
     startDate,
     endDate,
     leads,
@@ -172,8 +183,26 @@ function EmployeeLead() {
     dealFilter,
     leadStatusFilter,
     leadnotInterestedStatusFilter,
-    meetingStatusFilter
+    meetingStatusFilter,
+    
+    monthFilter,
+    sortOrder,
   ]);
+  
+  // Total Leads
+  const totalLeads = applyFilters().length;
+  
+  // Total Closed Leads
+  const totalClosedLeads = applyFilters().filter((lead) => lead.deal_status === "close").length;
+  
+  // Total Visits
+  const totalVisits = applyFilters().filter((lead) =>
+    ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+  ).length;
+  
+ 
+  
+  
 
   // Use filteredLeads for pagination
   const indexOfLastLead = (currentPage + 1) * leadsPerPage;
@@ -190,6 +219,9 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
     setLeadsPerPage(value === "All" ? Infinity : parseInt(value, 10));
     setCurrentPage(0); // Reset to the first page
   };
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
 
   return (
     <>
@@ -204,27 +236,17 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
           {/* Button to create a new lead */}
-
           <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
               <div>
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
-                   placeholder=" Name,Lead No,Lead Source,Phone No"
+                    placeholder=" Name,Lead Source,Assigned To,Phone No"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border rounded-2xl p-2 w-full"
                 />
               </div>
-              <div>
-                <label htmlFor="">Manual Date</label>
-                <input
-                  type="date"
-                  value={filterDate}
-        onChange={(e) => setFilterDate(e.target.value)}
-                  className="border   rounded-2xl p-2 w-full"
-                />
-                </div>
               <div>
                 <label htmlFor="">Start Date</label>
                 <input
@@ -249,7 +271,10 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                 <select
                   value={leadSourceFilter}
                   onChange={(e) => setLeadSourceFilter(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
+                  
+                  className={`border rounded-2xl p-2 w-full ${
+                    leadSourceFilter ? "bg-blue-500 text-white" : "bg-white"
+                  }`}
                 >
                    <option value="">Select Lead Source</option>
                      <option value="Facebook">Facebook</option>
@@ -279,26 +304,15 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
               </div>
 
            
-              <div>
-                <label htmlFor="">Visit Filter</label>
-                <select
-                  value={visitFilter}
-                  onChange={(e) => setVisitFilter(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
-                >
-                  <option value="">All visit</option>
-                  <option value="fresh">Fresh Visit</option>
-                  <option value="re-visit">Re-Visit</option>
-                  <option value="associative">Associative Visit</option>
-                  <option value="self">Self Visit</option>
-                </select>
-              </div>
+        
               <div>
                 <label htmlFor="">Deal Filter</label>
                 <select
                   value={dealFilter}
                   onChange={(e) => setDealFilter(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
+                  className={`border rounded-2xl p-2 w-full ${
+                    dealFilter ? "bg-blue-500 text-white" : "bg-white"
+                  }`}
                 >
                   <option value="">All Deal</option>
                   <option value="pending">Pending</option>
@@ -312,7 +326,9 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                 <select
                   value={leadStatusFilter}
                   onChange={(e) => setLeadStatusFilter(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
+                  className={`border rounded-2xl p-2 w-full ${
+                    leadStatusFilter ? "bg-blue-500 text-white" : "bg-white"
+                  }`}
                 >
                   <option value="">All Lead Status</option>
                   <option value="pending">Pending</option>
@@ -332,7 +348,9 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
   <select
     value={leadnotInterestedStatusFilter}
     onChange={(e) => setLeadnotInterestedStatusFilter(e.target.value)}
-    className="border rounded-2xl p-2 w-full"
+    className={`border rounded-2xl p-2 w-full ${
+      leadnotInterestedStatusFilter ? "bg-blue-500 text-white" : "bg-white"
+    }`}
   >
     <option value="">All Not Interested</option>
     <option value="price">Price</option>
@@ -347,13 +365,33 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
 
               )}
-              
+
+{leadStatusFilter === "site visit done" && (
+                    <div>
+                <label htmlFor="">Visit Filter</label>
+                <select
+                  value={visitFilter}
+                  onChange={(e) => setVisitFilter(e.target.value)}
+                  className={`border rounded-2xl p-2 w-full ${
+                    visitFilter ? "bg-blue-500 text-white" : "bg-white"
+                  }`}
+                >
+                  <option value="">All visit</option>
+                  <option value="fresh">Fresh Visit</option>
+                  <option value="re-visit">Re-Visit</option>
+                  <option value="associative">Associative Visit</option>
+                  <option value="self">Self Visit</option>
+                </select>
+              </div>
+                )}
               <div>
                 <label htmlFor="">Meeting Status</label>
                 <select
                   value={meetingStatusFilter}
                   onChange={(e) => setMeetingStatusFilter(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
+                  className={`border rounded-2xl p-2 w-full ${
+                   meetingStatusFilter ? "bg-blue-500 text-white" : "bg-white"
+                  }`}
                 >
                   <option value="">All Meeting Status</option>
                   <option value="pending">Pending</option>
@@ -362,6 +400,33 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                  
                 </select>
               </div>
+
+
+              <div>
+  <label htmlFor="">Month Filter</label>
+  <select
+    value={monthFilter}
+    onChange={(e) => setMonthFilter(e.target.value)}
+    className={`border rounded-2xl p-2 w-full ${
+     monthFilter ? "bg-blue-500 text-white" : "bg-white"
+    }`}
+  >
+    <option value="">All Months</option>
+    <option value="01">January</option>
+    <option value="02">February</option>
+    <option value="03">March</option>
+    <option value="04">April</option>
+    <option value="05">May</option>
+    <option value="06">June</option>
+    <option value="07">July</option>
+    <option value="08">August</option>
+    <option value="09">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+  </select>
+</div>
+
             
             </div>
           <div className="flex gap-10 text-xl font-semibold my-3 mt-5">
@@ -369,29 +434,15 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
   <div>
     Total Lead:{" "}
     {
-      leads
-        .filter(
-          (lead) =>
-          
-            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
-        ).length
+     totalLeads
     }
   </div>
 
   {/* Total Lead Visits */}
   <div>
-    Total Lead Visit:{" "}
+    Total Site Visit:{" "}
     {
-      leads
-        .filter(
-          (lead) =>
-           
-            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
-        )
-        .filter(
-          (lead) =>
-            ["fresh", "repeated", "self", "associative"].includes(lead.visit)
-        ).length
+      totalVisits
     }
   </div>
 
@@ -399,13 +450,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
   <div>
     Total Closed Lead:{" "}
     {
-      leads
-        .filter(
-          (lead) =>
-           
-            (!leadSourceFilter || lead.leadSource === leadSourceFilter)
-        )
-        .filter((lead) => lead.deal_status === "close").length
+     totalClosedLeads
     }
   </div>
   <select
@@ -430,7 +475,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                     S.no
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Lead Number
+                    Lead Id
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Name
@@ -449,6 +494,9 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                     Lead Status
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Visit
+                  </th>
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Reason
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
@@ -461,13 +509,17 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Answer Remark
                   </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                  Assigned Date
-                  </th>
-                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Action
-                  </th>
                 
+                  <th
+  className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left cursor-pointer"
+  onClick={toggleSortOrder}
+>
+  Assigned Date
+  <span>{sortOrder === "asc" ? "▲" : "▼" }</span>
+</th>
+            <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Action
+                  </th>      
                
                 </tr>
               </thead>
@@ -480,30 +532,33 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
         key={lead.id}
         className={index % 2 === 0 ? "bg-gray-100" : ""}
       >
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
         {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
+        <td className="px-6 py-4 border-b border-gray-200 underline font-semibold text-[blue]">
           <Link to={`/employee-lead-single-data/${lead.lead_id}`}>
-            {lead.lead_no}
+            {lead.lead_id}
           </Link>
         </td>
-         <td className="px-6 py-4 border-b border-gray-200 text-gray-800 text-wrap">
+         <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold text-wrap">
                         {lead.name}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
                         {lead.phone}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
                         {lead.leadSource}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
                         {lead.assignedTo}
                       </td>
                     
                     
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.lead_status}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+                          {lead.visit}
                         </td>
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.reason}
@@ -513,18 +568,18 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                         </td>
                     
                      
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 text-wrap">
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold text-wrap">
                         {lead.remark_status}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800  text-wrap" >
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold  text-wrap" >
                         {lead.answer_remark}
                         
                                        
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
                         {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                       </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+        <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
         {lead.lead_status === "active lead" || lead.lead_status === "calling done" || lead.lead_status === "site visit done" || lead.lead_status === "interested" || lead.lead_status === "not-interested"  ?  (
   <button
     className="text-[green] font-semibold hover:text-blue-700"
@@ -537,7 +592,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
     className="text-blue-500 font-semibold hover:text-blue-700"
     onClick={() => handleUpdate(lead)}
   >
-    Start Work
+   Not Start Work
   </button>
 ) : lead.lead_status === "completed" ? (
   <button

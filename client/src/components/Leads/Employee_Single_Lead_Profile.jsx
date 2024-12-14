@@ -451,12 +451,11 @@ const [remark, setRemark] = useState({
       cogoToast.error("Please select a visit date.");
       return;
     }
-   
   
-    console.log(visitLead);
+    console.log("Visit data:", visitLead);
   
     try {
-      // Send updated data to the backend using Axios
+      // First API call: Create a visit
       const response = await axios.post(
         `https://crm.one-realty.in/api/employe-visit`,
         {
@@ -466,15 +465,14 @@ const [remark, setRemark] = useState({
           employee_name: leads[0].assignedTo,
           visit: visitLead.visit,
           visit_date: visitLead.visit_date,
-         
         }
       );
   
       if (response.status === 201) {
-        console.log("Updated successfully:", response.data);
+        console.log("Visit created successfully:", response.data);
         cogoToast.success("Visit created successfully");
   
-        // Update the visit status after saving the visit
+        // Second API call: Update visit status
         const updateResponse = await axios.put(
           `https://crm.one-realty.in/api/updateVisitStatus/${leads[0].lead_id}`,
           { visit: visitLead.visit }
@@ -486,20 +484,44 @@ const [remark, setRemark] = useState({
         } else {
           console.error("Error updating visit status:", updateResponse.data);
           cogoToast.error("Failed to update visit status.");
+          return; // Exit if this step fails
         }
   
-        closePopupVisit(); // Close the popup on success
+        // Third API call: Update lead status
+        const updateLeadStatusResponse = await axios.put(
+          `https://crm.one-realty.in/api/updateOnlyLeadStatus/${leads[0].lead_id}`,
+          { lead_status: "site visit done" }
+        );
+  
+        if (updateLeadStatusResponse.status === 200) {
+          console.log(
+            "Lead status updated successfully:",
+            updateLeadStatusResponse.data
+          );
+          cogoToast.success("Lead status updated successfully");
+        } else {
+          console.error(
+            "Error updating lead status:",
+            updateLeadStatusResponse.data
+          );
+          cogoToast.error("Failed to update lead status.");
+          return; // Exit if this step fails
+        }
+  
+        // Close popup and refresh data after all calls are successful
+        closePopupVisit();
         fetchVisit();
         fetchLeads();
       } else {
-        console.error("Error updating visit:", response.data);
+        console.error("Error creating visit:", response.data);
         cogoToast.error("Failed to create visit.");
       }
     } catch (error) {
       console.error("Request failed:", error);
-      cogoToast.error("Failed to create visit.");
+      cogoToast.error("An error occurred while processing your request.");
     }
   };
+  
   // Validate required fields
   // if (!follow_up.follow_up_type) {
   //   cogoToast.error("Please select a follow up type.");
@@ -688,7 +710,7 @@ console.log(totalVisit);
                     </div>
                   </div>
                   <div>
-                    <label className="text-info">Subject</label>
+                    <label className="text-info">Project</label>
                     <div className="p-2 bg-gray-100 rounded">
                       <p className="m-0">{lead.subject}</p>
                     </div>
@@ -828,7 +850,7 @@ console.log(totalVisit);
       <th className="px-6 py-3 border-b-2 border-gray-300">Reason</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Registry</th>
     
-      <th className="px-6 py-3 border-b-2 border-gray-300">Subject</th>
+      <th className="px-6 py-3 border-b-2 border-gray-300">Project</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Close Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Assigned Date</th>

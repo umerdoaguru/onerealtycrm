@@ -37,14 +37,17 @@ const SuperAdminTotalLead = () => {
     let filtered = leads;
 
     // Filter by search term
-    if (searchTerm) {
-      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter((lead) =>
-        ["name", "lead_no", "leadSource", "phone"].some((key) =>
-          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
-        )
-      );
-    }
+    // Filter by search term
+ // Filter by search term
+ if (searchTerm) {
+  const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+  filtered = filtered.filter((lead) =>
+    ["name", "leadSource", "phone","assignedTo"].some((key) =>
+      lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+    )
+  );
+}
+
 
     // Update the filtered leads and reset to the first page
     setFilteredLeads(filtered);
@@ -97,7 +100,7 @@ const SuperAdminTotalLead = () => {
                
                <input
                  type="text"
-                 placeholder=" Name,Lead No,Lead Source,Phone No"
+                  placeholder=" Name,Lead Source,Assigned To,Phone No"
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
                  className="border rounded-2xl p-2 w-25"
@@ -123,7 +126,7 @@ const SuperAdminTotalLead = () => {
                 S.no
               </th>
               <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Lead Number
+                Lead Id
               </th>
               <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                 Name
@@ -137,9 +140,7 @@ const SuperAdminTotalLead = () => {
               <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                 Assigned To
               </th>
-              <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                Subject
-              </th>
+           
               <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                 Lead Status
               </th>
@@ -155,12 +156,12 @@ const SuperAdminTotalLead = () => {
       {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
 
       </td>
-      <td className="px-6 py-4 border-b border-gray-200">{lead.lead_no}</td>
+      <td className="px-6 py-4 border-b border-gray-200">{lead.lead_id}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.name}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.phone}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.leadSource}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.assignedTo}</td>
-      <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
+ 
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.lead_status}</td>
       <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
         {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}

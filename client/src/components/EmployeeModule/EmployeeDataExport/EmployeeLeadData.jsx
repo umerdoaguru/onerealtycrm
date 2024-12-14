@@ -112,7 +112,7 @@ function EmployeeLeadData() {
       reason: "Reason",
       registry: "Registry",
      
-      subject: "Subject",
+      subject: "Project",
       visit: "Visit",
       d_closeDate: "Close Date",
       createdTime: "Assigned Date",
@@ -234,9 +234,7 @@ function EmployeeLeadData() {
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Lead Source
                 </th>
-                <th className="px-6 py-3 border-b-2 border-gray-300">
-                  Subject
-                </th>
+             
                 <th className="px-6 py-3 border-b-2 border-gray-300">
                   Lead Status
                 </th>
@@ -276,9 +274,7 @@ function EmployeeLeadData() {
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.leadSource}
         </td>
-        <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-          {lead.subject}
-        </td>
+     
         <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
           {lead.lead_status}
         </td>

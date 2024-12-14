@@ -43,16 +43,15 @@ function TotalEmpLead() {
   useEffect(() => {
     let filtered = leads;
 
-    // Filter by search term
-    if (searchTerm) {
-      const trimmedSearchTerm = searchTerm.toLowerCase().trim();
-      filtered = filtered.filter((lead) =>
-        ["name", "lead_no", "leadSource", "phone"].some((key) =>
-          lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
-        )
-      );
-    }
-
+ // Filter by search term
+ if (searchTerm) {
+  const trimmedSearchTerm = searchTerm.toLowerCase().trim();
+  filtered = filtered.filter((lead) =>
+    ["name", "leadSource", "phone","assignedTo"].some((key) =>
+      lead[key]?.toLowerCase().trim().includes(trimmedSearchTerm)
+    )
+  );
+}
     // Update the filtered leads and reset to the first page
     setFilteredLeads(filtered);
     setCurrentPage(0); // Reset to the first page when the search term changes
@@ -103,7 +102,7 @@ function TotalEmpLead() {
                
                <input
                  type="text"
-                 placeholder=" Name,Lead No,Lead Source,Phone No"
+                  placeholder=" Name,Lead Source,Assigned To,Phone No"
                  value={searchTerm}
                  onChange={(e) => setSearchTerm(e.target.value)}
                  className="border rounded-2xl p-2 w-25"
@@ -126,7 +125,7 @@ function TotalEmpLead() {
                     S.no
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Lead Number
+                    Lead Id
                   </th>
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Name
@@ -140,9 +139,7 @@ function TotalEmpLead() {
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Assigned To
                   </th>
-                  <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
-                    Subject
-                  </th>
+                
                   <th className="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-gray-600 tracking-wider">
                     Lead Status
                   </th>
@@ -161,10 +158,10 @@ function TotalEmpLead() {
                     {leadsPerPage === Infinity ? index + 1 : index + 1 + currentPage * leadsPerPage}
 
                     </td>
-                    <td className="px-6 py-4 border-b border-gray-200 underline text-[blue]">
-                      <Link to={`/employee-lead-single-data/${lead.lead_id}`}>
-                        {lead.lead_no}
-                      </Link>
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                     
+                        {lead.lead_id}
+                      
                     </td>
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.name}
@@ -178,9 +175,7 @@ function TotalEmpLead() {
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.assignedTo}
                     </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                      {lead.subject}
-                    </td>
+                    
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {lead.lead_status}
                     </td>
