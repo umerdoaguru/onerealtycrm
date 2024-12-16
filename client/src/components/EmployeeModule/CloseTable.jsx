@@ -31,7 +31,7 @@ const CloseTable = () => {
       );
       // Filter out leads where deal_status is not "pending"
       const nonPendingLeads = response.data.filter(
-        (lead) => lead.deal_status !== "pending"
+        (lead) => lead.deal_status == "close"
       );
 
       setLeads(nonPendingLeads);

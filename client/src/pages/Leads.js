@@ -566,7 +566,7 @@ const toggleSortOrder = () => {
 
            
         
-              <div>
+             <div>
                 <label htmlFor="">Deal Filter</label>
                 <select
                   value={dealFilter}
@@ -577,7 +577,6 @@ const toggleSortOrder = () => {
                 >
                   <option value="">All Deal</option>
                   <option value="pending">Pending</option>
-                  <option value="in progress">In Progress</option>
                   <option value="close">Closed</option>
                   <option value="cancelled">Cancelled</option>
                 </select>
@@ -745,7 +744,7 @@ const toggleSortOrder = () => {
           </select>
 </div>
 
-          <div className=" overflow-x-auto mt-4 whitespace-nowrap  2xl:w-[89%]">
+          <div className=" overflow-x-auto mt-4  2xl:w-[89%]">
          
 
             <table className="min-w-full bg-white border">
@@ -779,6 +778,9 @@ const toggleSortOrder = () => {
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Reason
+                  </th>
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Deal Status
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Meeting Status
@@ -853,6 +855,9 @@ const toggleSortOrder = () => {
                         </td>
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.reason}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+                          {lead.deal_status}
                         </td>
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.meeting_status}
