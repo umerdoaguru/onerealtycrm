@@ -147,6 +147,9 @@ function CreateCompanyProfile() {
                     Quotation Name
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Quotation Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Created Date
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -170,6 +173,9 @@ function CreateCompanyProfile() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {quotation.customer_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {quotation.status}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {moment(quotation.created_date).format("DD MMM YYYY").toUpperCase()}
