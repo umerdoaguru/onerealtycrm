@@ -398,19 +398,9 @@ const [remark, setRemark] = useState({
 
   const saveChanges = async () => {
     console.log(currentLead);
-    if (currentLead.deal_status !== leads[0].deal_status) {
-      if (currentLead.d_closeDate === "pending") {
-        alert("Please update the deal close date as well");
-        return;
-      }
-    }
+   
 
-    if (currentLead.visit !== leads[0].visit) {
-      if (currentLead.visit_date === "pending") {
-        alert("Please update the visit date as well");
-        return;
-      }
-    }
+
     
 
     const leadData = {
@@ -419,6 +409,18 @@ const [remark, setRemark] = useState({
       : currentLead.reason // Use the default value if untouched
     };
     try {
+      if (currentLead.deal_status == 'close') {
+        if (currentLead.d_closeDate === "pending") {
+          alert("Please update the deal close date as well");
+          return;
+        }
+      }
+      if (currentLead.lead_status == 'not-interested') {
+        if (currentLead.reason === "pending" || currentLead.customReason === currentLead.reason) {
+          alert("Please update the reason as well");
+          return;
+        }
+      }
       // Send updated data to the backend using Axios
       const response = await axios.put(
         `https://crmdemo.vimubds5.a2hosted.com/api/updateLeadStatus/${currentLead.lead_id}`,
@@ -939,7 +941,7 @@ console.log(totalVisit);
                           <input
                             type="text"
                             name="customReason"
-      value={currentLead.customReason || ""}
+      value={currentLead.customReason}
       onChange={(e) => handleInputChange(e)}
                             className="w-full px-3 py-2 border rounded"
                           />

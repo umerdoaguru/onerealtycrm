@@ -305,7 +305,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
            
         
-              <div>
+             <div>
                 <label htmlFor="">Deal Filter</label>
                 <select
                   value={dealFilter}
@@ -316,7 +316,6 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                 >
                   <option value="">All Deal</option>
                   <option value="pending">Pending</option>
-                  <option value="in progress">In Progress</option>
                   <option value="close">Closed</option>
                   <option value="cancelled">Cancelled</option>
                 </select>
@@ -500,6 +499,9 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                     Reason
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
+                    Deal Status
+                  </th>
+                  <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Meeting Status
                   </th>
                  
@@ -562,6 +564,9 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
                         </td>
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.reason}
+                        </td>
+                        <td className="px-6 py-4 border-b border-gray-200 font-semibold">
+                          {lead.deal_status}
                         </td>
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.meeting_status}

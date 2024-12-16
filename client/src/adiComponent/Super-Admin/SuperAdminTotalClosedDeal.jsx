@@ -25,7 +25,7 @@ const SuperAdminTotalClosedDeal = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(`https://crmdemo.vimubds5.a2hosted.com/api/leads`);
-      const nonPendingLeads = response.data.filter((lead) => lead.deal_status !== "pending");
+      const nonPendingLeads = response.data.filter((lead) => lead.deal_status == "close");
       setLeads(nonPendingLeads);
       setFilteredLeads(nonPendingLeads);
     } catch (error) {

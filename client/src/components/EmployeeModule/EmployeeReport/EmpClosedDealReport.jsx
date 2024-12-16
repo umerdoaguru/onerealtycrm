@@ -60,7 +60,7 @@ const EmpClosedDealReport = () => {
       );
       // Filter out leads where deal status is "pending"
       const nonPendingLeads = response.data.filter(
-        (lead) => lead.deal_status !== "pending"
+        (lead) => lead.deal_status == "close"
       );
 
       setLeads(nonPendingLeads);
