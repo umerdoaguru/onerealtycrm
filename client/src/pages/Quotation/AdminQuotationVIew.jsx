@@ -166,7 +166,7 @@ Jabalpur, Madhya pradesh INDIA
           </div>
 
           <div className="w-full px-2 mt-4">
-            <h4 className="QuoStatus my-2">Quotation Status: <strong className={` ${quotationStatus !== "pending" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
+          <h4 className="QuoStatus my-2">Quotation Status: <strong className={` ${quotationStatus !== "Approved" ? "text-red-600" : "text-green-600"} p-2 mt-1`}>{quotations[0]?.status}</strong></h4>
             <div className="flex space-x-3 items-center">
               {/* <button
                 className="bg-green-500 hover:bg-green-600 text-white rounded py-2 px-4 mt-1"
