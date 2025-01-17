@@ -273,6 +273,7 @@ function Leads() {
             `https://crm.one-realty.in/api/leads/${currentLead.lead_id}`,
             leadData
           );
+          
           fetchLeads(); // Refresh the list
           closePopup();
         } else {
