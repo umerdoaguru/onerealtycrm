@@ -480,7 +480,7 @@ const [remark, setRemark] = useState({
           { visit: visitLead.visit }
         );
   
-        if (updateResponse.status === 200) {
+        if (updateResponse.status === 200) {        
           console.log("Visit status updated successfully:", updateResponse.data);
           cogoToast.success("Visit status updated successfully");
         } else {
