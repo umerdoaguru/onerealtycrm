@@ -33,7 +33,7 @@ function Employee_Single_Lead_Profile() {
       payment_mode:"",
       registry:"",
     reason: "",
-    status: "",
+  
 
 
     follow_up_status: "",

@@ -126,7 +126,7 @@ const updateLeadStatus = async (req, res) => {
       registry,
 
       reason,
-      status,
+     
       follow_up_status,
 
       d_closeDate, // Add d_closeDate (Deal Close Date) to destructured body
@@ -142,7 +142,7 @@ const updateLeadStatus = async (req, res) => {
       payment_mode,
       registry,
       reason,
-      status,
+     
       follow_up_status,
 
       d_closeDate, // Log d_closeDate
@@ -159,7 +159,7 @@ const updateLeadStatus = async (req, res) => {
       payment_mode = ?,
       registry = ?,
                       reason = ?, 
-                      status = ?, 
+                     
                       follow_up_status = ?, 
                    
                       d_closeDate = ?      
@@ -178,7 +178,7 @@ const updateLeadStatus = async (req, res) => {
       payment_mode,
       registry,
           reason,
-          status,
+        
           follow_up_status,
 
           d_closeDate, // Pass d_closeDate to the query
