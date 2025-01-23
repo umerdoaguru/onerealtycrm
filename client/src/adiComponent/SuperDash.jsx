@@ -13,7 +13,7 @@ import LeadsGraph from "./LeadsGraph";
 import QuotationGraph from "./QuotationGraph";
 import SuperAdminSider from "./Super-Admin/SuperAdminSider";
 import SuperHeader from "./Super-Admin/SuperHeader";
-import DealGraph from "./dealGraph";
+import DealGraph from "./DealClosedGraph";
 
 const SuperDash = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
