@@ -30,7 +30,8 @@ const VisitData = () => {
 'visit_date',
 
 ]);
-
+const adminuser = useSelector((state) => state.auth.user);
+const token = adminuser.token;
 
   // Fetch leads from the API
   useEffect(() => {
@@ -41,7 +42,12 @@ const VisitData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit`
+        `https://crm.one-realty.in/api/employe-all-visit`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(

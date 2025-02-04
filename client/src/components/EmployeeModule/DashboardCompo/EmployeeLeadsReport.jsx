@@ -9,13 +9,20 @@ const EmployeeLeadsReport = () => {
   const [leads, setLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 5; // Define how many leads to display per page
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+
+  const token = EmpId?.token;
 
   useEffect(() => {
     const fetchLeads = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+          `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }}
         );
         const data = response.data;
         const today = new Date();

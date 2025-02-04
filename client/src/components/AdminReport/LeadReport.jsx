@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate"; // Import react-paginate
 // import Sider from "../Sider";
 import Header from "../../pages/Quotation/Header";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 function LeadReport() {
     const [leads, setLeads] = useState([]);
@@ -44,6 +45,8 @@ function LeadReport() {
       ]);
     const [currentPage, setCurrentPage] = useState(0);
     const leadsPerPage = 6;
+    const adminuser = useSelector((state) => state.auth.user);
+    const token = adminuser.token;
   
     // Fetch leads and employees from the API
     useEffect(() => {
@@ -53,7 +56,12 @@ function LeadReport() {
   
     const fetchLeads = async () => {
       try {
-        const response = await axios.get("https://crm.one-realty.in/api/leads");
+        const response = await axios.get("https://crm.one-realty.in/api/leads",
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }});
         setLeads(response.data);
         setFilteredLeads(response.data);
       } catch (error) {
@@ -63,7 +71,12 @@ function LeadReport() {
   
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("https://crm.one-realty.in/api/employee");
+        const response = await axios.get("https://crm.one-realty.in/api/employee",
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }});
         setEmployees(response.data);
       } catch (error) {
         console.error("Error fetching employees:", error);

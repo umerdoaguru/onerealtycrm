@@ -17,6 +17,8 @@ const SuperAdminVisit = () => {
   const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
   const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
   const navigate = useNavigate();
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   useEffect(() => {
     fetchLeads();
@@ -24,7 +26,12 @@ const SuperAdminVisit = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit-super-admin`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
 
       setLeads(nonPendingLeads);

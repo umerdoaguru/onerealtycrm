@@ -30,11 +30,18 @@ const Super_view_visit = ({id,closeModalVisit}) => {
   useEffect(() => {
     fetchvisit();
   }, [id, render]);
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   const fetchvisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setVisit(response.data);
       console.log(response);

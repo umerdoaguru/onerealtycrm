@@ -50,11 +50,18 @@ const CloseData = () => {
     fetchLeads();
     fetchEmployees();
   }, []);
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/leads`
+        `https://crm.one-realty.in/api/leads`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       // Filter out leads where deal status is "pending"
       const nonPendingLeads = response.data.filter(
@@ -70,7 +77,12 @@ const CloseData = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);

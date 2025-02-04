@@ -12,6 +12,7 @@ import SuperAdminSider from './SuperAdminSider';
 import MainHeader from './../../components/MainHeader';
 import Modal from './../Modal';
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 
 function Super_Admin_Adminmanagement() {
   const [admins, setAdmins] = useState([]);
@@ -30,7 +31,8 @@ function Super_Admin_Adminmanagement() {
   const itemsPerPage = 7; 
   const navigate = useNavigate(); // Initialize useNavigate
   const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
-
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
   // Fetch admins when component loads
   useEffect(() => {
     fetchAdmins();
@@ -46,11 +48,17 @@ function Super_Admin_Adminmanagement() {
     setValidationErrors({})
   };
 
+
   // Fetch all admins from the backend
   const fetchAdmins = async () => {
     try {
       const response = await axios.get(
-        "https://crm.one-realty.in/api/getAllAdmins"
+        "https://crm.one-realty.in/api/getAllAdmins",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       const admins = response.data.admins;
       setAdmins(admins || []);

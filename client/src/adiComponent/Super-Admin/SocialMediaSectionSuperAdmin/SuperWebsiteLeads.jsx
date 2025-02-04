@@ -3,6 +3,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 function SuperWebsiteLeads() {
@@ -24,11 +25,18 @@ function SuperWebsiteLeads() {
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
   const [loading , setLoading] = useState(false)
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   // Fetch leads
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://one-realty.in/api/user-data");
+      const response = await axios.get("https://crm.one-realty.in/api/user-data-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setWebsiteLeads(response.data);
     } catch (error) {
       console.error("Error fetching website leads:", error);
@@ -38,7 +46,12 @@ function SuperWebsiteLeads() {
   // Fetch employees
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -48,7 +61,12 @@ function SuperWebsiteLeads() {
   // Fetch lead assignments
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setwebsiteLeadsAssigned(response.data);
     } catch (error) {
       console.error("Error fetching assigned leads:", error);

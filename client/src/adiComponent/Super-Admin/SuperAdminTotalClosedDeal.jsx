@@ -7,6 +7,7 @@ import SuperAdminSider from "./SuperAdminSider";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const SuperAdminTotalClosedDeal = () => {
   const [leads, setLeads] = useState([]);
@@ -17,6 +18,8 @@ const SuperAdminTotalClosedDeal = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
   const navigate = useNavigate();
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   useEffect(() => {
     fetchLeads();
@@ -24,7 +27,12 @@ const SuperAdminTotalClosedDeal = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads-super-admin`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       const nonPendingLeads = response.data.filter((lead) => lead.deal_status == "close");
       setLeads(nonPendingLeads);
       setFilteredLeads(nonPendingLeads);

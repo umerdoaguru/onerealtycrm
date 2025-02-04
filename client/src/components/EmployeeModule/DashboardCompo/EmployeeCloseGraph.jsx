@@ -15,7 +15,9 @@ import styled from "styled-components";
 
 const EmployeeCloseGraph = () => {
   const [dealStatusData, setDealStatusData] = useState([]);
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+
+  const token = EmpId?.token;
 
   // Function to format the date to "DD MMM" format
   const formatDate = (dateString) => {
@@ -61,7 +63,12 @@ const EmployeeCloseGraph = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       const data = response.data;
 

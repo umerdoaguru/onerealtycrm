@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 function EmpLeadReport() {
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
-  const EmpId = useSelector((state) => state.auth.user.id);
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [duration, setDuration] = useState("all"); // Default is "all"
   const [selectedColumns, setSelectedColumns] = useState([
@@ -42,6 +41,9 @@ function EmpLeadReport() {
   ]);
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 6;
+  const EmpId = useSelector((state) => state.auth.user);
+
+  const token = EmpId?.token;
 
   // Fetch leads and employees from the API
   useEffect(() => {
@@ -51,7 +53,12 @@ function EmpLeadReport() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api//employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api//employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setLeads(response.data);
       setFilteredLeads(response.data);

@@ -13,7 +13,7 @@ const EmployeeCloseData = () => {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 7; // Number of leads to display per page
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
   const [selectedColumns, setSelectedColumns] = useState([
     "lead_no",
         "assignedTo",
@@ -42,6 +42,7 @@ const EmployeeCloseData = () => {
         "createdTime",
         "actual_date",
   ]);
+  const token = EmpId?.token;
   // Fetch leads from the API
   useEffect(() => {
     fetchLeads();
@@ -50,7 +51,12 @@ const EmployeeCloseData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       // Filter out leads where deal status is "pending"
       const nonPendingLeads = response.data.filter(

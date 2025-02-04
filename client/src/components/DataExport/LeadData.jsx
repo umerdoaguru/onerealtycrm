@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate"; // Import react-paginate
 // import Sider from "../Sider";
 import Header from "../../pages/Quotation/Header";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 function LeadData() {
   const [leads, setLeads] = useState([]);
@@ -47,7 +48,8 @@ function LeadData() {
         "actual_date",
   ]);
 
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
 
   // Fetch leads and employees from the API
@@ -58,7 +60,12 @@ function LeadData() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering
       console.log(leads);
@@ -70,7 +77,12 @@ function LeadData() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);

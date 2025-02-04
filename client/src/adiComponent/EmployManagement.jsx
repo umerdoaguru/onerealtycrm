@@ -6,6 +6,7 @@ import Sider from "../components/Sider";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import MainHeader from "../components/MainHeader"
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 
 
 const EmployeeManagement = () => {
@@ -23,7 +24,8 @@ const EmployeeManagement = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 10; // Default leads per page
   const navigate = useNavigate(); // Initialize useNavigate
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
   useEffect(() => {
     fetchEmployees();
   }, []);
@@ -31,7 +33,12 @@ const EmployeeManagement = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "https://crm.one-realty.in/api/getAllEmployees"
+        "https://crm.one-realty.in/api/getAllEmployees",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       const { employees } = response.data;
       setEmployees(employees || []); // Ensure employees is always an array

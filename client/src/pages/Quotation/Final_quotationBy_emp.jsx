@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import UserLogin from "../../components/UserLogin";
 import { FaClipboardList } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 function Final_quotationBy_emp() {
   const navigate = useNavigate();
@@ -14,10 +15,18 @@ function Final_quotationBy_emp() {
   const [totalActualPrice, setTotalActualPrice] = useState(0);
   const [totalOfferPrice, setTotalOfferPrice] = useState(0);
   const [quotationStatus, setQuotationStatus] = useState("");
+  const EmpId = useSelector((state) => state.auth.user);
+
+  const token = EmpId?.token;
 
   const fetchQuotations = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/quotation/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/quotation/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       if (response.status === 200) {
         setQuotationName(response.data[0].customer_name);
         setQuotations(response.data);

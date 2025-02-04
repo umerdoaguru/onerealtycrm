@@ -18,7 +18,7 @@ function EmployeeLeadData() {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 7; // Adjust as needed
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
   const [selectedColumns, setSelectedColumns] = useState([
     "lead_no",
         "assignedTo",
@@ -46,7 +46,8 @@ function EmployeeLeadData() {
         "d_closeDate",
         "createdTime",
         "actual_date",
-  ]);
+  ]);  
+  const token = EmpId?.token;
 
   // Fetch leads from the API
   useEffect(() => {
@@ -56,7 +57,12 @@ function EmployeeLeadData() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setLeads(response.data);
       setFilteredLeads(response.data); // Initial data set for filtering

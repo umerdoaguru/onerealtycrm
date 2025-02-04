@@ -38,7 +38,9 @@ function EmployeeLead() {
 
   const navigate = useNavigate();
 
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+
+  const token = EmpId?.token;
 
   // Fetch leads from the API
   useEffect(() => {
@@ -48,7 +50,12 @@ function EmployeeLead() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       const data = response.data;
       console.log(data);

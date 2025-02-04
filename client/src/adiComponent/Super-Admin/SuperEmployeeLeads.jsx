@@ -10,6 +10,7 @@ import MainHeader from "./../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
 import cogoToast from "cogo-toast";
 import Super_Single_Lead_Profile from "./Super_Single_Lead_Profile";
+import { useSelector } from "react-redux";
 
 function SuperEmployeeLeads() {  
   const [leads, setLeads] = useState([]);
@@ -62,7 +63,8 @@ function SuperEmployeeLeads() {
   const [loading , setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [customLeadSource, setCustomLeadSource] = useState("");
-
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   
 
@@ -83,7 +85,12 @@ function SuperEmployeeLeads() {
       const response = await axios.get(
 
           //  `https://crm.one-realty.in/api/employe-leads/${id}`
-            "https://crm.one-realty.in/api/leads"
+            "https://crm.one-realty.in/api/leads-super-admin",
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }}
       );
       const data = response.data;
       console.log(data);
@@ -95,7 +102,12 @@ function SuperEmployeeLeads() {
  
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);

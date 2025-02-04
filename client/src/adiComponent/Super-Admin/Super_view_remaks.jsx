@@ -4,6 +4,7 @@ import axios from "axios";
 import moment from "moment";
 import MainHeader from "../../components/MainHeader";
 import SuperAdminSider from "./SuperAdminSider";
+import { useSelector } from "react-redux";
 
 
 
@@ -15,7 +16,8 @@ const Super_view_remarks = ({id,closeModalRemark }) => {
   const [itemsPerPage] = useState(10);
   const [filterText, setFilterText] = useState("");
   const [render, setRender] = useState(false);
-  
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
   
 console.log(id);
 
@@ -27,7 +29,12 @@ console.log(id);
 
   const fetchRemarks = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/remarks/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/remarks-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setRemarks(response.data);
       console.log(response);
     } catch (error) {

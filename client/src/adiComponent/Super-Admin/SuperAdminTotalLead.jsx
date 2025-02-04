@@ -16,7 +16,9 @@ const SuperAdminTotalLead = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage, setLeadsPerPage] = useState(10); // Default leads per page
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   useEffect(() => {
     fetchLeads();
@@ -24,7 +26,12 @@ const SuperAdminTotalLead = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads-super-admin`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       console.log(response);
       setLeads(response.data);
     } catch (error) {

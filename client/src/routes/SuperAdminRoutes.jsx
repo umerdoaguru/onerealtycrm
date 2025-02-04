@@ -40,9 +40,11 @@ import SuperDataExport from "../adiComponent/Super-Admin/SuperDataExport";
 import Super_view_followup from "../adiComponent/Super-Admin/Super_view_followup";
 import SuperMainSocialLeads from "../adiComponent/Super-Admin/SocialMediaSectionSuperAdmin/SuperMainSocialLeads";
 import Super_view_remarks from "../adiComponent/Super-Admin/Super_view_remaks";
+import SuperEmployeedatabyid from "../adiComponent/Super-Admin/SuperEmployeedatabyid";
 
 function SuperAdminRoutes() {
   const user = useSelector((state) => state.auth.user);
+  
   return (
     <>
       <Routes>
@@ -72,6 +74,10 @@ function SuperAdminRoutes() {
         <Route
           path="/super-admin-lead-single-data"
           element={<Super_Single_Lead_Profile />}
+        />
+        <Route
+          path="/super-admin-lead-single-data/:id"
+          element={<SuperEmployeedatabyid />}
         />
         <Route
           path="/super_view_visit/:id"

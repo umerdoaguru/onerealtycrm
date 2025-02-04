@@ -13,6 +13,9 @@ import LeadReport from "../../components/AdminReport/LeadReport";
 import VisitReport from "../../components/AdminReport/VisitReport";
 import ClosedDealReport from "../../components/AdminReport/ClosedDealReport";
 import { useSelector } from "react-redux";
+import SuperLeadReport from "./SuperAdminReport/SuperLeadReport";
+import SuperVisitReport from "./SuperAdminReport/SuperVisitReport";
+import SuperClosedDealReport from "./SuperAdminReport/SuperClosedDealReport";
 const d_fileds = {
   // quotation: {
   //   heading: ["Id", "Quotation Name", "Employee Name", "Date"],
@@ -342,10 +345,10 @@ const SuperReports = () =>
   
           {/* Conditionally render the selected component */}
           <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
-            {selectedComponent === "LeadData" && <LeadReport/> }
+            {selectedComponent === "LeadData" && <SuperLeadReport/> }
           
-            {selectedComponent === "VisitData" && <VisitReport/> }
-            {selectedComponent === "ClosedData" && <ClosedDealReport/> }
+            {selectedComponent === "VisitData" && <SuperVisitReport/> }
+            {selectedComponent === "ClosedData" && <SuperClosedDealReport/> }
           </div>
         </div>
       </>

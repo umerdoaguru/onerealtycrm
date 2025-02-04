@@ -19,7 +19,9 @@ const ViewAllFollowUp = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const navigate = useNavigate();
+  const EmpId = useSelector((state) => state.auth.user);
 
+  const token = EmpId?.token;
   useEffect(() => {
     fetchFollowUp();
   }, [id, render]);
@@ -27,7 +29,12 @@ const ViewAllFollowUp = () => {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setFollow_Up(response.data);
       console.log(response);

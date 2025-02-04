@@ -17,7 +17,9 @@ const TotalVisit = () => {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
   const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
- 
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
+
   const navigate = useNavigate();
   useEffect(() => {
     fetchLeads();
@@ -25,7 +27,12 @@ const TotalVisit = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
 
       setLeads(nonPendingLeads);

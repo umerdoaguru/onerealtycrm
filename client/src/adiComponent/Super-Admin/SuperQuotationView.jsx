@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import UserLogin from "../../components/UserLogin";
 import { FaClipboardList } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 function SuperQuotationVIew() {
   const navigate = useNavigate();
@@ -14,10 +15,17 @@ function SuperQuotationVIew() {
   const [totalActualPrice, setTotalActualPrice] = useState(0);
   const [totalOfferPrice, setTotalOfferPrice] = useState(0);
   const [quotationStatus, setQuotationStatus] = useState("");
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   const fetchQuotations = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/quotation/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/quotation-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       if (response.status === 200) {
         setQuotationName(response.data[0].customer_name);
         setQuotations(response.data);
@@ -172,10 +180,10 @@ function SuperQuotationVIew() {
               >
                 Review Quotation Data
               </button> */}
-              <button
-                className={`bg-green-700  text-white rounded p-2 mt-1`}
+                <button
+                className={`bg-green-700 ${quotationStatus !== "Approved" ? "opacity-50 cursor-not-allowed" : "hover:bg-green-600"} text-white rounded p-2 mt-1`}
                 onClick={handlePrintPage}
-              
+                disabled={quotationStatus !== "Approved"}
               >
                 Print Page
               </button>

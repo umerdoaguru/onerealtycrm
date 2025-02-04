@@ -24,7 +24,8 @@ function DataExport() {
   const [invoice, setInvoice] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("LeadData"); // Set 'LeadData' as default
 
-  const UserId = useSelector((state) => state.auth.user.id);
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   useEffect(() => {
     fetchLeads();
@@ -36,7 +37,12 @@ function DataExport() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -45,7 +51,12 @@ function DataExport() {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employee`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employee`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -76,7 +87,12 @@ function DataExport() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit`
+        `https://crm.one-realty.in/api/employe-all-visit`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
       setVisit(response.data);

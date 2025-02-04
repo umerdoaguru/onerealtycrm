@@ -15,7 +15,8 @@ import styled from "styled-components";
 
 const DealClosedGraph = () => {
   const [dealStatusData, setDealStatusData] = useState([]);
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
   // Function to format the date to "DD MMM" format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -60,7 +61,12 @@ const DealClosedGraph = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/leads`
+        `https://crm.one-realty.in/api/leads`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       const data = response.data;
 

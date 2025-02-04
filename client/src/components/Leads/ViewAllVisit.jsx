@@ -19,7 +19,9 @@ const ViewAllVisit = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const navigate = useNavigate();
+  const EmpId = useSelector((state) => state.auth.user);
 
+  const token = EmpId?.token;
   useEffect(() => {
     fetchvisit();
   }, [id, render]);
@@ -27,7 +29,12 @@ const ViewAllVisit = () => {
   const fetchvisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setVisit(response.data);
       console.log(response);

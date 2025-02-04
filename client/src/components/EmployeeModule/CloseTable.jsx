@@ -16,7 +16,8 @@ const CloseTable = () => {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // Current page state
   const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+  const token = EmpId?.token;
   const navigate = useNavigate();
 
   // Fetch leads from the API
@@ -27,7 +28,12 @@ const CloseTable = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       // Filter out leads where deal_status is not "pending"
       const nonPendingLeads = response.data.filter(

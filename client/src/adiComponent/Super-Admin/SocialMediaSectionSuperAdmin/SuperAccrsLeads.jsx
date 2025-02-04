@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
+import { useSelector } from 'react-redux';
 
 
 function SuperAccrs() {
@@ -20,11 +21,17 @@ function SuperAccrs() {
     employeephone: "",
     createdTime:"",
   });
-  console.log(responses, 'Line number 7 data check');
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   const fetchResponses = async () => {
     try {
-      const response = await axios.get('https://crm.one-realty.in/api/get-responses');
+      const response = await axios.get('https://crm.one-realty.in/api/get-responses-super-admin',
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       console.log('Response received from API:', response.data);
       setResponses(response.data);   
     } catch (error) {
@@ -33,7 +40,12 @@ function SuperAccrs() {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -41,7 +53,12 @@ function SuperAccrs() {
   };
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
     } catch (error) {

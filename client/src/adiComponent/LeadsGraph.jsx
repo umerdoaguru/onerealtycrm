@@ -10,15 +10,23 @@ import {
 } from "recharts";
 import axios from "axios";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const LeadsGraph = () => {
   const [leadsData, setLeadsData] = useState([]);
   const [error, setError] = useState(null);
+  const adminuser = useSelector((state) => state.auth.user);
 
+  const token = adminuser?.token;
   useEffect(() => {
     const fetchLeadsData = async () => {
       try {
-        const response = await axios.get("https://crm.one-realty.in/api/leads");
+        const response = await axios.get("https://crm.one-realty.in/api/leads",
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }});
         const allLeads = response.data;
 
         const today = moment();

@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 
 const EmployeeLeadsGraph = () => {
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
   // useEffect(() => {
   //   const fetchLeadsData = async () => {
   //     try {
@@ -77,11 +77,19 @@ const EmployeeLeadsGraph = () => {
   const [leadsData, setLeadsData] = useState([]);
   const [error, setError] = useState(null);
 
+  
+    const token = EmpId?.token;
+
   useEffect(() => {
     const fetchLeadsData = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+          `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }}
         );
         const allLeads = response.data;
 

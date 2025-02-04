@@ -16,14 +16,20 @@ const AdminTotalLead = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
   const navigate = useNavigate();
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
   useEffect(() => {
     fetchLeads();
   }, []);
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       console.log(response);
       setLeads(response.data);
     } catch (error) {

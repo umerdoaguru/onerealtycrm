@@ -18,7 +18,8 @@ const VisitTable = () => {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
   const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+  const token = EmpId?.token;
   const navigate = useNavigate();
   useEffect(() => {
     fetchLeads();
@@ -26,7 +27,12 @@ const VisitTable = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employebyid-visit/${EmpId}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employebyid-visit/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
 
       setLeads(nonPendingLeads);

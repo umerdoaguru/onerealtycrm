@@ -2,16 +2,23 @@ import React, { useEffect, useState } from "react";
 import moment from "moment"; // Import moment for date formatting
 import ReactPaginate from 'react-paginate'; // Make sure to import ReactPaginate
 import styled from 'styled-components'; // Import styled-components for styling
+import { useSelector } from "react-redux";
 
 const LeadsReport = () => {
   const [leads, setLeads] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(7);
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
   useEffect(() => {
     const fetchLeads = async () => {
       try {
-        const response = await fetch("https://crm.one-realty.in/api/leads");
+        const response = await fetch("https://crm.one-realty.in/api/leads",
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }});
         const data = await response.json();
         console.log("Fetched leads data:", data); // Debugging line
 

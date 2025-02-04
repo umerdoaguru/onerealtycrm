@@ -8,6 +8,7 @@ import { BsPencilSquare, BsTrash } from "react-icons/bs";
 import ToDoList from "./../adiComponent/Todo";
 import styled from "styled-components";
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 
 function Leads() {
   const navigate = useNavigate();
@@ -50,6 +51,8 @@ function Leads() {
   const [meetingStatusFilter, setMeetingStatusFilter] = useState("");
   const [monthFilter, setMonthFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("asc"); 
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   // Fetch leads and employees from the API
   useEffect(() => {
@@ -61,7 +64,12 @@ function Leads() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        "https://crm.one-realty.in/api/leads"
+        "https://crm.one-realty.in/api/leads",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setLeads(response.data);
       console.log(leads);
@@ -72,7 +80,12 @@ function Leads() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);

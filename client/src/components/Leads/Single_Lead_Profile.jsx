@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import img from "../../images/lead_profile.png";
 import MainHeader from "../MainHeader";
 import Sider from "../Sider";
+import { useSelector } from "react-redux";
 function Single_Lead_Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -15,11 +16,17 @@ function Single_Lead_Profile() {
   const [followCreated, setFollowCreated] = useState(false);
   const [remarksCreated, setRemarksCreated] = useState(false);
 
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       console.log(response.data);
       setLeads(response.data);
 
@@ -47,7 +54,12 @@ function Single_Lead_Profile() {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
     
@@ -61,7 +73,12 @@ function Single_Lead_Profile() {
   const fetchRemark = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/remarks/${id}`
+        `https://crm.one-realty.in/api/remarks-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
       setRemarksCreated(response.data[0]);
@@ -79,7 +96,12 @@ function Single_Lead_Profile() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
       setVisit(response.data);

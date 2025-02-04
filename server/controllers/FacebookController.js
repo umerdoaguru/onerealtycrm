@@ -106,6 +106,8 @@ const fetchLeads = async (req, res) => {
     try {
       // Fetch leads from Meta API
       const response = await axios.get(`https://graph.facebook.com/v20.0/${formId}?fields=name,leads&access_token=${ACCESS_TOKEN}`);
+      console.log(response.data, "sdfs data");
+      
   
       const leads = response.data.leads?.data || [];
       

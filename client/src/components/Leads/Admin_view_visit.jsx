@@ -21,6 +21,8 @@ const Admin_view_visit = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const navigate = useNavigate();
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   useEffect(() => {
     fetchvisit();
@@ -29,7 +31,12 @@ const Admin_view_visit = () => {
   const fetchvisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setVisit(response.data);
       console.log(response);

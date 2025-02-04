@@ -3,6 +3,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { BsPencilSquare } from "react-icons/bs";
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 function WebsiteLeads() {
@@ -24,11 +25,17 @@ function WebsiteLeads() {
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
   const [loading , setLoading] = useState(false)
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
   // Fetch leads
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://one-realty.in/api/user-data");
+      const response = await axios.get("https://crm.one-realty.in/api/user-data-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setWebsiteLeads(response.data);
     } catch (error) {
       console.error("Error fetching website leads:", error);
@@ -38,7 +45,12 @@ function WebsiteLeads() {
   // Fetch employees
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -48,7 +60,12 @@ function WebsiteLeads() {
   // Fetch lead assignments
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setwebsiteLeadsAssigned(response.data);
     } catch (error) {
       console.error("Error fetching assigned leads:", error);

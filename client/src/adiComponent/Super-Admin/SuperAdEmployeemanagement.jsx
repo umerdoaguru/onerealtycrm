@@ -9,6 +9,7 @@ import SuperAdminSider from "./SuperAdminSider";
 import MainHeader from "../../components/MainHeader";
 import cogoToast from "cogo-toast"; // Import CogoToast
 import ReactPaginate from "react-paginate";
+import { useSelector } from "react-redux";
 
 const SuperAdEmployeemanagement = () => {
   const [employees, setEmployees] = useState([]);
@@ -26,6 +27,8 @@ const SuperAdEmployeemanagement = () => {
 
  const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 7; 
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   useEffect(() => {
     fetchEmployees();
@@ -34,7 +37,12 @@ const SuperAdEmployeemanagement = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        "https://crm.one-realty.in/api/getAllEmployees"
+        "https://crm.one-realty.in/api/getAllEmployees-super-admin",
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }}
       );
       const { employees } = response.data;
       console.log(employees);

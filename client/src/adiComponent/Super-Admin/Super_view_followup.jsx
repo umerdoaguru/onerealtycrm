@@ -17,6 +17,8 @@ const Super_view_followup = ({id,closeModalFollowUp}) => {
   const [filterText, setFilterText] = useState("");
 
   const [render, setRender] = useState(false);
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
  
   const navigate = useNavigate();
 
@@ -31,7 +33,12 @@ const Super_view_followup = ({id,closeModalFollowUp}) => {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setFollow_Up(response.data);
       console.log(response);

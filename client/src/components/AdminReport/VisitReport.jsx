@@ -32,7 +32,8 @@ const VisitReport = () => {
 
   ]);
   
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   // Fetch leads from the API
   useEffect(() => {
@@ -43,7 +44,12 @@ const VisitReport = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit`
+        `https://crm.one-realty.in/api/employe-all-visit-admin`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(
@@ -58,7 +64,12 @@ const VisitReport = () => {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);

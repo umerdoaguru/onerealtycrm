@@ -16,7 +16,8 @@ const EmployeeVisitData = () => {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 7; // Default leads per page
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+  const token = EmpId?.token;
   const [selectedColumns, setSelectedColumns] = useState([
     'lead_id',
 'name',
@@ -36,7 +37,12 @@ const EmployeeVisitData = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employebyid-visit/${EmpId}`
+        `https://crm.one-realty.in/api/employebyid-visit/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       // Filter out leads where visit is "Pending"
       const nonPendingLeads = response.data.filter(

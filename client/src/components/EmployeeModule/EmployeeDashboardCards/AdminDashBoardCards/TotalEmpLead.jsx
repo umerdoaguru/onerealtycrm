@@ -9,13 +9,18 @@ import Pagination from "../../../../adiComponent/comp/pagination";
 import ReactPaginate from "react-paginate";
 
 function TotalEmpLead() {
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
   const [leads, setLeads] = useState([]);
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage, setLeadsPerPage] = useState(7); // Default leads per page
   const navigate = useNavigate();
+
+  
+  const token = EmpId?.token;
+  console.log(token);
+  
 
   useEffect(() => {
     fetchLeads();
@@ -29,7 +34,12 @@ function TotalEmpLead() {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setLeads(response.data);
     } catch (error) {

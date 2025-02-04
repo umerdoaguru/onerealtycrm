@@ -8,6 +8,7 @@ import SuperAdminSider from "./SuperAdminSider";
 import Super_view_remarks from "./Super_view_remaks";
 import Super_view_followup from "./Super_view_followup";
 import Super_view_visit from "./Super_view_visit";
+import { useSelector } from "react-redux";
 
 function Super_Single_Lead_Profile({id,closeModalLead }) {
 
@@ -22,12 +23,18 @@ function Super_Single_Lead_Profile({id,closeModalLead }) {
   const [isModalOpenFollowUp, setIsModalOpenFollowUp] = useState(false);
   const [isModalOpenVisit, setIsModalOpenVisit] = useState(false);
 
-
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
    
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/leads/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/leads-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       console.log(response.data);
       setLeads(response.data);
 
@@ -46,7 +53,12 @@ function Super_Single_Lead_Profile({id,closeModalLead }) {
   const fetchFollowUp = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-follow-up/${id}`
+        `https://crm.one-realty.in/api/employe-follow-up-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
     
@@ -59,7 +71,12 @@ function Super_Single_Lead_Profile({id,closeModalLead }) {
   const fetchRemark = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/remarks/${id}`
+        `https://crm.one-realty.in/api/remarks-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
       setRemarksCreated(response.data[0]);
@@ -78,7 +95,12 @@ function Super_Single_Lead_Profile({id,closeModalLead }) {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-visit/${id}`
+        `https://crm.one-realty.in/api/employe-visit-super-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
       setVisit(response.data);

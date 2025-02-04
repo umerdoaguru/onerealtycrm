@@ -7,6 +7,7 @@ import FormInput from './FormInput';
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
 import UpdateForm from './UpdateForm';
+import { useSelector } from 'react-redux';
 
 const LeadsTable = () => {
   const [leads, setLeads] = useState([]);
@@ -47,12 +48,20 @@ const LeadsTable = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
   const [leadsPerPage] = useState(10);
-  
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   const fetchLeadsByFormId = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/Leads-data-fetch/${gotId}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/Leads-data-fetch-admin/${gotId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeads(response.data);
+      console.log(response.data);
+      
       setLoading(false);
     } catch (err) {
       console.error('Error fetching leads:', err);
@@ -61,7 +70,12 @@ const LeadsTable = () => {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -69,7 +83,12 @@ const LeadsTable = () => {
   };
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
     } catch (error) {

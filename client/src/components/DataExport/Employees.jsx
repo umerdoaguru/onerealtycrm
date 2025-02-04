@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate"; // Import ReactPaginate
 // import Sider from "../Sider";
 import Header from "../../pages/Quotation/Header";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 function Employees() {
   const [employee, setEmployee] = useState([]);
@@ -14,14 +15,20 @@ function Employees() {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const leadsPerPage = 6; // Default leads per page
-
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
   useEffect(() => {
     fetchEmployees();
   }, []);
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployee(response.data);
       setFilteredEmployee(response.data);
     } catch (error) {

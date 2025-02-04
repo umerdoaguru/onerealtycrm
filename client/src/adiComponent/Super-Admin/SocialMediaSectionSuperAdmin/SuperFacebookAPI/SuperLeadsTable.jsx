@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import SuperFormInput from './SuperFormInput';
 import SuperUpdateForm from './SuperUpdateForm';
 import SuperFormSelector from './SuperSelectForm';
+import { useSelector } from 'react-redux';
 
 const SuperLeadsTable = () => {
   const [leads, setLeads] = useState([]);
@@ -42,6 +43,8 @@ const SuperLeadsTable = () => {
     employeephone: "",
     createdTime:"",
   });
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
@@ -50,7 +53,12 @@ const SuperLeadsTable = () => {
 
   const fetchLeadsByFormId = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/Leads-data-fetch/${gotId}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/Leads-data-fetch-super-admin/${gotId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeads(response.data);
       setLoading(false);
     } catch (err) {
@@ -60,7 +68,12 @@ const SuperLeadsTable = () => {
   };
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/employee");
+      const response = await axios.get("https://crm.one-realty.in/api/employee-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -68,7 +81,12 @@ const SuperLeadsTable = () => {
   };
   const fetchLeadassigned = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeadsAssigned(response.data);
       // console.log(leadsAssigned);
     } catch (error) {

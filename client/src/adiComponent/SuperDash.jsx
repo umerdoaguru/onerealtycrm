@@ -14,6 +14,10 @@ import QuotationGraph from "./QuotationGraph";
 import SuperAdminSider from "./Super-Admin/SuperAdminSider";
 import SuperHeader from "./Super-Admin/SuperHeader";
 import DealGraph from "./DealClosedGraph";
+import SuperLeadGraph from "./Super-Admin/SuperLeadGraph";
+import SuperLeadAllVisitChart from "./Super-Admin/SuperLeadAllVisitChart";
+import SuperDealClosedGraph from "./Super-Admin/SuperDealClosedGraph";
+import SuperLeadsToday from "./Super-Admin/SuperLeadsToday";
 
 const SuperDash = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -44,12 +48,12 @@ const SuperDash = () => {
               <Overview />
             </div>
             <div className="grid grid-cols-1 gap-2 mx-7 mt-6 md:grid-cols-2 lg:grid-cols-3">
-              <LeadsGraph />
-              <Invoice />
-              <DealGraph />
+              <SuperLeadGraph />
+              <SuperLeadAllVisitChart />
+              <SuperDealClosedGraph />
             </div>
 
-            <LeadsReport />
+            <SuperLeadsToday />
             {/* <ToDoList /> */}
           </div>
         </div>

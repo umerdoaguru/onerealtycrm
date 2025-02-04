@@ -19,7 +19,9 @@ const EmployeeQuotationList = () => {
   const { id } = useParams();
 const navigate  = useNavigate();
   
+const EmpId = useSelector((state) => state.auth.user);
 
+const token = EmpId?.token;
   useEffect(() => {
     fetchQuotations();
   }, [id, render]);
@@ -27,7 +29,12 @@ const navigate  = useNavigate();
   const fetchQuotations = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/get-quotation-byLead/${id}`
+        `https://crm.one-realty.in/api/get-quotation-byLead/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setQuotations(response.data);
       console.log(response.data);

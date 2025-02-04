@@ -7,6 +7,7 @@ import moment from "moment";
 
 import Sider from "../Sider";
 import MainHeader from './../MainHeader';
+import { useSelector } from "react-redux";
 
 
 const Admin_RemarksView = () => {
@@ -22,10 +23,17 @@ const Admin_RemarksView = () => {
   useEffect(() => {
     fetchRemarks();
   }, [id, render]);
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   const fetchRemarks = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/remarks/${id}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/remarks-admin/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setRemarks(response.data);
       console.log(response);
     } catch (error) {

@@ -18,14 +18,21 @@ import styled from "styled-components";
 const EmployeeVisitGraph = () => {
   const [loading, setLoading] = useState(false);
   const [visitData, setVisitData] = useState([]); // Update to store visit data
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+
+  const token = EmpId?.token;
 
   useEffect(() => {
     const getVisitList = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employebyid-visit/${EmpId}`
+          `https://crm.one-realty.in/api/employebyid-visit/${EmpId.id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }}
         );
         const leadList = response.data;
         console.log(leadList);

@@ -24,12 +24,19 @@ function CreateCompanyProfile() {
   const [filterText, setFilterText] = useState("");
   const [sortAsc, setSortAsc] = useState(true);
   const navigate = useNavigate()
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   useEffect(() => {
     const fetchQuotations = async () => {
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/quotation-data`
+          `https://crm.one-realty.in/api/quotation-data-admin`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }}
         );
         setQuotations(response.data);
         console.log(quotations);

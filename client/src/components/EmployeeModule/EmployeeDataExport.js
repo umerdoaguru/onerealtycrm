@@ -256,14 +256,20 @@ function DataExport() {
 
 
   const [visit, setVisit] = useState([]);
-  const EmpId = useSelector((state) => state.auth.user.id);
+  const EmpId = useSelector((state) => state.auth.user);
+  const token = EmpId?.token;
 
 
 
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${EmpId}`
+        `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log("setLeads", response.data);
       setLeads(response.data);
@@ -275,7 +281,12 @@ function DataExport() {
   const fetchQuotation = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/get-quotation-byEmploye/${EmpId}`
+        `https://crm.one-realty.in/api/get-quotation-byEmploye/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setQuotation(response.data);
     } catch (error) {
@@ -286,7 +297,12 @@ function DataExport() {
   const fetchInvoice = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/get-employee-invoice/${EmpId}`
+        `https://crm.one-realty.in/api/get-employee-invoice/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       setInvoice(response.data);
     } catch (error) {
@@ -296,7 +312,12 @@ function DataExport() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employebyid-visit/${EmpId}`
+        `https://crm.one-realty.in/api/employebyid-visit/${EmpId.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
       setVisit(response.data);

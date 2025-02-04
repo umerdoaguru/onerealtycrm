@@ -16,9 +16,11 @@ import { FaCheckCircle, FaClipboardList } from "react-icons/fa";
 
 import SuperAdminSider from "./SuperAdminSider";
 import MainHeader from './../../components/MainHeader';
-import LeadData from "../../components/DataExport/LeadData";
-import VisitData from "../../components/DataExport/VisitData";
-import CloseData from "../../components/DataExport/CloseDateData";
+
+import SuperLeadData from "./SuperDataExport/SuperLeadData";
+import SuperEmployees from "./SuperDataExport/SuperEmployees";
+import SuperVisitData from "./SuperDataExport/SuperVisitData";
+import SuperCloseData from "./SuperDataExport/SuperCloseDateData";
 
 function SuperDataExport() {
   const [leads, setLeads] = useState([]);
@@ -29,7 +31,8 @@ function SuperDataExport() {
   const [invoice, setInvoice] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("LeadData"); // Set 'LeadData' as default
 
-  const UserId = useSelector((state) => state.auth.user.id);
+  const superadminuser = useSelector((state) => state.auth.user);
+  const token = superadminuser.token;
 
   useEffect(() => {
     fetchLeads();
@@ -41,7 +44,12 @@ function SuperDataExport() {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get("https://crm.one-realty.in/api/leads");
+      const response = await axios.get("https://crm.one-realty.in/api/leads-super-admin",
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setLeads(response.data);
     } catch (error) {
       console.error("Error fetching leads:", error);
@@ -50,7 +58,12 @@ function SuperDataExport() {
 
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employee`);
+      const response = await axios.get(`https://crm.one-realty.in/api/employee-super-admin`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       setEmployee(response.data);
     } catch (error) {
       console.error("Error fetching employee data:", error);
@@ -81,7 +94,12 @@ function SuperDataExport() {
   const fetchVisit = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit`
+        `https://crm.one-realty.in/api/employe-all-visit-super-admin`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }}
       );
       console.log(response.data);
       setVisit(response.data);
@@ -291,10 +309,10 @@ function SuperDataExport() {
 
         {/* Conditionally render the selected component */}
         <div className=" h-[calc(100vh-10rem)]  overflow-y-auto ">
-          {selectedComponent === "LeadData" && <LeadData />}
-          {selectedComponent === "EmployeeData" && <Employees />}
-          {selectedComponent === "VisitData" && <VisitData />}
-          {selectedComponent === "ClosedData" && <CloseData />}
+          {selectedComponent === "LeadData" && <SuperLeadData />}
+          {selectedComponent === "EmployeeData" && <SuperEmployees />}
+          {selectedComponent === "VisitData" && <SuperVisitData />}
+          {selectedComponent === "ClosedData" && <SuperCloseData />}
         </div>
       </div>
     </>

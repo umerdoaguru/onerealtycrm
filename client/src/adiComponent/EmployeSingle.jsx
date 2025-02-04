@@ -29,11 +29,18 @@ const EmployeeSingle = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [error, setError] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
+  const adminuser = useSelector((state) => state.auth.user);
+  const token = adminuser.token;
 
   // Fetch employee data
   const fetchEmployee = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/getEmployeeById/${employeeId}`);
+      const response = await axios.get(`https://crm.one-realty.in/api/getEmployeeById/${employeeId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       if (response.data.success) {
         setEmployee(response.data.employee);
         setNewEmployee({
@@ -236,7 +243,12 @@ const EmployeeSingle = () => {
   const fetchLeads = async () => {
     try {
       const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-leads/${employeeId}`);
+        `https://crm.one-realty.in/api/employe-leads-admin/${employeeId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }});
       const data = response.data;
       setLeads(data);
     } catch (error) {
@@ -293,7 +305,7 @@ const EmployeeSingle = () => {
                 <div className="flex items-center mb-6">
                   {/* {employee.photo ? (
                     <img
-                      src={`https://crm.one-realty.in${employee.photo}`}
+                      src={`https://crm.one-realty.in/${employee.photo}`}
                       alt="Profile"
                       className="w-24 h-24 border-2 border-gray-300 rounded-full"
                     />
@@ -322,7 +334,7 @@ const EmployeeSingle = () => {
                       Signature
                     </h4>
                     <img
-                      src={`https://crm.one-realty.in${employee.signature}`}
+                      src={`https://crm.one-realty.in/${employee.signature}`}
                       alt="Signature"
                       className="w-32 h-16 border-t border-gray-300"
                     />
