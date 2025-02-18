@@ -218,7 +218,7 @@ const AdminOverviewDash = () =>  {
                     Total Closed Deal
                   </h5>
                   <p
-                    className={`${
+                    className={`text-gray-800 text-xl font-semibold ${
                       selectedComponent === "ClosedData"
                         ? "text-white"
                         : "text-gray-600"

@@ -217,10 +217,10 @@ const Overview2 = () => {
                     Total Closed Deal
                   </h5>
                   <p
-                    className={`${
+                    className={`text-gray-800 text-xl font-semibold ${
                       selectedComponent === "ClosedData"
                         ? "text-white"
-                        : "text-gray-600"
+                        : "text-gray-800"
                     }`}
                   >
                     {closedCount}
