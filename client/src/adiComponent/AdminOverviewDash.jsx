@@ -65,24 +65,24 @@ const AdminOverviewDash = () =>  {
       console.error("Error fetching employee data:", error);
     }
   };
-  const fetchVisit = async () => {
-    try {
-      const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit-admin`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }}
-      );
-      console.log(response.data);
-      setVisit(response.data);
-      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+  // const fetchVisit = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `https://crm.one-realty.in/api/employe-all-visit-admin`,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': `Bearer ${token}`
+  //       }}
+  //     );
+  //     console.log(response.data);
+  //     setVisit(response.data);
+  //     // Ensure proper comparison with 'Created', trim any spaces and normalize the case
     
-    } catch (error) {
-      console.error("Error fetching quotations:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error fetching quotations:", error);
+  //   }
+  // };
 
   // const fetchQuotation = async () => {
   //   try {
@@ -107,7 +107,7 @@ const AdminOverviewDash = () =>  {
   useEffect(() => {
     fetchLeads();
     fetchEmployee();
-  fetchVisit();
+  // fetchVisit();
   }, []);
 
   const employeeCount = employee.length;
@@ -116,7 +116,10 @@ const AdminOverviewDash = () =>  {
     (lead) => lead.deal_status === "close"
   ).length; 
   
-  const visitCount = visit.length;
+  const visitCount = leads.filter((lead) =>
+    ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+  ).length;
+
 
   return (
     <>

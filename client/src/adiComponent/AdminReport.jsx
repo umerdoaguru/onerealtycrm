@@ -655,7 +655,7 @@ const AdminReport = () =>  {
     fetchEmployee();
     fetchQuotation();
     fetchInvoice();
-    fetchVisit();
+  
   }, []);
 
   const fetchLeads = async () => {
@@ -702,24 +702,7 @@ const AdminReport = () =>  {
       console.error("Error fetching invoices:", error);
     }
   };
-  const fetchVisit = async () => {
-    try {
-      const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit-admin`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }}
-      );
-      console.log(response.data);
-      setVisit(response.data);
-      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
-    
-    } catch (error) {
-      console.error("Error fetching quotations:", error);
-    }
-  };
+ 
 
   const leadCount = leads.filter(
     (lead) => lead.lead_status === "completed"

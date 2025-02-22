@@ -35,6 +35,7 @@ function EmpLeadReport() {
    
     "subject",
     "visit",
+    "visit_date",
     "d_closeDate",
     "createdTime",
     "actual_date",
@@ -127,35 +128,59 @@ function EmpLeadReport() {
     
       subject: "Project",
       visit: "Visit",
+      visit_date: "Visit Date",
       d_closeDate: "Close Date",
       createdTime: "Assigned Date",
       actual_date: "Actual Date",
     };
 
+    // const completedLeads = filteredLeads.map((lead) => {
+    //   const formattedLead = {};
+
+    //   selectedColumns.forEach((col) => {
+    //     const newKey = columnMapping[col] || col;
+    //     formattedLead[newKey] =
+    //       (col === "actual_date" || col === "createdTime" || col === "visit_date") && lead[col]
+    //         ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
+    //         : lead[col];
+    //   });
+
+    //   formattedLead["Actual Date"] = lead["actual_date"]
+    //     ? moment(lead["actual_date"]).format("DD MMM YYYY").toUpperCase()
+    //     : "";
+    //   formattedLead["Assigned Date"] = lead["createdTime"]
+    //     ? moment(lead["createdTime"]).format("DD MMM YYYY").toUpperCase()
+    //     : "";
+    //   formattedLead["Visit Date"] = lead["visit_date"]
+    //     ? moment(lead["visit_date"]).format("DD MMM YYYY").toUpperCase()
+    //     : "pending";
+    //   formattedLead["Close Date"] = lead["d_closeDate"]
+    //     ? moment(lead["d_closeDate"]).format("DD MMM YYYY").toUpperCase()
+    //     : "pending";
+
+    //   return formattedLead;
+    // });
     const completedLeads = filteredLeads.map((lead) => {
       const formattedLead = {};
-
+    
       selectedColumns.forEach((col) => {
         const newKey = columnMapping[col] || col;
-        formattedLead[newKey] =
-          (col === "actual_date" || col === "createdTime") && lead[col]
-            ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
-            : lead[col];
+    
+        if (["actual_date", "createdTime", "visit_date", "d_closeDate"].includes(col)) {
+          // Check if date exists and is valid
+          formattedLead[newKey] =
+            lead[col] && moment(lead[col], moment.ISO_8601, true).isValid()
+              ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
+              : "pending"; // If invalid or missing, set as "PENDING"
+        } else {
+          formattedLead[newKey] = lead[col]; // Assign other fields normally
+        }
       });
-
-      formattedLead["Actual Date"] = lead["actual_date"]
-        ? moment(lead["actual_date"]).format("DD MMM YYYY").toUpperCase()
-        : "";
-      formattedLead["Assigned Date"] = lead["createdTime"]
-        ? moment(lead["createdTime"]).format("DD MMM YYYY").toUpperCase()
-        : "";
-      formattedLead["Close Date"] = lead["d_closeDate"]
-        ? moment(lead["d_closeDate"]).format("DD MMM YYYY").toUpperCase()
-        : "pending";
-
+    
       return formattedLead;
     });
-
+    
+    
     const worksheet = XLSX.utils.json_to_sheet(completedLeads);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(

@@ -180,7 +180,7 @@ const ViewAllRemark = () => {
                       <td className="px-6 py-4 whitespace-nowrap">{remark.employee_name}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{remark.remark_status}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{remark.answer_remark}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{remark.date}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">{moment(remark.date).format("DD MMM YYYY").toUpperCase()}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <button
                           className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-3 rounded m-1"

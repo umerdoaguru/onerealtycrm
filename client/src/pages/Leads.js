@@ -34,6 +34,7 @@ function Leads() {
   const [errors, setErrors] = useState({});
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterDate, setFilterDate] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   // Pagination state
@@ -50,9 +51,40 @@ function Leads() {
   const [leadnotInterestedStatusFilter, setLeadnotInterestedStatusFilter] = useState("");
   const [meetingStatusFilter, setMeetingStatusFilter] = useState("");
   const [monthFilter, setMonthFilter] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc"); 
+  const [sortOrder, setSortOrder] = useState("desce"); 
+  const [visitmonthFilter, setVisitMonthFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState("");
   const adminuser = useSelector((state) => state.auth.user);
   const token = adminuser.token;
+const uniqueYears = [
+    ...new Set(leads.map((lead) => moment(lead.createdTime).format("YYYY")))
+  ];
+
+  const monthOrder = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ]
+  const uniqueMonth = [
+    ...new Set(
+      leads
+        .filter((lead) => moment(lead.createdTime).format("YYYY") === yearFilter)
+        .map((lead) => moment(lead.createdTime).format("MMMM"))
+    ),
+  ].sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b)); // Sort by monthOrder
+
+  const uniqueVisitMonth = [
+    ...new Set(
+      leads
+        .filter(
+          (lead) =>
+            lead.visit === visitFilter && 
+            lead.visit !== "pending" && 
+            lead.visit_date && moment(lead.visit_date, moment.ISO_8601, true).isValid() 
+        )
+        .map((lead) => moment(lead.visit_date).format("MMMM"))
+    ),
+  ].sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b)); // Sort months in order
+  
 
   // Fetch leads and employees from the API
   useEffect(() => {
@@ -331,10 +363,10 @@ function Leads() {
   
     // Sort by date
     filtered = filtered.sort((a, b) => {
-      if (sortOrder === "asc") {
-        return new Date(a.createdTime) - new Date(b.createdTime);
-      } else {
+      if (sortOrder === "desce") {
         return new Date(b.createdTime) - new Date(a.createdTime);
+      } else {
+        return new Date(a.createdTime) - new Date(b.createdTime);
       }
     });
   
@@ -349,13 +381,13 @@ function Leads() {
 }
 
   
-    // Filter by date range
-    if (startDate && endDate) {
-      filtered = filtered.filter((lead) => {
-        const leadDate = moment(lead.createdTime).format("YYYY-MM-DD");
-        return leadDate >= startDate && leadDate <= endDate;
-      });
-    }
+   // Filter by date range
+       if (filterDate) {
+         filtered = filtered.filter((lead) => {
+           const leadDate = moment(lead.createdTime).format("YYYY-MM-DD");
+           return leadDate === filterDate
+         });
+       }
   
     // Filter by lead source
     if (leadSourceFilter) {
@@ -407,14 +439,26 @@ function Leads() {
       filtered = filtered.filter((lead) => lead.assignedTo === employeeFilter);
     }
   
-    // Filter by month
-    if (monthFilter) {
-      filtered = filtered.filter((lead) => {
-        const leadMonth = moment(lead.createdTime).format("MM");
-        return leadMonth === monthFilter;
-      });
-    }
-  
+     // Filter by month
+      if (monthFilter) {
+        filtered = filtered.filter((lead) => {
+          const leadMonth = moment(lead.createdTime).format("MMMM");
+          return leadMonth === monthFilter;
+        });
+      }
+      if (yearFilter) {
+        filtered = filtered.filter((lead) => {
+          const leadYear = moment(lead.createdTime).format("YYYY");
+          return leadYear === yearFilter;
+        });
+      }
+    
+      if (visitmonthFilter) {
+        filtered = filtered.filter((lead) => {
+          const visitleadMonth = moment(lead.visit_date).format("MMMM");
+          return visitleadMonth === visitmonthFilter;
+        });
+      }
     return filtered;
   };
 
@@ -435,6 +479,8 @@ function Leads() {
     meetingStatusFilter,
     employeeFilter,
     monthFilter,
+    yearFilter,
+    visitmonthFilter,
     sortOrder,
   ]);
   
@@ -486,9 +532,8 @@ const handleLeadsPerPageChange = (e) => {
   setCurrentPage(0); // Reset to the first page
 };
 const toggleSortOrder = () => {
-  setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  setSortOrder((prevOrder) => (prevOrder === "desce" ? "asce" : "desce"));
 };
-  
 
   return (
     <>
@@ -512,34 +557,47 @@ const toggleSortOrder = () => {
               </button>
             </div>
             <div className="grid max-sm:grid-cols-2 sm:grid-cols-3  lg:grid-cols-5 gap-4 mb-4">
-              <div>
+            <div>
                 <label htmlFor="">Search</label>
                 <input
                   type="text"
                     placeholder=" Name,Lead Source,Assigned To,Phone No"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="border rounded-2xl p-2 w-full"
+                  className={`border rounded-2xl p-2 w-full ${
+                    searchTerm ? "bg-blue-500 text-white" : "bg-white"
+                   }`}
                 />
               </div>
               <div>
-                <label htmlFor="">Start Date</label>
+                <label htmlFor="">Filterd Date</label>
                 <input
                   type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="border  rounded-2xl p-2 w-full"
+                  value={filterDate}
+                  onChange={(e) => setFilterDate(e.target.value)}
+                  className={`border rounded-2xl p-2 w-full ${
+                    filterDate ? "bg-blue-500 text-white" : "bg-white"
+                   }`}
                 />
               </div>
+             
 
-              <div>
-                <label htmlFor="">End Date</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="border   rounded-2xl p-2 w-full"
-                />
+
+           <div>
+                <label htmlFor="">Meeting Status</label>
+                <select
+                  value={meetingStatusFilter}
+                  onChange={(e) => setMeetingStatusFilter(e.target.value)}
+                  className={`border rounded-2xl p-2 w-full ${
+                   meetingStatusFilter ? "bg-blue-500 text-white" : "bg-white"
+                  }`}
+                >
+                  <option value="">All Meeting Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="done by director">Done By Director</option>
+                  <option value="done by manager">Done By Manager</option>
+                 
+                </select>
               </div>
               <div>
                 <label htmlFor="">Lead Source Filter</label>
@@ -595,6 +653,9 @@ const toggleSortOrder = () => {
                   <option value="cancelled">Cancelled</option>
                 </select>
               </div>
+
+
+            
               <div>
                 <label htmlFor="">Lead Status</label>
                 <select
@@ -640,8 +701,8 @@ const toggleSortOrder = () => {
 
               )}
 
-{leadStatusFilter === "site visit done" && (
-                    <div>
+
+     <div>
                 <label htmlFor="">Visit Filter</label>
                 <select
                   value={visitFilter}
@@ -657,49 +718,69 @@ const toggleSortOrder = () => {
                   <option value="self">Self Visit</option>
                 </select>
               </div>
-                )}
-              <div>
-                <label htmlFor="">Meeting Status</label>
-                <select
-                  value={meetingStatusFilter}
-                  onChange={(e) => setMeetingStatusFilter(e.target.value)}
-                  className={`border rounded-2xl p-2 w-full ${
-                   meetingStatusFilter ? "bg-blue-500 text-white" : "bg-white"
-                  }`}
-                >
-                  <option value="">All Meeting Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="done by director">Done By Director</option>
-                  <option value="done by manager">Done By Manager</option>
-                 
-                </select>
-              </div>
 
-
+  {visitFilter && (
               <div>
-  <label htmlFor="">Month Filter</label>
+  <label htmlFor="" className=" fw-semibold text-[blue]">Visit Month Filter</label>
   <select
-    value={monthFilter}
-    onChange={(e) => setMonthFilter(e.target.value)}
+    value={visitmonthFilter}
+    onChange={(e) => setVisitMonthFilter(e.target.value)}
     className={`border rounded-2xl p-2 w-full ${
-     monthFilter ? "bg-blue-500 text-white" : "bg-white"
+     visitmonthFilter ? "bg-blue-500 text-white" : "bg-white"
     }`}
   >
     <option value="">All Months</option>
-    <option value="01">January</option>
-    <option value="02">February</option>
-    <option value="03">March</option>
-    <option value="04">April</option>
-    <option value="05">May</option>
-    <option value="06">June</option>
-    <option value="07">July</option>
-    <option value="08">August</option>
-    <option value="09">September</option>
-    <option value="10">October</option>
-    <option value="11">November</option>
-    <option value="12">December</option>
+    {uniqueVisitMonth.map((visitmonth) => (
+        <option key={visitmonth} value={visitmonth}>
+          {visitmonth}
+        </option>
+      ))}
   </select>
 </div>
+
+    )}
+
+
+<div>
+    <label htmlFor="yearFilter">Year Filter</label>
+    <select
+      value={yearFilter}
+      onChange={(e) => setYearFilter(e.target.value)}
+      className={`border rounded-2xl p-2 w-full ${
+        yearFilter ? "bg-blue-500 text-white" : "bg-white"
+      }`}
+    >
+      <option value="">All Years</option>
+      {uniqueYears.map((year) => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    
+    </select>
+  </div>
+
+  {yearFilter && (
+         <div>
+         <label htmlFor="">Month Filter</label>
+         <select
+           value={monthFilter}
+           onChange={(e) => setMonthFilter(e.target.value)}
+           className={`border rounded-2xl p-2 w-full ${
+            monthFilter ? "bg-blue-500 text-white" : "bg-white"
+           }`}
+         >
+           <option value="">All Months</option>
+          
+             {uniqueMonth.map((month) => (
+               <option key={month} value={month}>
+                 {month}
+               </option>
+             ))}
+         </select>
+       </div>
+      )}
+            
 <div>
                 <label htmlFor="">Employee Filter</label>
                 <select
@@ -764,7 +845,7 @@ const toggleSortOrder = () => {
             <table className="min-w-full bg-white border">
              
               <thead>
-                <tr>
+                <tr className="text-nowrap">
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     S.no
                   </th>
@@ -791,11 +872,12 @@ const toggleSortOrder = () => {
                     Visit
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Reason
+                    Visit Date
                   </th>
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
-                    Deal Status
+                    Reason
                   </th>
+               
                   <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Meeting Status
                   </th>
@@ -811,7 +893,7 @@ const toggleSortOrder = () => {
   onClick={toggleSortOrder}
 >
   Assigned Date
-  <span>{sortOrder === "asc" ? "▲" : "▼" }</span>
+  <span className="text-blue-900 mx-2">{sortOrder === "desce" ? "▲" : "▼" }</span>
 </th>
                     <th className="px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-sm border-y-2 border-gray-300 text-left">
                     Action
@@ -867,12 +949,15 @@ const toggleSortOrder = () => {
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.visit}
                         </td>
+                        <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold text-nowrap">
+                                             {lead.visit_date === "pending"
+                                               ? "pending"
+                                               : moment(lead.visit_date).format("DD MMM YYYY").toUpperCase()}
+                                           </td>
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.reason}
                         </td>
-                        <td className="px-6 py-4 border-b border-gray-200 font-semibold">
-                          {lead.deal_status}
-                        </td>
+                        
                         <td className="px-6 py-4 border-b border-gray-200 font-semibold">
                           {lead.meeting_status}
                         </td>
@@ -889,7 +974,7 @@ const toggleSortOrder = () => {
                       <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
                         {moment(lead.createdTime).format("DD MMM YYYY").toUpperCase()}
                       </td>
-                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold">
+                      <td className="px-6 py-4 border-b border-gray-200 text-gray-800 font-semibold text-nowrap">
                         <button
                           className="text-blue-500 hover:text-blue-700"
                           onClick={() => handleEditClick(lead)}

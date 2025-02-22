@@ -27,13 +27,15 @@ const TotalVisit = () => {
 
   const fetchLeads = async () => {
     try {
-      const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit`,
+      const response = await axios.get(`https://crm.one-realty.in/api/leads`,
         {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }});
-      const nonPendingLeads = response.data.filter((lead) => lead.visit !== "pending");
+        const nonPendingLeads = response.data.filter((lead) =>
+          ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+        );
 
       setLeads(nonPendingLeads);
       setFilteredLeads(nonPendingLeads); // Initial data set for filtering
@@ -121,7 +123,7 @@ const TotalVisit = () => {
             <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
               <thead className="bg-gray-100">
               <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       S.no
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -139,9 +141,7 @@ const TotalVisit = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Visit Date
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Report
-                    </th>
+              
                 
                   </tr>
               </thead>
@@ -160,18 +160,16 @@ const TotalVisit = () => {
                       {visit.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                     {visit.employee_name}
+                     {visit.assignedTo}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                      {visit.visit}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                   
-                     {moment(visit.visit_date).format("DD MMM YYYY").toUpperCase()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                     {visit.report}
-                    </td>
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                     {visit.visit_date === "pending"
+                       ? "pending"
+                       : moment(visit.visit_date).format("DD MMM YYYY").toUpperCase()}
+                   </td>
                    
                   </tr>
                   ))

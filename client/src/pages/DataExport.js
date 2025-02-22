@@ -32,7 +32,7 @@ function DataExport() {
     fetchEmployee();
     fetchQuotation();
     fetchInvoice();
-    fetchVisit();
+    // fetchVisit();
   }, []);
 
   const fetchLeads = async () => {
@@ -84,24 +84,24 @@ function DataExport() {
       console.error("Error fetching invoices:", error);
     }
   };
-  const fetchVisit = async () => {
-    try {
-      const response = await axios.get(
-        `https://crm.one-realty.in/api/employe-all-visit`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }}
-      );
-      console.log(response.data);
-      setVisit(response.data);
-      // Ensure proper comparison with 'Created', trim any spaces and normalize the case
+  // const fetchVisit = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `https://crm.one-realty.in/api/employe-all-visit`,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': `Bearer ${token}`
+  //       }}
+  //     );
+  //     console.log(response.data);
+  //     setVisit(response.data);
+  //     // Ensure proper comparison with 'Created', trim any spaces and normalize the case
     
-    } catch (error) {
-      console.error("Error fetching quotations:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error fetching quotations:", error);
+  //   }
+  // };
 
   const leadCount = leads.filter(
     (lead) => lead.lead_status === "completed"
@@ -109,7 +109,10 @@ function DataExport() {
   const employeeCount = employee.length;
  
 
-  const visitCount = visit.length;
+  const visitCount = leads.filter((lead) =>
+    ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+  ).length;
+
 
 
   const closedCount = leads.filter(
@@ -168,48 +171,7 @@ function DataExport() {
             </div>
           </div>
 
-          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
-            <div
-              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
-                selectedComponent === "EmployeeData"
-                  ? "bg-blue-500 text-white"
-                  : ""
-              }`} // Change background color if active
-              onClick={() => setSelectedComponent("EmployeeData")} // Set selected component
-            >
-              <div className="p-4 flex flex-col items-center text-center">
-                <div
-                  className={`text-3xl ${
-                    selectedComponent === "EmployeeData"
-                      ? "text-white"
-                      : "text-gray-700"
-                  }`}
-                >
-                  <SiMoneygram />
-                </div>
-                <div className="mt-2">
-                  <h5
-                    className={`text-xl font-semibold ${
-                      selectedComponent === "EmployeeData"
-                        ? "text-white"
-                        : "text-gray-800"
-                    }`}
-                  >
-                    Employees Data
-                  </h5>
-                  <p
-                    className={`${
-                      selectedComponent === "EmployeeData"
-                        ? "text-white"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    {employeeCount}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+  
 
         {/* Card for Visit Data */}
         <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
@@ -298,15 +260,57 @@ function DataExport() {
               </div>
             </div>
           </div>
+          <div className="w-full sm:w-1/2 lg:w-1/4 xl:w-1/5 my-3 p-0 sm-mx-0 mx-3">
+            <div
+              className={` shadow-lg rounded-lg overflow-hidden cursor-pointer ${
+                selectedComponent === "EmployeeData"
+                  ? "bg-blue-500 text-white"
+                  : ""
+              }`} // Change background color if active
+              onClick={() => setSelectedComponent("EmployeeData")} // Set selected component
+            >
+              <div className="p-4 flex flex-col items-center text-center">
+                <div
+                  className={`text-3xl ${
+                    selectedComponent === "EmployeeData"
+                      ? "text-white"
+                      : "text-gray-700"
+                  }`}
+                >
+                  <SiMoneygram />
+                </div>
+                <div className="mt-2">
+                  <h5
+                    className={`text-xl font-semibold ${
+                      selectedComponent === "EmployeeData"
+                        ? "text-white"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    Employees Data
+                  </h5>
+                  <p
+                    className={`${
+                      selectedComponent === "EmployeeData"
+                        ? "text-white"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    {employeeCount}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
           
         </div>
 
         {/* Conditionally render the selected component */}
         <div className="w-full h-[calc(100vh-10rem)] overflow-y-auto">
           {selectedComponent === "LeadData" && <LeadData />}
-          {selectedComponent === "EmployeeData" && <Employees />}
           {selectedComponent === "VisitData" && <VisitData />}
           {selectedComponent === "ClosedData" && <CloseData />}
+          {selectedComponent === "EmployeeData" && <Employees />}
         </div>
       </div>
     </>

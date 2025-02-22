@@ -27,13 +27,15 @@ const SuperLeadAllVisitChart = () => {
       setLoading(true); // Start loading
 
       try {
-        const response = await axios.get(`https://crm.one-realty.in/api/employe-all-visit-super-admin`,
+        const response = await axios.get(`https://crm.one-realty.in/api/leads-super-admin`,
           {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
           }});
-        const allLeads = response.data;
+        const allLeads = response.data.filter((lead) =>
+          ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+        );
 
         const today = moment();
         const startDate = moment().subtract(28, "days"); // 28 days range including today

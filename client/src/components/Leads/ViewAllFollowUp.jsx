@@ -200,7 +200,7 @@ const ViewAllFollowUp = () => {
                        {followup.follow_up_type}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                       {followup.follow_up_date}
+                    {moment(followup.follow_up_date).format("DD MMM YYYY").toUpperCase()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                        {followup.report}
