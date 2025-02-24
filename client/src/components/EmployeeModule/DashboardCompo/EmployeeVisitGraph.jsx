@@ -27,14 +27,16 @@ const EmployeeVisitGraph = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://crm.one-realty.in/api/employebyid-visit/${EmpId.id}`,
+          `https://crm.one-realty.in/api/employe-leads/${EmpId.id}`,
           {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
           }}
         );
-        const leadList = response.data;
+        const leadList = response.data.filter((lead) =>
+          ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+        );
         console.log(leadList);
         
 

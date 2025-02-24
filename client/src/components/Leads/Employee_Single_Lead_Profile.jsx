@@ -13,6 +13,7 @@ function Employee_Single_Lead_Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
+  const [loading , setLoading] = useState(false)
   const [visit, setVisit] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [showPopupVisit, setShowPopupVisit] = useState(false);
@@ -445,6 +446,7 @@ const token = EmpId?.token;
           return;
         }
       }
+      setLoading(true)
       // Send updated data to the backend using Axios
       const response = await axios.put(
         `https://crm.one-realty.in/api/updateLeadStatus/${currentLead.lead_id}`,
@@ -457,12 +459,15 @@ const token = EmpId?.token;
         setRender(!render);
         closePopup(); // Close the popup on success
         fetchLeads();
+        setLoading(false)
       } else {
         console.error("Error updating:", response.data);
+        setLoading(false)
         cogoToast.error({ general: "Failed to update the lead status." });
       }
     } catch (error) {
       console.error("Request failed:", error);
+      setLoading(false)
       cogoToast.error("Failed to update the lead status.");
     }
   };
@@ -481,6 +486,7 @@ const token = EmpId?.token;
     console.log("Visit data:", visitLead);
   
     try {
+      setLoading(true)
       // First API call: Create a visit
       const response = await axios.post(
         `https://crm.one-realty.in/api/employe-visit`,
@@ -501,7 +507,7 @@ const token = EmpId?.token;
         // Second API call: Update visit status
         const updateResponse = await axios.put(
           `https://crm.one-realty.in/api/updateVisitStatus/${leads[0].lead_id}`,
-          { visit: visitLead.visit }
+          { visit: visitLead.visit,visit_date:visitLead.visit_date }
         );
   
         if (updateResponse.status === 200) {
@@ -538,12 +544,15 @@ const token = EmpId?.token;
         closePopupVisit();
         fetchVisit();
         fetchLeads();
+        setLoading(false)
       } else {
         console.error("Error creating visit:", response.data);
         cogoToast.error("Failed to create visit.");
+        setLoading(false)
       }
     } catch (error) {
       console.error("Request failed:", error);
+      setLoading(false)
       cogoToast.error("An error occurred while processing your request.");
     }
   };
@@ -574,6 +583,7 @@ const token = EmpId?.token;
     }
   
     try {
+      setLoading(true)
       // Send updated data to the backend using Axios
       const response = await axios.post(
         `https://crm.one-realty.in/api/employe-follow-up`,
@@ -609,12 +619,15 @@ const token = EmpId?.token;
         closePopupFollowUp();
         fetchFollowUp();
         fetchLeads();
+        setLoading(false)
       } else {
         console.error("Error creating follow-up:", response.data);
         cogoToast.error("Failed to create follow-up.");
+        setLoading(false)
       }
     } catch (error) {
       console.error("Request failed:", error);
+      setLoading(false)
       cogoToast.error("Failed to create follow-up.");
     }
   };
@@ -631,7 +644,7 @@ const token = EmpId?.token;
     }
   
     try {
-
+      setLoading(true)
         const response = await axios.post(`https://crm.one-realty.in/api/remarks`,
         {
           lead_id: leads[0].lead_id,
@@ -648,12 +661,15 @@ const token = EmpId?.token;
         closePopupRemark();
         fetchRemark();
         fetchLeads();
+        setLoading(false)
       } else {
         cogoToast.error("Failed to create remark and update lead.");
+        setLoading(false)
       }
     } catch (error) {
       console.error("Request failed:", error);
       cogoToast.error("Failed to create remark and update lead.");
+      setLoading(false)
     }
   };
   
@@ -878,6 +894,7 @@ console.log(totalVisit);
     
       <th className="px-6 py-3 border-b-2 border-gray-300">Project</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
+      <th className="px-6 py-3 border-b-2 border-gray-300">Visit Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Close Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Assigned Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Actual Date</th>
@@ -910,6 +927,13 @@ console.log(totalVisit);
 
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.visit}</td>
+    
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+  {lead.visit_date === "pending"
+    ? "pending"
+    : moment(lead.visit_date).format("DD MMM YYYY").toUpperCase()}
+</td>
+
     <td className="px-6 py-4 border-b border-gray-200 font-semibold text-gray-800">
       {lead.d_closeDate === "pending"
         ? "pending"
@@ -985,9 +1009,9 @@ console.log(totalVisit);
                 <div className="flex justify-end">
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                    onClick={saveChanges}
+                    onClick={saveChanges} disabled = {loading}
                   >
-                    Save
+                   {loading ? 'Save...' : 'Save'}
                   </button>
                   <button
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
@@ -1057,9 +1081,9 @@ console.log(totalVisit);
                 <div className="flex justify-end">
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                    onClick={saveVisit}
+                    onClick={saveVisit}  disabled = {loading}
                   >
-                    Save
+                  {loading ? 'Save...' : 'Save'}
                   </button>
                   <button
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
@@ -1138,9 +1162,9 @@ console.log(totalVisit);
                 <div className="flex justify-end">
                   <button
                     className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-                    onClick={saveFollowUp}
+                    onClick={saveFollowUp} disabled = {loading}
                   >
-                    Save
+                {loading ? 'Save...' : 'Save'}
                   </button>
                   <button
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
@@ -1210,9 +1234,9 @@ console.log(totalVisit);
       <div className="flex justify-end">
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mr-2"
-          onClick={saveRemark}
+          onClick={saveRemark} disabled = {loading}
         >
-          Save
+        {loading ? 'Save...' : 'Save'}
         </button>
         <button
           className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"

@@ -68,7 +68,7 @@ const ViewAllVisit = () => {
       // Update visit status
       const updateVisitResponse = await axios.put(
         `https://crm.one-realty.in/api/updateVisitStatus/${visit.lead_id}`,
-        { visit: "pending" }
+        { visit: "pending",visit_date: "pending" }
       );
   
       if (updateVisitResponse.status === 200) {
@@ -131,7 +131,22 @@ const ViewAllVisit = () => {
       if (response.status === 200) {
         cogoToast.success("Visit updated successfully!");
         setRender(!render); // Refresh the list after updating
+    
         closeModal(); // Close the modal
+         // Second API call: Update visit status
+         const updateResponse = await axios.put(
+          `https://crm.one-realty.in/api/updateVisitStatus/${modalData.lead_id}`,
+          { visit: modalData.visit,visit_date:modalData.visit_date }
+        );
+  
+        if (updateResponse.status === 200) {
+          console.log("Visit status updated successfully:", updateResponse.data);
+          cogoToast.success("Visit status updated successfully");
+        } else {
+          console.error("Error updating visit status:", updateResponse.data);
+          cogoToast.error("Failed to update visit status.");
+          return; // Exit if this step fails
+        }
       }
     } catch (error) {
       console.error("Error updating visit:", error);
@@ -227,7 +242,7 @@ const ViewAllVisit = () => {
                        {visit.visit}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                       {visit.visit_date}
+                      {moment(visit.visit_date).format("DD MMM YYYY").toUpperCase()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                        {visit.report}

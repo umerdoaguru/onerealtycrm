@@ -334,7 +334,10 @@ function DataExport() {
   // const quotationCount = quotation.length;
   // const invoiceCount = invoice.length;
 
-  const visitCount = visit.length;
+
+  const visitCount = leads.filter((lead) =>
+    ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+  ).length;
 
 
   const closedCount = leads.filter(

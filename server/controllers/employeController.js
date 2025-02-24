@@ -609,17 +609,17 @@ const AllgetEmployeebyvisit = async (req, res) => {
 const updateOnlyVisitStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { visit } = req.body;
+    const { visit,visit_date } = req.body;
 
     console.log(visit, id);
 
     const sql = `UPDATE leads SET 
-    visit = ?
+    visit = ?, visit_date = ?
     
     WHERE lead_id = ?`;
 
     await new Promise((resolve, reject) => {
-      db.query(sql, [visit, id], (err, result) => {
+      db.query(sql, [visit,visit_date, id], (err, result) => {
         if (err) {
           reject(err);
         } else {

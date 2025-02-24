@@ -316,6 +316,7 @@ function Single_Lead_Profile() {
     
       <th className="px-6 py-3 border-b-2 border-gray-300">Project</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Visit</th>
+      <th className="px-6 py-3 border-b-2 border-gray-300">Visit Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Close Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Assigned Date</th>
       <th className="px-6 py-3 border-b-2 border-gray-300">Actual Date</th>
@@ -348,7 +349,12 @@ function Single_Lead_Profile() {
 
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.subject}</td>
     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">{lead.visit}</td>
-    <td className="px-6 py-4 border-b border-gray-200 font-semibold text-gray-800">
+    <td className="px-6 py-4 border-b border-gray-200 text-gray-800 ">
+                                             {lead.visit_date === "pending"
+                                               ? "pending"
+                                               : moment(lead.visit_date).format("DD MMM YYYY").toUpperCase()}
+                                           </td>
+    <td className="px-6 py-4 border-b border-gray-200  text-gray-800">
       {lead.d_closeDate === "pending"
         ? "pending"
         : moment(lead.d_closeDate).format("DD MMM YYYY").toUpperCase()}

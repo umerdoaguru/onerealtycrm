@@ -117,9 +117,11 @@ const EmployeeOverview = () => {
     (lead) => lead.deal_status === "close"
   ).length; // Get count for Closed Data
 
-  const visitCount = visit.length;
+  const visitCount = leads.filter((lead) =>
+    ["fresh", "re-visit", "self", "associative"].includes(lead.visit)
+  ).length;
 
-
+  
   return (
     <>
       {/* <div className="w-full  h-screen"> */}

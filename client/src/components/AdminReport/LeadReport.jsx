@@ -38,6 +38,7 @@ function LeadReport() {
       
         "subject",
         "visit",
+        "visit_date",
         "d_closeDate",
         "createdTime",
         "actual_date",
@@ -150,34 +151,39 @@ function LeadReport() {
            
             subject: "Project",
             visit: "Visit",
+            visit_date: "Visit Date",
             d_closeDate: "Close Date",
             createdTime: "Assigned Date",
             actual_date: "Actual Date",
           };
   
-      const completedLeads = filteredLeads.map((lead) => {
-        const formattedLead = {};
-  
-        selectedColumns.forEach((col) => {
-          const newKey = columnMapping[col] || col;
-          formattedLead[newKey] =
-            (col === "actual_date" || col === "createdTime") && lead[col]
-              ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
-              : lead[col];
-        });
-  
-        formattedLead["Actual Date"] = lead["actual_date"]
-          ? moment(lead["actual_date"]).format("DD MMM YYYY").toUpperCase()
-          : "";
-        formattedLead["Assigned Date"] = lead["createdTime"]
-          ? moment(lead["createdTime"]).format("DD MMM YYYY").toUpperCase()
-          : "";
-        formattedLead["Close Date"] = lead["d_closeDate"]
-          ? moment(lead["d_closeDate"]).format("DD MMM YYYY").toUpperCase()
-          : "pending";
-  
-        return formattedLead;
-      });
+          const completedLeads = filteredLeads
+          .filter((lead) => lead.deal_status !== "pending")
+          .map((lead) => {
+            const formattedLead = {};
+      
+            // Dynamically include selected columns
+            selectedColumns.forEach((col) => {
+              const newKey = columnMapping[col] || col; // Use mapped name if available
+              formattedLead[newKey] = 
+                (col === "actual_date" || col === "createdTime") && lead[col]
+                  ? moment(lead[col]).format("DD MMM YYYY").toUpperCase()
+                  : lead[col]; // Format dates or copy value
+            });
+      
+            // Ensure renamed dates are included, even if not in selectedColumns
+            formattedLead["Actual Date"] = lead["actual_date"]
+              ? moment(lead["actual_date"]).format("DD MMM YYYY").toUpperCase()
+              : "";
+            formattedLead["Assigned Date"] = lead["createdTime"]
+              ? moment(lead["createdTime"]).format("DD MMM YYYY").toUpperCase()
+              : "";
+            formattedLead["Close Date"] = lead["d_closeDate"]
+              ? moment(lead["d_closeDate"]).format("DD MMM YYYY").toUpperCase()
+              : "pending";
+      
+            return formattedLead;
+          });
   
       const worksheet = XLSX.utils.json_to_sheet(completedLeads);
       const workbook = XLSX.utils.book_new();
@@ -312,23 +318,27 @@ function LeadReport() {
           </div>
   
           {/* Pagination */}
-          {pageCount > 1 && (
-            <div className="mt-4">
-              <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                breakLabel={"..."}
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={3}
-                onPageChange={handlePageClick}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
-                previousClassName={"prev"}
-                nextClassName={"next"}
-              />
-            </div>
-          )}
+          <div className="mt-3 mb-2 flex justify-center">
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={3}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
+          breakClassName={"page-item"}
+          breakLinkClassName={"page-link"}
+        />
+</div>
         </div>
       </>
     );
