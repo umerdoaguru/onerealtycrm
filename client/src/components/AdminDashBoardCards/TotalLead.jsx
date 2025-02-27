@@ -92,7 +92,7 @@ const AdminTotalLead = () => {
         <div className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></div>
       </div>
 
-      <div className="overflow-x-auto mt-4 px-12 2xl:ml-40">
+      <div className=" px-12 2xl:ml-40">
       <div className="flex justify-between mb-3" >
                
                <input
@@ -114,6 +114,9 @@ const AdminTotalLead = () => {
             <option value="All">All</option>
           </select>
              </div>
+
+        </div>
+      <div className="overflow-x-auto mt-4 px-3 2xl:ml-40">
         <table className="container bg-white border">
           <thead>
             <tr>

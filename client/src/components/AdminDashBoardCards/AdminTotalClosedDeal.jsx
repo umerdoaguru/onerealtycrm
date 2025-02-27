@@ -101,8 +101,7 @@ const AdminTotalClosedDeal = () => {
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
 
-          <div className="overflow-x-auto mt-4">
-          <div className="flex justify-between mb-3" >
+          <div className="flex justify-between mb-3 mx-1" >
                
                <input
                  type="text"
@@ -123,6 +122,7 @@ const AdminTotalClosedDeal = () => {
             <option value="All">All</option>
           </select>
              </div>
+          <div className="overflow-x-auto mt-4">
             <table className="min-w-full bg-white border">
               <thead>
                 <tr>

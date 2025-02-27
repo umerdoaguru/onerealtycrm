@@ -68,7 +68,7 @@ const Admin_RemarksView = () => {
         <div className="w-full px-2 mx-auto p-4">
           <div className="w-full px-2 mt-4">
             <h2 className="text-2xl font-bold mb-4 text-center">All Remarks</h2>
-            <div>
+            <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
                 <thead className="bg-gray-100">
                   <tr>

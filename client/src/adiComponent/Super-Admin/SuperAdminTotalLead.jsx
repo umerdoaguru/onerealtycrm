@@ -86,8 +86,8 @@ const SuperAdminTotalLead = () => {
     <>
       <MainHeader />
       <SuperAdminSider />
-      <div className="container px-5 mt-[4rem]">.
-      <div className="2xl:ml-40 ">
+      <div className="container ">.
+      <div className="2xl:ml-44 mt-[7rem]  ">
           <button
             onClick={() => navigate(-1)}
             className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
@@ -100,9 +100,7 @@ const SuperAdminTotalLead = () => {
       
       </div>
    
-
-      <div className="main overflow-x-auto mt-4 px-12 2xl:ml-40">
-
+      <div className=" px-8 2xl:ml-40">
       <div className="flex justify-between mb-3" >
                
                <input
@@ -126,6 +124,9 @@ const SuperAdminTotalLead = () => {
             <option value="All">All</option>
           </select>
              </div>
+             </div>
+      <div className="main overflow-x-auto mt-4 px-7 2xl:ml-40 ">
+
         <table className="bg-white border w-100">
           <thead>
             <tr>

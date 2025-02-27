@@ -101,8 +101,7 @@ const VisitTable = () => {
             Total Visits
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-          <div className="overflow-x-auto">
-          <div className="flex justify-between mb-3" >
+          <div className="flex justify-between mb-3 mx-1" >
                
                <input
                  type="text"
@@ -124,6 +123,7 @@ const VisitTable = () => {
           </select>
 
              </div>
+          <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
               <thead className="bg-gray-100">
               <tr>

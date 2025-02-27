@@ -247,30 +247,30 @@ fetchFollowUp();
         <div className="mt-2">
         <div className="">
               {/* Conditionally render the View Quotation button */}
-              <div className="flex">
+              <div className="flex flex-wrap gap-2">
                
                 {/* Conditionally render the View Quotation button */}
                 {visitCreated ? (
                   <button
                     onClick={handleClickVisit}
-                    className="bg-green-500 text-white px-4 py-2 mx-1 rounded"
+                    className="bg-green-500 text-white px-4 py-2 mx-1 rounded w-full sm:w-auto"
                   >
                     View Visit
                   </button>
                 ) : (
-                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded w-full sm:w-auto">
                     Visit not yet created
                   </p>
                 )}
                 {followCreated ? (
   <button
     onClick={handleClickFollowUp}
-    className="bg-yellow-500 text-white px-4 py-2 mx-1 rounded"
+    className="bg-yellow-500 text-white px-4 py-2 mx-1 rounded w-full sm:w-auto"
   >
     View Follow Up
   </button>
 ) : (
-  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
+  <p className="text-white bg-red-400 text-center px-4 py-2  rounded w-full sm:w-auto">
     Follow Up not yet created
   </p>
 )}
@@ -292,7 +292,7 @@ fetchFollowUp();
         </div>
 
    
-        <div className="overflow-x-auto mt-5">
+        <div className="overflow-x-auto ">
         <table className="min-w-full whitespace-nowrap bg-white border">
   <thead>
     <tr>

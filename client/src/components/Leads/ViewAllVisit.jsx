@@ -193,7 +193,7 @@ const ViewAllVisit = () => {
             <h2 className="text-2xl font-bold mb-4 text-center">
               All Leads visit
             </h2>
-            <div className="">
+            <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
                 <thead className="bg-gray-100">
                   <tr>

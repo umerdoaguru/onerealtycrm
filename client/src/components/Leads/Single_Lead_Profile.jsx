@@ -228,18 +228,18 @@ function Single_Lead_Profile() {
           ))}
         </div>
         <div className="2xl:ml-44 mt-2">
-        <div className="">
+        <div className="flex flex-wrap justify-between gap-4 p-4">
               {/* Conditionally render the View Quotation button */}
-              <div className="flex">
+              <div className="flex flex-wrap gap-2">
                 {quotationCreated ? (
                   <button
                     onClick={() => handleViewQuotation(leads[0])}
-                    className="bg-blue-500 text-white px-4 py-2 mx-1 rounded"
+                    className="bg-blue-500 text-white px-4 py-2  rounded w-full sm:w-auto"
                   >
                     View Quotation
                   </button>
                 ) : (
-                  <p className="text-white bg-red-400 text-center px-4 py-2 mx-1 rounded">
+                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded w-full sm:w-auto">
                     Quotation not yet created
                   </p>
                 )}
@@ -248,12 +248,12 @@ function Single_Lead_Profile() {
                 {visitCreated ? (
                   <button
                     onClick={handleViewVisit}
-                    className="bg-green-500 text-white px-4 py-2  rounded"
+                    className="bg-green-500 text-white px-4 py-2  rounded w-full sm:w-auto"
                   >
                     View Visit
                   </button>
                 ) : (
-                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded">
+                  <p className="text-white bg-red-400 text-center px-4 py-2 rounded w-full sm:w-auto">
                     Visit not yet created
                   </p>
                 )}
@@ -261,12 +261,12 @@ function Single_Lead_Profile() {
 {followCreated ? (
   <button
     onClick={handleViewFollowUp}
-    className="bg-yellow-500 text-white px-4 py-2 mx-1 rounded"
+    className="bg-yellow-500 text-white px-4 py-2  rounded w-full sm:w-auto"
   >
     View Follow Up
   </button>
 ) : (
-  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded">
+  <p className="text-white bg-red-400 text-center px-4 py-2 mx-2 rounded w-full sm:w-auto">
     Follow Up not yet created
   </p>
 )}
@@ -289,7 +289,7 @@ function Single_Lead_Profile() {
         </div>
 
 
-        <div className="overflow-x-auto mt-5 2xl:ml-44">
+        <div className="overflow-x-auto  2xl:ml-44">
         <table className="min-w-full whitespace-nowrap bg-white border">
   <thead>
     <tr>

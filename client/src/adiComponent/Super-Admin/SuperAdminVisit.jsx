@@ -87,7 +87,7 @@ const SuperAdminVisit = () => {
       <div className="mt-[7rem] 2xl:ml-40 ">
           <button
             onClick={() => navigate(-1)}
-            className="bg-blue-500 text-white px-3 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
+            className="bg-blue-500 text-white px-3 mx-1 py-1 max-sm:hidden rounded-lg hover:bg-blue-600 transition-colors"
           >
             Back
           </button>
@@ -98,7 +98,6 @@ const SuperAdminVisit = () => {
             Total Visits
           </center>
           <center className="mx-auto h-[3px] w-16 bg-[#34495E] my-3"></center>
-          <div className="overflow-x-auto mt-2">
           <div className="flex justify-between mb-3" >
                
                <input
@@ -120,6 +119,7 @@ const SuperAdminVisit = () => {
             <option value="All">All</option>
           </select>
              </div>
+          <div className="overflow-x-auto mt-2">
             <table className="min-w-full  border border-gray-300">
               <thead className="bg-gray-100">
               <tr>
