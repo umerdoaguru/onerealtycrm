@@ -55,7 +55,7 @@ const SuperAdminVisit = () => {
       );
     }
 
-    
+    setCurrentPage(0); 
     setFilteredLeads(filtered);
   }, [searchTerm]);
 
@@ -192,6 +192,7 @@ const SuperAdminVisit = () => {
           nextLabel={"Next"}
           breakLabel={"..."}
           pageCount={pageCount}
+         forcePage={currentPage} 
           marginPagesDisplayed={2}
           pageRangeDisplayed={3}
           onPageChange={handlePageClick}

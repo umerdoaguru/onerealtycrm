@@ -274,6 +274,7 @@ console.log("Assigned Leads:", websiteleadsAssigned);
               nextLabel={"Next"}
               breakLabel={"..."}
               pageCount={pageCount}
+              forcePage={currentPage} 
               marginPagesDisplayed={2}
               pageRangeDisplayed={3}
               onPageChange={handlePageClick}

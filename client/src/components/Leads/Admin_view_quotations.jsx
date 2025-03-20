@@ -181,6 +181,7 @@ const Admin_view_quotations = () => {
                 nextLabel={"next"}
                 breakLabel={"..."}
                 pageCount={pageCount}
+              forcePage={currentPage} 
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 onPageChange={handlePageClick}

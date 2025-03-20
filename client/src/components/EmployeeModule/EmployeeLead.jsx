@@ -52,7 +52,7 @@ function EmployeeLead() {
       leads
         .filter(
           (lead) =>
-            lead.visit === visitFilter && 
+           
             lead.visit !== "pending" && 
             lead.visit_date && moment(lead.visit_date, moment.ISO_8601, true).isValid() 
         )
@@ -224,10 +224,12 @@ function EmployeeLead() {
   useEffect(() => {
     const filtered = applyFilters();
     setFilteredLeads(filtered);
+    setCurrentPage(0);
   }, [
     searchTerm,
     filterDate,
     leads,
+    filterDate,
     leadSourceFilter,
     statusFilter,
     visitFilter,
@@ -437,25 +439,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
               )}
 
 
-     <div>
-                <label htmlFor="">Visit Filter</label>
-                <select
-                  value={visitFilter}
-                  onChange={(e) => setVisitFilter(e.target.value)}
-                  className={`border rounded-2xl p-2 w-full ${
-                    visitFilter ? "bg-blue-500 text-white" : "bg-white"
-                  }`}
-                >
-                  <option value="">All visit</option>
-                  <option value="fresh">Fresh Visit</option>
-                  <option value="re-visit">Re-Visit</option>
-                  <option value="associative">Associative Visit</option>
-                  <option value="self">Self Visit</option>
-                </select>
-              </div>
-
-  {visitFilter && (
-              <div>
+<div>
   <label htmlFor="" className=" fw-semibold text-[blue]">Visit Month Filter</label>
   <select
     value={visitmonthFilter}
@@ -473,11 +457,49 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
   </select>
 </div>
 
-    )}
+   
+
+{visitmonthFilter && (
+<div>
+                <label htmlFor="">Visit Filter</label>
+                <select
+                  value={visitFilter}
+                  onChange={(e) => setVisitFilter(e.target.value)}
+                  className={`border rounded-2xl p-2 w-full ${
+                    visitFilter ? "bg-blue-500 text-white" : "bg-white"
+                  }`}
+                >
+                  <option value="">All visit</option>
+                  <option value="fresh">Fresh Visit</option>
+                  <option value="re-visit">Re-Visit</option>
+                  <option value="associative">Associative Visit</option>
+                  <option value="self">Self Visit</option>
+                </select>
+              </div>
+
+)}
+<div>
+    <label htmlFor="yearFilter">Leads Year Filter</label>
+    <select
+      value={yearFilter}
+      onChange={(e) => setYearFilter(e.target.value)}
+      className={`border rounded-2xl p-2 w-full ${
+        yearFilter ? "bg-blue-500 text-white" : "bg-white"
+      }`}
+    >
+      <option value="">All Years</option>
+      {uniqueYears.map((year) => (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      ))}
+    
+    </select>
+  </div>
 
 
 <div>
-    <label htmlFor="yearFilter">Year Filter</label>
+    <label htmlFor="yearFilter">Leads Year Filter</label>
     <select
       value={yearFilter}
       onChange={(e) => setYearFilter(e.target.value)}
@@ -497,7 +519,7 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
 
   {yearFilter && (
          <div>
-         <label htmlFor="">Month Filter</label>
+    <label htmlFor="yearFilter">Leads Month Filter</label>
          <select
            value={monthFilter}
            onChange={(e) => setMonthFilter(e.target.value)}
@@ -724,6 +746,8 @@ const pageCount = Math.ceil(filteredLeads.length / leadsPerPage);
               nextLabel={"Next"}
               breakLabel={"..."}
               pageCount={pageCount}
+              forcePage={currentPage} 
+             
               marginPagesDisplayed={2}
               pageRangeDisplayed={3}
               onPageChange={handlePageClick}
