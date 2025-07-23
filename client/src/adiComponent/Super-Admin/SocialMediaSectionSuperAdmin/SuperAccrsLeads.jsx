@@ -179,7 +179,7 @@ setLoading(false)
   const filteredLeads = responses.filter(
     (lead) =>
       !leadsAssigned.some(
-        (assigned) => assigned.lead_no === lead.id.toString()
+        (assigned) => assigned.phone === lead.phone.replace("+91-", "")
       )
   );
 

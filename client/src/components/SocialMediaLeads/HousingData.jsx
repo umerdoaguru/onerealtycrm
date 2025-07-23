@@ -5,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { useSelector } from 'react-redux';
 
 
-function Accrs() {
+function HousingData() {
   const [responses, setResponses] = useState([]);
   const [leadsAssigned, setLeadsAssigned] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -422,4 +422,4 @@ setLoading(false)
   );
 }
 
-export default Accrs;
+export default HousingData;

@@ -277,7 +277,7 @@ const getRealtyToken = async () => {
     try {
         const response = await axios.post('https://one-realty.in/api/login', {
             email: 'umerqureshi786786@gmail.com',  // Use actual admin email
-            password: 'umer@321'     // Use actual password
+            password: 'umer@786'     // Use actual password
         });
 
         const token = response.data.user.token;
